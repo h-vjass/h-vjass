@@ -7,12 +7,6 @@ library hFilter initializer init needs hIs
 		private integer hashKey = 951753
 	endglobals
 
-	public function setUnit takes unit u returns nothing
-		call SaveUnitHandle(hash, hashKey , 1, u)
-	endfunction
-	private function getUnit takes nothing returns unit
-	    return LoadUnitHandle(hash, hashKey , 1)
-	endfunction
 	//
 	public function format takes nothing returns nothing
 		call SaveInteger(hash, hashKey , 100,0)
@@ -34,6 +28,13 @@ library hFilter initializer init needs hIs
 		call SaveInteger(hash, hashKey , 1016,0)
 		call SaveInteger(hash, hashKey , 1017,0)
 		call SaveInteger(hash, hashKey , 2017,0)
+	endfunction
+	//
+	public function setUnit takes unit u returns nothing
+		call SaveUnitHandle(hash, hashKey , 1, u)
+	endfunction
+	private function getUnit takes nothing returns unit
+	    return LoadUnitHandle(hash, hashKey , 1)
 	endfunction
 	//
 	public function isEnemy takes boolean status returns nothing

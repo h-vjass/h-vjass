@@ -1,14 +1,14 @@
 /**
  * author hunzsig
- * version v2.03
- * date 2017-09-30
+ * version v2.04
+ * date 2017-10-05
  **/
 
 提醒：
 #hJass参考文档：https://www.hunzsig.org/home/war3/hJass_dom
 #调用hJass需要支持vJass的编辑器，如YDWE等
 #如果保存报错，请关闭YDWE——YDWE配置——智能判断注入代码，或者自行寻找冲突代码，修改解决
-#本套代码免费提供给熟悉jass的作者使用，如果不熟悉jass请使用T来制作地图或自行学习，此处不提供jass教学
+#本套代码免费提供给了解jass的作者试用，如果不了解jass请使用T来制作地图或自行学习，此处不提供jass教学
 
 好了，让我们开始接入：
 #打开YDWE 打开地图 按F4打开触发编辑器
@@ -43,7 +43,7 @@
 注意：
 hJass库开源，不定时更新，可访问 https://www.hunzsig.org 查看下载最新版
 hJass库仅仅提供一些功能函数协助做图作者更加轻松制作地图
-hJass库不保证完全正确，效率问题，所以如有需要，请自行修改源码进行游戏制作
+hJass库不保证完全正确无bug，高效率，所以如有需要，请自行修改源码进行游戏制作，这里不过是给出一种方式
 hJass库中funcs-attribute系列方法是一套属性系统，如不使用请关闭，如果使用，请根据演示demo地图查看对应的属性设置方法
 hJass建议直接使用demo.w3x作为模板开发您的地图，当然你也可以自己建立
 

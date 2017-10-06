@@ -1,6 +1,17 @@
 /* 奖励 */
 library hAward requires hAttrUnit
 
+    globals
+        private real awardRange = 500.00
+    endglobals
+
+    /**
+     * 设置共享范围
+     */
+    public function setRange takes real range returns nothing
+        set awardRange = range
+    endfunction
+
     /**
      * 奖励单位（经验黄金木头）
      */
@@ -39,23 +50,37 @@ library hAward requires hAttrUnit
     /**
      * 平分奖励单位组（经验黄金木头）
      */
-    public function forGroup takes group whichGroup,integer exp,integer gold,integer lumber returns nothing
+    public function forGroup takes unit whichUnit,integer exp,integer gold,integer lumber returns nothing
         local unit u = null
-        local integer groupCount = CountUnitsInGroup( whichGroup )
-        local integer cutExp = R2I(I2R(exp) / I2R(groupCount))
-        local integer cutGold = R2I(I2R(gold) / I2R(groupCount))
-        local integer cutLumber = R2I(I2R(lumber) / I2R(groupCount))
-        if( groupCount <=0 ) then
+        local group g = null
+        local integer gCount = 0
+        local integer cutExp = 0
+        local integer cutGold = 0
+        local integer cutLumber = 0
+        call hFilter_format()
+        call hFilter_isHero(true)
+        call hFilter_isAlly(true)
+        call hFilter_isAlive(true)
+        call hFilter_isBuilding(false)
+        set g = hGroup_createByUnit(whichUnit,awardRange,function hFilter_get)
+        set gCount = CountUnitsInGroup( g )
+        if( gCount <=0 ) then
             return
         endif
+        set cutExp = R2I(I2R(exp) / I2R(gCount))
+        set cutGold = R2I(I2R(gold) / I2R(gCount))
+        set cutLumber = R2I(I2R(lumber) / I2R(gCount))
         loop
-            exitwhen(IsUnitGroupEmptyBJ(whichGroup) == true)
+            exitwhen(IsUnitGroupEmptyBJ(g) == true)
                 //must do
-                set u = FirstOfGroup(whichGroup)
-                call GroupRemoveUnit( whichGroup , u )
+                set u = FirstOfGroup(g)
+                call GroupRemoveUnit( g , u )
                 //
                 call forUnit(u,cutExp,cutGold,cutLumber)
         endloop
+        call GroupClear(g)
+        call DestroyGroup(g)
+        set g = null
     endfunction
 
 endlibrary
