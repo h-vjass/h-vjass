@@ -1,34 +1,35 @@
-globals
-
-	boolean h_log = false
-	string h_log_color = ""
-
-	integer h_clock_h = 0
-	integer h_clock_m = 0
-	integer h_clock_i = 0
-	integer h_clock_count = 0
-
-endglobals
 
 library hSys initializer init
 
+	globals
+
+		private boolean log_status = false
+		private string log_color = ""
+ 
+ 		private integer clock_h = 0
+ 		private integer clock_m = 0
+ 		private integer clock_i = 0
+		private integer clock_count = 0
+
+	endglobals
+
 	//配置log
 	public function open takes boolean status returns nothing
-		set h_log = status
+		set log_status = status
 		if(status == true)then
 			call DisplayTextToForce( GetPlayersAll(), "[hJass]系统log已于hSys(lib/system.j)开启" )
 		endif
 	endfunction
 	//设置log颜色
 	public function setColor takes string color returns nothing
-		set h_log_color = color
+		set log_color = color
 	endfunction
 	//打印log
 	public function log takes string msg returns nothing
-		if(h_log) then
+		if(log_status) then
 			set msg = "[log]"+msg
-			if(StringLength(h_log_color)==6)then
-				set msg = "|cff"+h_log_color+msg+"|r"
+			if(StringLength(log_color)==6)then
+				set msg = "|cff"+log_color+msg+"|r"
 			endif
 	    	call DisplayTextToForce( GetPlayersAll(), msg )
 	    endif
@@ -36,28 +37,32 @@ library hSys initializer init
 
 	//系统时间
 	private function clock takes nothing returns nothing
-		set h_clock_count = h_clock_count + 1
-	    set h_clock_i = h_clock_i + 1
-	    if (h_clock_i >= 60) then
-	        set h_clock_m = h_clock_m + 1
-	        set h_clock_i = 0
-	        if (h_clock_m >= 60) then
-	            set h_clock_h = h_clock_h + 1
-	            set h_clock_m = 0
+		set clock_count = clock_count + 1
+	    set clock_i = clock_i + 1
+	    if (clock_i >= 60) then
+	        set clock_m = clock_m + 1
+	        set clock_i = 0
+	        if (clock_m >= 60) then
+	            set clock_h = clock_h + 1
+	            set clock_m = 0
 	        endif
 	    endif
 	endfunction
 	//获取时
 	public function hour takes nothing returns integer
-		return h_clock_h
+		return clock_h
 	endfunction
 	//获取分
 	public function min takes nothing returns integer
-		return h_clock_m
+		return clock_m
 	endfunction
 	//获取秒
 	public function sec takes nothing returns integer
-		return h_clock_i
+		return clock_i
+	endfunction
+	//获取累计秒
+	public function count takes nothing returns integer
+		return clock_count
 	endfunction
 
 	/**

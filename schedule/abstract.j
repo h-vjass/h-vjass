@@ -1,6 +1,4 @@
-
 globals
-
 	/* APM */
 	trigger Trigger_Apm = null
 	trigger Trigger_SuccessFlag = null
@@ -19,11 +17,15 @@ globals
 	integer CurrentGameModelMoney = 0
 	integer CurrentGameModelLumber = 0
 	real CurrentGameModelCycle = 0
-
 endglobals
 
 /* 管理器：管理所有模式的初始化和进度 */
-library schedule requires skills
+library schedule requires hAward
+	
+	/* your code */
+	private function mySchedule takes nothing returns nothing
+
+	endfunction
 
 	/* Model */
 	private function selectGameModel takes integer model returns nothing
@@ -49,25 +51,25 @@ library schedule requires skills
 		set CurrentGameModelMoney = GameModelMoneys[CurrentGameModel]
 		set CurrentGameModelCycle = GameModelCycles[CurrentGameModel]
 		//提示开始
-        call funcs_print("|cffffff00" + CurrentGameTitle + "！开始！|r")
+        call hMsg_print("|cffffff00" + CurrentGameTitle + "！开始！|r")
         //删除对话框
-        call funcs_delTimer( GameModelTimer , GameModelTimerDialog )
+        call hTimer_delTimer( GameModelTimer , GameModelTimerDialog )
         //初始资源
         set i = 1
         loop
-            exitwhen i > Max_Player_num
-            	call SetPlayerHandicapXP( Players[i] , 0 )
-	            if (Player_isComputer[i] == false) then
-	                call SetPlayerStateBJ( Players[i], PLAYER_STATE_RESOURCE_GOLD,  GameModelMoneys[CurrentGameModel] )
-	                call SetPlayerStateBJ( Players[i], PLAYER_STATE_RESOURCE_LUMBER,  GameModelLumbers[CurrentGameModel] )
+            exitwhen i > player_max_qty
+            	call SetPlayerHandicapXP( players[i] , 0 )
+	            if (hPlayer_isComputer(players[i]) == false) then
+	                call SetPlayerStateBJ( players[i], PLAYER_STATE_RESOURCE_GOLD,  GameModelMoneys[CurrentGameModel] )
+	                call SetPlayerStateBJ( players[i], PLAYER_STATE_RESOURCE_LUMBER,  GameModelLumbers[CurrentGameModel] )
 	            else
-	            	call SetPlayerStateBJ( Players[i], PLAYER_STATE_RESOURCE_GOLD,  GameModelMoneys[CurrentGameModel]*2 )
-	            	call SetPlayerStateBJ( Players[i], PLAYER_STATE_RESOURCE_LUMBER,  GameModelLumbers[CurrentGameModel]*2 )
+	            	call SetPlayerStateBJ( players[i], PLAYER_STATE_RESOURCE_GOLD,  GameModelMoneys[CurrentGameModel]*2 )
+	            	call SetPlayerStateBJ( players[i], PLAYER_STATE_RESOURCE_LUMBER,  GameModelLumbers[CurrentGameModel]*2 )
 	            endif
             set i = i + 1
         endloop
 		//模式开始
-		/* your code */
+		call mySchedule()
 	endfunction
 
 	private function TriggerGameModelActions takes nothing returns nothing
@@ -80,8 +82,23 @@ library schedule requires skills
 	        endif
 	        set i = i + 1
 	    endloop
-
 	endfunction
+
+	private function scheduleAbortLose takes nothing returns nothing
+        local integer i = 0
+        set i = 1
+        loop
+            exitwhen i > player_max_qty
+            	call hPlayer_defeat(players[i])
+            set i = i + 1
+        endloop
+    endfunction
+	public function scheduleAbort takes nothing returns nothing
+        call CinematicModeBJ( true,  GetPlayersAll() )
+        call ForceCinematicSubtitles( true )
+        call TransmissionFromUnitWithNameBJ(  GetPlayersAll() , null, "游戏终止" , null, "没有选择模式，游戏已结束！" , bj_TIMETYPE_SET, 5.00, false )
+        call hTimer_setTimeout(3.00,function scheduleAbortLose)
+    endfunction
 
 	public function start takes nothing returns nothing
 		local integer i
@@ -95,7 +112,7 @@ library schedule requires skills
 		if( GameModelMaxLv == 1 )then	//如果只有一种模式，立刻开始
         	call selectGameModel(1)
 	    elseif( GameModelMaxLv > 1 )then	//如果多种模式，选择模式
-	    	call funcs_print(" |cffffff00第 1 位玩家开始选择游戏模式...|r")
+	    	call hMsg_print(" |cffffff00第 1 位玩家开始选择游戏模式...|r")
 	    	call DialogSetMessage( dialogGameModel , "游戏模式" )
 		    call TriggerRegisterDialogEvent( triggerGameModel, dialogGameModel )
 		    call TriggerAddAction(triggerGameModel, function TriggerGameModelActions)
@@ -109,17 +126,16 @@ library schedule requires skills
 		    endloop
 		    set i = 1
 		    loop
-		        exitwhen i > Max_Player_num
-		        if(Player_isComputer[i] == false) then
-		            call DialogDisplayBJ( true, dialogGameModel , Players[i] )
+		        exitwhen i > player_max_qty
+		        if(hPlayer_isComputer(players[i]) == false) then
+		            call DialogDisplayBJ( true, dialogGameModel , players[i] )
 		            call DoNothing() YDNL exitwhen true//(  )
 		        else
 		        endif
 		        set i = i + 1
 		    endloop
-		    call lose_setLoseTips("|cffff0000没有选择模式，全军覆没！！|r")
-		    set GameModelTimer = funcs_setTimeout( 30.00, function lose_actionAll )
-		    set GameModelTimerDialog = funcs_setTimerDialog( GameModelTimer , "正在选择游戏模式" )
+		    set GameModelTimer = hTimer_setTimeout( 20.00, function scheduleAbort )
+		    set GameModelTimerDialog = hTimer_setDialog( GameModelTimer , "正在选择游戏模式" )
 	    endif
 
 	endfunction

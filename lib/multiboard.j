@@ -1,15 +1,16 @@
-globals
-
-	/* 多面板 */
-	//多面板检查，用来检查此用户是否已经显示在上面
-	//用来跳过那些非玩家 无玩家的玩家列
-	//这样3个玩家就只会显示3个，而不需要多余的列来显示null
-	boolean array MultiboardCheck
-
-endglobals
 
 
-library myMultiboard requires funcs
+library hMultiboard requires funcs
+
+    globals
+
+        /* 多面板 */
+        //多面板检查，用来检查此用户是否已经显示在上面
+        //用来跳过那些非玩家 无玩家的玩家列
+        //这样3个玩家就只会显示3个，而不需要多余的列来显示null
+        private boolean array MultiboardCheck
+
+    endglobals
 
 	/**
      * 创建信息多面板

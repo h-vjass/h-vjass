@@ -1,12 +1,11 @@
 /* 消息 */
-
-globals
-
-    hashtable hash_message = null
-
-endglobals
-
 library hMsg initializer init needs hPlayer
+
+    globals
+
+        hashtable hash = null
+
+    endglobals
 
     //在屏幕打印信息给所有玩家
     public function echo takes string msg returns nothing
@@ -49,9 +48,9 @@ library hMsg initializer init needs hPlayer
             call SetTextTagTextBJ(ttg, msg, size)
         endif
         call SetTextTagTextBJ(ttg, msg, size)
-        call SaveStr(hash_message, GetHandleId(ttg), 1, msg)
-        call SaveReal(hash_message, GetHandleId(ttg), 2, size)
-        call SaveStr(hash_message, GetHandleId(ttg), 3, color)
+        call SaveStr(hash, GetHandleId(ttg), 1, msg)
+        call SaveReal(hash, GetHandleId(ttg), 2, size)
+        call SaveStr(hash, GetHandleId(ttg), 3, color)
         call SetTextTagColorBJ(ttg, 100.00, 100.00, 100.00, opacity)
         if(during==0)then
             call SetTextTagPermanent( ttg, true )
@@ -64,15 +63,15 @@ library hMsg initializer init needs hPlayer
     endfunction
     //获取漂浮字初始文本
     public function getTtgMsg takes texttag ttg returns string
-        return LoadStr(hash_message, GetHandleId(ttg), 1)
+        return LoadStr(hash, GetHandleId(ttg), 1)
     endfunction
     //获取漂浮字大小
     public function getTtgSize takes texttag ttg returns real
-        return LoadReal(hash_message, GetHandleId(ttg), 2)
+        return LoadReal(hash, GetHandleId(ttg), 2)
     endfunction
     //获取漂浮字颜色
     public function getTtgColor takes texttag ttg returns string
-        return LoadStr(hash_message, GetHandleId(ttg), 3)
+        return LoadStr(hash, GetHandleId(ttg), 3)
     endfunction
     //设置漂浮字弹出样式
     private function ttgshowScale takes nothing returns nothing
@@ -162,7 +161,7 @@ library hMsg initializer init needs hPlayer
     endfunction
     
     private function init takes nothing returns nothing
-        set hash_message = InitHashtable()
+        set hash = InitHashtable()
     endfunction
 
 endlibrary

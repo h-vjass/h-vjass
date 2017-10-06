@@ -126,6 +126,21 @@ library hIs needs hSys
         set loc = null
         return status
     endfunction
+
+    /**
+     * 是否地图边界
+     */
+    public function border takes real x,real y returns boolean
+        local boolean flag = false
+        if( x >= GetRectMaxX(GetPlayableMapRect()) or x <= GetRectMinX(GetPlayableMapRect()) )then
+            set flag = true
+        endif
+        if( y >= GetRectMaxY(GetPlayableMapRect()) or y <= GetRectMinY(GetPlayableMapRect()) )then
+            return true
+        endif
+        return flag
+    endfunction
+
     /**
      * 单位身上是否有某物品
      */

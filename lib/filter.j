@@ -1,230 +1,230 @@
 /* 判定过滤器 */
 
-globals
-	hashtable hashfilter = null
-	integer hashKey = 951753
-endglobals
-
 library hFilter initializer init needs hIs
 
+	globals
+		private hashtable hash = null
+		private integer hashKey = 951753
+	endglobals
+
 	public function setUnit takes unit u returns nothing
-		call SaveUnitHandle(hashfilter, hashKey , 1, u)
+		call SaveUnitHandle(hash, hashKey , 1, u)
 	endfunction
 	private function getUnit takes nothing returns unit
-	    return LoadUnitHandle(hashfilter, hashKey , 1)
+	    return LoadUnitHandle(hash, hashKey , 1)
 	endfunction
 	//
 	public function format takes nothing returns nothing
-		call SaveInteger(hashfilter, hashKey , 100,0)
-		call SaveInteger(hashfilter, hashKey , 101,0)
-		call SaveInteger(hashfilter, hashKey , 102,0)
-		call SaveInteger(hashfilter, hashKey , 103,0)
-		call SaveInteger(hashfilter, hashKey , 104,0)
-		call SaveInteger(hashfilter, hashKey , 105,0)
-		call SaveInteger(hashfilter, hashKey , 106,0)
-		call SaveInteger(hashfilter, hashKey , 107,0)
-		call SaveInteger(hashfilter, hashKey , 108,0)
-		call SaveInteger(hashfilter, hashKey , 109,0)
-		call SaveInteger(hashfilter, hashKey , 1010,0)
-		call SaveInteger(hashfilter, hashKey , 1011,0)
-		call SaveInteger(hashfilter, hashKey , 1012,0)
-		call SaveInteger(hashfilter, hashKey , 1013,0)
-		call SaveInteger(hashfilter, hashKey , 1014,0)
-		call SaveInteger(hashfilter, hashKey , 1015,0)
-		call SaveInteger(hashfilter, hashKey , 1016,0)
-		call SaveInteger(hashfilter, hashKey , 1017,0)
-		call SaveInteger(hashfilter, hashKey , 2017,0)
+		call SaveInteger(hash, hashKey , 100,0)
+		call SaveInteger(hash, hashKey , 101,0)
+		call SaveInteger(hash, hashKey , 102,0)
+		call SaveInteger(hash, hashKey , 103,0)
+		call SaveInteger(hash, hashKey , 104,0)
+		call SaveInteger(hash, hashKey , 105,0)
+		call SaveInteger(hash, hashKey , 106,0)
+		call SaveInteger(hash, hashKey , 107,0)
+		call SaveInteger(hash, hashKey , 108,0)
+		call SaveInteger(hash, hashKey , 109,0)
+		call SaveInteger(hash, hashKey , 1010,0)
+		call SaveInteger(hash, hashKey , 1011,0)
+		call SaveInteger(hash, hashKey , 1012,0)
+		call SaveInteger(hash, hashKey , 1013,0)
+		call SaveInteger(hash, hashKey , 1014,0)
+		call SaveInteger(hash, hashKey , 1015,0)
+		call SaveInteger(hash, hashKey , 1016,0)
+		call SaveInteger(hash, hashKey , 1017,0)
+		call SaveInteger(hash, hashKey , 2017,0)
 	endfunction
 	//
 	public function isEnemy takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 100, 1)
+	        call SaveInteger(hash, hashKey , 100, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 100, -1)
+	        call SaveInteger(hash, hashKey , 100, -1)
 	    endif
 	endfunction
 	private function getIsEnemy takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 100)
+	    return LoadInteger(hash, hashKey , 100)
 	endfunction
 	public function isAlly takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 101, 1)
+	        call SaveInteger(hash, hashKey , 101, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 101, -1)
+	        call SaveInteger(hash, hashKey , 101, -1)
 	    endif
 	endfunction
 	private function getIsAlly takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 101)
+	    return LoadInteger(hash, hashKey , 101)
 	endfunction
 	public function isDeath takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 102, 1)
+	        call SaveInteger(hash, hashKey , 102, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 102, -1)
+	        call SaveInteger(hash, hashKey , 102, -1)
 	    endif
 	endfunction
 	private function getIsDeath takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 102)
+	    return LoadInteger(hash, hashKey , 102)
 	endfunction
 	public function isAlive takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 103, 1)
+	        call SaveInteger(hash, hashKey , 103, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 103, -1)
+	        call SaveInteger(hash, hashKey , 103, -1)
 	    endif
 	endfunction
 	private function getIsAlive takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 103)
+	    return LoadInteger(hash, hashKey , 103)
 	endfunction
 	public function isInvincible takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 104, 1)
+	        call SaveInteger(hash, hashKey , 104, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 104, -1)
+	        call SaveInteger(hash, hashKey , 104, -1)
 	    endif
 	endfunction
 	private function getIsInvincible takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 104)
+	    return LoadInteger(hash, hashKey , 104)
 	endfunction
 	public function isHero takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 105, 1)
+	        call SaveInteger(hash, hashKey , 105, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 105, -1)
+	        call SaveInteger(hash, hashKey , 105, -1)
 	    endif
 	endfunction
 	private function getIsHero takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 105)
+	    return LoadInteger(hash, hashKey , 105)
 	endfunction
 	public function isBuilding takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 106, 1)
+	        call SaveInteger(hash, hashKey , 106, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 106, -1)
+	        call SaveInteger(hash, hashKey , 106, -1)
 	    endif
 	endfunction
 	private function getIsBuilding takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 106)
+	    return LoadInteger(hash, hashKey , 106)
 	endfunction
 	public function isIllusion takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 107, 1)
+	        call SaveInteger(hash, hashKey , 107, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 107, -1)
+	        call SaveInteger(hash, hashKey , 107, -1)
 	    endif
 	endfunction
 	private function getIsIllusion takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 107)
+	    return LoadInteger(hash, hashKey , 107)
 	endfunction
 	public function isGround takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 108, 1)
+	        call SaveInteger(hash, hashKey , 108, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 108, -1)
+	        call SaveInteger(hash, hashKey , 108, -1)
 	    endif
 	endfunction
 	private function getIsGround takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 108)
+	    return LoadInteger(hash, hashKey , 108)
 	endfunction
 	public function isFlying takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 109, 1)
+	        call SaveInteger(hash, hashKey , 109, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 109, -1)
+	        call SaveInteger(hash, hashKey , 109, -1)
 	    endif
 	endfunction
 	private function getIsFlying takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 109)
+	    return LoadInteger(hash, hashKey , 109)
 	endfunction
 	public function isMelee takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1010, 1)
+	        call SaveInteger(hash, hashKey , 1010, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1010, -1)
+	        call SaveInteger(hash, hashKey , 1010, -1)
 	    endif
 	endfunction
 	private function getIsMelee takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1010)
+	    return LoadInteger(hash, hashKey , 1010)
 	endfunction
 	public function isRanged takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1011, 1)
+	        call SaveInteger(hash, hashKey , 1011, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1011, -1)
+	        call SaveInteger(hash, hashKey , 1011, -1)
 	    endif
 	endfunction
 	private function getIsRanged takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1011)
+	    return LoadInteger(hash, hashKey , 1011)
 	endfunction
 	public function isSummoned takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1012, 1)
+	        call SaveInteger(hash, hashKey , 1012, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1012, -1)
+	        call SaveInteger(hash, hashKey , 1012, -1)
 	    endif
 	endfunction
 	private function getIsSummoned takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1012)
+	    return LoadInteger(hash, hashKey , 1012)
 	endfunction
 	public function isMechanical takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1013, 1)
+	        call SaveInteger(hash, hashKey , 1013, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1013, -1)
+	        call SaveInteger(hash, hashKey , 1013, -1)
 	    endif
 	endfunction
 	private function getIsMechanical takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1013)
+	    return LoadInteger(hash, hashKey , 1013)
 	endfunction
 	public function isAncient takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1014, 1)
+	        call SaveInteger(hash, hashKey , 1014, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1014, -1)
+	        call SaveInteger(hash, hashKey , 1014, -1)
 	    endif
 	endfunction
 	private function getIsAncient takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1014)
+	    return LoadInteger(hash, hashKey , 1014)
 	endfunction
 	public function isWater takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1015, 1)
+	        call SaveInteger(hash, hashKey , 1015, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1015, -1)
+	        call SaveInteger(hash, hashKey , 1015, -1)
 	    endif
 	endfunction
 	private function getIsWater takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1015)
+	    return LoadInteger(hash, hashKey , 1015)
 	endfunction
 	public function isFloor takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1016, 1)
+	        call SaveInteger(hash, hashKey , 1016, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1016, -1)
+	        call SaveInteger(hash, hashKey , 1016, -1)
 	    endif
 	endfunction
 	private function getIsFloor takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1016)
+	    return LoadInteger(hash, hashKey , 1016)
 	endfunction
 	public function isOwnItem takes boolean status returns nothing
 	    if(status==true)then
-	        call SaveInteger(hashfilter, hashKey , 1017, 1)
+	        call SaveInteger(hash, hashKey , 1017, 1)
 	    else
-	        call SaveInteger(hashfilter, hashKey , 1017, -1)
+	        call SaveInteger(hash, hashKey , 1017, -1)
 	    endif
 	endfunction
 	private function getIsOwnItem takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 1017)
+	    return LoadInteger(hash, hashKey , 1017)
 	endfunction
 
 
 	//----------------------------------------
 
 	public function setIsOwnItemId takes integer itemId returns nothing
-        call SaveInteger(hashfilter, hashKey , 2017, itemId)
+        call SaveInteger(hash, hashKey , 2017, itemId)
 	endfunction
 	private function getIsOwnItemId takes nothing returns integer
-	    return LoadInteger(hashfilter, hashKey , 2017)
+	    return LoadInteger(hash, hashKey , 2017)
 	endfunction
 
 	public function get takes nothing returns boolean
@@ -337,7 +337,7 @@ library hFilter initializer init needs hIs
 	endfunction
 
 	private function init takes nothing returns nothing
-		set hashfilter = InitHashtable()
+		set hash = InitHashtable()
 		call format()
 	endfunction
 

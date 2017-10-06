@@ -1,12 +1,12 @@
-/* 计时器 */
-globals
-
-    hashtable hash_timer = null
-
-endglobals
-
 
 library hTimer initializer init needs hSys
+
+    /* 计时器 */
+    globals
+
+        private hashtable hash = null
+
+    endglobals
 
     /**
      * GET SET TIMER PARAMS
@@ -14,92 +14,92 @@ library hTimer initializer init needs hSys
      //SET
     public function setReal takes timer t,integer k,real value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveReal(hash_timer, timerHandleId, k, value)
+        call SaveReal(hash, timerHandleId, k, value)
     endfunction
     public function setInteger takes timer t,integer k,integer value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveInteger(hash_timer, timerHandleId, k, value)
+        call SaveInteger(hash, timerHandleId, k, value)
     endfunction
     public function setUnit takes timer t,integer k,unit value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveUnitHandle(hash_timer, timerHandleId, k, value)
+        call SaveUnitHandle(hash, timerHandleId, k, value)
     endfunction
     public function setString takes timer t,integer k,string value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveStr(hash_timer, timerHandleId, k, value)
+        call SaveStr(hash, timerHandleId, k, value)
     endfunction
     public function setBoolean takes timer t,integer k,boolean value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveBoolean(hash_timer, timerHandleId, k, value)
+        call SaveBoolean(hash, timerHandleId, k, value)
     endfunction
     public function setLoc takes timer t,integer k,location value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveLocationHandle(hash_timer, timerHandleId, k, value)
+        call SaveLocationHandle(hash, timerHandleId, k, value)
     endfunction
     public function setGroup takes timer t,integer k,group value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveGroupHandle(hash_timer, timerHandleId, k, value)
+        call SaveGroupHandle(hash, timerHandleId, k, value)
     endfunction
     public function setPlayer takes timer t,integer k,player value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SavePlayerHandle(hash_timer, timerHandleId, k, value)
+        call SavePlayerHandle(hash, timerHandleId, k, value)
     endfunction
     public function setItem takes timer t,integer k,item value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveItemHandle(hash_timer, timerHandleId, k, value)
+        call SaveItemHandle(hash, timerHandleId, k, value)
     endfunction
     public function setTimerDialog takes timer t,integer k,timerdialog value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveTimerDialogHandle(hash_timer, timerHandleId, k, value)
+        call SaveTimerDialogHandle(hash, timerHandleId, k, value)
     endfunction
     public function setTexttag takes timer t,integer k,texttag value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveTextTagHandle(hash_timer, timerHandleId, k, value)
+        call SaveTextTagHandle(hash, timerHandleId, k, value)
     endfunction
     //GET
     public function getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
-        return LoadReal(hash_timer, timerHandleId, k)
+        return LoadReal(hash, timerHandleId, k)
     endfunction
     public function getInteger takes timer t,integer k returns integer
         local integer timerHandleId = GetHandleId(t)
-        return LoadInteger(hash_timer, timerHandleId, k)
+        return LoadInteger(hash, timerHandleId, k)
     endfunction
     public function getUnit takes timer t,integer k returns unit
         local integer timerHandleId = GetHandleId(t)
-        return LoadUnitHandle(hash_timer, timerHandleId, k)
+        return LoadUnitHandle(hash, timerHandleId, k)
     endfunction
     public function getString takes timer t,integer k returns string
         local integer timerHandleId = GetHandleId(t)
-        return LoadStr(hash_timer, timerHandleId, k)
+        return LoadStr(hash, timerHandleId, k)
     endfunction
     public function getBoolean takes timer t,integer k returns boolean
         local integer timerHandleId = GetHandleId(t)
-        return LoadBoolean(hash_timer, timerHandleId, k)
+        return LoadBoolean(hash, timerHandleId, k)
     endfunction
     public function getLoc takes timer t,integer k returns location
         local integer timerHandleId = GetHandleId(t)
-        return LoadLocationHandle(hash_timer, timerHandleId, k)
+        return LoadLocationHandle(hash, timerHandleId, k)
     endfunction
     public function getGroup takes timer t,integer k returns group
         local integer timerHandleId = GetHandleId(t)
-        return LoadGroupHandle(hash_timer, timerHandleId, k)
+        return LoadGroupHandle(hash, timerHandleId, k)
     endfunction
     public function getPlayer takes timer t,integer k returns player
         local integer timerHandleId = GetHandleId(t)
-        return LoadPlayerHandle(hash_timer, timerHandleId, k)
+        return LoadPlayerHandle(hash, timerHandleId, k)
     endfunction
     public function getItem takes timer t,integer k returns item
         local integer timerHandleId = GetHandleId(t)
-        return LoadItemHandle(hash_timer, timerHandleId, k)
+        return LoadItemHandle(hash, timerHandleId, k)
     endfunction
     public function getTimerDialog takes timer t,integer k returns timerdialog
         local integer timerHandleId = GetHandleId(t)
-        return LoadTimerDialogHandle(hash_timer, timerHandleId, k)
+        return LoadTimerDialogHandle(hash, timerHandleId, k)
     endfunction
     public function getTexttag takes timer t,integer k returns texttag
         local integer timerHandleId = GetHandleId(t)
-        return LoadTextTagHandle(hash_timer, timerHandleId, k)
+        return LoadTextTagHandle(hash, timerHandleId, k)
     endfunction
 
     /**
@@ -159,7 +159,7 @@ library hTimer initializer init needs hSys
     endfunction
     
     private function init takes nothing returns nothing
-        set hash_timer = InitHashtable()
+        set hash = InitHashtable()
     endfunction
 
 endlibrary

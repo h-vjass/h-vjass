@@ -1,6 +1,4 @@
-globals
-	
-	/*
+/*
 	生命恢复效果：增加生命恢复
 	魔法恢复效果：增加魔法恢复
 	攻击速度效果：增加攻击速度
@@ -37,173 +35,172 @@ globals
 	swimp 		眩晕[特定眩晕，直接眩晕，不受抵抗]
 	heavy 		沉重[加重硬直减少量]
 	break 		打断[直接僵直]
-	*/
-	integer ATTR_FLAG_EFFECT_UNIT = 1000
-    integer ATTR_FLAG_EFFECT_CD = 1001
-    //--
-	integer ATTR_FLAG_EFFECT_LIFE_BACK = 2001
-	integer ATTR_FLAG_EFFECT_MANA_BACK = 2002
-	integer ATTR_FLAG_EFFECT_ATTACK_SPEED = 2003
-	integer ATTR_FLAG_EFFECT_ATTACK_PHYSICAL = 2004
-	integer ATTR_FLAG_EFFECT_ATTACK_MAGIC = 2005
-	integer ATTR_FLAG_EFFECT_MOVE = 2006
-	integer ATTR_FLAG_EFFECT_AIM = 2007
-	integer ATTR_FLAG_EFFECT_STR = 2008
-	integer ATTR_FLAG_EFFECT_AGI = 2009
-	integer ATTR_FLAG_EFFECT_INT = 2010
-	integer ATTR_FLAG_EFFECT_KNOCKING = 2011
-	integer ATTR_FLAG_EFFECT_VIOLENCE = 2012
-	integer ATTR_FLAG_EFFECT_HEMOPHAGIA = 2013
-	integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL = 2014
-	integer ATTR_FLAG_EFFECT_SPLIT = 2015
-	integer ATTR_FLAG_EFFECT_SWIM = 2016
-	integer ATTR_FLAG_EFFECT_LUCK = 2017
-	integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE = 2018
-	integer ATTR_FLAG_EFFECT_POISON = 2019
-	integer ATTR_FLAG_EFFECT_DRY = 2020
-	integer ATTR_FLAG_EFFECT_FREEZE = 2021
-	integer ATTR_FLAG_EFFECT_COLD = 2022
-	integer ATTR_FLAG_EFFECT_BLUNT = 2023
-	integer ATTR_FLAG_EFFECT_CORROSION = 2024
-	integer ATTR_FLAG_EFFECT_CHAOS = 2025
-	integer ATTR_FLAG_EFFECT_TWINE = 2026
-	integer ATTR_FLAG_EFFECT_BLIND = 2027
-	integer ATTR_FLAG_EFFECT_WEAK = 2028
-	integer ATTR_FLAG_EFFECT_BOUND = 2029
-	integer ATTR_FLAG_EFFECT_FOOLISH = 2030
-	integer ATTR_FLAG_EFFECT_LAZY = 2031
-	integer ATTR_FLAG_EFFECT_SWIMP = 2032
-	integer ATTR_FLAG_EFFECT_SWIMP_DURING = 2033
-	integer ATTR_FLAG_EFFECT_BREAK = 2034
-	integer ATTR_FLAG_EFFECT_BREAK_DURING = 2035
-	integer ATTR_FLAG_EFFECT_HEAVY = 2036
-	integer ATTR_FLAG_EFFECT_UNLUCK = 2037
-	integer ATTR_FLAG_EFFECT_DURING_LIFE_BACK = 4001
-	integer ATTR_FLAG_EFFECT_DURING_MANA_BACK = 4002
-	integer ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED = 4003
-	integer ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL = 4004
-	integer ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC = 4005
-	integer ATTR_FLAG_EFFECT_DURING_MOVE = 4006
-	integer ATTR_FLAG_EFFECT_DURING_AIM = 4007
-	integer ATTR_FLAG_EFFECT_DURING_STR = 4008
-	integer ATTR_FLAG_EFFECT_DURING_AGI = 4009
-	integer ATTR_FLAG_EFFECT_DURING_INT = 4010
-	integer ATTR_FLAG_EFFECT_DURING_KNOCKING = 4011
-	integer ATTR_FLAG_EFFECT_DURING_VIOLENCE = 4012
-	integer ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA = 4013
-	integer ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL = 4014
-	integer ATTR_FLAG_EFFECT_DURING_SPLIT = 4015
-	integer ATTR_FLAG_EFFECT_DURING_SWIM = 4016
-	integer ATTR_FLAG_EFFECT_DURING_LUCK = 4017
-	integer ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE = 4018
-	integer ATTR_FLAG_EFFECT_DURING_POISON = 4019
-	integer ATTR_FLAG_EFFECT_DURING_DRY = 4020
-	integer ATTR_FLAG_EFFECT_DURING_FREEZE = 4021
-	integer ATTR_FLAG_EFFECT_DURING_COLD = 4022
-	integer ATTR_FLAG_EFFECT_DURING_BLUNT = 4023
-	integer ATTR_FLAG_EFFECT_DURING_CORROSION = 4024
-	integer ATTR_FLAG_EFFECT_DURING_CHAOS = 4025
-	integer ATTR_FLAG_EFFECT_DURING_TWINE = 4026
-	integer ATTR_FLAG_EFFECT_DURING_BLIND = 4027
-	integer ATTR_FLAG_EFFECT_DURING_WEAK = 4028
-	integer ATTR_FLAG_EFFECT_DURING_BOUND = 4029
-	integer ATTR_FLAG_EFFECT_DURING_FOOLISH = 4030
-	integer ATTR_FLAG_EFFECT_DURING_LAZY = 4031
-	integer ATTR_FLAG_EFFECT_DURING_SWIMP = 4032
-	integer ATTR_FLAG_EFFECT_DURING_SWIMP_DURING = 4033
-	integer ATTR_FLAG_EFFECT_DURING_BREAK = 4034
-	integer ATTR_FLAG_EFFECT_DURING_BREAK_DURING = 4035
-	integer ATTR_FLAG_EFFECT_DURING_HEAVY = 4036
-	integer ATTR_FLAG_EFFECT_DURING_UNLUCK = 4037
-
-    hashtable hash_attrEffect = null
-
-endglobals
-
+*/
 library hAttrEffect initializer init needs hAttr
+
+	globals
+		private hashtable hash = null
+		private integer ATTR_FLAG_EFFECT_UNIT = 1000
+	    private integer ATTR_FLAG_EFFECT_CD = 1001
+	    //--
+		private integer ATTR_FLAG_EFFECT_LIFE_BACK = 2001
+		private integer ATTR_FLAG_EFFECT_MANA_BACK = 2002
+		private integer ATTR_FLAG_EFFECT_ATTACK_SPEED = 2003
+		private integer ATTR_FLAG_EFFECT_ATTACK_PHYSICAL = 2004
+		private integer ATTR_FLAG_EFFECT_ATTACK_MAGIC = 2005
+		private integer ATTR_FLAG_EFFECT_MOVE = 2006
+		private integer ATTR_FLAG_EFFECT_AIM = 2007
+		private integer ATTR_FLAG_EFFECT_STR = 2008
+		private integer ATTR_FLAG_EFFECT_AGI = 2009
+		private integer ATTR_FLAG_EFFECT_INT = 2010
+		private integer ATTR_FLAG_EFFECT_KNOCKING = 2011
+		private integer ATTR_FLAG_EFFECT_VIOLENCE = 2012
+		private integer ATTR_FLAG_EFFECT_HEMOPHAGIA = 2013
+		private integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL = 2014
+		private integer ATTR_FLAG_EFFECT_SPLIT = 2015
+		private integer ATTR_FLAG_EFFECT_SWIM = 2016
+		private integer ATTR_FLAG_EFFECT_LUCK = 2017
+		private integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE = 2018
+		private integer ATTR_FLAG_EFFECT_POISON = 2019
+		private integer ATTR_FLAG_EFFECT_DRY = 2020
+		private integer ATTR_FLAG_EFFECT_FREEZE = 2021
+		private integer ATTR_FLAG_EFFECT_COLD = 2022
+		private integer ATTR_FLAG_EFFECT_BLUNT = 2023
+		private integer ATTR_FLAG_EFFECT_CORROSION = 2024
+		private integer ATTR_FLAG_EFFECT_CHAOS = 2025
+		private integer ATTR_FLAG_EFFECT_TWINE = 2026
+		private integer ATTR_FLAG_EFFECT_BLIND = 2027
+		private integer ATTR_FLAG_EFFECT_WEAK = 2028
+		private integer ATTR_FLAG_EFFECT_BOUND = 2029
+		private integer ATTR_FLAG_EFFECT_FOOLISH = 2030
+		private integer ATTR_FLAG_EFFECT_LAZY = 2031
+		private integer ATTR_FLAG_EFFECT_SWIMP = 2032
+		private integer ATTR_FLAG_EFFECT_SWIMP_DURING = 2033
+		private integer ATTR_FLAG_EFFECT_BREAK = 2034
+		private integer ATTR_FLAG_EFFECT_BREAK_DURING = 2035
+		private integer ATTR_FLAG_EFFECT_HEAVY = 2036
+		private integer ATTR_FLAG_EFFECT_UNLUCK = 2037
+		private integer ATTR_FLAG_EFFECT_DURING_LIFE_BACK = 4001
+		private integer ATTR_FLAG_EFFECT_DURING_MANA_BACK = 4002
+		private integer ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED = 4003
+		private integer ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL = 4004
+		private integer ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC = 4005
+		private integer ATTR_FLAG_EFFECT_DURING_MOVE = 4006
+		private integer ATTR_FLAG_EFFECT_DURING_AIM = 4007
+		private integer ATTR_FLAG_EFFECT_DURING_STR = 4008
+		private integer ATTR_FLAG_EFFECT_DURING_AGI = 4009
+		private integer ATTR_FLAG_EFFECT_DURING_INT = 4010
+		private integer ATTR_FLAG_EFFECT_DURING_KNOCKING = 4011
+		private integer ATTR_FLAG_EFFECT_DURING_VIOLENCE = 4012
+		private integer ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA = 4013
+		private integer ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL = 4014
+		private integer ATTR_FLAG_EFFECT_DURING_SPLIT = 4015
+		private integer ATTR_FLAG_EFFECT_DURING_SWIM = 4016
+		private integer ATTR_FLAG_EFFECT_DURING_LUCK = 4017
+		private integer ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE = 4018
+		private integer ATTR_FLAG_EFFECT_DURING_POISON = 4019
+		private integer ATTR_FLAG_EFFECT_DURING_DRY = 4020
+		private integer ATTR_FLAG_EFFECT_DURING_FREEZE = 4021
+		private integer ATTR_FLAG_EFFECT_DURING_COLD = 4022
+		private integer ATTR_FLAG_EFFECT_DURING_BLUNT = 4023
+		private integer ATTR_FLAG_EFFECT_DURING_CORROSION = 4024
+		private integer ATTR_FLAG_EFFECT_DURING_CHAOS = 4025
+		private integer ATTR_FLAG_EFFECT_DURING_TWINE = 4026
+		private integer ATTR_FLAG_EFFECT_DURING_BLIND = 4027
+		private integer ATTR_FLAG_EFFECT_DURING_WEAK = 4028
+		private integer ATTR_FLAG_EFFECT_DURING_BOUND = 4029
+		private integer ATTR_FLAG_EFFECT_DURING_FOOLISH = 4030
+		private integer ATTR_FLAG_EFFECT_DURING_LAZY = 4031
+		private integer ATTR_FLAG_EFFECT_DURING_SWIMP = 4032
+		private integer ATTR_FLAG_EFFECT_DURING_SWIMP_DURING = 4033
+		private integer ATTR_FLAG_EFFECT_DURING_BREAK = 4034
+		private integer ATTR_FLAG_EFFECT_DURING_BREAK_DURING = 4035
+		private integer ATTR_FLAG_EFFECT_DURING_HEAVY = 4036
+		private integer ATTR_FLAG_EFFECT_DURING_UNLUCK = 4037
+	endglobals
 
 	/* 验证单位是否初始化过参数 */
 	public function initAttr takes unit whichUnit returns boolean
 		local integer uhid = GetHandleId(whichUnit)
-		local integer judgeHandleId = LoadInteger( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_UNIT )
+		local integer judgeHandleId = LoadInteger( hash , uhid , ATTR_FLAG_EFFECT_UNIT )
 		local real tempReal = 0
 		if( uhid != judgeHandleId ) then
-			call SaveInteger( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_UNIT , uhid )
+			call SaveInteger( hash , uhid , ATTR_FLAG_EFFECT_UNIT , uhid )
 
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_LIFE_BACK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_LIFE_BACK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_MANA_BACK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_MANA_BACK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_ATTACK_SPEED , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_ATTACK_PHYSICAL , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_ATTACK_MAGIC , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_MOVE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_MOVE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_AIM , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_AIM , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_STR , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_STR , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_AGI , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_AGI , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_INT , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_INT , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_KNOCKING , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_KNOCKING , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_VIOLENCE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_VIOLENCE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_HEMOPHAGIA , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_SPLIT , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_SPLIT , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_SWIM , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_SWIM , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_LUCK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_LUCK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_HUNT_AMPLITUDE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_POISON , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_POISON , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DRY , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_DRY , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_FREEZE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_FREEZE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_COLD , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_COLD , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_BLUNT , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_BLUNT , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_CORROSION , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_CORROSION , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_CHAOS , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_CHAOS , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_TWINE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_TWINE , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_BLIND , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_BLIND , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_WEAK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_WEAK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_BOUND , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_BOUND , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_FOOLISH , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_FOOLISH , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_LAZY , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_LAZY , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_SWIMP , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_SWIMP , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_SWIMP_DURING , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_SWIMP_DURING , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_BREAK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_BREAK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_BREAK_DURING , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_BREAK_DURING , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_HEAVY , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_HEAVY , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_UNLUCK , 0 )
-			call SaveReal( hash_attrEffect , uhid , ATTR_FLAG_EFFECT_DURING_UNLUCK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_LIFE_BACK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_LIFE_BACK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_MANA_BACK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_MANA_BACK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_ATTACK_SPEED , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_ATTACK_PHYSICAL , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_ATTACK_MAGIC , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_MOVE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_MOVE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_AIM , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_AIM , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_STR , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_STR , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_AGI , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_AGI , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_INT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_INT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_KNOCKING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_KNOCKING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_VIOLENCE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_VIOLENCE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_HEMOPHAGIA , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SPLIT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SPLIT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIM , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIM , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_LUCK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_LUCK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_HUNT_AMPLITUDE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_POISON , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_POISON , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DRY , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_DRY , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_FREEZE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_FREEZE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_COLD , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_COLD , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BLUNT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BLUNT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_CORROSION , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_CORROSION , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_CHAOS , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_CHAOS , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_TWINE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_TWINE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BLIND , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BLIND , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_WEAK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_WEAK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BOUND , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BOUND , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_FOOLISH , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_FOOLISH , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_LAZY , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_LAZY , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIMP , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIMP , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIMP_DURING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIMP_DURING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BREAK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BREAK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BREAK_DURING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BREAK_DURING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_HEAVY , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_HEAVY , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_UNLUCK , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_UNLUCK , 0 )
 			return true
 		endif
 		return false
@@ -213,7 +210,7 @@ library hAttrEffect initializer init needs hAttr
 	private function setAttrDo takes integer flag , unit whichUnit , real diff returns nothing
 		local integer uhid = GetHandleId(whichUnit)
 		if(diff != 0)then
-			call SaveReal( hash_attrEffect , uhid , flag , LoadReal( hash_attrEffect , uhid , flag ) + diff )
+			call SaveReal( hash , uhid , flag , LoadReal( hash , uhid , flag ) + diff )
 		endif
 	endfunction
 
@@ -241,7 +238,7 @@ library hAttrEffect initializer init needs hAttr
 
 	private function getAttr takes integer flag , unit whichUnit returns real
 		call initAttr( whichUnit )
-		return LoadReal( hash_attrEffect , GetHandleId(whichUnit) , flag )
+		return LoadReal( hash , GetHandleId(whichUnit) , flag )
 	endfunction
 
 
@@ -990,7 +987,7 @@ library hAttrEffect initializer init needs hAttr
     endfunction
 
     private function init takes nothing returns nothing
-    	set hash_attrEffect = InitHashtable()
+    	set hash = InitHashtable()
     endfunction
 
 

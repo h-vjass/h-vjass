@@ -1,19 +1,19 @@
 /* 基础能力 */
-globals
-
-	hashtable hash_ability = null
-	//硬直
-	integer SKILL_PUNISH_TYPE_black = 1
-	integer SKILL_PUNISH_TYPE_blue = 2	
-	//超级马甲
-	integer Unit_Token = 'h00J'
-	//马甲技能
-	integer Unit_TokenSkill_Break 	= 'A09R'
-	integer Unit_TokenSkill_Swim_05 = 'A09Q'
-
-endglobals
-
 library hAbility needs hFilter
+
+	globals
+
+		private hashtable hash = null
+		//硬直
+		private integer SKILL_PUNISH_TYPE_black = 1
+		private integer SKILL_PUNISH_TYPE_blue = 2	
+		//超级马甲
+		private integer Unit_Token = 'h00J'
+		//马甲技能
+		private integer Unit_TokenSkill_Break 	= 'A09R'
+		private integer Unit_TokenSkill_Swim_05 = 'A09Q'
+
+	endglobals
 
 	/**
 	 * 打断
@@ -159,7 +159,7 @@ library hAbility needs hFilter
 	    if( during == null ) then
 	        set during = 0.01   //假如没有设置时间，默认打断效果
 	    endif
-	    set prevTimer = LoadTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 )
+	    set prevTimer = LoadTimerHandle( hash , GetHandleId(whichUnit) , 3 )
 	    set prevTimeRemaining = TimerGetRemaining(prevTimer)
 	    if( prevTimeRemaining > 0 )then
 	        call hTimer_delTimer( prevTimer ,null )
@@ -176,7 +176,7 @@ library hAbility needs hFilter
 	    set t = hTimer_setTimeout( (during+prevTimeRemaining) ,function punishCallBack )
 	    call hTimer_setUnit(t,1,whichUnit)
 	    call hTimer_setInteger(t,2, skillPunishType )
-	    call SaveTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 , t )
+	    call SaveTimerHandle( hash , GetHandleId(whichUnit) , 3 , t )
 	endfunction
 
 	 /**
@@ -263,7 +263,7 @@ library hAbility needs hFilter
 	endfunction	
 
 	private function init takes nothing returns nothing
-		set hash_ability = InitHashtable()
+		set hash = InitHashtable()
 	endfunction
 
 endlibrary

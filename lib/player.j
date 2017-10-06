@@ -1,28 +1,53 @@
+
 globals
-
-	hashtable hash_player = null
-	integer player_qty = 12
+	integer player_max_qty = 12
+	integer player_current_qty = 0
 	player array players
-	constant integer hplayer_isComputer = 10001
-	constant integer hplayer_apm = 10002
-	constant integer hplayer_battle_status = 10003
-
 endglobals
 
 library hPlayer initializer init needs hSys
 
+	globals
+
+		private hashtable hash = null
+		private integer hp_isComputer = 10001
+		private integer hp_apm = 10002
+		private integer hp_battle_status = 10003
+		private integer hp_hero = 10004
+
+	endglobals
+
 	//是否电脑
-	public function isComputer takes player whichPlayer returns nothing
-		call LoadBoolean(hash_player, GetHandleId(whichPlayer), hplayer_isComputer)
+	public function isComputer takes player whichPlayer returns boolean
+		return LoadBoolean(hash, GetHandleId(whichPlayer), hp_isComputer)
 	endfunction
 
 	//设置玩家战斗状态
 	public function setBattleStatus takes player whichPlayer,string status returns nothing
-		call SaveStr(hash_player, GetHandleId(whichPlayer), hplayer_battle_status, status)
+		call SaveStr(hash, GetHandleId(whichPlayer), hp_battle_status, status)
 	endfunction
 	//获取玩家战斗状态
 	public function getBattleStatus takes player whichPlayer returns string
-		return LoadStr(hash_player, GetHandleId(whichPlayer), hplayer_battle_status)
+		return LoadStr(hash, GetHandleId(whichPlayer), hp_battle_status)
+	endfunction
+
+	//设置失败
+	public function defeat takes player whichPlayer returns nothing
+		call CustomDefeatBJ( whichPlayer, "失败" )
+	endfunction
+
+	//设置胜利
+	public function victory takes player whichPlayer returns nothing
+		call CustomVictoryBJ( whichPlayer, true, true )
+	endfunction
+
+	//设置玩家英雄
+	public function setHero takes player whichPlayer,unit hero returns nothing
+		call SaveUnitHandle(hash, GetHandleId(whichPlayer), hp_hero, hero)
+	endfunction
+	//获取玩家英雄
+	public function getHero takes player whichPlayer returns unit
+		return LoadUnitHandle(hash, GetHandleId(whichPlayer), hp_hero)
 	endfunction
 
 	//获取玩家金钱
@@ -61,17 +86,17 @@ library hPlayer initializer init needs hSys
 
 	//apm
 	private function setApm takes player whichPlayer , integer apm returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hplayer_apm, apm)
+		call SaveInteger(hash, GetHandleId(whichPlayer), hp_apm, apm)
 	endfunction
 	public function getApm takes player whichPlayer returns integer
-		if(h_clock_count > 60) then
-			return R2I( I2R(LoadInteger(hash_player, GetHandleId(whichPlayer), hplayer_apm))  / ( I2R(h_clock_count) / 60.00 ))
+		if(hSys_count() > 60) then
+			return R2I( I2R(LoadInteger(hash, GetHandleId(whichPlayer), hp_apm))  / ( I2R(hSys_count()) / 60.00 ))
 	    else
-	        return LoadInteger(hash_player, GetHandleId(whichPlayer), hplayer_apm)
+	        return LoadInteger(hash, GetHandleId(whichPlayer), hp_apm)
 	    endif
 	endfunction
 	private function addApm takes player whichPlayer returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hplayer_apm , LoadInteger(hash_player, GetHandleId(whichPlayer), hplayer_apm)+1)
+		call SaveInteger(hash, GetHandleId(whichPlayer), hp_apm , LoadInteger(hash, GetHandleId(whichPlayer), hp_apm)+1)
 	endfunction
 	private function triggerApmActions takes nothing returns nothing
 		call addApm(GetTriggerPlayer())
@@ -85,25 +110,26 @@ library hPlayer initializer init needs hSys
 		local integer pid = 0
 		local trigger triggerApm = CreateTrigger()
 		local trigger triggerApmUnit = CreateTrigger()
-		set hash_player = InitHashtable()
+		set hash = InitHashtable()
 		call TriggerAddAction(triggerApm , function triggerApmActions)
 		call TriggerAddAction(triggerApmUnit , function triggerApmUnitActions)
 		loop
-			exitwhen i>player_qty
+			exitwhen i>player_max_qty
 				set players[i] = Player(i-1)
 				set pid = GetHandleId(players[i])
 				call SetPlayerHandicapXP( players[i] , 0 )
 				call setApm(players[i],0)
 				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
-					call SaveBoolean(hash_player, pid, hplayer_isComputer, false)
-					call SaveStr(hash_player, pid, hplayer_battle_status, "游戏中")
+					set player_current_qty = player_current_qty + 1
+					call SaveBoolean(hash, pid, hp_isComputer, false)
+					call SaveStr(hash, pid, hp_battle_status, "游戏中")
 	                call TriggerRegisterPlayerSelectionEventBJ( triggerApm , players[i] , true )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_LEFT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
 	            else
-	            	call SaveBoolean(hash_player, pid, hplayer_isComputer, true)
+	            	call SaveBoolean(hash, pid, hp_isComputer, true)
 	            endif
 			set i = i + 1
 		endloop

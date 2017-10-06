@@ -3,7 +3,7 @@
 #include "lib/abstract.j"
 
 //载入 主游戏流程文件
-//#include "schedule/abstract.j"
+#include "schedule/abstract.j"
 
 //载入 房间音乐
 function hBgm takes string s returns nothing
@@ -13,7 +13,7 @@ function hBgm takes string s returns nothing
 endfunction
 #define SetMapDescription(s) hBgm(s)
 
-library hJass initializer init
+library hJass initializer init needs schedule
 
 	//预读
 	private function preread takes nothing returns nothing
@@ -28,7 +28,8 @@ library hJass initializer init
 	    loop
 	        exitwhen i>total
 	            set prereadUnits[i] = CreateUnitAtLoc(Player(PLAYER_NEUTRAL_PASSIVE), prereads[i], GetRectCenter(GetPlayableMapRect()), bj_UNIT_FACING)
-	            //call attribute_initAllSkill(prereadUnits[i])
+	            call hAttr_initAttr(prereadUnits[i])
+	            call hAttrEffect_initAttr(prereadUnits[i])
 	        set i = i+1
 	    endloop
 	    call PolledWait(0.00)
@@ -43,6 +44,8 @@ library hJass initializer init
 	private function init takes nothing returns nothing
 		//预读
 		call preread()
+		//属性 - 硬直条
+		call hAttrUnit_setPunishTtg(true,false)
 		//迷雾
 		call FogEnable( true )
 		//阴影

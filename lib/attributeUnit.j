@@ -1,74 +1,25 @@
-globals
-
-	/* 漂浮字高度 */
-	real TEXTTAG_HEIGHT_Lv1 = 260.00
-	real TEXTTAG_HEIGHT_Lv2 = 280.00
-	real TEXTTAG_HEIGHT_Lv3 = 300.00
-	real TEXTTAG_HEIGHT_Lv4 = 320.00
-
-	trigger ATTR_TRIGGER_UNIT_BEHUNT = null
-	trigger ATTR_TRIGGER_HERO_LEVEL = null
-	trigger ATTR_TRIGGER_UNIT_DEATH = null
-
-	boolean ATTR_SWITCH_PUNISH = true //有的游戏不需要硬直条就把他关闭
-
-	hashtable hash_attrUnit = null
-
-endglobals
-
+/* 属性 - 单位 */
 library hAttrUnit initializer init needs hAttrHunt
 
-	/**
-     * 漂浮文字 - 重设置
-     *  ttg 漂浮文字
-     *  u 某单位
-     *  textSize 字体大小
-     */
-    public function punishTexttagReSet takes integer index , string msg, real textSize returns nothing
-        if( Player_heros[index] == null and SKILL_PUNISH_texttag[index] != null) then
-            set SKILL_PUNISH_texttag[index] = null
-        else
-            call SetTextTagTextBJ( SKILL_PUNISH_texttag[index] , msg , textSize )
-        endif
-    endfunction
+	globals
+		private boolean PUNISH_SWITCH = true 			//有的游戏不需要硬直条就把他关闭
+		private boolean PUNISH_SWITCH_ONLYHERO = true 	//是否只有英雄有硬直条
+		private real PUNISH_TEXTTAG_HEIGHT = 260.00		//硬直条漂浮字高度
 
-	/**
-	 * 设置硬直漂浮字
-	 */
-    private function punishTexttag takes integer index , real val ,real limit returns nothing
-		local string ttgStr = ""
-		local real percent = 0
-		local integer block = 0
-		local integer blockMax = 25
-		local real textSize = 5.00
-		local real textZOffset = TEXTTAG_HEIGHT_Lv1
-		local real textOpacity = 0.10
-		local real textXOffset = -(textSize*blockMax*0.5)
-		local string font = "■"
-		local integer i = 0
-        //计算字符串
-        if( limit > 0 ) then
-            set percent = val * 100 / limit
-            set block = R2I(percent / I2R(100/blockMax))
-            if( val >= limit ) then
-                set block = blockMax
-            endif
-            set i = 1
-            loop
-                exitwhen i > blockMax
-                    if( i <= block ) then
-                        set ttgStr = ttgStr + "|cffffff80"+font+"|r"
-                    else
-                        set ttgStr = ttgStr + "|cff000000"+font+"|r"
-                    endif
-                set i = i + 1
-            endloop
-        endif
-        if( Player_heros[index] != null and SKILL_PUNISH_texttag[index] == null ) then
-            set SKILL_PUNISH_texttag[index] = funcs_floatMsgWithSizeAutoBind( ttgStr , Player_heros[index] , textSize , textZOffset , textOpacity , textXOffset )
-        else
-            call punishTexttagReSet( index , ttgStr , textSize )
-        endif
+		private trigger ATTR_TRIGGER_UNIT_BEHUNT = null
+		private trigger ATTR_TRIGGER_HERO_LEVEL = null
+		private trigger ATTR_TRIGGER_UNIT_DEATH = null
+
+		private hashtable hash = null
+		private group ATTR_GROUP = CreateGroup()
+
+	endglobals
+
+	/* 把单位赶出属性组 */
+	private function groupOut takes unit whichUnit returns nothing
+		if( IsUnitInGroup( whichUnit , ATTR_GROUP ) == true ) then
+			call GroupRemoveUnit( ATTR_GROUP , whichUnit )
+		endif
 	endfunction
 
 	/* 活力/魔法恢复 */
@@ -124,7 +75,41 @@ library hAttrUnit initializer init needs hAttrHunt
 		endif
 	endfunction
 
-
+	/**
+	 * 设置硬直漂浮字
+	 */
+    private function punishTtg takes unit whichUnit returns nothing
+		local string ttgStr = ""
+		local string font = "|"
+		local real percent = 0
+		local integer block = 0
+		local integer blockMax = 25
+		local real textSize = 5.00
+		local real textZOffset = PUNISH_TEXTTAG_HEIGHT
+		local real textOpacity = 0.10
+		local integer i = 0
+		local real punishNow = hAttr_getPunishCurrent(whichUnit)
+		local real punishAll = hAttr_getPunish(whichUnit)
+        //计算字符串
+        if( punishAll > 0 ) then
+            set percent = punishNow / punishAll
+            set block = R2I(percent * I2R(blockMax))
+            if( punishNow >= punishAll ) then
+                set block = R2I(blockMax)
+            endif
+            set i = 1
+            loop
+                exitwhen i > blockMax
+                    if( i <= block ) then
+                        set ttgStr = ttgStr + "|cffffff80"+font+"|r"
+                    else
+                        set ttgStr = ttgStr + "|cff000000"+font+"|r"
+                    endif
+                set i = i + 1
+            endloop
+        endif
+        call hMsg_ttgBindUnit(whichUnit,ttgStr,textSize,"",textOpacity,textZOffset)
+	endfunction
 
 	/* 单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害) */
 	private function triggerUnitbeHuntAction takes nothing returns nothing
@@ -339,7 +324,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	private function triggerUnitDeathAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		if( hIs_hero(u)==false and IsUnitInGroup(u, ATTR_GROUP) ) then
-			call hAttr_groupOut(u)
+			call groupOut(u)
 		endif
 		set u = null
 	endfunction
@@ -348,7 +333,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	private function triggerInAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local integer uhid = GetHandleId(u)
-		local boolean isBind = LoadBoolean( hash_attrUnit , uhid , 1 )
+		local boolean isBind = LoadBoolean( hash , uhid , 1 )
 		//todo 注册事件
 		if(isBind != true)then
 			call hAttr_initAttr(u)
@@ -356,11 +341,22 @@ library hAttrUnit initializer init needs hAttrHunt
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_BEHUNT , u , EVENT_UNIT_DAMAGED )
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
 			if( hIs_hero(u) )then
+				//英雄升级
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
 	        endif
-	        call SaveBoolean( hash_attrUnit , uhid , 1 , true )
+	        //硬直条
+			if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and hIs_hero(u))))then
+				call punishTtg(u)
+			endif
+	        call SaveBoolean( hash , uhid , 1 , true )
 		endif
         set u = null
+	endfunction
+
+	/* 设置硬直条 */
+	public function setPunishTtg takes boolean status,boolean onlyHero returns nothing
+		set PUNISH_SWITCH = status
+		set PUNISH_SWITCH_ONLYHERO = onlyHero
 	endfunction
 
 	/* 初始化 */
@@ -368,7 +364,7 @@ library hAttrUnit initializer init needs hAttrHunt
 
 		local trigger triggerIn = CreateTrigger()
 		//
-		set hash_attrUnit = InitHashtable()
+		set hash = InitHashtable()
 		//触发设定
 		set ATTR_TRIGGER_UNIT_BEHUNT = CreateTrigger()
 		set ATTR_TRIGGER_HERO_LEVEL = CreateTrigger()

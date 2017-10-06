@@ -21,14 +21,7 @@
 					#include "attributeEffect.j"
 						#include "attributeHunt.j"
 							#include "attributeUnit.j"
+								#include "award.j"
 								//#include "items.j"
-
-
-/*
-#include "items.j"
-#include "lose.j"
-#include "share.j"
-#include "success.j"
-#include "skills.j"
-#include "myMultiboard.j"
-*/
+									//#include "skills.j"
+										//#include "multiboard.j"

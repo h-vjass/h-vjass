@@ -1,4 +1,4 @@
-
+/* 属性 - 伤害 */
 library hAttrHunt initializer init needs hAttrEffect
 
 	/**

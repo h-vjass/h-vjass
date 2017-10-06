@@ -1,20 +1,20 @@
 /* 事件.j */
 
-globals
-
-    hashtable hash_event = null
-
-endglobals
-
 library hEvent initializer init needs hFilter
     
+    globals
+
+        private hashtable hash = null
+
+    endglobals
+
     /**
      * 设置凶手单位
      */
     public function setKiller takes unit toUnit,unit killer returns nothing
         local integer hid = GetHandleId(toUnit)
         if(hIs_death(toUnit)==true)then
-            call SaveUnitHandle(hash_event, hid , 1, killer)
+            call SaveUnitHandle(hash, hid , 1, killer)
         endif
     endfunction
     /**
@@ -25,11 +25,17 @@ library hEvent initializer init needs hFilter
         if(hIs_death(toUnit)!=true)then
             return null
         endif
-        return LoadUnitHandle(hash_event, hid , 1)
+        return LoadUnitHandle(hash, hid , 1)
+    endfunction
+
+    //on - 受伤
+    public function onHunt takes unit whichUnit returns nothing
+        
     endfunction
 
     private function init takes nothing returns nothing
-        set hash_event = InitHashtable()
+        set hash = InitHashtable()
     endfunction
 
 endlibrary
+

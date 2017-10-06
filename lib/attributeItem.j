@@ -1,10 +1,9 @@
-globals
-
-
-
-endglobals
 
 library attributeItem requires attributeHunt
+
+	globals
+
+	endglobals
 
 	//物品缓存
 	private function setItemCacheAttr takes integer flag , unit whichUnit , real value returns nothing
