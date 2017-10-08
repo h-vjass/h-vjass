@@ -63,7 +63,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	                set tempUnit = FirstOfGroup(tempGroup)
 	                call GroupRemoveUnit( tempGroup , tempUnit )
 	                //
-	                if( hIs_hero(tempUnit) )then
+	                if( is.hero(tempUnit) )then
 		                call hAttr_addPunishCurrent( tempUnit , 100 , 0 )
 	                endif
 	            	//
@@ -323,7 +323,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	/* 单位死亡（一般排除玩家的英雄） */
 	private function triggerUnitDeathAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
-		if( hIs_hero(u)==false and IsUnitInGroup(u, ATTR_GROUP) ) then
+		if( is.hero(u)==false and IsUnitInGroup(u, ATTR_GROUP) ) then
 			call groupOut(u)
 		endif
 		set u = null
@@ -340,12 +340,12 @@ library hAttrUnit initializer init needs hAttrHunt
 			call hAttrEffect_initAttr(u)
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_BEHUNT , u , EVENT_UNIT_DAMAGED )
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
-			if( hIs_hero(u) )then
+			if( is.hero(u) )then
 				//英雄升级
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
 	        endif
 	        //硬直条
-			if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and hIs_hero(u))))then
+			if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and is.hero(u))))then
 				call punishTtg(u)
 			endif
 	        call SaveBoolean( hash , uhid , 1 , true )
@@ -377,8 +377,8 @@ library hAttrUnit initializer init needs hAttrHunt
 		call TriggerRegisterEnterRectSimple( triggerIn , GetPlayableMapRect() )
 		call TriggerAddAction( triggerIn , function triggerInAction)
 
-		call hTimer_setInterval( 0.45 , function lifemanaback )
-		call hTimer_setInterval(	5.00 , function punishback )
+		call time.setInterval( 0.45 , function lifemanaback )
+		call time.setInterval( 5.00 , function punishback )
 
 	endfunction
 

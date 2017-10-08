@@ -33,7 +33,7 @@ library hAward requires hAttrUnit
         set realLumber	= realLumber + R2I( I2R(lumber) * hAttr_getLumberRatio(whichUnit) / 100.00 )
         set realExp		= realExp + R2I( I2R(exp) * hAttr_getExpRatio(whichUnit) / 100.00 )
 
-        if(exp > 0 and hIs_hero(whichUnit)) then
+        if(exp > 0 and is.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )
             call hMsg_style(hMsg_ttg2Unit(whichUnit,I2S(realExp)+"Exp",12.00,"c4c4ff",0,2.00,50.00),"toggle",0,20)
         endif
@@ -57,12 +57,14 @@ library hAward requires hAttrUnit
         local integer cutExp = 0
         local integer cutGold = 0
         local integer cutLumber = 0
-        call hFilter_format()
-        call hFilter_isHero(true)
-        call hFilter_isAlly(true)
-        call hFilter_isAlive(true)
-        call hFilter_isBuilding(false)
-        set g = hGroup_createByUnit(whichUnit,awardRange,function hFilter_get)
+        local hFilter filter = 0
+        set filter = hFilter.create()
+        call filter.isHero(true)
+        call filter.isAlly(true)
+        call filter.isAlive(true)
+        call filter.isBuilding(false)
+        set g = hGroup_createByUnit(whichUnit,awardRange,function hFilter.get)
+        call filter.destroy()
         set gCount = CountUnitsInGroup( g )
         if( gCount <=0 ) then
             return

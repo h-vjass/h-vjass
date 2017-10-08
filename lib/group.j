@@ -1,5 +1,5 @@
 
-library hGroup needs hTimer
+library hGroup needs hSys
 	
 	/**
 	 * 瞬间移动单位组
@@ -18,7 +18,7 @@ library hGroup needs hTimer
 	            endif
 	    endloop
 	    if(meffect != null) then
-	        call hEffect_toLoc(meffect,loc)
+	        call heffect.toLoc(meffect,loc,0)
 	    endif
 	    set u = null
 	endfunction

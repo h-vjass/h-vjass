@@ -1,5 +1,5 @@
 /* 消息 */
-library hMsg initializer init needs hPlayer
+library hMsg initializer init needs hSys
 
     globals
 
@@ -76,28 +76,28 @@ library hMsg initializer init needs hPlayer
     //设置漂浮字弹出样式
     private function ttgshowScale takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local texttag ttg = hTimer_getTexttag(t,1)
+        local texttag ttg = time.getTexttag(t,1)
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
-        local real tnow = hTimer_getReal(t,2)
-        local real tend = hTimer_getReal(t,3)
+        local real tnow = time.getReal(t,2)
+        local real tend = time.getReal(t,3)
         if(tnow>=tend)then
-            call hTimer_delTimer(t,null)
+            call time.delTimer(t,null)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         call SetTextTagTextBJ(ttg, msg, size*(1+tnow/tend))
-        call hTimer_setReal(t,2,tnow)
+        call time.setReal(t,2,tnow)
     endfunction
     private function ttgshowToggle takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local texttag ttg = hTimer_getTexttag(t,1)
+        local texttag ttg = time.getTexttag(t,1)
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
-        local real tnow = hTimer_getReal(t,2)
-        local real tend1 = hTimer_getReal(t,3)
-        local real tend2 = hTimer_getReal(t,4)
+        local real tnow = time.getReal(t,2)
+        local real tend1 = time.getReal(t,3)
+        local real tend2 = time.getReal(t,4)
         if(tnow>=tend2)then
-            call hTimer_delTimer(t,null)
+            call time.delTimer(t,null)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         if(tnow<=tend1)then
@@ -105,22 +105,22 @@ library hMsg initializer init needs hPlayer
         else
             call SetTextTagTextBJ(ttg, msg, size*(1-tnow/(tend1+tend2)*(1/(tend2/(tend1+tend2)))))
         endif
-        call hTimer_setReal(t,2,tnow)
+        call time.setReal(t,2,tnow)
     endfunction
     public function style takes texttag ttg,string showtype,real xspeed,real yspeed returns nothing
         local timer t = null
         call SetTextTagVelocity( ttg, xspeed, yspeed )
         if(showtype == "scale")then //瞬间放大
-            set t = hTimer_setInterval(0.03,function ttgshowScale)
-            call hTimer_setTexttag(t,1,ttg)
-            call hTimer_setReal(t,2,0)
-            call hTimer_setReal(t,3,0.5)
+            set t = time.setInterval(0.03,function ttgshowScale)
+            call time.setTexttag(t,1,ttg)
+            call time.setReal(t,2,0)
+            call time.setReal(t,3,0.5)
         elseif(showtype == "toggle")then //放大再缩小
-            set t = hTimer_setInterval(0.03,function ttgshowToggle)
-            call hTimer_setTexttag(t,1,ttg)
-            call hTimer_setReal(t,2,0)
-            call hTimer_setReal(t,3,0.2)
-            call hTimer_setReal(t,4,0.3)
+            set t = time.setInterval(0.03,function ttgshowToggle)
+            call time.setTexttag(t,1,ttg)
+            call time.setReal(t,2,0)
+            call time.setReal(t,3,0.2)
+            call time.setReal(t,4,0.3)
         endif
     endfunction
     //漂浮文字 - 默认 (在某单位头上)
@@ -138,12 +138,12 @@ library hMsg initializer init needs hPlayer
     //漂浮文字 - 绑定在某单位头上，跟随移动(动作)
     private function ttgBindUnitCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local unit u = hTimer_getUnit( t , 1 )
-        local texttag ttg = hTimer_getTexttag( t , 2 )
-        local real zOffset = hTimer_getReal( t , 3 )
+        local unit u = time.getUnit( t , 1 )
+        local texttag ttg = time.getTexttag( t , 2 )
+        local real zOffset = time.getReal( t , 3 )
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
-        if( hIs_alive(u) == true ) then
+        if( is.alive(u) == true ) then
             call SetTextTagPos( ttg , GetUnitX(u)-I2R(StringLength(msg))*size*0.5 , GetUnitY(u) , zOffset )
             call SetTextTagVisibility( ttg , true )
         else
@@ -153,10 +153,10 @@ library hMsg initializer init needs hPlayer
     //漂浮文字 - 绑定在某单位头上，跟随移动
     public function ttgBindUnit takes unit u,string msg,real size,string color,real opacity,real zOffset returns texttag
         local texttag ttg =  ttg2Unit(u,msg,size,color,opacity,0,zOffset)
-        local timer t = hTimer_setInterval( 0.05 , function ttgBindUnitCall )
-        call hTimer_setUnit( t , 1 , u )
-        call hTimer_setTexttag( t , 2 , ttg )
-        call hTimer_setReal( t , 3 , zOffset )
+        local timer t = time.setInterval( 0.05 , function ttgBindUnitCall )
+        call time.setUnit( t , 1 , u )
+        call time.setTexttag( t , 2 , ttg )
+        call time.setReal( t , 3 , zOffset )
         return ttg
     endfunction
     
@@ -165,4 +165,3 @@ library hMsg initializer init needs hPlayer
     endfunction
 
 endlibrary
-

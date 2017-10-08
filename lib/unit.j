@@ -1,5 +1,5 @@
 
-library hUnit needs hTimer
+library hUnit needs hSys
 
     /**
      * 获取单位的最大生命
@@ -98,11 +98,11 @@ library hUnit needs hTimer
      */
     public function delUnitCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local unit targetUnit = hTimer_getUnit( t, -1 )
+        local unit targetUnit = time.getUnit( t, -1 )
         if( targetUnit != null ) then
             call RemoveUnit( targetUnit )
         endif
-        call hTimer_delTimer(t,null)
+        call time.delTimer(t,null)
     endfunction
 
     /**
@@ -113,8 +113,8 @@ library hUnit needs hTimer
         if( during <= 0 ) then
             call RemoveUnit( targetUnit )
         else
-            set t = hTimer_setTimeout( during , function delUnitCall)
-            call hTimer_setUnit( t, -1 ,targetUnit )
+            set t = time.setTimeout( during , function delUnitCall)
+            call time.setUnit( t, -1 ,targetUnit )
         endif
     endfunction
 

@@ -89,8 +89,8 @@ library hPlayer initializer init needs hSys
 		call SaveInteger(hash, GetHandleId(whichPlayer), hp_apm, apm)
 	endfunction
 	public function getApm takes player whichPlayer returns integer
-		if(hSys_count() > 60) then
-			return R2I( I2R(LoadInteger(hash, GetHandleId(whichPlayer), hp_apm))  / ( I2R(hSys_count()) / 60.00 ))
+		if(time.count() > 60) then
+			return R2I( I2R(LoadInteger(hash, GetHandleId(whichPlayer), hp_apm))  / ( I2R(time.count()) / 60.00 ))
 	    else
 	        return LoadInteger(hash, GetHandleId(whichPlayer), hp_apm)
 	    endif

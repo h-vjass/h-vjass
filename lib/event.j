@@ -1,6 +1,6 @@
 /* 事件.j */
 
-library hEvent initializer init needs hFilter
+library hEvent initializer init needs hPlayer
     
     globals
 
@@ -13,7 +13,7 @@ library hEvent initializer init needs hFilter
      */
     public function setKiller takes unit toUnit,unit killer returns nothing
         local integer hid = GetHandleId(toUnit)
-        if(hIs_death(toUnit)==true)then
+        if(is.death(toUnit)==true)then
             call SaveUnitHandle(hash, hid , 1, killer)
         endif
     endfunction
@@ -22,7 +22,7 @@ library hEvent initializer init needs hFilter
      */
     public function getKiller takes unit toUnit returns unit
         local integer hid = GetHandleId(toUnit)
-        if(hIs_death(toUnit)!=true)then
+        if(is.death(toUnit)!=true)then
             return null
         endif
         return LoadUnitHandle(hash, hid , 1)

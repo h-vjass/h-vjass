@@ -1,8 +1,11 @@
 
-//载入 lib功能文件
-#include "lib/abstract.j"
+//载入 struct
+#include "struct/abstract.j"
 
-//载入 主游戏流程文件
+//载入 lib
+#include "lib/abstract.j"
+/*
+//载入 主游戏流程
 #include "schedule/abstract.j"
 
 //载入 房间音乐
@@ -53,5 +56,5 @@ library hJass initializer init needs schedule
 	endfunction
 
 endlibrary
-
+*/
 //最后一行必须留空请勿修改

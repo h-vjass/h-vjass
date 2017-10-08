@@ -1,5 +1,5 @@
 /* 基础能力 */
-library hAbility needs hFilter
+library hAbility needs hPlayer
 
 	globals
 
@@ -54,9 +54,9 @@ library hAbility needs hFilter
 	 */
 	private function avoidCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = hTimer_getUnit(t,1)
+	    local unit whichUnit = time.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
-	    call hTimer_delTimer(t,null)
+	    call time.delTimer(t,null)
 	endfunction
 	/**
 	 * 回避
@@ -67,8 +67,8 @@ library hAbility needs hFilter
 	        return
 	    endif
 	    call SetUnitInvulnerable( whichUnit, true )
-	    set t = hTimer_setTimeout( 0.00 ,function avoidCallBack)
-	    call hTimer_setUnit(t,1,whichUnit)
+	    set t = time.setTimeout( 0.00 ,function avoidCallBack)
+	    call time.setUnit(t,1,whichUnit)
 	endfunction
 
 	/**
@@ -76,9 +76,9 @@ library hAbility needs hFilter
 	 */
 	private function invulnerableCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = hTimer_getUnit(t,1)
+	    local unit whichUnit = time.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
-	    call hTimer_delTimer(t,null)
+	    call time.delTimer(t,null)
 	endfunction
 	/**
 	 * 无敌
@@ -92,8 +92,8 @@ library hAbility needs hFilter
 	        set during = 0.00       //如果没有设置持续时间，则0秒无敌，跟回避效果相同
 	    endif
 	    call SetUnitInvulnerable( whichUnit, true )
-	    set t = hTimer_setTimeout( during ,function invulnerableCallBack)
-	    call hTimer_setUnit(t,1,whichUnit)
+	    set t = time.setTimeout( during ,function invulnerableCallBack)
+	    call time.setUnit(t,1,whichUnit)
 	endfunction
 
 	/**
@@ -113,7 +113,7 @@ library hAbility needs hFilter
 	 */
 	private function invulnerableGroupCallBackT takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local group whichGroup = hTimer_getGroup( t,1 )
+	    local group whichGroup = time.getGroup( t,1 )
 	    call ForGroup(whichGroup, function invulnerableGroupCallBack2)
 	    call GroupClear(whichGroup)
 	    call DestroyGroup(whichGroup)
@@ -128,8 +128,8 @@ library hAbility needs hFilter
 	        return
 	    endif
 	    call ForGroup(whichGroup, function invulnerableGroupCallBack1)
-	    set t = hTimer_setTimeout( during ,function invulnerableGroupCallBackT)
-	    call hTimer_setGroup(t,1,whichGroup)
+	    set t = time.setTimeout( during ,function invulnerableGroupCallBackT)
+	    call time.setGroup(t,1,whichGroup)
 	endfunction
 
 	/**
@@ -137,14 +137,14 @@ library hAbility needs hFilter
 	 */
 	public function punishCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = hTimer_getUnit(t,1)
-	    local integer skillPunishType = hTimer_getInteger(t,2)
+	    local unit whichUnit = time.getUnit(t,1)
+	    local integer skillPunishType = time.getInteger(t,2)
 	    call PauseUnit( whichUnit , false )
 	    if( skillPunishType > 0 ) then
 	        call SetUnitVertexColorBJ( whichUnit , 100, 100, 100, 0 )
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit , 100.00 )
-	    call hTimer_delTimer(t,null)
+	    call time.delTimer(t,null)
 	endfunction
 	/**
 	 * 僵直/硬直效果
@@ -162,7 +162,7 @@ library hAbility needs hFilter
 	    set prevTimer = LoadTimerHandle( hash , GetHandleId(whichUnit) , 3 )
 	    set prevTimeRemaining = TimerGetRemaining(prevTimer)
 	    if( prevTimeRemaining > 0 )then
-	        call hTimer_delTimer( prevTimer ,null )
+	        call time.delTimer( prevTimer ,null )
 	    else
 	        set prevTimeRemaining = 0
 	    endif
@@ -173,9 +173,9 @@ library hAbility needs hFilter
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit, 0.00 )
 	    call PauseUnit( whichUnit, true )
-	    set t = hTimer_setTimeout( (during+prevTimeRemaining) ,function punishCallBack )
-	    call hTimer_setUnit(t,1,whichUnit)
-	    call hTimer_setInteger(t,2, skillPunishType )
+	    set t = time.setTimeout( (during+prevTimeRemaining) ,function punishCallBack )
+	    call time.setUnit(t,1,whichUnit)
+	    call time.setInteger(t,2, skillPunishType )
 	    call SaveTimerHandle( hash , GetHandleId(whichUnit) , 3 , t )
 	endfunction
 
@@ -198,10 +198,10 @@ library hAbility needs hFilter
 	//为单位添加效果只限技能类一段时间 回调
 	private function addAbilityEffectCall takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = hTimer_getUnit(t,1)
-	    local integer whichAbility = hTimer_getInteger(t,2)
+	    local unit whichUnit = time.getUnit(t,1)
+	    local integer whichAbility = time.getInteger(t,2)
 	    call UnitRemoveAbility(whichUnit, whichAbility)
-	    call hTimer_delTimer( t ,null )
+	    call time.delTimer( t ,null )
 	endfunction
 	//为单位添加效果只限技能类一段时间
 	public function addAbilityEffect takes unit whichUnit,integer whichAbility,integer abilityLevel,real during returns nothing
@@ -212,9 +212,9 @@ library hAbility needs hFilter
 	        if( abilityLevel>0 ) then
 	            call SetUnitAbilityLevel( whichUnit, whichAbility, abilityLevel )
 	        endif
-	        set t = hTimer_setTimeout( during,function addAbilityEffectCall )
-	        call hTimer_setUnit(t,1,whichUnit)
-	        call hTimer_setInteger(t,2,whichAbility)
+	        set t = time.setTimeout( during,function addAbilityEffectCall )
+	        call time.setUnit(t,1,whichUnit)
+	        call time.setInteger(t,2,whichAbility)
 	    endif
 	endfunction
 

@@ -57,7 +57,7 @@ library hAttrHunt initializer init needs hAttrEffect
      * specialVal特殊数值：作用于特殊效果的数值
      * specialDuring特殊持续时间
      */
-    public function huntUnit takes unit fromUnit,unit toUnit,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
+    public function huntUnit takes unit fromUnit,unit toUnit,string heff,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
     	
     	local real realDamage = 0
 
@@ -90,14 +90,15 @@ library hAttrHunt initializer init needs hAttrEffect
     	local location loc = null
     	local group g = null
     	local unit u = null
+        local hFilter filter = 0
 
-    	if( heffect != null and heffect != "" ) then
+    	if( heff != null and heff != "" ) then
     		set loc = GetUnitLoc( toUnit )
-			call hEffect_toLoc(heffect,loc)
+			call heffect.toLoc(heff,loc,0)
             call RemoveLocation( loc )
     	endif
 
-    	if(hIs_alive(toUnit)==true and damage>0.5)then
+    	if(is.alive(toUnit)==true and damage>0.5)then
 
             //赋值伤害
             set realDamage = damage
@@ -108,7 +109,7 @@ library hAttrHunt initializer init needs hAttrEffect
 	        elseif( hkind=="skill" )then
 	    	elseif( hkind=="item" )then
 	    	else
-	    		call hSys_log("伤害单位错误：hkind")
+	    		call console.error("伤害单位错误：hkind")
 	    		return
 	        endif
     		//判断伤害类型
@@ -123,11 +124,11 @@ library hAttrHunt initializer init needs hAttrEffect
 	    		set fromUnitViolence = 0
 	    		set fromUnitKnocking = 0
 	    	else
-	    		call hSys_log("伤害单位错误：htype")
+	    		call console.error("伤害单位错误：htype")
 	    		return
 	        endif
 
-            call hSys_log("htype:"+htype)
+            call console.log("htype:"+htype)
 
 	        //判断无视Break
 	        if( isBreak == true ) then
@@ -190,12 +191,12 @@ library hAttrHunt initializer init needs hAttrEffect
     			call hAbility_swim( toUnit , 0.5 )
     		endif
 	        //计算单位是否无敌且不是绝对伤害,无敌属性为百分比计算，被动触发抵挡一次
-    		if( htype == "absolute" and (hIs_invincible(toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
+    		if( htype == "absolute" and (is.invincible(toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
     			set realDamage = 0
                 set isInvincible = true
     		endif
 
-            call hSys_log("realDamage:"+R2S(realDamage))
+            call console.log("realDamage:"+R2S(realDamage))
 
     		//造成伤害
     		if( realDamage > 0 ) then
@@ -204,12 +205,13 @@ library hAttrHunt initializer init needs hAttrEffect
 				//分裂
 				if( htype == "physical" and fromUnitSplit >0 )then
 	                set loc = GetUnitLoc( toUnit )
-                    call hFilter_format()
-                    call hFilter_setUnit(fromUnit)
-                    call hFilter_isAlive(true)
-                    call hFilter_isEnemy(true)
-                    call hFilter_isBuilding(false)
-	                set g = hGroup_createByLoc(loc,200.00,function hFilter_get )
+                    set filter = hFilter.create()
+                    call filter.setUnit(fromUnit)
+                    call filter.isAlive(true)
+                    call filter.isEnemy(true)
+                    call filter.isBuilding(false)
+	                set g = hGroup_createByLoc(loc,200.00,function hFilter.get )
+                    call filter.destroy()
 	                loop
 			            exitwhen(IsUnitGroupEmptyBJ(g) == true)
 			                set u = FirstOfGroup(g)
@@ -221,25 +223,25 @@ library hAttrHunt initializer init needs hAttrEffect
 	                call GroupClear(g)
 	                call DestroyGroup(g)
 	                set g = null
-	                call hEffect_toLoc(Effect_Split,loc)
+	                call heffect.toLoc(Effect_Split,loc,0)
 	                call RemoveLocation( loc )
 	            endif
 	            //吸血
 				if( htype == "physical" and fromUnitHemophagia >0 )then
                     call hUnit_addLife(fromUnit,realDamage * fromUnitHemophagia * 0.01)
 					set loc = GetUnitLoc( fromUnit )
-					call hEffect_toLoc(Effect_HealTarget,loc)
+					call heffect.toLoc(Effect_HealTarget,loc,0)
 	                call RemoveLocation( loc )
 				endif
 				//技能吸血
 				if( htype == "magic" and hkind == "skill" and fromUnitHemophagiaSkill >0 )then
                     call hUnit_addLife(fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
 					set loc = GetUnitLoc( fromUnit )
-					call hEffect_toLoc(Effect_HealingSalveTarget,loc)
+					call heffect.toLoc(Effect_HealingSalveTarget,loc,0)
 	                call RemoveLocation( loc )
 				endif
 				//硬直
-                if( hIs_alive(toUnit) )then
+                if( is.alive(toUnit) )then
                     if( IsUnitPaused(toUnit) == false ) then
                         call hAttr_subPunishCurrent(toUnit,realDamage*fromUnitPunishHeavy,0)
                     endif
@@ -347,17 +349,17 @@ library hAttrHunt initializer init needs hAttrEffect
     /**
      * 伤害群
      */
-    public function huntGroup takes group g,group rg,string gheffect,location gheffectloc,unit fromUnit,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
+    public function huntGroup takes group g,group rg,string gheffect,location gheffectloc,unit fromUnit,string heff,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
     	local unit u = null
     	if( gheffect != null and gheffect != "" and gheffectloc != null) then
-			call hEffect_toLoc(gheffect,gheffectloc)
+			call heffect.toLoc(gheffect,gheffectloc,0)
     	endif
     	loop
             exitwhen(IsUnitGroupEmptyBJ(g) == true)
                 set u = FirstOfGroup(g)
                 call GroupRemoveUnit( g , u )
                 if(IsUnitEnemy(u,GetOwningPlayer(fromUnit)) == true and (rg == null or IsUnitInGroup(u, rg)==false)) then
-                    call huntUnit(fromUnit,u,heffect,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
+                    call huntUnit(fromUnit,u,heff,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
                 endif
                 if( rg != null) then
                 	call GroupAddUnit( rg, u )
@@ -365,8 +367,6 @@ library hAttrHunt initializer init needs hAttrEffect
         endloop
         set u = null
     endfunction
-
-
 
 
 	private function init takes nothing returns nothing

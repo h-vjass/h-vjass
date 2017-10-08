@@ -1,6 +1,6 @@
 /* 特效字符串 */
 globals
-
+hEffect heffect = 0
 //分裂
 string Effect_Split = "Abilities\\Spells\\Human\\Feedback\\SpellBreakerAttack.mdl"
 //治疗1
@@ -135,31 +135,52 @@ string Effect_ReviveHuman = "Abilities\\Spells\\Human\\ReviveHuman\\ReviveHuman.
 string Effect_MassTeleportTarget = "Abilities\\Spells\\Human\\MassTeleport\\MassTeleportTarget.mdl"
 //点金术
 string Effect_PileofGold = "Abilities\\Spells\\Other\\Transmute\\PileofGold.mdl"
-//增加力量的物品
-string Effect_AIsmTarget = "Abilities\\Spells\\Items\\AIsm\\AIsmTarget.mdl"
-//增加敏捷的物品
-string Effect_AIamTarget = "Abilities\\Spells\\Items\\AIam\\AIamTarget.mdl"
-//增加智力的物品
-string Effect_AIimTarget = "Abilities\\Spells\\Items\\AIim\\AIimTarget.mdl"
-//增加经验的物品
-string Effect_AIemTarget = "Abilities\\Spells\\Items\\AIem\\AIemTarget.mdl"
 
 endglobals
 
-library hEffect needs hSys
+struct hEffect
+
+	//删除特效
+	public method del takes effect e returns nothing
+		call DestroyEffect(e)
+	endmethod
+
+	static method duringDel takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local effect e = time.getEffect(t,1)
+		call time.delTimer(t,null)
+		call DestroyEffect(e)
+		set e = null
+	endmethod
 
 	/**
 	 * 特效 点
 	 */
-	public function toLoc takes string effectModel,location loc returns nothing
-	    call DestroyEffect(AddSpecialEffectLoc(effectModel, loc))
-	endfunction
+	public method toLoc takes string effectModel,location loc,real during returns nothing
+		local effect e = null
+		local timer t = null
+		if(during > 0)then
+			set e = AddSpecialEffectLoc(effectModel, loc)
+			set t = time.setTimeout(during,function hEffect.duringDel)
+			call time.setEffect(t,1,e)
+		else
+			call del(AddSpecialEffectLoc(effectModel, loc))
+		endif
+	endmethod
 
 	/**
 	 * 特效 绑定单位
 	 */
-	public function toUnit takes string effectModel,widget targetUnit ,string attach returns nothing
-	    call DestroyEffect(AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel))
-	endfunction
+	public method toUnit takes string effectModel,widget targetUnit,string attach,real during returns nothing
+		local effect e = null
+		local timer t = null
+		if(during > 0)then
+			set e = AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel)
+			set t = time.setTimeout(during,function hEffect.duringDel)
+			call time.setEffect(t,1,e)
+		else
+			call del(AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel))
+		endif
+	endmethod
 
-endlibrary
+endstruct

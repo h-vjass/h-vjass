@@ -1,5 +1,5 @@
 /* 属性系统 */
-library hAttr initializer init needs hAbility
+library hAttr initializer init needs hEvent
 
 	globals
 	    private real ATTRIBUTE_DEFAULT_HERO_ATTACKSPEED = 150		//默认攻击速度，除以100等于各个英雄的初始速度，用于计算攻击速度显示文本
@@ -731,10 +731,10 @@ library hAttr initializer init needs hAbility
 
 	private function setAttrDuring takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		local integer flag = hTimer_getInteger(t,1)
-		local unit whichUnit = hTimer_getUnit(t,2)
-		local real diff = hTimer_getReal(t,3)
-		call hTimer_delTimer( t , null )
+		local integer flag = time.getInteger(t,1)
+		local unit whichUnit = time.getUnit(t,2)
+		local real diff = time.getReal(t,3)
+		call time.delTimer( t , null )
 		call setAttrDo( flag , whichUnit , diff )
 	endfunction
 
@@ -805,7 +805,7 @@ library hAttr initializer init needs hAbility
 			call SaveReal( hash , uhid , ATTR_FLAG_HUNT_REBOUND , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_CURE , 0 )
 			//todo 设定默认值
-			if( hIs_hero(whichUnit) ) then
+			if( is.hero(whichUnit) ) then
 				//白字
 				set tempReal = I2R(GetHeroStr(whichUnit, false))
 				call SaveReal( hash , uhid , ATTR_FLAG_STR_WHITE , tempReal )
@@ -854,10 +854,10 @@ library hAttr initializer init needs hAbility
 		call initAttr( whichUnit )
 		call setAttrDo( flag , whichUnit , diff )
 		if( during>0 ) then
-			set t = hTimer_setTimeout( during , function setAttrDuring )
-			call hTimer_setInteger(t,1,flag)
-			call hTimer_setUnit(t,2,whichUnit)
-			call hTimer_setReal(t,3, -diff )
+			set t = time.setTimeout( during , function setAttrDuring )
+			call time.setInteger(t,1,flag)
+			call time.setUnit(t,2,whichUnit)
+			call time.setReal(t,3, -diff )
 		endif
 	endfunction
 
