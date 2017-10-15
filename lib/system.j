@@ -18,17 +18,6 @@ library hSys initializer init
 	endfunction
 
 	/**
-	 * 设定中心点（X,Y）创建一个长width宽height的矩形区域
-	 */
-	public function createRect takes real locX , real locY , real width , real height returns rect
-		local real startX = locX-(width * 0.5)
-		local real startY = locY-(height * 0.5)
-		local real endX = locX+(width * 0.5)
-		local real endY = locY+(height * 0.5)
-		return Rect( startX , startY , endX , endY )
-	endfunction
-
-	/**
 	 * 对玩家组播放电影
 	 */
 	public function moive takes unit speaker,force toForce returns nothing
@@ -78,7 +67,7 @@ library hSys initializer init
 		set heffect = hEffect.create()
 		set math = hMath.create()
 		set console = hConsole.create()
-		//console
+		set hrect = hRect.create()
 	endfunction
 
 endlibrary

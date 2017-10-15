@@ -38,4 +38,30 @@ struct hMath
 		endif
 	endmethod
 
+	//实数格式化
+	public method realformat takes real value returns string
+		local string s = ""
+		if(value>100000000)then
+			set s = R2SW(value/100000000, 1, 3)+"Y"
+		elseif(value>10000)then
+			set s = R2SW(value/10000, 1, 3)+"W"
+		else
+			set s = R2S(value)
+		endif
+		return s
+	endmethod
+
+	//整型格式化
+	public method integerformat takes integer value returns string
+		local string s = ""
+		if(value>100000000)then
+			set s = I2S(value/100000000)+"Y"
+		elseif(value>10000)then
+			set s = I2S(value/10000)+"W"
+		else
+			set s = I2S(value)
+		endif
+		return s
+	endmethod
+
 endstruct

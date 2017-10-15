@@ -131,17 +131,24 @@ struct hIs
     endmethod
 
     /**
-     * 是否地图边界
+     * 是否超出区域边界
      */
-    public method border takes real x,real y returns boolean
+    public method borderRect takes rect r,real x,real y returns boolean
         local boolean flag = false
-        if( x >= GetRectMaxX(GetPlayableMapRect()) or x <= GetRectMinX(GetPlayableMapRect()) )then
+        if( x >= GetRectMaxX(r) or x <= GetRectMinX(r) )then
             set flag = true
         endif
-        if( y >= GetRectMaxY(GetPlayableMapRect()) or y <= GetRectMinY(GetPlayableMapRect()) )then
+        if( y >= GetRectMaxY(r) or y <= GetRectMinY(r) )then
             return true
         endif
         return flag
+    endmethod
+
+    /**
+     * 是否超出地图边界
+     */
+    public method borderMap takes real x,real y returns boolean
+        return this.borderRect(GetPlayableMapRect(),x,y)
     endmethod
 
     /**

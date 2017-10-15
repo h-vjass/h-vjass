@@ -29,9 +29,9 @@ library hAward requires hAttrUnit
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
         //TODO 增益
-        set realGold 	= realGold + R2I( I2R(gold) * hAttr_getGoldRatio(whichUnit) / 100.00 )
-        set realLumber	= realLumber + R2I( I2R(lumber) * hAttr_getLumberRatio(whichUnit) / 100.00 )
-        set realExp		= realExp + R2I( I2R(exp) * hAttr_getExpRatio(whichUnit) / 100.00 )
+        set realGold 	= realGold + R2I( I2R(gold) * hAttrExt_getGoldRatio(whichUnit) / 100.00 )
+        set realLumber	= realLumber + R2I( I2R(lumber) * hAttrExt_getLumberRatio(whichUnit) / 100.00 )
+        set realExp		= realExp + R2I( I2R(exp) * hAttrExt_getExpRatio(whichUnit) / 100.00 )
 
         if(exp > 0 and is.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )

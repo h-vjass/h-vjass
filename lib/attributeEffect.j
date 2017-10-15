@@ -14,7 +14,6 @@
 	吸血效果：增加吸血
 	技能吸血效果：增加技能吸血
 	分裂效果：增加分裂
-	眩晕效果：增加眩晕
 	运气效果：增加运气
 	伤害增幅效果：增加伤害增幅
 	--*/
@@ -28,13 +27,15 @@
 	chaos		混乱[减少魔抗]
 	twine		缠绕[减少回避]
 	blind		致盲[减少命中]
+	tortua		剧痛[减少命中]
 	weak		乏力[减少力量(绿字)]
 	bound		束缚[减少敏捷(绿字)]
 	foolish		愚蠢[减少智力(绿字)]
 	lazy		懒惰[减少物理暴击和魔法暴击]
-	swimp 		眩晕[特定眩晕，直接眩晕，不受抵抗]
+	swim 		眩晕[特定眩晕，直接眩晕，受抵抗]
 	heavy 		沉重[加重硬直减少量]
 	break 		打断[直接僵直]
+	unluck 		倒霉[减少运气]
 */
 library hAttrEffect initializer init needs hAttr
 
@@ -58,28 +59,27 @@ library hAttrEffect initializer init needs hAttr
 		private integer ATTR_FLAG_EFFECT_HEMOPHAGIA = 2013
 		private integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL = 2014
 		private integer ATTR_FLAG_EFFECT_SPLIT = 2015
-		private integer ATTR_FLAG_EFFECT_SWIM = 2016
-		private integer ATTR_FLAG_EFFECT_LUCK = 2017
-		private integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE = 2018
-		private integer ATTR_FLAG_EFFECT_POISON = 2019
-		private integer ATTR_FLAG_EFFECT_DRY = 2020
-		private integer ATTR_FLAG_EFFECT_FREEZE = 2021
-		private integer ATTR_FLAG_EFFECT_COLD = 2022
-		private integer ATTR_FLAG_EFFECT_BLUNT = 2023
-		private integer ATTR_FLAG_EFFECT_CORROSION = 2024
-		private integer ATTR_FLAG_EFFECT_CHAOS = 2025
-		private integer ATTR_FLAG_EFFECT_TWINE = 2026
-		private integer ATTR_FLAG_EFFECT_BLIND = 2027
+		private integer ATTR_FLAG_EFFECT_LUCK = 2016
+		private integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE = 2017
+		private integer ATTR_FLAG_EFFECT_POISON = 2018
+		private integer ATTR_FLAG_EFFECT_DRY = 2019
+		private integer ATTR_FLAG_EFFECT_FREEZE = 2020
+		private integer ATTR_FLAG_EFFECT_COLD = 2021
+		private integer ATTR_FLAG_EFFECT_BLUNT = 2022
+		private integer ATTR_FLAG_EFFECT_CORROSION = 2023
+		private integer ATTR_FLAG_EFFECT_CHAOS = 2024
+		private integer ATTR_FLAG_EFFECT_TWINE = 2025
+		private integer ATTR_FLAG_EFFECT_BLIND = 2026
+		private integer ATTR_FLAG_EFFECT_TORTUA = 2027
 		private integer ATTR_FLAG_EFFECT_WEAK = 2028
 		private integer ATTR_FLAG_EFFECT_BOUND = 2029
 		private integer ATTR_FLAG_EFFECT_FOOLISH = 2030
 		private integer ATTR_FLAG_EFFECT_LAZY = 2031
-		private integer ATTR_FLAG_EFFECT_SWIMP = 2032
-		private integer ATTR_FLAG_EFFECT_SWIMP_DURING = 2033
-		private integer ATTR_FLAG_EFFECT_BREAK = 2034
-		private integer ATTR_FLAG_EFFECT_BREAK_DURING = 2035
-		private integer ATTR_FLAG_EFFECT_HEAVY = 2036
-		private integer ATTR_FLAG_EFFECT_UNLUCK = 2037
+		private integer ATTR_FLAG_EFFECT_SWIM = 2032
+		private integer ATTR_FLAG_EFFECT_BREAK = 2033
+		private integer ATTR_FLAG_EFFECT_HEAVY = 2034
+		private integer ATTR_FLAG_EFFECT_UNLUCK = 2035
+
 		private integer ATTR_FLAG_EFFECT_DURING_LIFE_BACK = 4001
 		private integer ATTR_FLAG_EFFECT_DURING_MANA_BACK = 4002
 		private integer ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED = 4003
@@ -95,28 +95,26 @@ library hAttrEffect initializer init needs hAttr
 		private integer ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA = 4013
 		private integer ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL = 4014
 		private integer ATTR_FLAG_EFFECT_DURING_SPLIT = 4015
-		private integer ATTR_FLAG_EFFECT_DURING_SWIM = 4016
-		private integer ATTR_FLAG_EFFECT_DURING_LUCK = 4017
-		private integer ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE = 4018
-		private integer ATTR_FLAG_EFFECT_DURING_POISON = 4019
-		private integer ATTR_FLAG_EFFECT_DURING_DRY = 4020
-		private integer ATTR_FLAG_EFFECT_DURING_FREEZE = 4021
-		private integer ATTR_FLAG_EFFECT_DURING_COLD = 4022
-		private integer ATTR_FLAG_EFFECT_DURING_BLUNT = 4023
-		private integer ATTR_FLAG_EFFECT_DURING_CORROSION = 4024
-		private integer ATTR_FLAG_EFFECT_DURING_CHAOS = 4025
-		private integer ATTR_FLAG_EFFECT_DURING_TWINE = 4026
-		private integer ATTR_FLAG_EFFECT_DURING_BLIND = 4027
+		private integer ATTR_FLAG_EFFECT_DURING_LUCK = 4016
+		private integer ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE = 4017
+		private integer ATTR_FLAG_EFFECT_DURING_POISON = 4018
+		private integer ATTR_FLAG_EFFECT_DURING_DRY = 4019
+		private integer ATTR_FLAG_EFFECT_DURING_FREEZE = 4020
+		private integer ATTR_FLAG_EFFECT_DURING_COLD = 4021
+		private integer ATTR_FLAG_EFFECT_DURING_BLUNT = 4022
+		private integer ATTR_FLAG_EFFECT_DURING_CORROSION = 4023
+		private integer ATTR_FLAG_EFFECT_DURING_CHAOS = 4024
+		private integer ATTR_FLAG_EFFECT_DURING_TWINE = 4025
+		private integer ATTR_FLAG_EFFECT_DURING_BLIND = 4026
+		private integer ATTR_FLAG_EFFECT_DURING_TORTUA = 4027
 		private integer ATTR_FLAG_EFFECT_DURING_WEAK = 4028
 		private integer ATTR_FLAG_EFFECT_DURING_BOUND = 4029
 		private integer ATTR_FLAG_EFFECT_DURING_FOOLISH = 4030
 		private integer ATTR_FLAG_EFFECT_DURING_LAZY = 4031
-		private integer ATTR_FLAG_EFFECT_DURING_SWIMP = 4032
-		private integer ATTR_FLAG_EFFECT_DURING_SWIMP_DURING = 4033
-		private integer ATTR_FLAG_EFFECT_DURING_BREAK = 4034
-		private integer ATTR_FLAG_EFFECT_DURING_BREAK_DURING = 4035
-		private integer ATTR_FLAG_EFFECT_DURING_HEAVY = 4036
-		private integer ATTR_FLAG_EFFECT_DURING_UNLUCK = 4037
+		private integer ATTR_FLAG_EFFECT_DURING_SWIM = 4032
+		private integer ATTR_FLAG_EFFECT_DURING_BREAK = 4033
+		private integer ATTR_FLAG_EFFECT_DURING_HEAVY = 4034
+		private integer ATTR_FLAG_EFFECT_DURING_UNLUCK = 4035
 	endglobals
 
 	/* 验证单位是否初始化过参数 */
@@ -157,8 +155,6 @@ library hAttrEffect initializer init needs hAttr
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SPLIT , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SPLIT , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIM , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIM , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_LUCK , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_LUCK , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_HUNT_AMPLITUDE , 0 )
@@ -181,6 +177,8 @@ library hAttrEffect initializer init needs hAttr
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_TWINE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BLIND , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BLIND , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_TORTUA , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_TORTUA , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_WEAK , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_WEAK , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BOUND , 0 )
@@ -189,14 +187,10 @@ library hAttrEffect initializer init needs hAttr
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_FOOLISH , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_LAZY , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_LAZY , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIMP , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIMP , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIMP_DURING , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIMP_DURING , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_SWIM , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_SWIM , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BREAK , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BREAK , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_BREAK_DURING , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_BREAK_DURING , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_HEAVY , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_DURING_HEAVY , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_EFFECT_UNLUCK , 0 )
@@ -219,7 +213,7 @@ library hAttrEffect initializer init needs hAttr
 		local integer flag = time.getInteger(t,1)
 		local unit whichUnit = time.getUnit(t,2)
 		local real diff = time.getReal(t,3)
-		call time.delTimer( t , null )
+		call time.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
 	endfunction
 
@@ -259,7 +253,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_LIFE_BACK , whichUnit )
 	endfunction
 	public function coverLifeBackDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_LIFE_BACK , whichUnit , math.oddsAttrEffectDuring(getLifeBackDuring(whichUnit),value)-getLifeBackDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_LIFE_BACK , whichUnit , math.oddsAttrEffect(getLifeBackDuring(whichUnit),value)-getLifeBackDuring(whichUnit) , during )
 	endfunction
 	public function setLifeBackDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_LIFE_BACK , whichUnit , value - getLifeBack(whichUnit) , during )
@@ -279,7 +273,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_MANA_BACK , whichUnit )
 	endfunction
 	public function coverManaBackDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_MANA_BACK , whichUnit , math.oddsAttrEffectDuring(getManaBackDuring(whichUnit),value)-getManaBackDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_MANA_BACK , whichUnit , math.oddsAttrEffect(getManaBackDuring(whichUnit),value)-getManaBackDuring(whichUnit) , during )
 	endfunction
 	public function setManaBackDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_MANA_BACK , whichUnit , value - getManaBack(whichUnit) , during )
@@ -299,7 +293,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED , whichUnit )
 	endfunction
 	public function coverAttackSpeedDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED , whichUnit , math.oddsAttrEffectDuring(getAttackSpeedDuring(whichUnit),value)-getAttackSpeedDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED , whichUnit , math.oddsAttrEffect(getAttackSpeedDuring(whichUnit),value)-getAttackSpeedDuring(whichUnit) , during )
 	endfunction
 	public function setAttackSpeedDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_SPEED , whichUnit , value - getAttackSpeed(whichUnit) , during )
@@ -319,7 +313,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL , whichUnit )
 	endfunction
 	public function coverAttackPhysicalDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL , whichUnit , math.oddsAttrEffectDuring(getAttackPhysicalDuring(whichUnit),value)-getAttackPhysicalDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL , whichUnit , math.oddsAttrEffect(getAttackPhysicalDuring(whichUnit),value)-getAttackPhysicalDuring(whichUnit) , during )
 	endfunction
 	public function setAttackPhysicalDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_PHYSICAL , whichUnit , value - getAttackPhysical(whichUnit) , during )
@@ -339,7 +333,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC , whichUnit )
 	endfunction
 	public function coverAttackMagicDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC , whichUnit , math.oddsAttrEffectDuring(getAttackMagicDuring(whichUnit),value)-getAttackMagicDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC , whichUnit , math.oddsAttrEffect(getAttackMagicDuring(whichUnit),value)-getAttackMagicDuring(whichUnit) , during )
 	endfunction
 	public function setAttackMagicDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_ATTACK_MAGIC , whichUnit , value - getAttackMagic(whichUnit) , during )
@@ -359,7 +353,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_MOVE , whichUnit )
 	endfunction
 	public function coverMoveDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_MOVE , whichUnit , math.oddsAttrEffectDuring(getMoveDuring(whichUnit),value)-getMoveDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_MOVE , whichUnit , math.oddsAttrEffect(getMoveDuring(whichUnit),value)-getMoveDuring(whichUnit) , during )
 	endfunction
 	public function setMoveDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_MOVE , whichUnit , value - getMove(whichUnit) , during )
@@ -379,7 +373,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_AIM , whichUnit )
 	endfunction
 	public function coverAimDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_AIM , whichUnit , math.oddsAttrEffectDuring(getAimDuring(whichUnit),value)-getAimDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_AIM , whichUnit , math.oddsAttrEffect(getAimDuring(whichUnit),value)-getAimDuring(whichUnit) , during )
 	endfunction
 	public function setAimDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_AIM , whichUnit , value - getAim(whichUnit) , during )
@@ -399,7 +393,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_STR , whichUnit )
 	endfunction
 	public function coverStrDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_STR , whichUnit , math.oddsAttrEffectDuring(getStrDuring(whichUnit),value)-getStrDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_STR , whichUnit , math.oddsAttrEffect(getStrDuring(whichUnit),value)-getStrDuring(whichUnit) , during )
 	endfunction
 	public function setStrDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_STR , whichUnit , value - getStr(whichUnit) , during )
@@ -419,7 +413,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_AGI , whichUnit )
 	endfunction
 	public function coverAgiDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_AGI , whichUnit , math.oddsAttrEffectDuring(getAgiDuring(whichUnit),value)-getAgiDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_AGI , whichUnit , math.oddsAttrEffect(getAgiDuring(whichUnit),value)-getAgiDuring(whichUnit) , during )
 	endfunction
 	public function setAgiDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_AGI , whichUnit , value - getAgi(whichUnit) , during )
@@ -439,7 +433,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_INT , whichUnit )
 	endfunction
 	public function coverIntDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_INT , whichUnit , math.oddsAttrEffectDuring(getIntDuring(whichUnit),value)-getIntDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_INT , whichUnit , math.oddsAttrEffect(getIntDuring(whichUnit),value)-getIntDuring(whichUnit) , during )
 	endfunction
 	public function setIntDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_INT , whichUnit , value - getInt(whichUnit) , during )
@@ -459,7 +453,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_KNOCKING , whichUnit )
 	endfunction
 	public function coverKnockingDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_KNOCKING , whichUnit , math.oddsAttrEffectDuring(getKnockingDuring(whichUnit),value)-getKnockingDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_KNOCKING , whichUnit , math.oddsAttrEffect(getKnockingDuring(whichUnit),value)-getKnockingDuring(whichUnit) , during )
 	endfunction
 	public function setKnockingDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_KNOCKING , whichUnit , value - getKnocking(whichUnit) , during )
@@ -479,7 +473,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_VIOLENCE , whichUnit )
 	endfunction
 	public function coverViolenceDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_VIOLENCE , whichUnit , math.oddsAttrEffectDuring(getViolenceDuring(whichUnit),value)-getViolenceDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_VIOLENCE , whichUnit , math.oddsAttrEffect(getViolenceDuring(whichUnit),value)-getViolenceDuring(whichUnit) , during )
 	endfunction
 	public function setViolenceDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_VIOLENCE , whichUnit , value - getViolence(whichUnit) , during )
@@ -499,7 +493,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA , whichUnit )
 	endfunction
 	public function coverHemophagiaDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA , whichUnit , math.oddsAttrEffectDuring(getHemophagiaDuring(whichUnit),value)-getHemophagiaDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA , whichUnit , math.oddsAttrEffect(getHemophagiaDuring(whichUnit),value)-getHemophagiaDuring(whichUnit) , during )
 	endfunction
 	public function setHemophagiaDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA , whichUnit , value - getHemophagia(whichUnit) , during )
@@ -519,7 +513,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , whichUnit )
 	endfunction
 	public function coverHemophagiaSkillDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , whichUnit , math.oddsAttrEffectDuring(getHemophagiaSkillDuring(whichUnit),value)-getHemophagiaSkillDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , whichUnit , math.oddsAttrEffect(getHemophagiaSkillDuring(whichUnit),value)-getHemophagiaSkillDuring(whichUnit) , during )
 	endfunction
 	public function setHemophagiaSkillDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEMOPHAGIA_SKILL , whichUnit , value - getHemophagiaSkill(whichUnit) , during )
@@ -539,30 +533,10 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_SPLIT , whichUnit )
 	endfunction
 	public function coverSplitDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_SPLIT , whichUnit , math.oddsAttrEffectDuring(getSplitDuring(whichUnit),value)-getSplitDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_SPLIT , whichUnit , math.oddsAttrEffect(getSplitDuring(whichUnit),value)-getSplitDuring(whichUnit) , during )
 	endfunction
 	public function setSplitDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_SPLIT , whichUnit , value - getSplit(whichUnit) , during )
-	endfunction
-	/* 攻击|伤害特效[swim] ------------------------------------------------------------ */
-	public function getSwim takes unit whichUnit returns real
-	   return getAttr( ATTR_FLAG_EFFECT_SWIM , whichUnit )
-	endfunction
-	public function coverSwim takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_SWIM , whichUnit , math.oddsAttrEffect(getSwim(whichUnit),value)-getSwim(whichUnit) , during )
-	endfunction
-	public function setSwim takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_SWIM , whichUnit , value - getSwim(whichUnit) , during )
-	endfunction
-	//持续
-	public function getSwimDuring takes unit whichUnit returns real
-	   return getAttr( ATTR_FLAG_EFFECT_DURING_SWIM , whichUnit )
-	endfunction
-	public function coverSwimDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_SWIM , whichUnit , math.oddsAttrEffectDuring(getSwimDuring(whichUnit),value)-getSwimDuring(whichUnit) , during )
-	endfunction
-	public function setSwimDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_SWIM , whichUnit , value - getSwim(whichUnit) , during )
 	endfunction
 	/* 攻击|伤害特效[luck] ------------------------------------------------------------ */
 	public function getLuck takes unit whichUnit returns real
@@ -579,7 +553,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_LUCK , whichUnit )
 	endfunction
 	public function coverLuckDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_LUCK , whichUnit , math.oddsAttrEffectDuring(getLuckDuring(whichUnit),value)-getLuckDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_LUCK , whichUnit , math.oddsAttrEffect(getLuckDuring(whichUnit),value)-getLuckDuring(whichUnit) , during )
 	endfunction
 	public function setLuckDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_LUCK , whichUnit , value - getLuck(whichUnit) , during )
@@ -599,7 +573,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE , whichUnit )
 	endfunction
 	public function coverHuntAmplitudeDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE , whichUnit , math.oddsAttrEffectDuring(getHuntAmplitudeDuring(whichUnit),value)-getHuntAmplitudeDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE , whichUnit , math.oddsAttrEffect(getHuntAmplitudeDuring(whichUnit),value)-getHuntAmplitudeDuring(whichUnit) , during )
 	endfunction
 	public function setHuntAmplitudeDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_HUNT_AMPLITUDE , whichUnit , value - getHuntAmplitude(whichUnit) , during )
@@ -619,7 +593,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_POISON , whichUnit )
 	endfunction
 	public function coverPoisonDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_POISON , whichUnit , math.oddsAttrEffectDuring(getPoisonDuring(whichUnit),value)-getPoisonDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_POISON , whichUnit , math.oddsAttrEffect(getPoisonDuring(whichUnit),value)-getPoisonDuring(whichUnit) , during )
 	endfunction
 	public function setPoisonDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_POISON , whichUnit , value - getPoison(whichUnit) , during )
@@ -639,7 +613,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_DRY , whichUnit )
 	endfunction
 	public function coverDryDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_DRY , whichUnit , math.oddsAttrEffectDuring(getDryDuring(whichUnit),value)-getDryDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_DRY , whichUnit , math.oddsAttrEffect(getDryDuring(whichUnit),value)-getDryDuring(whichUnit) , during )
 	endfunction
 	public function setDryDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_DRY , whichUnit , value - getDry(whichUnit) , during )
@@ -659,7 +633,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_FREEZE , whichUnit )
 	endfunction
 	public function coverFreezeDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_FREEZE , whichUnit , math.oddsAttrEffectDuring(getFreezeDuring(whichUnit),value)-getFreezeDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_FREEZE , whichUnit , math.oddsAttrEffect(getFreezeDuring(whichUnit),value)-getFreezeDuring(whichUnit) , during )
 	endfunction
 	public function setFreezeDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_FREEZE , whichUnit , value - getFreeze(whichUnit) , during )
@@ -679,7 +653,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_COLD , whichUnit )
 	endfunction
 	public function coverColdDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_COLD , whichUnit , math.oddsAttrEffectDuring(getColdDuring(whichUnit),value)-getColdDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_COLD , whichUnit , math.oddsAttrEffect(getColdDuring(whichUnit),value)-getColdDuring(whichUnit) , during )
 	endfunction
 	public function setColdDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_COLD , whichUnit , value - getCold(whichUnit) , during )
@@ -699,7 +673,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_BLUNT , whichUnit )
 	endfunction
 	public function coverBluntDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_BLUNT , whichUnit , math.oddsAttrEffectDuring(getBluntDuring(whichUnit),value)-getBluntDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_BLUNT , whichUnit , math.oddsAttrEffect(getBluntDuring(whichUnit),value)-getBluntDuring(whichUnit) , during )
 	endfunction
 	public function setBluntDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_BLUNT , whichUnit , value - getBlunt(whichUnit) , during )
@@ -719,7 +693,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_CORROSION , whichUnit )
 	endfunction
 	public function coverCorrosionDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_CORROSION , whichUnit , math.oddsAttrEffectDuring(getCorrosionDuring(whichUnit),value)-getCorrosionDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_CORROSION , whichUnit , math.oddsAttrEffect(getCorrosionDuring(whichUnit),value)-getCorrosionDuring(whichUnit) , during )
 	endfunction
 	public function setCorrosionDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_CORROSION , whichUnit , value - getCorrosion(whichUnit) , during )
@@ -739,7 +713,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_CHAOS , whichUnit )
 	endfunction
 	public function coverChaosDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_CHAOS , whichUnit , math.oddsAttrEffectDuring(getChaosDuring(whichUnit),value)-getChaosDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_CHAOS , whichUnit , math.oddsAttrEffect(getChaosDuring(whichUnit),value)-getChaosDuring(whichUnit) , during )
 	endfunction
 	public function setChaosDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_CHAOS , whichUnit , value - getChaos(whichUnit) , during )
@@ -759,7 +733,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_TWINE , whichUnit )
 	endfunction
 	public function coverTwineDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_TWINE , whichUnit , math.oddsAttrEffectDuring(getTwineDuring(whichUnit),value)-getTwineDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_TWINE , whichUnit , math.oddsAttrEffect(getTwineDuring(whichUnit),value)-getTwineDuring(whichUnit) , during )
 	endfunction
 	public function setTwineDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_TWINE , whichUnit , value - getTwine(whichUnit) , during )
@@ -779,10 +753,30 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_BLIND , whichUnit )
 	endfunction
 	public function coverBlindDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_BLIND , whichUnit , math.oddsAttrEffectDuring(getBlindDuring(whichUnit),value)-getBlindDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_BLIND , whichUnit , math.oddsAttrEffect(getBlindDuring(whichUnit),value)-getBlindDuring(whichUnit) , during )
 	endfunction
 	public function setBlindDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_BLIND , whichUnit , value - getBlind(whichUnit) , during )
+	endfunction
+	/* 攻击|伤害特效[tortua] ------------------------------------------------------------ */
+	public function getTortua takes unit whichUnit returns real
+	   return getAttr( ATTR_FLAG_EFFECT_TORTUA , whichUnit )
+	endfunction
+	public function coverTortua takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_TORTUA , whichUnit , math.oddsAttrEffect(getTortua(whichUnit),value)-getTortua(whichUnit) , during )
+	endfunction
+	public function setTortua takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_TORTUA , whichUnit , value - getTortua(whichUnit) , during )
+	endfunction
+	//持续
+	public function getTortuaDuring takes unit whichUnit returns real
+	   return getAttr( ATTR_FLAG_EFFECT_DURING_TORTUA , whichUnit )
+	endfunction
+	public function coverTortuaDuring takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_TORTUA , whichUnit , math.oddsAttrEffect(getTortuaDuring(whichUnit),value)-getTortuaDuring(whichUnit) , during )
+	endfunction
+	public function setTortuaDuring takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_TORTUA , whichUnit , value - getTortua(whichUnit) , during )
 	endfunction
 	/* 攻击|伤害特效[weak] ------------------------------------------------------------ */
 	public function getWeak takes unit whichUnit returns real
@@ -799,7 +793,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_WEAK , whichUnit )
 	endfunction
 	public function coverWeakDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_WEAK , whichUnit , math.oddsAttrEffectDuring(getWeakDuring(whichUnit),value)-getWeakDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_WEAK , whichUnit , math.oddsAttrEffect(getWeakDuring(whichUnit),value)-getWeakDuring(whichUnit) , during )
 	endfunction
 	public function setWeakDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_WEAK , whichUnit , value - getWeak(whichUnit) , during )
@@ -819,7 +813,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_BOUND , whichUnit )
 	endfunction
 	public function coverBoundDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_BOUND , whichUnit , math.oddsAttrEffectDuring(getBoundDuring(whichUnit),value)-getBoundDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_BOUND , whichUnit , math.oddsAttrEffect(getBoundDuring(whichUnit),value)-getBoundDuring(whichUnit) , during )
 	endfunction
 	public function setBoundDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_BOUND , whichUnit , value - getBound(whichUnit) , during )
@@ -839,7 +833,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_FOOLISH , whichUnit )
 	endfunction
 	public function coverFoolishDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_FOOLISH , whichUnit , math.oddsAttrEffectDuring(getFoolishDuring(whichUnit),value)-getFoolishDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_FOOLISH , whichUnit , math.oddsAttrEffect(getFoolishDuring(whichUnit),value)-getFoolishDuring(whichUnit) , during )
 	endfunction
 	public function setFoolishDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_FOOLISH , whichUnit , value - getFoolish(whichUnit) , during )
@@ -859,30 +853,30 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_LAZY , whichUnit )
 	endfunction
 	public function coverLazyDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_LAZY , whichUnit , math.oddsAttrEffectDuring(getLazyDuring(whichUnit),value)-getLazyDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_LAZY , whichUnit , math.oddsAttrEffect(getLazyDuring(whichUnit),value)-getLazyDuring(whichUnit) , during )
 	endfunction
 	public function setLazyDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_LAZY , whichUnit , value - getLazy(whichUnit) , during )
 	endfunction
-	/* 攻击|伤害特效[swimp] ------------------------------------------------------------ */
-	public function getSwimp takes unit whichUnit returns real
-	   return getAttr( ATTR_FLAG_EFFECT_SWIMP , whichUnit )
+	/* 攻击|伤害特效[swim] ------------------------------------------------------------ */
+	public function getSwim takes unit whichUnit returns real
+	   return getAttr( ATTR_FLAG_EFFECT_SWIM , whichUnit )
 	endfunction
-	public function coverSwimp takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_SWIMP , whichUnit , math.oddsAttrEffect(getSwimp(whichUnit),value)-getSwimp(whichUnit) , during )
+	public function coverSwim takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_SWIM , whichUnit , math.oddsAttrEffect(getSwim(whichUnit),value)-getSwim(whichUnit) , during )
 	endfunction
-	public function setSwimp takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_SWIMP , whichUnit , value - getSwimp(whichUnit) , during )
+	public function setSwim takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_SWIM , whichUnit , value - getSwim(whichUnit) , during )
 	endfunction
 	//持续
-	public function getSwimpDuring takes unit whichUnit returns real
-	   return getAttr( ATTR_FLAG_EFFECT_DURING_SWIMP , whichUnit )
+	public function getSwimDuring takes unit whichUnit returns real
+	   return getAttr( ATTR_FLAG_EFFECT_DURING_SWIM , whichUnit )
 	endfunction
-	public function coverSwimpDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_SWIMP , whichUnit , math.oddsAttrEffectDuring(getSwimpDuring(whichUnit),value)-getSwimpDuring(whichUnit) , during )
+	public function coverSwimDuring takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_SWIM , whichUnit , math.oddsAttrEffect(getSwimDuring(whichUnit),value)-getSwimDuring(whichUnit) , during )
 	endfunction
-	public function setSwimpDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_SWIMP , whichUnit , value - getSwimp(whichUnit) , during )
+	public function setSwimDuring takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_SWIM , whichUnit , value - getSwim(whichUnit) , during )
 	endfunction
 	/* 攻击|伤害特效[break] ------------------------------------------------------------ */
 	public function getBreak takes unit whichUnit returns real
@@ -899,7 +893,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_BREAK , whichUnit )
 	endfunction
 	public function coverBreakDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_BREAK , whichUnit , math.oddsAttrEffectDuring(getBreakDuring(whichUnit),value)-getBreakDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_BREAK , whichUnit , math.oddsAttrEffect(getBreakDuring(whichUnit),value)-getBreakDuring(whichUnit) , during )
 	endfunction
 	public function setBreakDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_BREAK , whichUnit , value - getBreak(whichUnit) , during )
@@ -919,7 +913,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_HEAVY , whichUnit )
 	endfunction
 	public function coverHeavyDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEAVY , whichUnit , math.oddsAttrEffectDuring(getHeavyDuring(whichUnit),value)-getHeavyDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEAVY , whichUnit , math.oddsAttrEffect(getHeavyDuring(whichUnit),value)-getHeavyDuring(whichUnit) , during )
 	endfunction
 	public function setHeavyDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_HEAVY , whichUnit , value - getHeavy(whichUnit) , during )
@@ -939,7 +933,7 @@ library hAttrEffect initializer init needs hAttr
 	   return getAttr( ATTR_FLAG_EFFECT_DURING_UNLUCK , whichUnit )
 	endfunction
 	public function coverUnluckDuring takes unit whichUnit , real value , real during returns nothing
-	   call setAttr( ATTR_FLAG_EFFECT_DURING_UNLUCK , whichUnit , math.oddsAttrEffectDuring(getUnluckDuring(whichUnit),value)-getUnluckDuring(whichUnit) , during )
+	   call setAttr( ATTR_FLAG_EFFECT_DURING_UNLUCK , whichUnit , math.oddsAttrEffect(getUnluckDuring(whichUnit),value)-getUnluckDuring(whichUnit) , during )
 	endfunction
 	public function setUnluckDuring takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_EFFECT_DURING_UNLUCK , whichUnit , value - getUnluck(whichUnit) , during )
@@ -949,41 +943,41 @@ library hAttrEffect initializer init needs hAttr
      * 打印某个单位的攻击特效到桌面
      */
     public function showAttr takes unit whichUnit returns nothing
-		call hMsg_print("攻击特效#life_back："+R2S(getLifeBack(whichUnit))+"("+R2S(getLifeBackDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#mana_back："+R2S(getManaBack(whichUnit))+"("+R2S(getManaBackDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#attack_speed："+R2S(getAttackSpeed(whichUnit))+"("+R2S(getAttackSpeedDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#attack_physical："+R2S(getAttackPhysical(whichUnit))+"("+R2S(getAttackPhysicalDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#attack_magic："+R2S(getAttackMagic(whichUnit))+"("+R2S(getAttackMagicDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#move："+R2S(getMove(whichUnit))+"("+R2S(getMoveDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#aim："+R2S(getAim(whichUnit))+"("+R2S(getAimDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#str："+R2S(getStr(whichUnit))+"("+R2S(getStrDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#agi："+R2S(getAgi(whichUnit))+"("+R2S(getAgiDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#int："+R2S(getInt(whichUnit))+"("+R2S(getIntDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#knocking："+R2S(getKnocking(whichUnit))+"("+R2S(getKnockingDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#violence："+R2S(getViolence(whichUnit))+"("+R2S(getViolenceDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#hemophagia："+R2S(getHemophagia(whichUnit))+"("+R2S(getHemophagiaDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#hemophagia_skill："+R2S(getHemophagiaSkill(whichUnit))+"("+R2S(getHemophagiaSkillDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#split："+R2S(getSplit(whichUnit))+"("+R2S(getSplitDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#swim："+R2S(getSwim(whichUnit))+"("+R2S(getSwimDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#luck："+R2S(getLuck(whichUnit))+"("+R2S(getLuckDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#hunt_amplitude："+R2S(getHuntAmplitude(whichUnit))+"("+R2S(getHuntAmplitudeDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#poison："+R2S(getPoison(whichUnit))+"("+R2S(getPoisonDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#dry："+R2S(getDry(whichUnit))+"("+R2S(getDryDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#freeze："+R2S(getFreeze(whichUnit))+"("+R2S(getFreezeDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#cold："+R2S(getCold(whichUnit))+"("+R2S(getColdDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#blunt："+R2S(getBlunt(whichUnit))+"("+R2S(getBluntDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#corrosion："+R2S(getCorrosion(whichUnit))+"("+R2S(getCorrosionDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#chaos："+R2S(getChaos(whichUnit))+"("+R2S(getChaosDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#twine："+R2S(getTwine(whichUnit))+"("+R2S(getTwineDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#blind："+R2S(getBlind(whichUnit))+"("+R2S(getBlindDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#weak："+R2S(getWeak(whichUnit))+"("+R2S(getWeakDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#bound："+R2S(getBound(whichUnit))+"("+R2S(getBoundDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#foolish："+R2S(getFoolish(whichUnit))+"("+R2S(getFoolishDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#lazy："+R2S(getLazy(whichUnit))+"("+R2S(getLazyDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#swimp："+R2S(getSwimp(whichUnit))+"("+R2S(getSwimpDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#break："+R2S(getBreak(whichUnit))+"("+R2S(getBreakDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#heavy："+R2S(getHeavy(whichUnit))+"("+R2S(getHeavyDuring(whichUnit))+")")
-		call hMsg_print("攻击特效#unluck："+R2S(getUnluck(whichUnit))+"("+R2S(getUnluckDuring(whichUnit))+")")
+		call console.info("攻击特效#life_back："+R2S(getLifeBack(whichUnit))+"("+R2S(getLifeBackDuring(whichUnit))+")")
+		call console.info("攻击特效#mana_back："+R2S(getManaBack(whichUnit))+"("+R2S(getManaBackDuring(whichUnit))+")")
+		call console.info("攻击特效#attack_speed："+R2S(getAttackSpeed(whichUnit))+"("+R2S(getAttackSpeedDuring(whichUnit))+")")
+		call console.info("攻击特效#attack_physical："+R2S(getAttackPhysical(whichUnit))+"("+R2S(getAttackPhysicalDuring(whichUnit))+")")
+		call console.info("攻击特效#attack_magic："+R2S(getAttackMagic(whichUnit))+"("+R2S(getAttackMagicDuring(whichUnit))+")")
+		call console.info("攻击特效#move："+R2S(getMove(whichUnit))+"("+R2S(getMoveDuring(whichUnit))+")")
+		call console.info("攻击特效#aim："+R2S(getAim(whichUnit))+"("+R2S(getAimDuring(whichUnit))+")")
+		call console.info("攻击特效#str："+R2S(getStr(whichUnit))+"("+R2S(getStrDuring(whichUnit))+")")
+		call console.info("攻击特效#agi："+R2S(getAgi(whichUnit))+"("+R2S(getAgiDuring(whichUnit))+")")
+		call console.info("攻击特效#int："+R2S(getInt(whichUnit))+"("+R2S(getIntDuring(whichUnit))+")")
+		call console.info("攻击特效#knocking："+R2S(getKnocking(whichUnit))+"("+R2S(getKnockingDuring(whichUnit))+")")
+		call console.info("攻击特效#violence："+R2S(getViolence(whichUnit))+"("+R2S(getViolenceDuring(whichUnit))+")")
+		call console.info("攻击特效#hemophagia："+R2S(getHemophagia(whichUnit))+"("+R2S(getHemophagiaDuring(whichUnit))+")")
+		call console.info("攻击特效#hemophagia_skill："+R2S(getHemophagiaSkill(whichUnit))+"("+R2S(getHemophagiaSkillDuring(whichUnit))+")")
+		call console.info("攻击特效#split："+R2S(getSplit(whichUnit))+"("+R2S(getSplitDuring(whichUnit))+")")
+		call console.info("攻击特效#luck："+R2S(getLuck(whichUnit))+"("+R2S(getLuckDuring(whichUnit))+")")
+		call console.info("攻击特效#hunt_amplitude："+R2S(getHuntAmplitude(whichUnit))+"("+R2S(getHuntAmplitudeDuring(whichUnit))+")")
+		call console.info("攻击特效#poison："+R2S(getPoison(whichUnit))+"("+R2S(getPoisonDuring(whichUnit))+")")
+		call console.info("攻击特效#dry："+R2S(getDry(whichUnit))+"("+R2S(getDryDuring(whichUnit))+")")
+		call console.info("攻击特效#freeze："+R2S(getFreeze(whichUnit))+"("+R2S(getFreezeDuring(whichUnit))+")")
+		call console.info("攻击特效#cold："+R2S(getCold(whichUnit))+"("+R2S(getColdDuring(whichUnit))+")")
+		call console.info("攻击特效#blunt："+R2S(getBlunt(whichUnit))+"("+R2S(getBluntDuring(whichUnit))+")")
+		call console.info("攻击特效#corrosion："+R2S(getCorrosion(whichUnit))+"("+R2S(getCorrosionDuring(whichUnit))+")")
+		call console.info("攻击特效#chaos："+R2S(getChaos(whichUnit))+"("+R2S(getChaosDuring(whichUnit))+")")
+		call console.info("攻击特效#twine："+R2S(getTwine(whichUnit))+"("+R2S(getTwineDuring(whichUnit))+")")
+		call console.info("攻击特效#blind："+R2S(getBlind(whichUnit))+"("+R2S(getBlindDuring(whichUnit))+")")
+		call console.info("攻击特效#tortua："+R2S(getTortua(whichUnit))+"("+R2S(getTortuaDuring(whichUnit))+")")
+		call console.info("攻击特效#weak："+R2S(getWeak(whichUnit))+"("+R2S(getWeakDuring(whichUnit))+")")
+		call console.info("攻击特效#bound："+R2S(getBound(whichUnit))+"("+R2S(getBoundDuring(whichUnit))+")")
+		call console.info("攻击特效#foolish："+R2S(getFoolish(whichUnit))+"("+R2S(getFoolishDuring(whichUnit))+")")
+		call console.info("攻击特效#lazy："+R2S(getLazy(whichUnit))+"("+R2S(getLazyDuring(whichUnit))+")")
+		call console.info("攻击特效#swim："+R2S(getSwim(whichUnit))+"("+R2S(getSwimDuring(whichUnit))+")")
+		call console.info("攻击特效#break："+R2S(getBreak(whichUnit))+"("+R2S(getBreakDuring(whichUnit))+")")
+		call console.info("攻击特效#heavy："+R2S(getHeavy(whichUnit))+"("+R2S(getHeavyDuring(whichUnit))+")")
+		call console.info("攻击特效#unluck："+R2S(getUnluck(whichUnit))+"("+R2S(getUnluckDuring(whichUnit))+")")
     endfunction
 
     private function init takes nothing returns nothing

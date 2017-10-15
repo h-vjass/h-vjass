@@ -5,3 +5,4 @@
 #include "time.j"
 #include "effect.j"
 #include "math.j"
+#include "rect.j"

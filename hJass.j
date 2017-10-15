@@ -4,9 +4,9 @@
 
 //载入 lib
 #include "lib/abstract.j"
-/*
+
 //载入 主游戏流程
-#include "schedule/abstract.j"
+//#include "schedule/abstract.j"
 
 //载入 房间音乐
 function hBgm takes string s returns nothing
@@ -16,7 +16,7 @@ function hBgm takes string s returns nothing
 endfunction
 #define SetMapDescription(s) hBgm(s)
 
-library hJass initializer init needs schedule
+library hJass initializer init needs hmb //hmb | schedule
 
 	//预读
 	private function preread takes nothing returns nothing
@@ -25,14 +25,14 @@ library hJass initializer init needs schedule
 	    local integer array prereads
 	    local unit array prereadUnits
 
-	    set prereads[1] = 'H009'
+	    set prereads[1] = 'H00B'
+	    set prereads[2] = 'n00F'
 	    
 	    set i = 1
 	    loop
 	        exitwhen i>total
 	            set prereadUnits[i] = CreateUnitAtLoc(Player(PLAYER_NEUTRAL_PASSIVE), prereads[i], GetRectCenter(GetPlayableMapRect()), bj_UNIT_FACING)
-	            call hAttr_initAttr(prereadUnits[i])
-	            call hAttrEffect_initAttr(prereadUnits[i])
+	            call hAttrUnit_regAllAttrSkill(prereadUnits[i])
 	        set i = i+1
 	    endloop
 	    call PolledWait(0.00)
@@ -44,17 +44,39 @@ library hJass initializer init needs schedule
 	    endloop
 	endfunction
 
+	//游戏开始0秒
+	private function start takes nothing returns nothing
+		local unit u = null
+		//TODO TEST
+		set u = hUnit_createUnit(players[1],'H00B',Location(0,0))
+		call hAttrExt_addHemophagia(u,25,0)
+		call hAttrExt_addSplit(u,50,0)
+		call hAttrExt_addHuntRebound(u,50,0)
+		call hAttrExt_addCure(u,50,0)
+		call hPlayer_setHero(players[1],u)
+		call hUnit_createUnits(10,Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,500))
+		call PanCameraToTimedLocForPlayer( players[1] , Location(0,0), 0 )
+	endfunction
+
 	private function init takes nothing returns nothing
+		local trigger startTrigger = null
 		//预读
 		call preread()
 		//属性 - 硬直条
-		call hAttrUnit_setPunishTtg(true,false)
+		call hAttrUnit_punishTtgIsOpen(true)
+		call hAttrUnit_punishTtgIsOnlyHero(false)
+		call hAttrUnit_punishTtgHeight(250.00)
 		//迷雾
 		call FogEnable( true )
 		//阴影
 		call FogMaskEnable( true )
-	endfunction
+		//开启日志
+		call console.open(true)
+		//开始触发
+		set startTrigger = CreateTrigger()
+	    call TriggerRegisterTimerEventSingle( startTrigger, 0.00 )
+	    call TriggerAddAction(startTrigger, function start)
+    endfunction
 
 endlibrary
-*/
 //最后一行必须留空请勿修改

@@ -3,6 +3,9 @@ globals
 	integer player_max_qty = 12
 	integer player_current_qty = 0
 	player array players
+	string player_default_status_gaming = "游戏中"
+	string player_default_status_nil = "无参与"
+	string player_default_status_leave = "已离开"
 endglobals
 
 library hPlayer initializer init needs hSys
@@ -14,6 +17,9 @@ library hPlayer initializer init needs hSys
 		private integer hp_apm = 10002
 		private integer hp_battle_status = 10003
 		private integer hp_hero = 10004
+		private integer hp_damage = 10005
+		private integer hp_bedamage = 10006
+		private integer hp_kill = 10007
 
 	endglobals
 
@@ -43,11 +49,39 @@ library hPlayer initializer init needs hSys
 
 	//设置玩家英雄
 	public function setHero takes player whichPlayer,unit hero returns nothing
+		call console.log(GetUnitName(hero))
 		call SaveUnitHandle(hash, GetHandleId(whichPlayer), hp_hero, hero)
 	endfunction
 	//获取玩家英雄
 	public function getHero takes player whichPlayer returns unit
 		return LoadUnitHandle(hash, GetHandleId(whichPlayer), hp_hero)
+	endfunction
+
+	//获取玩家造成的总伤害
+	public function getDamage takes player whichPlayer returns real
+		return LoadReal(hash, GetHandleId(whichPlayer), hp_damage)
+	endfunction
+	//增加玩家造成的总伤害
+	public function addDamage takes player whichPlayer,real val returns nothing
+		call SaveReal(hash, GetHandleId(whichPlayer), hp_damage, getDamage(whichPlayer)+val)
+	endfunction
+
+	//获取玩家是受到的总伤害
+	public function getBeDamage takes player whichPlayer returns real
+		return LoadReal(hash, GetHandleId(whichPlayer), hp_bedamage)
+	endfunction
+	//增加玩家受到的总伤害
+	public function addBeDamage takes player whichPlayer,real val returns nothing
+		call SaveReal(hash, GetHandleId(whichPlayer), hp_bedamage, getBeDamage(whichPlayer)+val)
+	endfunction
+
+	//获取玩家杀敌数
+	public function getKill takes player whichPlayer returns integer
+		return LoadInteger(hash, GetHandleId(whichPlayer), hp_kill)
+	endfunction
+	//增加玩家杀敌数
+	public function addKill takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hash, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
 	endfunction
 
 	//获取玩家金钱
@@ -122,7 +156,7 @@ library hPlayer initializer init needs hSys
 				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
 					set player_current_qty = player_current_qty + 1
 					call SaveBoolean(hash, pid, hp_isComputer, false)
-					call SaveStr(hash, pid, hp_battle_status, "游戏中")
+					call SaveStr(hash, pid, hp_battle_status, player_default_status_gaming)
 	                call TriggerRegisterPlayerSelectionEventBJ( triggerApm , players[i] , true )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_LEFT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
@@ -130,6 +164,7 @@ library hPlayer initializer init needs hSys
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
 	            else
 	            	call SaveBoolean(hash, pid, hp_isComputer, true)
+	            	call SaveStr(hash, pid, hp_battle_status, player_default_status_nil)
 	            endif
 			set i = i + 1
 		endloop

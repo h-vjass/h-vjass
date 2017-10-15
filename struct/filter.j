@@ -2,8 +2,8 @@
 
 struct hFilter
 
-	static hashtable hash = null
-	static integer hashKey = 0
+	private static hashtable hash = null
+	private static integer hashKey = 0
 
 	private method format takes nothing returns nothing
 		call SaveInteger(hash, hashKey , 100,0)

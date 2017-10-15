@@ -1,12 +1,6 @@
 /* 特效字符串 */
 globals
 hEffect heffect = 0
-//分裂
-string Effect_Split = "Abilities\\Spells\\Human\\Feedback\\SpellBreakerAttack.mdl"
-//治疗1
-string Effect_HealTarget = "Abilities\\Spells\\Human\\Heal\\HealTarget.mdl"
-//治疗2
-string Effect_HealingSalveTarget = "Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl"
 //血
 string Effect_Boold_Cut = "Objects\\Spawnmodels\\Critters\\Albatross\\CritterBloodAlbatross.mdl"
 //红色粉碎
@@ -148,7 +142,7 @@ struct hEffect
 	static method duringDel takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local effect e = time.getEffect(t,1)
-		call time.delTimer(t,null)
+		call time.delTimer(t)
 		call DestroyEffect(e)
 		set e = null
 	endmethod

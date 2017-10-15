@@ -102,7 +102,7 @@ library hUnit needs hSys
         if( targetUnit != null ) then
             call RemoveUnit( targetUnit )
         endif
-        call time.delTimer(t,null)
+        call time.delTimer(t)
     endfunction
 
     /**
@@ -274,6 +274,7 @@ library hUnit needs hSys
         set lookat = null
         return g
     endfunction
+
 
 endlibrary
 

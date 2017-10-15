@@ -56,7 +56,7 @@ library hAbility needs hPlayer
 	    local timer t = GetExpiredTimer()
 	    local unit whichUnit = time.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
-	    call time.delTimer(t,null)
+	    call time.delTimer(t)
 	endfunction
 	/**
 	 * 回避
@@ -78,7 +78,7 @@ library hAbility needs hPlayer
 	    local timer t = GetExpiredTimer()
 	    local unit whichUnit = time.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
-	    call time.delTimer(t,null)
+	    call time.delTimer(t)
 	endfunction
 	/**
 	 * 无敌
@@ -144,7 +144,7 @@ library hAbility needs hPlayer
 	        call SetUnitVertexColorBJ( whichUnit , 100, 100, 100, 0 )
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit , 100.00 )
-	    call time.delTimer(t,null)
+	    call time.delTimer(t)
 	endfunction
 	/**
 	 * 僵直/硬直效果
@@ -162,7 +162,7 @@ library hAbility needs hPlayer
 	    set prevTimer = LoadTimerHandle( hash , GetHandleId(whichUnit) , 3 )
 	    set prevTimeRemaining = TimerGetRemaining(prevTimer)
 	    if( prevTimeRemaining > 0 )then
-	        call time.delTimer( prevTimer ,null )
+	        call time.delTimer( prevTimer )
 	    else
 	        set prevTimeRemaining = 0
 	    endif
@@ -201,7 +201,7 @@ library hAbility needs hPlayer
 	    local unit whichUnit = time.getUnit(t,1)
 	    local integer whichAbility = time.getInteger(t,2)
 	    call UnitRemoveAbility(whichUnit, whichAbility)
-	    call time.delTimer( t ,null )
+	    call time.delTimer(t)
 	endfunction
 	//为单位添加效果只限技能类一段时间
 	public function addAbilityEffect takes unit whichUnit,integer whichAbility,integer abilityLevel,real during returns nothing

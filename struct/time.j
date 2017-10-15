@@ -9,7 +9,7 @@ endglobals
 
 struct hTime
 
-    hashtable hash = null
+    private hashtable hash = null
 
     //系统时间
     private static method clock takes nothing returns nothing
@@ -51,6 +51,31 @@ struct hTime
     //获取累计秒
     public method count takes nothing returns integer
         return clock_count
+    endmethod
+    //获取时分秒
+    public method his takes nothing returns string
+        local integer h = hour()
+        local integer i = min()
+        local integer s = sec()
+        local string str = ""
+        if(h<10)then
+            set str = str + "0"+I2S(h)
+        else
+            set str = str + I2S(h)
+        endif
+        set str = str + ":"
+        if(i<10)then
+            set str = str + "0"+I2S(i)
+        else
+            set str = str + I2S(i)
+        endif
+        set str = str + ":"
+        if(s<10)then
+            set str = str + "0"+I2S(s)
+        else
+            set str = str + I2S(s)
+        endif
+        return str
     endmethod
 
     /**
@@ -105,6 +130,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveEffectHandle(hash, timerHandleId, k, value)
     endmethod
+    public method setRect takes timer t,integer k,rect value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveRectHandle(hash, timerHandleId, k, value)
+    endmethod
     //GET
     public method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
@@ -154,6 +183,43 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         return LoadEffectHandle(hash, timerHandleId, k)
     endmethod
+    public method getRect takes timer t,integer k returns rect
+        local integer timerHandleId = GetHandleId(t)
+        return LoadRectHandle(hash, timerHandleId, k)
+    endmethod
+
+    /**
+     * 获取计时器设置时间
+     */
+    public method getSetTime takes timer t returns real
+        if(t==null)then
+            return 0
+        else
+            return TimerGetTimeout(t)
+        endif
+    endmethod
+
+    /**
+     * 获取计时器剩余时间
+     */
+    public method getRemainTime takes timer t returns real
+        if(t==null)then
+            return 0
+        else
+            return TimerGetRemaining(t)
+        endif
+    endmethod 
+
+    /**
+     * 获取计时器已过去时间
+     */
+    public method getElapsedTime takes timer t returns real
+        if(t==null)then
+            return 0
+        else
+            return TimerGetElapsed(t)
+        endif
+    endmethod 
 
     /**
      * 设置一次性计时器
@@ -184,21 +250,31 @@ struct hTime
         endif
         return getTimerDialog( t , 9001 )
     endmethod
+/**
+     * 删除计时器窗口
+     */
+    public method delDialog takes timerdialog td returns nothing
+        if(td == null) then
+            return
+        endif
+        call DestroyTimerDialog(td)
+    endmethod
 
     /**
      * 删除计时器 | 窗口
      */
-    public method delTimer takes timer t,timerdialog td returns nothing
+    public method delTimer takes timer t returns nothing
+        local timerdialog td = null
         if(t != null) then
             call PauseTimer(t)
-            //如果没有窗口，就去找找看哈希表，看看有没有
-            if(td == null) then
-                set td = getDialog(t)
-            endif
+            //找找看哈希表，看看有没有窗口
+            set td = getDialog(t)
             if(td != null) then
                 call DestroyTimerDialog(td)
+                set td = null
             endif
             call DestroyTimer(t)
+            set t = null
         endif
     endmethod
 

@@ -5,11 +5,11 @@ endglobals
 
 struct hConsole
 	
-	boolean status = false
-	string color_log = "ffffff"
-	string color_error = "e04240"
-	string color_info = "98f5ff"
-	string color_warning = "ffff00"
+	private boolean status = false
+	private string color_log = "ffffff"
+	private string color_error = "e04240"
+	private string color_info = "98f5ff"
+	private string color_warning = "ffff00"
 
 	//配置log
 	public method open takes boolean s returns nothing

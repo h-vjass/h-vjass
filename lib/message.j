@@ -43,9 +43,7 @@ library hMsg initializer init needs hSys
             return null
         endif
         if(StringLength(color)==6)then
-            call SetTextTagTextBJ(ttg, "|cff"+color+msg+"|r", size)
-        else
-            call SetTextTagTextBJ(ttg, msg, size)
+            set msg = "|cff"+color+msg+"|r"
         endif
         call SetTextTagTextBJ(ttg, msg, size)
         call SaveStr(hash, GetHandleId(ttg), 1, msg)
@@ -82,10 +80,24 @@ library hMsg initializer init needs hSys
         local real tnow = time.getReal(t,2)
         local real tend = time.getReal(t,3)
         if(tnow>=tend)then
-            call time.delTimer(t,null)
+            call time.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
-        call SetTextTagTextBJ(ttg, msg, size*(1+tnow/tend))
+        call SetTextTagTextBJ(ttg, msg, size*(1+tnow*0.5/tend))
+        call time.setReal(t,2,tnow)
+    endfunction
+    private function ttgshowShrink takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local texttag ttg = time.getTexttag(t,1)
+        local string msg = getTtgMsg(ttg)
+        local real size = getTtgSize(ttg)
+        local real tnow = time.getReal(t,2)
+        local real tend = time.getReal(t,3)
+        if(tnow>=tend)then
+            call time.delTimer(t)
+        endif
+        set tnow = tnow + TimerGetTimeout(t)
+        call SetTextTagTextBJ(ttg, msg, size*(1-tnow*0.5/tend))
         call time.setReal(t,2,tnow)
     endfunction
     private function ttgshowToggle takes nothing returns nothing
@@ -96,22 +108,27 @@ library hMsg initializer init needs hSys
         local real tnow = time.getReal(t,2)
         local real tend1 = time.getReal(t,3)
         local real tend2 = time.getReal(t,4)
-        if(tnow>=tend2)then
-            call time.delTimer(t,null)
+        if(tnow>=tend1+tend2+0.3)then
+            call time.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         if(tnow<=tend1)then
-            call SetTextTagTextBJ(ttg, msg, size*(1+tnow/(tend1+tend2)*(1/(tend1/(tend1+tend2)))))
-        else
-            call SetTextTagTextBJ(ttg, msg, size*(1-tnow/(tend1+tend2)*(1/(tend2/(tend1+tend2)))))
+            call SetTextTagTextBJ(ttg, msg, size*(1+tnow/tend1))
+        elseif(tnow>tend1+0.3)then
+            call SetTextTagTextBJ(ttg, msg, size*2-(3*(tnow-tend1-0.3)/tend2))
         endif
         call time.setReal(t,2,tnow)
     endfunction
     public function style takes texttag ttg,string showtype,real xspeed,real yspeed returns nothing
         local timer t = null
         call SetTextTagVelocity( ttg, xspeed, yspeed )
-        if(showtype == "scale")then //瞬间放大
+        if(showtype == "scale")then //放大
             set t = time.setInterval(0.03,function ttgshowScale)
+            call time.setTexttag(t,1,ttg)
+            call time.setReal(t,2,0)
+            call time.setReal(t,3,0.5)
+        elseif(showtype == "shrink")then //缩小
+            set t = time.setInterval(0.03,function ttgshowShrink)
             call time.setTexttag(t,1,ttg)
             call time.setReal(t,2,0)
             call time.setReal(t,3,0.5)
@@ -119,7 +136,7 @@ library hMsg initializer init needs hSys
             set t = time.setInterval(0.03,function ttgshowToggle)
             call time.setTexttag(t,1,ttg)
             call time.setReal(t,2,0)
-            call time.setReal(t,3,0.2)
+            call time.setReal(t,3,0.3)
             call time.setReal(t,4,0.3)
         endif
     endfunction

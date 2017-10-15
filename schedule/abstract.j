@@ -8,7 +8,6 @@ globals
 	/* 游戏模式 */
 	integer GameModelMaxLv = 0
 	timer GameModelTimer = null
-	timerdialog GameModelTimerDialog = null
 	button array GameModelButtons
 	string array GameModelTitle
 
@@ -53,7 +52,7 @@ library schedule requires hAward
 		//提示开始
         call hMsg_print("|cffffff00" + CurrentGameTitle + "！开始！|r")
         //删除对话框
-        call hTimer_delTimer( GameModelTimer , GameModelTimerDialog )
+        call time.delTimer( GameModelTimer )
         //初始资源
         set i = 1
         loop
@@ -97,7 +96,7 @@ library schedule requires hAward
         call CinematicModeBJ( true,  GetPlayersAll() )
         call ForceCinematicSubtitles( true )
         call TransmissionFromUnitWithNameBJ(  GetPlayersAll() , null, "游戏终止" , null, "没有选择模式，游戏已结束！" , bj_TIMETYPE_SET, 5.00, false )
-        call hTimer_setTimeout(3.00,function scheduleAbortLose)
+        call time.setTimeout(3.00,function scheduleAbortLose)
     endfunction
 
 	public function start takes nothing returns nothing
@@ -134,8 +133,8 @@ library schedule requires hAward
 		        endif
 		        set i = i + 1
 		    endloop
-		    set GameModelTimer = hTimer_setTimeout( 20.00, function scheduleAbort )
-		    set GameModelTimerDialog = hTimer_setDialog( GameModelTimer , "正在选择游戏模式" )
+		    set GameModelTimer = time.setTimeout( 20.00, function scheduleAbort )
+		    call time.setDialog( GameModelTimer , "正在选择游戏模式" )
 	    endif
 
 	endfunction
