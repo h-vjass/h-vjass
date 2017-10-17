@@ -1,5 +1,5 @@
 
-library hmb initializer init requires hAward
+library hmb initializer init requires hWeather
 
     globals
 
@@ -167,17 +167,17 @@ library hmb initializer init requires hAward
                     call MultiboardSetItemValueBJ( mb_simple, 5, 20, "负重" )
                     
                     call MultiboardSetItemValueBJ( mb_simple, 6, 1, I2S(R2I(hAttr_getDefend(hPlayer_getHero(players[i])))) )
-                    call MultiboardSetItemValueBJ( mb_simple, 6, 2, I2S(R2I(hAttrExt_getResistance(hPlayer_getHero(players[i])))) )
-                    call MultiboardSetItemValueBJ( mb_simple, 6, 3, I2S(R2I(hAttrExt_getAvoid(hPlayer_getHero(players[i])))) )
-                    call MultiboardSetItemValueBJ( mb_simple, 6, 4, I2S(R2I(hAttrExt_getAim(hPlayer_getHero(players[i])))) )
+                    call MultiboardSetItemValueBJ( mb_simple, 6, 2, R2S(hAttrExt_getResistance(hPlayer_getHero(players[i])))+"%" )
+                    call MultiboardSetItemValueBJ( mb_simple, 6, 3, R2S(hAttrExt_getAvoid(hPlayer_getHero(players[i])))+"%" )
+                    call MultiboardSetItemValueBJ( mb_simple, 6, 4, R2S(hAttrExt_getAim(hPlayer_getHero(players[i])))+"%" )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 5, R2S(hAttrExt_getToughness(hPlayer_getHero(players[i]))) )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 6, I2S(R2I(hAttrExt_getKnocking(hPlayer_getHero(players[i])))) )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 7, I2S(R2I(hAttrExt_getViolence(hPlayer_getHero(players[i])))) )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 8, I2S(R2I(hAttrExt_getMortalOppose(hPlayer_getHero(players[i]))))+"%" )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 9, I2S(R2I(hAttrExt_getSplit(hPlayer_getHero(players[i]))))+"%" )
-                    call MultiboardSetItemValueBJ( mb_simple, 6, 10, I2S(R2I(hAttrExt_getHemophagia(hPlayer_getHero(players[i])))) )
-                    call MultiboardSetItemValueBJ( mb_simple, 6, 11, I2S(R2I(hAttrExt_getHemophagiaSkill(hPlayer_getHero(players[i])))) )
-                    call MultiboardSetItemValueBJ( mb_simple, 6, 12, I2S(R2I(hAttrExt_getSwimOppose(hPlayer_getHero(players[i]))))+"%" )
+                    call MultiboardSetItemValueBJ( mb_simple, 6, 10, I2S(R2I(hAttrExt_getHemophagia(hPlayer_getHero(players[i]))))+"%" )
+                    call MultiboardSetItemValueBJ( mb_simple, 6, 11, I2S(R2I(hAttrExt_getHemophagiaSkill(hPlayer_getHero(players[i]))))+"%" )
+                    call MultiboardSetItemValueBJ( mb_simple, 6, 12, R2S(hAttrExt_getSwimOppose(hPlayer_getHero(players[i])))+"%" )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 13, I2S(R2I(hAttrExt_getHelp(hPlayer_getHero(players[i])))) )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 14, I2S(R2I(hAttrExt_getLuck(hPlayer_getHero(players[i]))))+"%" )
                     call MultiboardSetItemValueBJ( mb_simple, 6, 15, I2S(R2I(hAttrExt_getInvincible(hPlayer_getHero(players[i]))))+"%" )

@@ -855,7 +855,7 @@ library hAttr initializer init needs hAttrExt
 		local real toughness = value*0.1
 		local real knocking = value*3
 		local real punish = value*5
-		local real swimOppose = value*3
+		local real swimOppose = value*0.01
 		local real avoid = value*2
 		local real violence = value*3
 		call setAttr( ATTR_FLAG_STR , whichUnit , value , during )
@@ -885,7 +885,7 @@ library hAttr initializer init needs hAttrExt
 		local real attackPhysical = value*1
 		local real attackspeed = value*0.04
 		local real knocking = value*1
-		local real avoid = value*3
+		local real avoid = value*0.01
 		local real punish = value*2
 		local real violence = value*1
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
@@ -940,7 +940,7 @@ library hAttr initializer init needs hAttrExt
 		local real toughness = value*0.2
 		local real knocking = value*5
 		local real punish = value*10
-		local real swimOppose = value*5
+		local real swimOppose = value*0.03
 		call setAttr( ATTR_FLAG_STR , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
@@ -966,7 +966,7 @@ library hAttr initializer init needs hAttrExt
 		local real attackPhysical = value*2
 		local real attackspeed = value*0.05
 		local real knocking = value*3
-		local real avoid = value*5
+		local real avoid = value*0.02
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )

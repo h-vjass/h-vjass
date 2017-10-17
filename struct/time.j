@@ -134,6 +134,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveRectHandle(hash, timerHandleId, k, value)
     endmethod
+    public method setBx takes timer t,integer k,boolexpr value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveBooleanExprHandle(hash, timerHandleId, k, value)
+    endmethod
     //GET
     public method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
@@ -186,6 +190,10 @@ struct hTime
     public method getRect takes timer t,integer k returns rect
         local integer timerHandleId = GetHandleId(t)
         return LoadRectHandle(hash, timerHandleId, k)
+    endmethod
+    public method getBx takes timer t,integer k returns boolexpr
+        local integer timerHandleId = GetHandleId(t)
+        return LoadBooleanExprHandle(hash, timerHandleId, k)
     endmethod
 
     /**

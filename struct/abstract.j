@@ -6,3 +6,6 @@
 #include "effect.j"
 #include "math.j"
 #include "rect.j"
+#include "unit.j"
+#include "group.j"
+#include "media.j"

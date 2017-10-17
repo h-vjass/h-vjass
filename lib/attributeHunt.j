@@ -212,8 +212,8 @@ library hAttrHunt initializer init needs hAttrNatural
                     call hMsg_style(  hMsg_ttg2Unit(toUnit,"暴击",6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
                 endif
 	        endif
-	        //计算回避 X 命中,满20000
-    		if( htype == "physical" and realDamage<(hUnit_getMaxLife(toUnit)*0.25) and (toUnitAvoid-fromUnitAim)>0 and GetRandomInt(1, 1000)<=R2I((toUnitAvoid-fromUnitAim)/20))then
+	        //计算回避 X 命中
+    		if( htype == "physical" and realDamage<(hunit.getMaxLife(toUnit)*0.25) and R2I(toUnitAvoid-fromUnitAim)>0 and GetRandomInt(1, 100)<=R2I(toUnitAvoid-fromUnitAim))then
                 set realDamage = 0
                 call hMsg_style(  hMsg_ttg2Unit(toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
     		endif
@@ -230,7 +230,7 @@ library hAttrHunt initializer init needs hAttrNatural
                 if( toUnitResistance!=0 )then
     				if(toUnitResistance>=100)then
     					set realDamage = 0
-                        call hUnit_subLife(fromUnit,realDamage*(toUnitResistance-100)*0.01)
+                        call hunit.subLife(fromUnit,realDamage*(toUnitResistance-100)*0.01)
     				else
     					set realDamage = realDamage * (1-toUnitResistance*0.01)
                     endif
@@ -254,7 +254,7 @@ library hAttrHunt initializer init needs hAttrNatural
 
     		//造成伤害
     		if( realDamage > 0 ) then
-				call hUnit_subLife(toUnit,realDamage) //#
+				call hunit.subLife(toUnit,realDamage) //#
                 call hEvent_setKiller(toUnit,fromUnit)
                 call hPlayer_addDamage(GetOwningPlayer(fromUnit),realDamage)
                 call hPlayer_addBeDamage(GetOwningPlayer(toUnit),realDamage)
@@ -266,14 +266,14 @@ library hAttrHunt initializer init needs hAttrNatural
                     call filter.isAlive(true)
                     call filter.isEnemy(true)
                     call filter.isBuilding(false)
-	                set g = hGroup_createByLoc(loc,200.00,function hFilter.get )
+	                set g = hgroup.createByLoc(loc,200.00,function hFilter.get )
                     call filter.destroy()
 	                loop
 			            exitwhen(IsUnitGroupEmptyBJ(g) == true)
 			                set u = FirstOfGroup(g)
 			                call GroupRemoveUnit( g , u )
 		                    if(u!=toUnit and IsUnitEnemy(u,GetOwningPlayer(fromUnit)) == true) then
-                                call hUnit_subLife(u,realDamage * fromUnitSplit * 0.01)
+                                call hunit.subLife(u,realDamage * fromUnitSplit * 0.01)
 		                    endif
         			endloop
 	                call GroupClear(g)
@@ -284,12 +284,12 @@ library hAttrHunt initializer init needs hAttrNatural
 	            endif
 	            //吸血
 				if( htype == "physical" and fromUnitHemophagia >0 )then
-                    call hUnit_addLife(fromUnit,realDamage * fromUnitHemophagia * 0.01)
-					call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",fromUnit,"weapon",1.8)
+                    call hunit.addLife(fromUnit,realDamage * fromUnitHemophagia * 0.01)
+					call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",fromUnit,"origin",1.00)
 				endif
 				//技能吸血
 				if( htype == "magic" and hkind == "skill" and fromUnitHemophagiaSkill >0 )then
-                    call hUnit_addLife(fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
+                    call hunit.addLife(fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
                     call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",fromUnit,"weapon",1.8)
 				endif
 				//硬直
@@ -308,13 +308,13 @@ library hAttrHunt initializer init needs hAttrNatural
                 endif
                 //反射
                 if( toUnitHuntRebound >0 )then
-					call hUnit_subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
+					call hunit.subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
                     call hMsg_style(hMsg_ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
 				endif
                 //治疗
                 if( toUnitCure >0 )then
-                    call hUnit_addLife(toUnit,realDamage * toUnitCure * 0.01)
-                    call heffect.toUnit("Abilities\\Spells\\Human\\Heal\\HealTarget.mdl",toUnit,"origin",1.83)
+                    call hunit.addLife(toUnit,realDamage * toUnitCure * 0.01)
+                    call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",toUnit,"origin",1.00)
                     set loc = GetUnitLoc( toUnit )
                     call hMsg_style(hMsg_ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",0,0.2)
                     call RemoveLocation( loc )

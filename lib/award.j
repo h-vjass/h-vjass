@@ -63,7 +63,7 @@ library hAward requires hAttrUnit
         call filter.isAlly(true)
         call filter.isAlive(true)
         call filter.isBuilding(false)
-        set g = hGroup_createByUnit(whichUnit,awardRange,function hFilter.get)
+        set g = hgroup.createByUnit(whichUnit,awardRange,function hFilter.get)
         call filter.destroy()
         set gCount = CountUnitsInGroup( g )
         if( gCount <=0 ) then

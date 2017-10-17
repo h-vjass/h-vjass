@@ -21,7 +21,7 @@ library hAbility needs hPlayer
 	 */
 	public function break takes unit u returns nothing
 	    local location loc = GetUnitLoc( u )
-	    local unit cu = hUnit_createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , Unit_Token , loc)
+	    local unit cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , Unit_Token , loc)
 	    call UnitAddAbility( cu, Unit_TokenSkill_Break)
 	    call SetUnitAbilityLevel( cu , Unit_TokenSkill_Break , 1 )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
@@ -41,7 +41,7 @@ library hAbility needs hPlayer
 	    if( level < 1 ) then
 	        return
 	    endif
-	    set cu = hUnit_createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , Unit_Token , loc)
+	    set cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , Unit_Token , loc)
 	    call UnitAddAbility( cu, Unit_TokenSkill_Swim_05)
 	    call SetUnitAbilityLevel( cu , Unit_TokenSkill_Swim_05 , level )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
