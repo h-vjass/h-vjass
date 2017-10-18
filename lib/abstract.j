@@ -2,11 +2,10 @@
 /*
 	lib继承关系
 	下一级可以调用上级或上级的平级方法
-	如[filter]可以调用[is]也可以调用[effect]
-	但[message]不可以调用[filter]
+	如[attributeExt]可以调用[ability]也可以调用[event]
+	但[ability]不可以调用[event]
 */
 #include "system.j"
-	#include "message.j"
 	#include "player.j"
 		#include "ability.j"
 		#include "event.j"

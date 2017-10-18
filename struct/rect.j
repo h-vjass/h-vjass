@@ -24,11 +24,12 @@ struct hRect
 	static method create takes nothing returns hRect
         local hRect x = 0
         set x = hRect.allocate()
-        set hash_hrect = InitHashtable()
+        if(hash_hrect==null)then
+        	set hash_hrect = InitHashtable()
+        endif
         return x
     endmethod
     method onDestroy takes nothing returns nothing
-        set hash_hrect = null
     endmethod
 
 	/**
@@ -181,7 +182,7 @@ struct hRect
 					call SetUnitPositionLoc( u , loc )
 					call RemoveLocation(loc)
 					call heffect.toUnit( "Abilities\\Spells\\Human\\Defend\\DefendCaster.mdl" , u , "origin" , 0.2)
-					call hMsg_style(hMsg_ttg2Unit( u,"被困",10,"dde6f3",30,1,20),"shrink",0,0.2)
+					call hmsg.style(hmsg.ttg2Unit( u,"被困",10,"dde6f3",30,1,20),"shrink",0,0.2)
 				endif
         endloop
 

@@ -1,6 +1,7 @@
 
 globals
     hTime time = 0
+    hashtable hash_time = null
     integer clock_h = 0
     integer clock_m = 0
     integer clock_i = 0
@@ -8,8 +9,6 @@ globals
 endglobals
 
 struct hTime
-
-    private hashtable hash = null
 
     //系统时间
     private static method clock takes nothing returns nothing
@@ -28,12 +27,13 @@ struct hTime
     static method create takes nothing returns hTime
         local hTime t = 0
         set t = hTime.allocate()
-        set t.hash = InitHashtable()
+        if(hash_time==null)then
+            set hash_time = InitHashtable()
+        endif
         call TimerStart( CreateTimer() , 1.00 , true, function hTime.clock )
         return t
     endmethod
     method onDestroy takes nothing returns nothing
-        set hash = null
     endmethod
 
     //获取时
@@ -84,116 +84,116 @@ struct hTime
      //SET
     public method setReal takes timer t,integer k,real value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveReal(hash, timerHandleId, k, value)
+        call SaveReal(hash_time, timerHandleId, k, value)
     endmethod
     public method setInteger takes timer t,integer k,integer value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveInteger(hash, timerHandleId, k, value)
+        call SaveInteger(hash_time, timerHandleId, k, value)
     endmethod
     public method setUnit takes timer t,integer k,unit value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveUnitHandle(hash, timerHandleId, k, value)
+        call SaveUnitHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setString takes timer t,integer k,string value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveStr(hash, timerHandleId, k, value)
+        call SaveStr(hash_time, timerHandleId, k, value)
     endmethod
     public method setBoolean takes timer t,integer k,boolean value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveBoolean(hash, timerHandleId, k, value)
+        call SaveBoolean(hash_time, timerHandleId, k, value)
     endmethod
     public method setLoc takes timer t,integer k,location value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveLocationHandle(hash, timerHandleId, k, value)
+        call SaveLocationHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setGroup takes timer t,integer k,group value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveGroupHandle(hash, timerHandleId, k, value)
+        call SaveGroupHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setPlayer takes timer t,integer k,player value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SavePlayerHandle(hash, timerHandleId, k, value)
+        call SavePlayerHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setItem takes timer t,integer k,item value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveItemHandle(hash, timerHandleId, k, value)
+        call SaveItemHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setTimerDialog takes timer t,integer k,timerdialog value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveTimerDialogHandle(hash, timerHandleId, k, value)
+        call SaveTimerDialogHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setTexttag takes timer t,integer k,texttag value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveTextTagHandle(hash, timerHandleId, k, value)
+        call SaveTextTagHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setEffect takes timer t,integer k,effect value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveEffectHandle(hash, timerHandleId, k, value)
+        call SaveEffectHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setRect takes timer t,integer k,rect value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveRectHandle(hash, timerHandleId, k, value)
+        call SaveRectHandle(hash_time, timerHandleId, k, value)
     endmethod
     public method setBx takes timer t,integer k,boolexpr value returns nothing
         local integer timerHandleId = GetHandleId(t)
-        call SaveBooleanExprHandle(hash, timerHandleId, k, value)
+        call SaveBooleanExprHandle(hash_time, timerHandleId, k, value)
     endmethod
     //GET
     public method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
-        return LoadReal(hash, timerHandleId, k)
+        return LoadReal(hash_time, timerHandleId, k)
     endmethod
     public method getInteger takes timer t,integer k returns integer
         local integer timerHandleId = GetHandleId(t)
-        return LoadInteger(hash, timerHandleId, k)
+        return LoadInteger(hash_time, timerHandleId, k)
     endmethod
     public method getUnit takes timer t,integer k returns unit
         local integer timerHandleId = GetHandleId(t)
-        return LoadUnitHandle(hash, timerHandleId, k)
+        return LoadUnitHandle(hash_time, timerHandleId, k)
     endmethod
     public method getString takes timer t,integer k returns string
         local integer timerHandleId = GetHandleId(t)
-        return LoadStr(hash, timerHandleId, k)
+        return LoadStr(hash_time, timerHandleId, k)
     endmethod
     public method getBoolean takes timer t,integer k returns boolean
         local integer timerHandleId = GetHandleId(t)
-        return LoadBoolean(hash, timerHandleId, k)
+        return LoadBoolean(hash_time, timerHandleId, k)
     endmethod
     public method getLoc takes timer t,integer k returns location
         local integer timerHandleId = GetHandleId(t)
-        return LoadLocationHandle(hash, timerHandleId, k)
+        return LoadLocationHandle(hash_time, timerHandleId, k)
     endmethod
     public method getGroup takes timer t,integer k returns group
         local integer timerHandleId = GetHandleId(t)
-        return LoadGroupHandle(hash, timerHandleId, k)
+        return LoadGroupHandle(hash_time, timerHandleId, k)
     endmethod
     public method getPlayer takes timer t,integer k returns player
         local integer timerHandleId = GetHandleId(t)
-        return LoadPlayerHandle(hash, timerHandleId, k)
+        return LoadPlayerHandle(hash_time, timerHandleId, k)
     endmethod
     public method getItem takes timer t,integer k returns item
         local integer timerHandleId = GetHandleId(t)
-        return LoadItemHandle(hash, timerHandleId, k)
+        return LoadItemHandle(hash_time, timerHandleId, k)
     endmethod
     public method getTimerDialog takes timer t,integer k returns timerdialog
         local integer timerHandleId = GetHandleId(t)
-        return LoadTimerDialogHandle(hash, timerHandleId, k)
+        return LoadTimerDialogHandle(hash_time, timerHandleId, k)
     endmethod
     public method getTexttag takes timer t,integer k returns texttag
         local integer timerHandleId = GetHandleId(t)
-        return LoadTextTagHandle(hash, timerHandleId, k)
+        return LoadTextTagHandle(hash_time, timerHandleId, k)
     endmethod
     public method getEffect takes timer t,integer k returns effect
         local integer timerHandleId = GetHandleId(t)
-        return LoadEffectHandle(hash, timerHandleId, k)
+        return LoadEffectHandle(hash_time, timerHandleId, k)
     endmethod
     public method getRect takes timer t,integer k returns rect
         local integer timerHandleId = GetHandleId(t)
-        return LoadRectHandle(hash, timerHandleId, k)
+        return LoadRectHandle(hash_time, timerHandleId, k)
     endmethod
     public method getBx takes timer t,integer k returns boolexpr
         local integer timerHandleId = GetHandleId(t)
-        return LoadBooleanExprHandle(hash, timerHandleId, k)
+        return LoadBooleanExprHandle(hash_time, timerHandleId, k)
     endmethod
 
     /**

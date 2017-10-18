@@ -177,7 +177,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	        if( htype == "physical" and (fromUnitKnocking-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitMortalOppose)/30) ) then
 	       		set realDamage = realDamage * (1+(fromUnitKnocking-toUnitMortalOppose)*0.0004)
 	       		set toUnitAvoid = toUnitAvoid * 0.5
-                call hMsg_style(  hMsg_ttg2Unit(toUnit,"暴击",6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
+                call hmsg.style(  hmsg.ttg2Unit(toUnit,"暴击",6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
 	        endif
             //计算自然属性
             if( htype == "magic_fire" and fromUnitNaturalFire>0 )then
@@ -209,13 +209,13 @@ library hAttrHunt initializer init needs hAttrNatural
                 if((fromUnitViolence-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitMortalOppose)/20))then
                     set realDamage = realDamage * (1+(fromUnitViolence-toUnitMortalOppose)*0.0002)
                     set toUnitAvoid = toUnitAvoid * 0.5
-                    call hMsg_style(  hMsg_ttg2Unit(toUnit,"暴击",6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
+                    call hmsg.style(  hmsg.ttg2Unit(toUnit,"暴击",6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
                 endif
 	        endif
 	        //计算回避 X 命中
     		if( htype == "physical" and realDamage<(hunit.getMaxLife(toUnit)*0.25) and R2I(toUnitAvoid-fromUnitAim)>0 and GetRandomInt(1, 100)<=R2I(toUnitAvoid-fromUnitAim))then
                 set realDamage = 0
-                call hMsg_style(  hMsg_ttg2Unit(toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
+                call hmsg.style(  hmsg.ttg2Unit(toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
     		endif
     		//计算护甲
     		if( htype == "physical" and toUnitDefend!=0 )then
@@ -303,20 +303,20 @@ library hAttrHunt initializer init needs hAttrNatural
                     if(hAttrExt_getPunishCurrent(toUnit) <= 0 ) then
                         call hAttrExt_setPunishCurrent(toUnit,hAttrExt_getPunish(toUnit),0)
                         call hAbility_punish( toUnit , 3.00 , 0 )
-                        call hMsg_ttg2Unit(toUnit,"僵硬",10.00,"c0c0c0",0,3.00,50.00)
+                        call hmsg.ttg2Unit(toUnit,"僵硬",10.00,"c0c0c0",0,3.00,50.00)
                     endif
                 endif
                 //反射
                 if( toUnitHuntRebound >0 )then
 					call hunit.subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
-                    call hMsg_style(hMsg_ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
+                    call hmsg.style(hmsg.ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
 				endif
                 //治疗
                 if( toUnitCure >0 )then
                     call hunit.addLife(toUnit,realDamage * toUnitCure * 0.01)
                     call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",toUnit,"origin",1.00)
                     set loc = GetUnitLoc( toUnit )
-                    call hMsg_style(hMsg_ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",0,0.2)
+                    call hmsg.style(hmsg.ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",0,0.2)
                     call RemoveLocation( loc )
 				endif
     		endif

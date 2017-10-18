@@ -9,3 +9,4 @@
 #include "unit.j"
 #include "group.j"
 #include "media.j"
+#include "message.j"

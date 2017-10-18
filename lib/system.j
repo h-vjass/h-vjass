@@ -12,6 +12,7 @@ library hSys initializer init
 		set hrect = hRect.create()
 		set hunit = hUnit.create()
 		set hgroup = hGroup.create()
+		set hmsg = hMsg.create()
 	endfunction
 
 endlibrary

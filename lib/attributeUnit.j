@@ -125,7 +125,7 @@ library hAttrUnit initializer init needs hAttrHunt
             endloop
         endif
         call console.log("ttgStr = "+ttgStr)
-        call hMsg_ttgBindUnit(whichUnit,ttgStr,textSize,"",textOpacity,textZOffset)
+        call hmsg.ttgBindUnit(whichUnit,ttgStr,textSize,"",textOpacity,textZOffset)
 	endfunction
 
 	/* 单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害) */
