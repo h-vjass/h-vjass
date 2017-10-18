@@ -1,5 +1,5 @@
 
-library hmb initializer init requires hWeather
+library hmb initializer init needs hWeather
 
     globals
 
