@@ -49,6 +49,7 @@ library hJass initializer init needs hmb //hmb | schedule
 		local unit u = null
 		local unit u2 = null
 		local rect r = hrect.createInLoc(0,0,3000,1500)
+		local hWeatherBean wbean = 0
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
 		call hAttrExt_addHemophagia(u,25,0)
@@ -72,6 +73,14 @@ library hJass initializer init needs hmb //hmb | schedule
 		//rect
 		//call hrect.lockByRect(r,"square",0)
 		call hrect.lockByUnit(u2,"circle",500,500,0)
+
+		call wbean.create()
+		set wbean.loc = Location(0,0)
+		set wbean.width = 500
+		set wbean.height = 500
+		set wbean.during = 5.00
+	    call hWeather_rain(wbean)
+		call wbean.destroy()
 	endfunction
 
 	private function init takes nothing returns nothing
