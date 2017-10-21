@@ -87,14 +87,11 @@ library hWeather initializer init needs hAward
 		local weathereffect w = null
         local rect area = null
         local timer t = null
-        if(/*bean.area==null and */bean.loc==null)then
+        if(bean.loc==null)then
             call console.error("hWeather.build")
             return null
         endif
-        /*
-        if(bean.area!=null)then
-            set w = AddWeatherEffect( bean.area , bean.id )
-        else*/if(bean.loc!=null)then
+        if(bean.loc!=null)then
             if(bean.width<=0 or bean.height<=0)then
                 call console.error("hWeather.build -w-h")
                 return null

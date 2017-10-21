@@ -49,7 +49,7 @@ struct hMsg
     //*color为6位颜色代码
     private static method createttg takes string msg,real size,string color,real opacity,real during returns texttag
         local texttag ttg = CreateTextTag()
-        if(msg==null or msg == "" or size<0 or opacity>=100 or opacity<0 or during<=0)then
+        if( size<0 or opacity>=100 or opacity<0 or during<0)then
             return null
         endif
         if(StringLength(color)==6)then
@@ -69,10 +69,7 @@ struct hMsg
         endif
         return ttg
     endmethod
-    //获取漂浮字初始文本
-    public static method getTtgMsg takes texttag ttg returns string
-        return LoadStr(hash_hmsg, GetHandleId(ttg), 1)
-    endmethod
+
     //获取漂浮字大小
     public static method getTtgSize takes texttag ttg returns real
         return LoadReal(hash_hmsg, GetHandleId(ttg), 2)
@@ -80,6 +77,18 @@ struct hMsg
     //获取漂浮字颜色
     public static method getTtgColor takes texttag ttg returns string
         return LoadStr(hash_hmsg, GetHandleId(ttg), 3)
+    endmethod
+    //设置漂浮字内容
+    public static method setTtgMsg takes texttag ttg,string msg,real size returns nothing
+        if(size<=0)then
+            set size = getTtgSize(ttg)
+        endif
+        call SaveStr(hash_hmsg, GetHandleId(ttg), 1 , msg)
+        call SetTextTagTextBJ(  ttg , msg , size )
+    endmethod
+    //获取漂浮字内容
+    public static method getTtgMsg takes texttag ttg returns string
+        return LoadStr(hash_hmsg, GetHandleId(ttg), 1)
     endmethod
     //设置漂浮字弹出样式
     private static method ttgshowScale takes nothing returns nothing
@@ -170,8 +179,11 @@ struct hMsg
         local real zOffset = time.getReal( t , 3 )
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
+        if( ttg==null )then
+            call time.delTimer(t)
+        endif
+        call SetTextTagPos( ttg , GetUnitX(u)-25.0*size*0.5 , GetUnitY(u) , zOffset )
         if( is.alive(u) == true ) then
-            call SetTextTagPos( ttg , GetUnitX(u)-I2R(StringLength(msg))*size*0.5 , GetUnitY(u) , zOffset )
             call SetTextTagVisibility( ttg , true )
         else
             call SetTextTagVisibility( ttg , false )
@@ -180,7 +192,7 @@ struct hMsg
     //漂浮文字 - 绑定在某单位头上，跟随移动
     public static method ttgBindUnit takes unit u,string msg,real size,string color,real opacity,real zOffset returns texttag
         local texttag ttg =  ttg2Unit(u,msg,size,color,opacity,0,zOffset)
-        local timer t = time.setInterval( 0.05 , function hMsg.ttgBindUnitCall )
+        local timer t = time.setInterval( 0.03 , function hMsg.ttgBindUnitCall )
         call time.setUnit( t , 1 , u )
         call time.setTexttag( t , 2 , ttg )
         call time.setReal( t , 3 , zOffset )

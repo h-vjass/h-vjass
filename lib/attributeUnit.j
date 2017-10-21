@@ -64,6 +64,70 @@ library hAttrUnit initializer init needs hAttrHunt
 		endif
 	endfunction
 
+	/**
+	 * 设置硬直漂浮字
+	 */
+    private function punishTtgCall takes nothing returns nothing
+    	local timer t = GetExpiredTimer()
+		local string ttgStr = ""
+		local string font = "■"
+		local real percent = 0
+		local integer block = 0
+		local integer blockMax = 25
+		local integer i = 0
+		local unit whichUnit = time.getUnit(t,1)
+		local texttag ttg = time.getTexttag(t,2)
+		local real zOffset = time.getReal(t,3)
+		local real size = time.getReal(t,4)
+		local real punishNow = hAttrExt_getPunishCurrent(whichUnit)
+		local real punishAll = hAttrExt_getPunish(whichUnit)
+		if( ttg == null ) then
+        	call time.delTimer(t)
+        endif
+        call SetTextTagPos( ttg , GetUnitX(whichUnit)-blockMax*size*0.5 , GetUnitY(whichUnit) , zOffset )
+        if( is.alive(whichUnit)== false )then
+        	call hmsg.setTtgMsg(ttg,"",size)
+        	call SetTextTagVisibility( ttg , false )
+        else
+        	//计算字符串
+	        if( punishAll > 0 ) then
+	            set percent = punishNow / punishAll
+	            set block = R2I(percent * I2R(blockMax))
+	            if( punishNow >= punishAll ) then
+	                set block = R2I(blockMax)
+	            endif
+	            set i = 1
+	            loop
+	                exitwhen i > blockMax
+	                    if( i <= block ) then
+	                        set ttgStr = ttgStr + "|cfff8f5ec"+font+"|r"
+	                    else
+	                        set ttgStr = ttgStr + "|cff000000"+font+"|r"
+	                    endif
+	                set i = i + 1
+	            endloop
+	        endif
+	        call hmsg.setTtgMsg(ttg,ttgStr,size)
+	        call SetTextTagVisibility( ttg , true )
+        endif
+	endfunction
+
+	//硬直条
+	public function punishTtg takes unit whichUnit returns nothing
+		local timer t = null
+		local texttag = ttg = null
+		local real size = 5
+		if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and is.hero(whichUnit))))then
+
+			set ttg = hmsg.ttg2Unit(whichUnit,"",size,"",10,0,PUNISH_TEXTTAG_HEIGHT)
+	        set t = time.setInterval( 0.03 , function punishTtgCall )
+	        call time.setUnit( t , 1 , whichUnit )
+	        call time.setTexttag( t , 2 , ttg )
+	        call time.setReal( t , 3 , PUNISH_TEXTTAG_HEIGHT )
+	        call time.setReal( t , 4 , size )
+		endif
+	endfunction
+
 	/* 硬直恢复器(+100/5s) */
 	private function punishback takes nothing returns nothing
 	    local integer i
@@ -88,44 +152,6 @@ library hAttrUnit initializer init needs hAttrHunt
 	        call DestroyGroup( tempGroup )
 	        set tempGroup = null
 		endif
-	endfunction
-
-	/**
-	 * 设置硬直漂浮字
-	 */
-    private function punishTtg takes unit whichUnit returns nothing
-		local string ttgStr = ""
-		local string font = "■"
-		local real percent = 0
-		local integer block = 0
-		local integer blockMax = 25
-		local real textSize = 5.00
-		local real textZOffset = PUNISH_TEXTTAG_HEIGHT
-		local real textOpacity = 0.10
-		local integer i = 0
-		local real punishNow = hAttrExt_getPunishCurrent(whichUnit)
-		local real punishAll = hAttrExt_getPunish(whichUnit)
-		call console.log("punishAll = "+R2S(punishAll))
-        //计算字符串
-        if( punishAll > 0 ) then
-            set percent = punishNow / punishAll
-            set block = R2I(percent * I2R(blockMax))
-            if( punishNow >= punishAll ) then
-                set block = R2I(blockMax)
-            endif
-            set i = 1
-            loop
-                exitwhen i > blockMax
-                    if( i <= block ) then
-                        set ttgStr = ttgStr + "|cffffff80"+font+"|r"
-                    else
-                        set ttgStr = ttgStr + "|cff000000"+font+"|r"
-                    endif
-                set i = i + 1
-            endloop
-        endif
-        call console.log("ttgStr = "+ttgStr)
-        call hmsg.ttgBindUnit(whichUnit,ttgStr,textSize,"",textOpacity,textZOffset)
 	endfunction
 
 	/* 单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害) */
@@ -507,6 +533,9 @@ library hAttrUnit initializer init needs hAttrHunt
 		if( is.hero(u)==false and IsUnitInGroup(u, ATTR_GROUP) ) then
 			call groupOut(u)
 		endif
+		if( PUNISH_SWITCH == true )then
+			call SaveTextTagHandle(hash, GetHandleId(u), 7896 , null)
+		endif
 		set u = null
 	endfunction
 
@@ -529,11 +558,7 @@ library hAttrUnit initializer init needs hAttrHunt
 				//英雄升级
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
 	        endif
-	        //硬直条
-			if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and is.hero(u))))then
-				call console.log(GetUnitName(u)+"绑定了硬直条")
-				call punishTtg(u)
-			endif
+	        call punishTtg(u)
 	        call SaveBoolean( hash , uhid , 1 , true )
 		endif
         set u = null
