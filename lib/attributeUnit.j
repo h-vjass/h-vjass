@@ -64,23 +64,45 @@ library hAttrUnit initializer init needs hAttrHunt
 		endif
 	endfunction
 
+	public function createBlockText takes real current,real all,integer blockMax,string colorFt,string colorBg returns string
+		local string str = ""
+		local string font = "■"
+		local real percent = 0
+		local integer block = 0
+		local integer i = 0
+		if( all > 0 ) then
+            set percent = current / all
+            set block = R2I(percent * I2R(blockMax))
+            if( current >= all ) then
+                set block = R2I(blockMax)
+            endif
+            set i = 1
+            loop
+                exitwhen i > blockMax
+                    if( i <= block ) then
+                        set str = str + "|cff"+colorFt+font+"|r"
+                    else
+                        set str = str + "|cff"+colorBg+font+"|r"
+                    endif
+                set i = i + 1
+            endloop
+        endif
+        return str
+	endfunction
+
 	/**
 	 * 设置硬直漂浮字
 	 */
     private function punishTtgCall takes nothing returns nothing
     	local timer t = GetExpiredTimer()
 		local string ttgStr = ""
-		local string font = "■"
-		local real percent = 0
-		local integer block = 0
-		local integer blockMax = 25
-		local integer i = 0
 		local unit whichUnit = time.getUnit(t,1)
 		local texttag ttg = time.getTexttag(t,2)
 		local real zOffset = time.getReal(t,3)
 		local real size = time.getReal(t,4)
 		local real punishNow = hAttrExt_getPunishCurrent(whichUnit)
 		local real punishAll = hAttrExt_getPunish(whichUnit)
+		local integer blockMax = 25
 		if( ttg == null ) then
         	call time.delTimer(t)
         endif
@@ -89,24 +111,7 @@ library hAttrUnit initializer init needs hAttrHunt
         	call hmsg.setTtgMsg(ttg,"",size)
         	call SetTextTagVisibility( ttg , false )
         else
-        	//计算字符串
-	        if( punishAll > 0 ) then
-	            set percent = punishNow / punishAll
-	            set block = R2I(percent * I2R(blockMax))
-	            if( punishNow >= punishAll ) then
-	                set block = R2I(blockMax)
-	            endif
-	            set i = 1
-	            loop
-	                exitwhen i > blockMax
-	                    if( i <= block ) then
-	                        set ttgStr = ttgStr + "|cfff8f5ec"+font+"|r"
-	                    else
-	                        set ttgStr = ttgStr + "|cff000000"+font+"|r"
-	                    endif
-	                set i = i + 1
-	            endloop
-	        endif
+        	set ttgStr = createBlockText(punishNow,punishAll,blockMax,"f8f5ec","000000")
 	        call hmsg.setTtgMsg(ttg,ttgStr,size)
 	        call SetTextTagVisibility( ttg , true )
         endif
@@ -116,7 +121,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	public function punishTtg takes unit whichUnit returns nothing
 		local timer t = null
 		local texttag = ttg = null
-		local real size = 5
+		local real size = 6
 		if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and is.hero(whichUnit))))then
 
 			set ttg = hmsg.ttg2Unit(whichUnit,"",size,"",10,0,PUNISH_TEXTTAG_HEIGHT)
@@ -161,6 +166,7 @@ library hAttrUnit initializer init needs hAttrHunt
 		local real damage = GetEventDamage()
 		local real attackEffectDuringBuff = 5.00
 		local real attackEffectDuringDebuff = 3.00
+		local hAttrHuntBean bean = 0
 
 		//计算攻击特效
 		local real fromUnitLifeBack = hAttrEffect_getLifeBack(fromUnit)
@@ -238,114 +244,232 @@ library hAttrUnit initializer init needs hAttrHunt
 		if(damage>0.5)then
 			call console.info("basedamage"+R2S(damage))
 			call hAbility_avoid(toUnit) //抵消伤害
-			call hAttrHunt_huntUnit( fromUnit,toUnit,null,damage,"attack","physical",false,false,"null",0,0 )
+			call bean.create()
+			set bean.fromUnit = fromUnit
+			set bean.toUnit = toUnit
+			set bean.damage = damage
+			set bean.huntKind = "attack"
+			set bean.huntType = "physical"
+			call hAttrHunt_huntUnit( bean )
+			call bean.destroy()
 		endif
 		//攻击特效
+		call bean.create()
+		set bean.fromUnit = fromUnit
+		set bean.toUnit = toUnit
+		set bean.huntKind = "attack"
+		set bean.huntType = "physical"
 		if( fromUnitLifeBack != 0 and fromUnitLifeBackDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_life_back",fromUnitLifeBack,fromUnitLifeBackDuring )
+		   set bean.special = "effect_life_back"
+		   set bean.specialVal = fromUnitLifeBack
+		   set bean.specialDuring = fromUnitLifeBackDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitManaBack != 0 and fromUnitManaBackDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_mana_back",fromUnitManaBack,fromUnitManaBackDuring )
+		   set bean.special = "effect_mana_back"
+		   set bean.specialVal = fromUnitManaBack
+		   set bean.specialDuring = fromUnitManaBackDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitAttackSpeed != 0 and fromUnitAttackSpeedDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_attack_speed",fromUnitAttackSpeed,fromUnitAttackSpeedDuring )
+		   set bean.special = "effect_attack_speed"
+		   set bean.specialVal = fromUnitAttackSpeed
+		   set bean.specialDuring = fromUnitAttackSpeedDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitAttackPhysical != 0 and fromUnitAttackPhysicalDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_attack_physical",fromUnitAttackPhysical,fromUnitAttackPhysicalDuring )
+		   set bean.special = "effect_attack_physical"
+		   set bean.specialVal = fromUnitAttackPhysical
+		   set bean.specialDuring = fromUnitAttackPhysicalDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitAttackMagic != 0 and fromUnitAttackMagicDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_attack_magic",fromUnitAttackMagic,fromUnitAttackMagicDuring )
+		   set bean.special = "effect_attack_magic"
+		   set bean.specialVal = fromUnitAttackMagic
+		   set bean.specialDuring = fromUnitAttackMagicDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitMove != 0 and fromUnitMoveDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_move",fromUnitMove,fromUnitMoveDuring )
+		   set bean.special = "effect_move"
+		   set bean.specialVal = fromUnitMove
+		   set bean.specialDuring = fromUnitMoveDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitAim != 0 and fromUnitAimDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_aim",fromUnitAim,fromUnitAimDuring )
+		   set bean.special = "effect_aim"
+		   set bean.specialVal = fromUnitAim
+		   set bean.specialDuring = fromUnitAimDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitStr != 0 and fromUnitStrDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_str",fromUnitStr,fromUnitStrDuring )
+		   set bean.special = "effect_str"
+		   set bean.specialVal = fromUnitStr
+		   set bean.specialDuring = fromUnitStrDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitAgi != 0 and fromUnitAgiDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_agi",fromUnitAgi,fromUnitAgiDuring )
+		   set bean.special = "effect_agi"
+		   set bean.specialVal = fromUnitAgi
+		   set bean.specialDuring = fromUnitAgiDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitInt != 0 and fromUnitIntDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_int",fromUnitInt,fromUnitIntDuring )
+		   set bean.special = "effect_int"
+		   set bean.specialVal = fromUnitInt
+		   set bean.specialDuring = fromUnitIntDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitKnocking != 0 and fromUnitKnockingDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_knocking",fromUnitKnocking,fromUnitKnockingDuring )
+		   set bean.special = "effect_knocking"
+		   set bean.specialVal = fromUnitKnocking
+		   set bean.specialDuring = fromUnitKnockingDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitViolence != 0 and fromUnitViolenceDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_violence",fromUnitViolence,fromUnitViolenceDuring )
+		   set bean.special = "effect_violence"
+		   set bean.specialVal = fromUnitViolence
+		   set bean.specialDuring = fromUnitViolenceDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitHemophagia != 0 and fromUnitHemophagiaDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_hemophagia",fromUnitHemophagia,fromUnitHemophagiaDuring )
+		   set bean.special = "effect_hemophagia"
+		   set bean.specialVal = fromUnitHemophagia
+		   set bean.specialDuring = fromUnitHemophagiaDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitHemophagiaSkill != 0 and fromUnitHemophagiaSkillDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_hemophagia_skill",fromUnitHemophagiaSkill,fromUnitHemophagiaSkillDuring )
+		   set bean.special = "effect_hemophagia_skill"
+		   set bean.specialVal = fromUnitHemophagiaSkill
+		   set bean.specialDuring = fromUnitHemophagiaSkillDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitSplit != 0 and fromUnitSplitDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_split",fromUnitSplit,fromUnitSplitDuring )
+		   set bean.special = "effect_split"
+		   set bean.specialVal = fromUnitSplit
+		   set bean.specialDuring = fromUnitSplitDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitLuck != 0 and fromUnitLuckDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_luck",fromUnitLuck,fromUnitLuckDuring )
+		   set bean.special = "effect_luck"
+		   set bean.specialVal = fromUnitLuck
+		   set bean.specialDuring = fromUnitLuckDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitHuntAmplitude != 0 and fromUnitHuntAmplitudeDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_hunt_amplitude",fromUnitHuntAmplitude,fromUnitHuntAmplitudeDuring )
+		   set bean.special = "effect_hunt_amplitude"
+		   set bean.specialVal = fromUnitHuntAmplitude
+		   set bean.specialDuring = fromUnitHuntAmplitudeDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitPoison != 0 and fromUnitPoisonDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_poison",fromUnitPoison,fromUnitPoisonDuring )
+		   set bean.special = "effect_poison"
+		   set bean.specialVal = fromUnitPoison
+		   set bean.specialDuring = fromUnitPoisonDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitDry != 0 and fromUnitDryDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_dry",fromUnitDry,fromUnitDryDuring )
+		   set bean.special = "effect_dry"
+		   set bean.specialVal = fromUnitDry
+		   set bean.specialDuring = fromUnitDryDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitFreeze != 0 and fromUnitFreezeDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_freeze",fromUnitFreeze,fromUnitFreezeDuring )
+		   set bean.special = "effect_freeze"
+		   set bean.specialVal = fromUnitFreeze
+		   set bean.specialDuring = fromUnitFreezeDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitCold != 0 and fromUnitColdDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_cold",fromUnitCold,fromUnitColdDuring )
+		   set bean.special = "effect_cold"
+		   set bean.specialVal = fromUnitCold
+		   set bean.specialDuring = fromUnitColdDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitBlunt != 0 and fromUnitBluntDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_blunt",fromUnitBlunt,fromUnitBluntDuring )
+		   set bean.special = "effect_blunt"
+		   set bean.specialVal = fromUnitBlunt
+		   set bean.specialDuring = fromUnitBluntDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitCorrosion != 0 and fromUnitCorrosionDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_corrosion",fromUnitCorrosion,fromUnitCorrosionDuring )
+		   set bean.special = "effect_corrosion"
+		   set bean.specialVal = fromUnitCorrosion
+		   set bean.specialDuring = fromUnitCorrosionDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitChaos != 0 and fromUnitChaosDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_chaos",fromUnitChaos,fromUnitChaosDuring )
+		   set bean.special = "effect_chaos"
+		   set bean.specialVal = fromUnitChaos
+		   set bean.specialDuring = fromUnitChaosDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitTwine != 0 and fromUnitTwineDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_twine",fromUnitTwine,fromUnitTwineDuring )
+		   set bean.special = "effect_twine"
+		   set bean.specialVal = fromUnitTwine
+		   set bean.specialDuring = fromUnitTwineDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitBlind != 0 and fromUnitBlindDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_blind",fromUnitBlind,fromUnitBlindDuring )
+		   set bean.special = "effect_blind"
+		   set bean.specialVal = fromUnitBlind
+		   set bean.specialDuring = fromUnitBlindDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitTortua != 0 and fromUnitTortuaDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_tortua",fromUnitTortua,fromUnitTortuaDuring )
+		   set bean.special = "effect_tortua"
+		   set bean.specialVal = fromUnitTortua
+		   set bean.specialDuring = fromUnitTortuaDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitWeak != 0 and fromUnitWeakDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_weak",fromUnitWeak,fromUnitWeakDuring )
+		   set bean.special = "effect_weak"
+		   set bean.specialVal = fromUnitWeak
+		   set bean.specialDuring = fromUnitWeakDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitBound != 0 and fromUnitBoundDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_bound",fromUnitBound,fromUnitBoundDuring )
+		   set bean.special = "effect_bound"
+		   set bean.specialVal = fromUnitBound
+		   set bean.specialDuring = fromUnitBoundDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitFoolish != 0 and fromUnitFoolishDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_foolish",fromUnitFoolish,fromUnitFoolishDuring )
+		   set bean.special = "effect_foolish"
+		   set bean.specialVal = fromUnitFoolish
+		   set bean.specialDuring = fromUnitFoolishDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitLazy != 0 and fromUnitLazyDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_lazy",fromUnitLazy,fromUnitLazyDuring )
+		   set bean.special = "effect_lazy"
+		   set bean.specialVal = fromUnitLazy
+		   set bean.specialDuring = fromUnitLazyDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitSwim != 0 and fromUnitSwimDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_swim",fromUnitSwim,fromUnitSwimDuring )
+		   set bean.special = "effect_swim"
+		   set bean.specialVal = fromUnitSwim
+		   set bean.specialDuring = fromUnitSwimDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitBreak != 0 and fromUnitBreakDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_break",fromUnitBreak,fromUnitBreakDuring )
+		   set bean.special = "effect_break"
+		   set bean.specialVal = fromUnitBreak
+		   set bean.specialDuring = fromUnitBreakDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitHeavy != 0 and fromUnitHeavyDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_heavy",fromUnitHeavy,fromUnitHeavyDuring )
+		   set bean.special = "effect_heavy"
+		   set bean.specialVal = fromUnitHeavy
+		   set bean.specialDuring = fromUnitHeavyDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
 		if( fromUnitUnluck != 0 and fromUnitUnluckDuring > 0 ) then
-		   call hAttrHunt_huntUnit( fromUnit,toUnit,null,0,"attack","physical",false,false,"effect_unluck",fromUnitUnluck,fromUnitUnluckDuring )
+		   set bean.special = "effect_unluck"
+		   set bean.specialVal = fromUnitUnluck
+		   set bean.specialDuring = fromUnitUnluckDuring
+		   call hAttrHunt_huntUnit(bean)
 		endif
+		call bean.destroy()
 		set fromUnit = null
 		set toUnit = null
 	endfunction

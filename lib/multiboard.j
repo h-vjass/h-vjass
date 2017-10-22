@@ -5,6 +5,7 @@ library hmb initializer init needs hWeather
 
         private multiboard mb_allPlayer = null
         private multiboard mb_simple = null
+        private multiboard mb_value = null
         private string array mb_show
 
         /* 多面板 */
@@ -60,8 +61,15 @@ library hmb initializer init needs hWeather
             call MultiboardSetItemWidthBJ( mb_simple, 0, 0, 4.50 )
             call MultiboardSetItemStyleBJ( mb_simple, 0, 0, true, false )
         endif
+        if(mb_value == null) then
+            set mb_value = CreateMultiboard()
+            call MultiboardSetRowCount(mb_value, 8)
+            call MultiboardSetColumnCount(mb_value, 3)
+            call MultiboardSetItemStyleBJ( mb_value, 0, 0, true, false )
+        endif
         call MultiboardSetTitleText(mb_allPlayer, "全玩家情报 - "+time.his())
         call MultiboardSetTitleText(mb_simple, "个人情报 - "+time.his())
+        call MultiboardSetTitleText(mb_value, "实时情报 - "+time.his())
         set i = 1
         set j = 1
         loop
@@ -293,6 +301,35 @@ library hmb initializer init needs hWeather
                     call MultiboardSetItemValueBJ( mb_simple,12,16, I2S(R2I(hAttrNatural_getThunderOppose(hPlayer_getHero(players[i])))) +"%" )
 
                     call MultiboardDisplay(mb_simple, true)
+                elseif(GetLocalPlayer()==players[i] and mb_show[i] == "value")then
+                    call MultiboardSetItemWidthBJ( mb_value, 1, 0, 3.00 )
+                    call MultiboardSetItemWidthBJ( mb_value, 2, 0, 10.00 )
+                    call MultiboardSetItemWidthBJ( mb_value, 3, 0, 6.00 )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 1, "" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 2, "生命量" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 3, "生命源" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 4, "魔法量" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 5, "魔法源" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 6, "移动力" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 7, "僵直度" )
+                    call MultiboardSetItemValueBJ( mb_value, 1, 8, "负重量" )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 1, "" )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 2, hAttrUnit_createBlockText(hunit.getLife(hPlayer_getHero(players[i])),hunit.getMaxLife(hPlayer_getHero(players[i])),30,"4bf14f","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 3, hAttrUnit_createBlockText(hAttrExt_getLifeSourceCurrent(hPlayer_getHero(players[i])),hAttrExt_getLifeSource(hPlayer_getHero(players[i])),30,"92f693","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 4, hAttrUnit_createBlockText(hunit.getMana(hPlayer_getHero(players[i])),hunit.getMaxMana(hPlayer_getHero(players[i])),30,"3192ed","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 5, hAttrUnit_createBlockText(hAttrExt_getManaSourceCurrent(hPlayer_getHero(players[i])),hAttrExt_getManaSource(hPlayer_getHero(players[i])),30,"90c4f3","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 6, hAttrUnit_createBlockText(hAttr_getMove(hPlayer_getHero(players[i])),522,30,"f36dc4","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 7, hAttrUnit_createBlockText(hAttrExt_getPunishCurrent(hPlayer_getHero(players[i])),hAttrExt_getPunish(hPlayer_getHero(players[i])),30,"f8f5ec","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 8, hAttrUnit_createBlockText(hAttrExt_getWeightCurrent(hPlayer_getHero(players[i])),hAttrExt_getWeight(hPlayer_getHero(players[i])),30,"f3eb90","f2e121") )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 1, "数值" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 2, "|cff4bf14f"+R2S(hunit.getLife(hPlayer_getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hunit.getMaxLife(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 3, "|cff92f693"+R2S(hAttrExt_getLifeSourceCurrent(hPlayer_getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hAttrExt_getLifeSource(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 4, "|cff3192ed"+R2S(hunit.getMana(hPlayer_getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hunit.getMaxMana(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 5, "|cff90c4f3"+R2S(hAttrExt_getManaSourceCurrent(hPlayer_getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hAttrExt_getManaSource(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 6, "|cff4f4f4a"+R2S(hAttr_getMove(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 7, "|cfff8f5ec"+R2S(hAttrExt_getPunishCurrent(hPlayer_getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hAttrExt_getPunish(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 8, "|cfff3eb90"+R2S(hAttrExt_getWeightCurrent(hPlayer_getHero(players[i])))+"|r / |cfff2e121"+R2S(hAttrExt_getWeight(hPlayer_getHero(players[i])))+"|r" )
+                    call MultiboardDisplay(mb_value, true)
                 endif
             endif
             set i = i + 1
@@ -312,12 +349,16 @@ library hmb initializer init needs hWeather
     private function mbs takes nothing returns nothing
         set mb_show[GetConvertedPlayerId(GetTriggerPlayer())] = "simple"
     endfunction
+    private function mbv takes nothing returns nothing
+        set mb_show[GetConvertedPlayerId(GetTriggerPlayer())] = "value"
+    endfunction
 
     private function init takes nothing returns nothing
         local integer i = 0
         local trigger startTrigger = null
         local trigger mbapTrigger = null
         local trigger mbsTrigger = null
+        local trigger mbvTrigger = null
 
         set startTrigger = CreateTrigger()
         call TriggerRegisterTimerEventSingle( startTrigger, 0.00 )
@@ -325,6 +366,7 @@ library hmb initializer init needs hWeather
 
         set mbapTrigger = CreateTrigger()
         set mbsTrigger = CreateTrigger()
+        set mbvTrigger = CreateTrigger()
 
         set i = 1
         loop
@@ -333,6 +375,8 @@ library hmb initializer init needs hWeather
                 call TriggerAddAction(mbapTrigger, function mbap)
                 call TriggerRegisterPlayerChatEvent( mbsTrigger, players[i], "-mbs", true )
                 call TriggerAddAction(mbsTrigger, function mbs)
+                call TriggerRegisterPlayerChatEvent( mbvTrigger, players[i], "-mbv", true )
+                call TriggerAddAction(mbvTrigger, function mbv)
                 if( mb_show[i] == null)then
                     set mb_show[i] = "allPlayer"
                 endif

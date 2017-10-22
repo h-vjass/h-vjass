@@ -1,14 +1,68 @@
 /* 属性 - 伤害 */
+struct hAttrHuntBean
+
+    public static unit fromUnit = null
+    public static unit toUnit = null
+    public static string huntEff = null
+    public static real damage = 0
+    public static string huntKind = null
+    public static string huntType = null
+    public static boolean isBreak = false
+    public static boolean isNoAvoid = false
+    public static string special = null
+    public static real specialVal = 0
+    public static real specialDuring = 0
+
+    public static group whichGroup = null
+    public static group whichGroupRepeat = null
+    public static string whichGroupHuntEff = null
+    public static location whichGroupHuntEffLoc = null
+
+    static method create takes nothing returns hAttrHuntBean
+        local hAttrHuntBean x = 0
+        set x = hAttrHuntBean.allocate()
+        return x
+    endmethod
+    method onDestroy takes nothing returns nothing
+        set fromUnit = null
+        set toUnit = null
+        set huntEff = null
+        set damage = 0
+        set huntKind = null
+        set huntType = null
+        set isBreak = false
+        set isNoAvoid = false
+        set special = null
+        set specialVal = 0
+        set specialDuring = 0
+        set whichGroupHuntEff = null
+        if(whichGroup!=null)then
+            call GroupClear(whichGroup)
+            call DestroyGroup(whichGroup)
+            set whichGroup = null
+        endif
+        if(whichGroupRepeat!=null)then
+            call GroupClear(whichGroupRepeat)
+            call DestroyGroup(whichGroupRepeat)
+            set whichGroupRepeat = null
+        endif
+        if(whichGroupHuntEffLoc!=null)then
+            call RemoveLocation(whichGroupHuntEffLoc)
+            set whichGroupHuntEffLoc = null
+        endif
+    endmethod
+endstruct
+
 library hAttrHunt initializer init needs hAttrNatural
 
 	/**
      * 伤害单位
      * heffect 特效
-     * hkind伤害类型: 
+     * bean.huntKind伤害类型: 
      		attack 攻击
      		skill 技能
      		item 物品
-     * htype伤害类型: 
+     * bean.huntType伤害类型: 
      		physical 物理
      		magic 魔法<魔法涵盖了自然属性，享受魔法加成，受魔抗影响>
                 magic_fire    火
@@ -65,49 +119,49 @@ library hAttrHunt initializer init needs hAttrNatural
      * specialVal特殊数值：作用于特殊效果的数值
      * specialDuring特殊持续时间
      */
-    public function huntUnit takes unit fromUnit,unit toUnit,string heff,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
+    public function huntUnit takes hAttrHuntBean bean returns nothing
     	
     	local real realDamage = 0
 
         local real fromUnitPunishHeavy = 1
 
-    	local real fromUnitAttackPhysical = hAttr_getAttackPhysical(fromUnit)
-        local real fromUnitAttackMagic = hAttr_getAttackMagic(fromUnit)
-    	local real fromUnitAim = hAttrExt_getAim(fromUnit)
-    	local real fromUnitKnocking = hAttrExt_getKnocking(fromUnit)
-    	local real fromUnitViolence = hAttrExt_getViolence(fromUnit)
-    	local real fromUnitHemophagia = hAttrExt_getHemophagia(fromUnit)
-    	local real fromUnitHemophagiaSkill = hAttrExt_getHemophagiaSkill(fromUnit)
-    	local real fromUnitSplit = hAttrExt_getSplit(fromUnit)
-    	local real fromUnitLuck = hAttrExt_getLuck(fromUnit)
-        local real fromUnitHuntAmplitude = hAttrExt_getHuntAmplitude(fromUnit)
-        local real fromUnitNaturalFire = hAttrNatural_getFire(fromUnit)
-        local real fromUnitNaturalSoil = hAttrNatural_getSoil(fromUnit)
-        local real fromUnitNaturalWater = hAttrNatural_getWater(fromUnit)
-        local real fromUnitNaturalWind = hAttrNatural_getWind(fromUnit)
-        local real fromUnitNaturalLight = hAttrNatural_getLight(fromUnit)
-        local real fromUnitNaturalDark = hAttrNatural_getDark(fromUnit)
-        local real fromUnitNaturalWood = hAttrNatural_getWood(fromUnit)
-    	local real fromUnitNaturalThunder = hAttrNatural_getThunder(fromUnit)
+    	local real fromUnitAttackPhysical = hAttr_getAttackPhysical(bean.fromUnit)
+        local real fromUnitAttackMagic = hAttr_getAttackMagic(bean.fromUnit)
+    	local real fromUnitAim = hAttrExt_getAim(bean.fromUnit)
+    	local real fromUnitKnocking = hAttrExt_getKnocking(bean.fromUnit)
+    	local real fromUnitViolence = hAttrExt_getViolence(bean.fromUnit)
+    	local real fromUnitHemophagia = hAttrExt_getHemophagia(bean.fromUnit)
+    	local real fromUnitHemophagiaSkill = hAttrExt_getHemophagiaSkill(bean.fromUnit)
+    	local real fromUnitSplit = hAttrExt_getSplit(bean.fromUnit)
+    	local real fromUnitLuck = hAttrExt_getLuck(bean.fromUnit)
+        local real fromUnitHuntAmplitude = hAttrExt_getHuntAmplitude(bean.fromUnit)
+        local real fromUnitNaturalFire = hAttrNatural_getFire(bean.fromUnit)
+        local real fromUnitNaturalSoil = hAttrNatural_getSoil(bean.fromUnit)
+        local real fromUnitNaturalWater = hAttrNatural_getWater(bean.fromUnit)
+        local real fromUnitNaturalWind = hAttrNatural_getWind(bean.fromUnit)
+        local real fromUnitNaturalLight = hAttrNatural_getLight(bean.fromUnit)
+        local real fromUnitNaturalDark = hAttrNatural_getDark(bean.fromUnit)
+        local real fromUnitNaturalWood = hAttrNatural_getWood(bean.fromUnit)
+    	local real fromUnitNaturalThunder = hAttrNatural_getThunder(bean.fromUnit)
 
-    	local real toUnitDefend = hAttr_getDefend(toUnit)
-    	local real toUnitResistance = hAttrExt_getResistance(toUnit)
-    	local real toUnitToughness = hAttrExt_getToughness(toUnit)
-    	local real toUnitAvoid = hAttrExt_getAvoid(toUnit)
-    	local real toUnitMortalOppose = hAttrExt_getMortalOppose(toUnit)
-    	local real toUnitSwimOppose = hAttrExt_getSwimOppose(toUnit)
-    	local real toUnitLuck = hAttrExt_getLuck(toUnit)
-    	local real toUnitInvincible = hAttrExt_getInvincible(toUnit)
-    	local real toUnitHuntRebound = hAttrExt_getHuntRebound(toUnit)
-    	local real toUnitCure = hAttrExt_getCure(toUnit)
-        local real toUnitNaturalFireOppose = hAttrNatural_getFireOppose(toUnit)
-        local real toUnitNaturalSoilOppose = hAttrNatural_getSoilOppose(toUnit)
-        local real toUnitNaturalWaterOppose = hAttrNatural_getWaterOppose(toUnit)
-        local real toUnitNaturalWindOppose = hAttrNatural_getWindOppose(toUnit)
-        local real toUnitNaturalLightOppose = hAttrNatural_getLightOppose(toUnit)
-        local real toUnitNaturalDarkOppose = hAttrNatural_getDarkOppose(toUnit)
-        local real toUnitNaturalWoodOppose = hAttrNatural_getWoodOppose(toUnit)
-        local real toUnitNaturalThunderOppose = hAttrNatural_getThunderOppose(toUnit)
+    	local real toUnitDefend = hAttr_getDefend(bean.toUnit)
+    	local real toUnitResistance = hAttrExt_getResistance(bean.toUnit)
+    	local real toUnitToughness = hAttrExt_getToughness(bean.toUnit)
+    	local real toUnitAvoid = hAttrExt_getAvoid(bean.toUnit)
+    	local real toUnitMortalOppose = hAttrExt_getMortalOppose(bean.toUnit)
+    	local real toUnitSwimOppose = hAttrExt_getSwimOppose(bean.toUnit)
+    	local real toUnitLuck = hAttrExt_getLuck(bean.toUnit)
+    	local real toUnitInvincible = hAttrExt_getInvincible(bean.toUnit)
+    	local real toUnitHuntRebound = hAttrExt_getHuntRebound(bean.toUnit)
+    	local real toUnitCure = hAttrExt_getCure(bean.toUnit)
+        local real toUnitNaturalFireOppose = hAttrNatural_getFireOppose(bean.toUnit)
+        local real toUnitNaturalSoilOppose = hAttrNatural_getSoilOppose(bean.toUnit)
+        local real toUnitNaturalWaterOppose = hAttrNatural_getWaterOppose(bean.toUnit)
+        local real toUnitNaturalWindOppose = hAttrNatural_getWindOppose(bean.toUnit)
+        local real toUnitNaturalLightOppose = hAttrNatural_getLightOppose(bean.toUnit)
+        local real toUnitNaturalDarkOppose = hAttrNatural_getDarkOppose(bean.toUnit)
+        local real toUnitNaturalWoodOppose = hAttrNatural_getWoodOppose(bean.toUnit)
+        local real toUnitNaturalThunderOppose = hAttrNatural_getThunderOppose(bean.toUnit)
 
         local boolean isInvincible = false
 
@@ -116,48 +170,48 @@ library hAttrHunt initializer init needs hAttrNatural
     	local unit u = null
         local hFilter filter = 0
 
-    	if( heff != null and heff != "" ) then
-    		set loc = GetUnitLoc( toUnit )
-			call heffect.toLoc(heff,loc,0)
+    	if( bean.huntEff != null and bean.huntEff != "" ) then
+    		set loc = GetUnitLoc( bean.toUnit )
+			call heffect.toLoc(bean.huntEff,loc,0)
             call RemoveLocation( loc )
     	endif
 
-    	if(is.alive(toUnit)==true and damage>0.5)then
+    	if(is.alive(bean.toUnit)==true and bean.damage>0.5)then
 
             //赋值伤害
-            set realDamage = damage
+            set realDamage = bean.damage
 
     		//判断伤害方式
-    		if( hkind=="attack" )then
+    		if( bean.huntKind=="attack" )then
     			set realDamage = realDamage - fromUnitAttackMagic //减去绿字
-	        elseif( hkind=="skill" )then
-	    	elseif( hkind=="item" )then
+	        elseif( bean.huntKind=="skill" )then
+	    	elseif( bean.huntKind=="item" )then
 	    	else
-	    		call console.error("伤害单位错误：hkind")
+	    		call console.error("伤害单位错误：bean.huntKind")
 	    		return
 	        endif
     		//判断伤害类型
-    		if( htype=="physical" )then
+    		if( bean.huntType=="physical" )then
 				set fromUnitViolence = 0
-	        elseif( htype=="magic" )then
+	        elseif( bean.huntType=="magic" )then
 	        	set fromUnitKnocking = 0
-            elseif( htype=="magic_fire" or htype=="magic_soil" or htype=="magic_water" or htype=="magic_wind" or htype=="magic_light" or htype=="magic_dark" or htype=="magic_wood" or htype=="magic_thunder" )then
+            elseif( bean.huntType=="magic_fire" or bean.huntType=="magic_soil" or bean.huntType=="magic_water" or bean.huntType=="magic_wind" or bean.huntType=="magic_light" or bean.huntType=="magic_dark" or bean.huntType=="magic_wood" or bean.huntType=="magic_thunder" )then
                 set fromUnitKnocking = 0
-	    	elseif( htype=="real" )then
+	    	elseif( bean.huntType=="real" )then
 	    		set fromUnitViolence = 0
 	    		set fromUnitKnocking = 0
-	    	elseif( htype=="absolute" )then
+	    	elseif( bean.huntType=="absolute" )then
 	    		set fromUnitViolence = 0
 	    		set fromUnitKnocking = 0
 	    	else
-	    		call console.error("伤害单位错误：htype")
+	    		call console.error("伤害单位错误：bean.huntType")
 	    		return
 	        endif
 
-            call console.log("htype:"+htype)
+            call console.log("bean.huntType:"+bean.huntType)
 
 	        //判断无视Break
-	        if( isBreak == true ) then
+	        if( bean.isBreak == true ) then
 	        	if(toUnitDefend>0) then
 	        		set toUnitDefend = 0
 	        	endif
@@ -166,7 +220,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	        	endif
 	        endif
 	        //判断无视回避
-	        if( isNoAvoid == true ) then
+	        if( bean.isNoAvoid == true ) then
 	        	set toUnitAvoid = 0
 	        endif
 	        //计算伤害增幅
@@ -174,51 +228,51 @@ library hAttrHunt initializer init needs hAttrNatural
 	        	set realDamage = realDamage * (1+fromUnitHuntAmplitude*0.01)
 	        endif
 	        //计算物理暴击,满30000
-	        if( htype == "physical" and (fromUnitKnocking-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitMortalOppose)/30) ) then
+	        if( bean.huntType == "physical" and (fromUnitKnocking-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitMortalOppose)/30) ) then
 	       		set realDamage = realDamage * (1+(fromUnitKnocking-toUnitMortalOppose)*0.0004)
 	       		set toUnitAvoid = toUnitAvoid * 0.5
-                call hmsg.style(  hmsg.ttg2Unit(toUnit,"暴击",6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
+                call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击",6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
 	        endif
             //计算自然属性
-            if( htype == "magic_fire" and fromUnitNaturalFire>0 )then
+            if( bean.huntType == "magic_fire" and fromUnitNaturalFire>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalFire-toUnitNaturalFireOppose)*0.01)
             endif
-            if( htype == "magic_soil" and fromUnitNaturalSoil>0 )then
+            if( bean.huntType == "magic_soil" and fromUnitNaturalSoil>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalSoil-toUnitNaturalSoilOppose)*0.01)
             endif
-            if( htype == "magic_water" and fromUnitNaturalWater>0 )then
+            if( bean.huntType == "magic_water" and fromUnitNaturalWater>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalWater-toUnitNaturalWaterOppose)*0.01)
             endif
-            if( htype == "magic_wind" and fromUnitNaturalWind>0 )then
+            if( bean.huntType == "magic_wind" and fromUnitNaturalWind>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalWind-toUnitNaturalWindOppose)*0.01)
             endif
-            if( htype == "magic_light" and fromUnitNaturalLight>0 )then
+            if( bean.huntType == "magic_light" and fromUnitNaturalLight>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalLight-toUnitNaturalLightOppose)*0.01)
             endif
-            if( htype == "magic_dark" and fromUnitNaturalDark>0 )then
+            if( bean.huntType == "magic_dark" and fromUnitNaturalDark>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalDark-toUnitNaturalDarkOppose)*0.01)
             endif
-            if( htype == "magic_wood" and fromUnitNaturalWood>0 )then
+            if( bean.huntType == "magic_wood" and fromUnitNaturalWood>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalWood-toUnitNaturalWoodOppose)*0.01)
             endif
-            if( htype == "magic_thunder" and fromUnitNaturalThunder>0 )then
+            if( bean.huntType == "magic_thunder" and fromUnitNaturalThunder>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalThunder-toUnitNaturalThunderOppose)*0.01)
             endif
 	        //计算魔法暴击,满20000
-	        if( htype == "magic" or htype=="magic_fire" or htype=="magic_soil" or htype=="magic_water" or htype=="magic_wind" or htype=="magic_light" or htype=="magic_dark" or htype=="magic_wood" or htype=="magic_thunder" ) then
+	        if( bean.huntType == "magic" or bean.huntType=="magic_fire" or bean.huntType=="magic_soil" or bean.huntType=="magic_water" or bean.huntType=="magic_wind" or bean.huntType=="magic_light" or bean.huntType=="magic_dark" or bean.huntType=="magic_wood" or bean.huntType=="magic_thunder" ) then
                 if((fromUnitViolence-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitMortalOppose)/20))then
                     set realDamage = realDamage * (1+(fromUnitViolence-toUnitMortalOppose)*0.0002)
                     set toUnitAvoid = toUnitAvoid * 0.5
-                    call hmsg.style(  hmsg.ttg2Unit(toUnit,"暴击",6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
+                    call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击",6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
                 endif
 	        endif
 	        //计算回避 X 命中
-    		if( htype == "physical" and realDamage<(hunit.getMaxLife(toUnit)*0.25) and R2I(toUnitAvoid-fromUnitAim)>0 and GetRandomInt(1, 100)<=R2I(toUnitAvoid-fromUnitAim))then
+    		if( bean.huntType == "physical" and realDamage<(hunit.getMaxLife(bean.toUnit)*0.25) and R2I(toUnitAvoid-fromUnitAim)>0 and GetRandomInt(1, 100)<=R2I(toUnitAvoid-fromUnitAim))then
                 set realDamage = 0
-                call hmsg.style(  hmsg.ttg2Unit(toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
+                call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
     		endif
     		//计算护甲
-    		if( htype == "physical" and toUnitDefend!=0 )then
+    		if( bean.huntType == "physical" and toUnitDefend!=0 )then
 				if(toUnitDefend>0)then
 					set realDamage = realDamage * (1-toUnitDefend/(toUnitDefend+200))
 				else
@@ -226,11 +280,11 @@ library hAttrHunt initializer init needs hAttrNatural
 				endif
     		endif
     		//计算魔抗
-    		if( htype == "magic" or htype=="magic_fire" or htype=="magic_soil" or htype=="magic_water" or htype=="magic_wind" or htype=="magic_light" or htype=="magic_dark" or htype=="magic_wood" or htype=="magic_thunder")then
+    		if( bean.huntType == "magic" or bean.huntType=="magic_fire" or bean.huntType=="magic_soil" or bean.huntType=="magic_water" or bean.huntType=="magic_wind" or bean.huntType=="magic_light" or bean.huntType=="magic_dark" or bean.huntType=="magic_wood" or bean.huntType=="magic_thunder")then
                 if( toUnitResistance!=0 )then
     				if(toUnitResistance>=100)then
     					set realDamage = 0
-                        call hunit.subLife(fromUnit,realDamage*(toUnitResistance-100)*0.01)
+                        call hunit.subLife(bean.fromUnit,realDamage*(toUnitResistance-100)*0.01)
     				else
     					set realDamage = realDamage * (1-toUnitResistance*0.01)
                     endif
@@ -245,7 +299,7 @@ library hAttrHunt initializer init needs hAttrNatural
     			endif
     		endif
 	        //计算单位是否无敌且不是绝对伤害,无敌属性为百分比计算，被动触发抵挡一次
-    		if( htype == "absolute" and (is.invincible(toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
+    		if( bean.huntType == "absolute" and (is.invincible(bean.toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
     			set realDamage = 0
                 set isInvincible = true
     		endif
@@ -254,15 +308,15 @@ library hAttrHunt initializer init needs hAttrNatural
 
     		//造成伤害
     		if( realDamage > 0 ) then
-				call hunit.subLife(toUnit,realDamage) //#
-                call hEvent_setKiller(toUnit,fromUnit)
-                call hPlayer_addDamage(GetOwningPlayer(fromUnit),realDamage)
-                call hPlayer_addBeDamage(GetOwningPlayer(toUnit),realDamage)
+				call hunit.subLife(bean.toUnit,realDamage) //#
+                call hEvent_setKiller(bean.toUnit,bean.fromUnit)
+                call hPlayer_addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
+                call hPlayer_addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
 				//分裂
-				if( htype == "physical" and fromUnitSplit >0 )then
-	                set loc = GetUnitLoc( toUnit )
+				if( bean.huntType == "physical" and fromUnitSplit >0 )then
+	                set loc = GetUnitLoc( bean.toUnit )
                     set filter = hFilter.create()
-                    call filter.setUnit(fromUnit)
+                    call filter.setUnit(bean.fromUnit)
                     call filter.isAlive(true)
                     call filter.isEnemy(true)
                     call filter.isBuilding(false)
@@ -272,7 +326,7 @@ library hAttrHunt initializer init needs hAttrNatural
 			            exitwhen(IsUnitGroupEmptyBJ(g) == true)
 			                set u = FirstOfGroup(g)
 			                call GroupRemoveUnit( g , u )
-		                    if(u!=toUnit and IsUnitEnemy(u,GetOwningPlayer(fromUnit)) == true) then
+		                    if(u!=bean.toUnit and IsUnitEnemy(u,GetOwningPlayer(bean.fromUnit)) == true) then
                                 call hunit.subLife(u,realDamage * fromUnitSplit * 0.01)
 		                    endif
         			endloop
@@ -283,39 +337,39 @@ library hAttrHunt initializer init needs hAttrNatural
 	                call RemoveLocation( loc )
 	            endif
 	            //吸血
-				if( htype == "physical" and fromUnitHemophagia >0 )then
-                    call hunit.addLife(fromUnit,realDamage * fromUnitHemophagia * 0.01)
-					call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",fromUnit,"origin",1.00)
+				if( bean.huntType == "physical" and fromUnitHemophagia >0 )then
+                    call hunit.addLife(bean.fromUnit,realDamage * fromUnitHemophagia * 0.01)
+					call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",bean.fromUnit,"origin",1.00)
 				endif
 				//技能吸血
-				if( htype == "magic" and hkind == "skill" and fromUnitHemophagiaSkill >0 )then
-                    call hunit.addLife(fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
-                    call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",fromUnit,"weapon",1.8)
+				if( bean.huntType == "magic" and bean.huntKind == "skill" and fromUnitHemophagiaSkill >0 )then
+                    call hunit.addLife(bean.fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
+                    call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",bean.fromUnit,"weapon",1.8)
 				endif
 				//硬直
-                if( is.alive(toUnit) )then
-                    if( IsUnitPaused(toUnit) == false ) then
-                        if( special == "effect_heavy" and specialVal>1 ) then
-                            set fromUnitPunishHeavy = fromUnitPunishHeavy * specialVal
+                if( is.alive(bean.toUnit) )then
+                    if( IsUnitPaused(bean.toUnit) == false ) then
+                        if( bean.special == "effect_heavy" and bean.specialVal>1 ) then
+                            set fromUnitPunishHeavy = fromUnitPunishHeavy * bean.specialVal
                         endif
-                        call hAttrExt_subPunishCurrent(toUnit,realDamage*fromUnitPunishHeavy,0)
+                        call hAttrExt_subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
                     endif
-                    if(hAttrExt_getPunishCurrent(toUnit) <= 0 ) then
-                        call hAttrExt_setPunishCurrent(toUnit,hAttrExt_getPunish(toUnit),0)
-                        call hAbility_punish( toUnit , 3.00 , 0 )
-                        call hmsg.ttg2Unit(toUnit,"僵硬",10.00,"c0c0c0",0,3.00,50.00)
+                    if(hAttrExt_getPunishCurrent(bean.toUnit) <= 0 ) then
+                        call hAttrExt_setPunishCurrent(bean.toUnit,hAttrExt_getPunish(bean.toUnit),0)
+                        call hAbility_punish( bean.toUnit , 3.00 , 0 )
+                        call hmsg.ttg2Unit(bean.toUnit,"僵硬",10.00,"c0c0c0",0,3.00,50.00)
                     endif
                 endif
                 //反射
                 if( toUnitHuntRebound >0 )then
-					call hunit.subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
-                    call hmsg.style(hmsg.ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
+					call hunit.subLife(bean.fromUnit,realDamage * toUnitHuntRebound * 0.01)
+                    call hmsg.style(hmsg.ttg2Unit(bean.fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
 				endif
                 //治疗
                 if( toUnitCure >0 )then
-                    call hunit.addLife(toUnit,realDamage * toUnitCure * 0.01)
-                    call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",toUnit,"origin",1.00)
-                    set loc = GetUnitLoc( toUnit )
+                    call hunit.addLife(bean.toUnit,realDamage * toUnitCure * 0.01)
+                    call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",bean.toUnit,"origin",1.00)
+                    set loc = GetUnitLoc( bean.toUnit )
                     call hmsg.style(hmsg.ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",0,0.2)
                     call RemoveLocation( loc )
 				endif
@@ -323,88 +377,88 @@ library hAttrHunt initializer init needs hAttrNatural
     	endif
 
         //特殊效果,不需要伤害，一定会触发
-        if( specialVal != 0 and specialDuring > 0 )then
-            if(hkind=="attack")then
-                if( special == "null" ) then
-                elseif( special == "effect_life_back" ) then
-                    call hAttrExt_addLifeBack(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_mana_back" ) then
-                    call hAttrExt_addManaBack(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_attack_speed" ) then
-                    call hAttr_addAttackSpeed(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_attack_physical" ) then
-                    call hAttr_addAttackPhysical(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_attack_magic" ) then
-                    call hAttr_addAttackMagic(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_move" ) then
-                    call hAttr_addMove(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_aim" ) then
-                    call hAttrExt_addAim(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_str" ) then
-                    call hAttr_addStr(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_agi" ) then
-                    call hAttr_addAgi(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_int" ) then
-                    call hAttr_addInt(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_knocking" ) then
-                    call hAttrExt_addKnocking(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_violence" ) then
-                    call hAttrExt_addViolence(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_hemophagia" ) then
-                    call hAttrExt_addHemophagia(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_hemophagia_skill" ) then
-                    call hAttrExt_addHemophagiaSkill(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_split" ) then
-                    call hAttrExt_addSplit(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_luck" ) then
-                    call hAttrExt_addLuck(fromUnit,specialVal,specialDuring)
-                elseif( special == "effect_hunt_amplitude" ) then
-                    call hAttrExt_addHuntAmplitude(fromUnit,specialVal,specialDuring)
+        if( bean.specialVal != 0 and bean.specialDuring > 0 )then
+            if(bean.huntKind=="attack")then
+                if( bean.special == "null" ) then
+                elseif( bean.special == "effect_life_back" ) then
+                    call hAttrExt_addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_mana_back" ) then
+                    call hAttrExt_addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_attack_speed" ) then
+                    call hAttr_addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_attack_physical" ) then
+                    call hAttr_addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_attack_magic" ) then
+                    call hAttr_addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_move" ) then
+                    call hAttr_addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_aim" ) then
+                    call hAttrExt_addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_str" ) then
+                    call hAttr_addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_agi" ) then
+                    call hAttr_addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_int" ) then
+                    call hAttr_addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_knocking" ) then
+                    call hAttrExt_addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_violence" ) then
+                    call hAttrExt_addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_hemophagia" ) then
+                    call hAttrExt_addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_hemophagia_skill" ) then
+                    call hAttrExt_addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_split" ) then
+                    call hAttrExt_addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_luck" ) then
+                    call hAttrExt_addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                elseif( bean.special == "effect_hunt_amplitude" ) then
+                    call hAttrExt_addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
                 endif
             endif
-            if( special == "null" ) then
-            elseif( special == "effect_poison" ) then
-                call hAttrExt_subLifeBack(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_dry" ) then
-                call hAttrExt_subManaBack(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_freeze" ) then
-                call hAttr_subAttackSpeed(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_cold" ) then
-                call hAttr_subMove(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_blunt" ) then
-                call hAttr_subAttackPhysical(toUnit,specialVal,specialDuring)
-                call hAttr_subAttackMagic(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_corrosion" ) then
-                call hAttr_subDefend(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_chaos" ) then
-                call hAttrExt_subResistance(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_twine" ) then
-                call hAttrExt_subAvoid(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_blind" ) then
-                call hAttrExt_subAim(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_tortua" ) then
-                call hAttrExt_subToughness(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_weak" ) then
-                call hAttr_subStr(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_bound" ) then
-                call hAttr_subAgi(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_foolish" ) then
-                call hAttr_subInt(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_lazy" ) then
-                call hAttrExt_subKnocking(toUnit,specialVal,specialDuring)
-                call hAttrExt_subViolence(toUnit,specialVal,specialDuring)
-            elseif( special == "effect_swim") then
+            if( bean.special == "null" ) then
+            elseif( bean.special == "effect_poison" ) then
+                call hAttrExt_subLifeBack(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_dry" ) then
+                call hAttrExt_subManaBack(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_freeze" ) then
+                call hAttr_subAttackSpeed(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_cold" ) then
+                call hAttr_subMove(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_blunt" ) then
+                call hAttr_subAttackPhysical(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hAttr_subAttackMagic(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_corrosion" ) then
+                call hAttr_subDefend(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_chaos" ) then
+                call hAttrExt_subResistance(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_twine" ) then
+                call hAttrExt_subAvoid(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_blind" ) then
+                call hAttrExt_subAim(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_tortua" ) then
+                call hAttrExt_subToughness(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_weak" ) then
+                call hAttr_subStr(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_bound" ) then
+                call hAttr_subAgi(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_foolish" ) then
+                call hAttr_subInt(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_lazy" ) then
+                call hAttrExt_subKnocking(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hAttrExt_subViolence(bean.toUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_swim") then
                 if(toUnitSwimOppose!=0)then
-                    set specialVal = specialVal - toUnitSwimOppose
-                    set specialDuring = specialDuring * (1-toUnitSwimOppose*0.01)
+                    set bean.specialVal = bean.specialVal - toUnitSwimOppose
+                    set bean.specialDuring = bean.specialDuring * (1-toUnitSwimOppose*0.01)
                 endif
-                if(GetRandomReal(1,100)<specialVal and specialDuring>0)then
-                    call hAbility_swim( toUnit , specialDuring )
+                if(GetRandomReal(1,100)<bean.specialVal and bean.specialDuring>0)then
+                    call hAbility_swim( bean.toUnit , bean.specialDuring )
                 endif
-            elseif( special == "effect_break" and GetRandomReal(1,100)<specialVal ) then
-                call hAbility_punish( toUnit , specialDuring , 0 )
-            elseif( special == "effect_unluck" ) then
-                call hAttrExt_subLuck(toUnit,specialVal,specialDuring)
+            elseif( bean.special == "effect_break" and GetRandomReal(1,100)<bean.specialVal ) then
+                call hAbility_punish( bean.toUnit , bean.specialDuring , 0 )
+            elseif( bean.special == "effect_unluck" ) then
+                call hAttrExt_subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
             endif
         endif
 
@@ -413,20 +467,22 @@ library hAttrHunt initializer init needs hAttrNatural
     /**
      * 伤害群
      */
-    public function huntGroup takes group g,group rg,string gheffect,location gheffectloc,unit fromUnit,string heff,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
+    public function huntGroup takes hAttrHuntBean bean returns nothing
     	local unit u = null
-    	if( gheffect != null and gheffect != "" and gheffectloc != null) then
-			call heffect.toLoc(gheffect,gheffectloc,0)
+        local group g = null
+    	if( bean.whichGroupHuntEff != null and bean.whichGroupHuntEff != "" and bean.whichGroupHuntEffLoc != null) then
+			call heffect.toLoc(bean.whichGroupHuntEff,bean.whichGroupHuntEffLoc,0)
     	endif
+        call GroupAddGroup(g, bean.whichGroup)
     	loop
             exitwhen(IsUnitGroupEmptyBJ(g) == true)
                 set u = FirstOfGroup(g)
                 call GroupRemoveUnit( g , u )
-                if(IsUnitEnemy(u,GetOwningPlayer(fromUnit)) == true and (rg == null or IsUnitInGroup(u, rg)==false)) then
-                    call huntUnit(fromUnit,u,heff,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
+                if(IsUnitEnemy(u,GetOwningPlayer(bean.fromUnit))==true and (bean.whichGroupRepeat==null or IsUnitInGroup(u,bean.whichGroupRepeat)==false)) then
+                    call huntUnit(bean)
                 endif
-                if( rg != null) then
-                	call GroupAddUnit( rg, u )
+                if( bean.whichGroupRepeat != null) then
+                	call GroupAddUnit( bean.whichGroupRepeat,u )
                 endif
         endloop
         set u = null

@@ -10,3 +10,4 @@
 #include "group.j"
 #include "media.j"
 #include "message.j"
+#include "camera.j"

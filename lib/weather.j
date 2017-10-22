@@ -1,8 +1,6 @@
 /* 天气 */
 
 struct hWeatherBean
-    
-    //public static rect area = null
     public static location loc = null
     public static integer id = 0
     public static real width = 0
@@ -19,14 +17,7 @@ struct hWeatherBean
             call RemoveLocation(loc)
             set loc = null
         endif
-        /*
-        if(area!=null)then
-            call RemoveRect(area)
-            set area = null
-        endif
-        */
     endmethod
-
 endstruct
 
 library hWeather initializer init needs hAward
