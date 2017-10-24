@@ -310,8 +310,8 @@ library hAttrHunt initializer init needs hAttrNatural
     		if( realDamage > 0 ) then
 				call hunit.subLife(bean.toUnit,realDamage) //#
                 call hEvent_setKiller(bean.toUnit,bean.fromUnit)
-                call hPlayer_addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
-                call hPlayer_addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
+                call hplayer.addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
+                call hplayer.addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
 				//分裂
 				if( bean.huntType == "physical" and fromUnitSplit >0 )then
 	                set loc = GetUnitLoc( bean.toUnit )

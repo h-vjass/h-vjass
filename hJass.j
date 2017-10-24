@@ -57,7 +57,7 @@ library hJass initializer init needs hmb //hmb | schedule
 		call hAttrExt_addHuntRebound(u,50,0)
 		call hAttrExt_addCure(u,50,0)
 		call hAttrExt_addAvoid(u,80,30)
-		call hPlayer_setHero(players[1],u)
+		call hplayer.setHero(players[1],u)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
@@ -81,6 +81,8 @@ library hJass initializer init needs hmb //hmb | schedule
 		set wbean.during = 5.00
 	    call hWeather_rain(wbean)
 		call wbean.destroy()
+
+		call camera.setModel("zoomin")
 	endfunction
 
 	private function init takes nothing returns nothing

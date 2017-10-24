@@ -1,5 +1,5 @@
 /* 基础能力 */
-library hAbility needs hPlayer
+library hAbility needs hSys
 
 	globals
 

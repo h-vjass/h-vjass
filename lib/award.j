@@ -38,11 +38,11 @@ library hAward requires hAttrUnit
             call hmsg.style(hmsg.ttg2Unit(whichUnit,I2S(realExp)+"Exp",12.00,"c4c4ff",0,2.00,50.00),"toggle",0,20)
         endif
         if(gold > 0) then
-            call hPlayer_addGold( GetOwningPlayer( whichUnit ) , realGold )
+            call hplayer.addGold( GetOwningPlayer( whichUnit ) , realGold )
             call hmsg.style(hmsg.ttg2Unit(whichUnit,I2S(realGold)+"G",12.00,"ffcc00",0,2.00,50.00),"toggle",0,20)
         endif
         if(lumber > 0) then
-            call hPlayer_addLumber( GetOwningPlayer( whichUnit ) , realLumber )
+            call hplayer.addLumber( GetOwningPlayer( whichUnit ) , realLumber )
             call hmsg.style(hmsg.ttg2Unit(whichUnit,I2S(realLumber)+"L",12.00,"80ff80",0,2.00,50.00),"toggle",0,20)
         endif
     endfunction

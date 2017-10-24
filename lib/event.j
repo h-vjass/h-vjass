@@ -1,6 +1,6 @@
 /* 事件.j */
 
-library hEvent initializer init needs hPlayer
+library hEvent initializer init needs hSys
     
     globals
 
@@ -15,7 +15,7 @@ library hEvent initializer init needs hPlayer
         local integer hid = GetHandleId(toUnit)
         if(is.death(toUnit)==true)then
             call SaveUnitHandle(hash, hid , 1, killer)
-            call hPlayer_addKill(GetOwningPlayer(killer),1)
+            call hplayer.addKill(GetOwningPlayer(killer),1)
         endif
     endfunction
     /**
