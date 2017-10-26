@@ -6,6 +6,7 @@ library hmb initializer init needs hWeather
         private multiboard mb_allPlayer = null
         private multiboard mb_simple = null
         private multiboard mb_value = null
+        private integer mb_value_block = 20
         private string array mb_show
 
         /* 多面板 */
@@ -314,19 +315,19 @@ library hmb initializer init needs hWeather
                     call MultiboardSetItemValueBJ( mb_value, 1, 7, "僵直度" )
                     call MultiboardSetItemValueBJ( mb_value, 1, 8, "负重量" )
                     call MultiboardSetItemValueBJ( mb_value, 2, 1, "" )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 2, hAttrUnit_createBlockText(hunit.getLife(hplayer.getHero(players[i])),hunit.getMaxLife(hplayer.getHero(players[i])),30,"4bf14f","4f4f4a") )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 3, hAttrUnit_createBlockText(hAttrExt_getLifeSourceCurrent(hplayer.getHero(players[i])),hAttrExt_getLifeSource(hplayer.getHero(players[i])),30,"92f693","4f4f4a") )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 4, hAttrUnit_createBlockText(hunit.getMana(hplayer.getHero(players[i])),hunit.getMaxMana(hplayer.getHero(players[i])),30,"3192ed","4f4f4a") )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 5, hAttrUnit_createBlockText(hAttrExt_getManaSourceCurrent(hplayer.getHero(players[i])),hAttrExt_getManaSource(hplayer.getHero(players[i])),30,"90c4f3","4f4f4a") )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 6, hAttrUnit_createBlockText(hAttr_getMove(hplayer.getHero(players[i])),522,30,"f36dc4","4f4f4a") )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 7, hAttrUnit_createBlockText(hAttrExt_getPunishCurrent(hplayer.getHero(players[i])),hAttrExt_getPunish(hplayer.getHero(players[i])),30,"f8f5ec","4f4f4a") )
-                    call MultiboardSetItemValueBJ( mb_value, 2, 8, hAttrUnit_createBlockText(hAttrExt_getWeightCurrent(hplayer.getHero(players[i])),hAttrExt_getWeight(hplayer.getHero(players[i])),30,"f3eb90","f2e121") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 2, hAttrUnit_createBlockText(hunit.getLife(hplayer.getHero(players[i])),hunit.getMaxLife(hplayer.getHero(players[i])),mb_value_block,"4bf14f","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 3, hAttrUnit_createBlockText(hAttrExt_getLifeSourceCurrent(hplayer.getHero(players[i])),hAttrExt_getLifeSource(hplayer.getHero(players[i])),mb_value_block,"92f693","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 4, hAttrUnit_createBlockText(hunit.getMana(hplayer.getHero(players[i])),hunit.getMaxMana(hplayer.getHero(players[i])),mb_value_block,"3192ed","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 5, hAttrUnit_createBlockText(hAttrExt_getManaSourceCurrent(hplayer.getHero(players[i])),hAttrExt_getManaSource(hplayer.getHero(players[i])),mb_value_block,"90c4f3","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 6, hAttrUnit_createBlockText(hAttr_getMove(hplayer.getHero(players[i])),MAX_MOVE_SPEED,mb_value_block,"f36dc4","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 7, hAttrUnit_createBlockText(hAttrExt_getPunishCurrent(hplayer.getHero(players[i])),hAttrExt_getPunish(hplayer.getHero(players[i])),mb_value_block,"f8f5ec","4f4f4a") )
+                    call MultiboardSetItemValueBJ( mb_value, 2, 8, hAttrUnit_createBlockText(hAttrExt_getWeightCurrent(hplayer.getHero(players[i])),hAttrExt_getWeight(hplayer.getHero(players[i])),mb_value_block,"f3eb90","f2e121") )
                     call MultiboardSetItemValueBJ( mb_value, 3, 1, "数值" )
                     call MultiboardSetItemValueBJ( mb_value, 3, 2, "|cff4bf14f"+R2S(hunit.getLife(hplayer.getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hunit.getMaxLife(hplayer.getHero(players[i])))+"|r" )
                     call MultiboardSetItemValueBJ( mb_value, 3, 3, "|cff92f693"+R2S(hAttrExt_getLifeSourceCurrent(hplayer.getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hAttrExt_getLifeSource(hplayer.getHero(players[i])))+"|r" )
                     call MultiboardSetItemValueBJ( mb_value, 3, 4, "|cff3192ed"+R2S(hunit.getMana(hplayer.getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hunit.getMaxMana(hplayer.getHero(players[i])))+"|r" )
                     call MultiboardSetItemValueBJ( mb_value, 3, 5, "|cff90c4f3"+R2S(hAttrExt_getManaSourceCurrent(hplayer.getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hAttrExt_getManaSource(hplayer.getHero(players[i])))+"|r" )
-                    call MultiboardSetItemValueBJ( mb_value, 3, 6, "|cff4f4f4a"+R2S(hAttr_getMove(hplayer.getHero(players[i])))+"|r" )
+                    call MultiboardSetItemValueBJ( mb_value, 3, 6, "|cfff36dc4"+I2S(R2I(hAttr_getMove(hplayer.getHero(players[i]))))+"|r" )
                     call MultiboardSetItemValueBJ( mb_value, 3, 7, "|cfff8f5ec"+R2S(hAttrExt_getPunishCurrent(hplayer.getHero(players[i])))+"|r / |cff4f4f4a"+R2S(hAttrExt_getPunish(hplayer.getHero(players[i])))+"|r" )
                     call MultiboardSetItemValueBJ( mb_value, 3, 8, "|cfff3eb90"+R2S(hAttrExt_getWeightCurrent(hplayer.getHero(players[i])))+"|r / |cfff2e121"+R2S(hAttrExt_getWeight(hplayer.getHero(players[i])))+"|r" )
                     call MultiboardDisplay(mb_value, true)

@@ -231,7 +231,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	        if( bean.huntType == "physical" and (fromUnitKnocking-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitMortalOppose)/30) ) then
 	       		set realDamage = realDamage * (1+(fromUnitKnocking-toUnitMortalOppose)*0.0004)
 	       		set toUnitAvoid = toUnitAvoid * 0.5
-                call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击",6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
+                call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击"+I2S(R2I(realDamage)),6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
 	        endif
             //计算自然属性
             if( bean.huntType == "magic_fire" and fromUnitNaturalFire>0 )then
@@ -263,7 +263,7 @@ library hAttrHunt initializer init needs hAttrNatural
                 if((fromUnitViolence-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitMortalOppose)/20))then
                     set realDamage = realDamage * (1+(fromUnitViolence-toUnitMortalOppose)*0.0002)
                     set toUnitAvoid = toUnitAvoid * 0.5
-                    call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击",6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
+                    call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击"+I2S(R2I(realDamage)),6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
                 endif
 	        endif
 	        //计算回避 X 命中

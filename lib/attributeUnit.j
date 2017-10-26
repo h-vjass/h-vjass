@@ -4,7 +4,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	globals
 		private boolean PUNISH_SWITCH = true 			//有的游戏不需要硬直条就把他关闭
 		private boolean PUNISH_SWITCH_ONLYHERO = false 	//是否只有英雄有硬直条
-		private real PUNISH_TEXTTAG_HEIGHT = 260.00		//硬直条漂浮字高度
+		private real PUNISH_TEXTTAG_HEIGHT = 0
 
 		private trigger ATTR_TRIGGER_UNIT_BEHUNT = null
 		private trigger ATTR_TRIGGER_HERO_LEVEL = null
@@ -27,7 +27,11 @@ library hAttrUnit initializer init needs hAttrHunt
 
 	/* 设定硬直条高度 */
 	public function punishTtgHeight takes real high returns nothing
-		set PUNISH_TEXTTAG_HEIGHT = high
+		if(camera.model=="zoomin")then
+			set PUNISH_TEXTTAG_HEIGHT = high*0.5
+		else
+			set PUNISH_TEXTTAG_HEIGHT = high
+		endif
 	endfunction
 
 	/* 把单位赶出属性组 */
@@ -102,11 +106,17 @@ library hAttrUnit initializer init needs hAttrHunt
 		local real size = time.getReal(t,4)
 		local real punishNow = hAttrExt_getPunishCurrent(whichUnit)
 		local real punishAll = hAttrExt_getPunish(whichUnit)
-		local integer blockMax = 25
+		local integer blockMax = 14
+		local real scale = 0.5
 		if( ttg == null ) then
         	call time.delTimer(t)
         endif
-        call SetTextTagPos( ttg , GetUnitX(whichUnit)-blockMax*size*0.5 , GetUnitY(whichUnit) , zOffset )
+        if(camera.model=="zoomin")then
+        	set scale = 0.25
+        elseif(camera.model=="zoomout")then
+        	set scale = 1
+        endif
+        call SetTextTagPos( ttg , GetUnitX(whichUnit)-blockMax*size*scale , GetUnitY(whichUnit) , zOffset )
         if( is.alive(whichUnit)== false )then
         	call hmsg.setTtgMsg(ttg,"",size)
         	call SetTextTagVisibility( ttg , false )
@@ -121,7 +131,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	public function punishTtg takes unit whichUnit returns nothing
 		local timer t = null
 		local texttag = ttg = null
-		local real size = 6
+		local real size = 5
 		if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and is.hero(whichUnit))))then
 
 			set ttg = hmsg.ttg2Unit(whichUnit,"",size,"",10,0,PUNISH_TEXTTAG_HEIGHT)

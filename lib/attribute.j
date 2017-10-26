@@ -1,6 +1,10 @@
 /* 属性系统 */
 
 globals
+	
+	//系统最大移动速度
+	real MAX_MOVE_SPEED = 522
+
 	//护甲 1
 	integer Attr_Ability_defend_1 = 'A01J'
 	//护甲 10
@@ -403,10 +407,12 @@ library hAttr initializer init needs hAttrExt
 				call SaveReal( hash , uhid , flag , futureVal )
 				if( futureVal < 0 ) then
 					call SetUnitMoveSpeed( whichUnit , 0 )
-				elseif( futureVal >522 ) then
-					call SetUnitMoveSpeed( whichUnit , 522 )
 				else
-					call SetUnitMoveSpeed( whichUnit , R2I(futureVal) )
+					if(camera.model=="zoomin")then
+						call SetUnitMoveSpeed( whichUnit , R2I(futureVal*0.5) )
+					else
+						call SetUnitMoveSpeed( whichUnit , R2I(futureVal) )
+					endif
 				endif
 			elseif( flag == ATTR_FLAG_DEFEND ) then
 				set currentVal = LoadReal( hash , uhid , flag )
@@ -693,7 +699,6 @@ library hAttr initializer init needs hAttrExt
 			call SaveBoolean( hash , uhid , ATTR_FLAG_CD , false )
 			call SaveReal( hash , uhid , ATTR_FLAG_LIFE , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit) )
 			call SaveReal( hash , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
-			call SaveReal( hash , uhid , ATTR_FLAG_MOVE , GetUnitDefaultMoveSpeed(whichUnit) )
 			call SaveReal( hash , uhid , ATTR_FLAG_DEFEND , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
@@ -704,6 +709,10 @@ library hAttr initializer init needs hAttrExt
 			call SaveReal( hash , uhid , ATTR_FLAG_STR_WHITE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_AGI_WHITE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_INT_WHITE , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_MOVE , GetUnitDefaultMoveSpeed(whichUnit) )
+			if(camera.model=="zoomin")then
+				call SetUnitMoveSpeed( whichUnit , R2I(LoadReal( hash , uhid , ATTR_FLAG_MOVE)*0.5) )
+			endif
 			//todo 设定默认值
 			if( is.hero(whichUnit) ) then
 				//白字

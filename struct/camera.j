@@ -5,6 +5,8 @@ endglobals
 
 struct hCamera
 
+	public static string model = "normal"
+
 	//重置镜头
 	public static method reset takes player whichPlayer,real during returns nothing
 		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
@@ -55,14 +57,18 @@ struct hCamera
 	public static method setModel takes string model returns nothing
 		local timer t = null
 		if(model=="lock")then
-			set t = time.setInterval(0.1,function hCamera.modelLock)
+			set t = time.setInterval(0.1,function thistype.modelLock)
 		elseif(model=="zoomin")then
-			set t = time.setInterval(0.1,function hCamera.zoomModel)
+			set t = time.setInterval(0.1,function thistype.zoomModel)
 			call time.setReal(t,1,825)
+			set MAX_MOVE_SPEED = MAX_MOVE_SPEED*2
 		elseif(model=="zoomout")then
-			set t = time.setInterval(0.1,function hCamera.zoomModel)
+			set t = time.setInterval(0.1,function thistype.zoomModel)
 			call time.setReal(t,1,3300)
+		else
+			return
 		endif
+		set thistype.model = model
 	endmethod
 
 

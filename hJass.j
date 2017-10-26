@@ -71,8 +71,8 @@ library hJass initializer init needs hmb //hmb | schedule
 		call hAttrExt_addAim(u2,100,15)
 
 		//rect
-		//call hrect.lockByRect(r,"square",0)
-		call hrect.lockByUnit(u2,"circle",500,500,0)
+		call hrect.lockByRect(r,"square",0)
+		//call hrect.lockByUnit(u2,"circle",500,500,0)
 
 		call wbean.create()
 		set wbean.loc = Location(0,0)
@@ -82,17 +82,18 @@ library hJass initializer init needs hmb //hmb | schedule
 	    call hWeather_rain(wbean)
 		call wbean.destroy()
 
-		call camera.setModel("zoomin")
 	endfunction
 
 	private function init takes nothing returns nothing
 		local trigger startTrigger = null
 		//预读
 		call preread()
+		//镜头模式
+		call camera.setModel("zoomin")
 		//属性 - 硬直条
-		call hAttrUnit_punishTtgIsOpen(true)
-		call hAttrUnit_punishTtgIsOnlyHero(false)
-		call hAttrUnit_punishTtgHeight(250.00)
+		call hAttrUnit_punishTtgIsOpen(false)
+		//call hAttrUnit_punishTtgIsOnlyHero(false)
+		//call hAttrUnit_punishTtgHeight(250.00)
 		//迷雾
 		call FogEnable( true )
 		//阴影

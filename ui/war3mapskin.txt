@@ -1,4 +1,10 @@
 [CustomSkin]
+ChatFont=fonts.ttf
+EscMenuTextFont=fonts.ttf
+TextTagFont=fonts.ttf
+InfoPanelTextFont=fonts.ttf
+MasterFont=fonts.ttf
+MessageFont=fonts.ttf
 SimpleHpBarConsoleSmall=boold2.blp
 
 [FrameDef]
