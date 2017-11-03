@@ -179,10 +179,16 @@ struct hMsg
         local real zOffset = time.getReal( t , 3 )
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
+        local real scale = 0.5
         if( ttg==null )then
             call time.delTimer(t)
         endif
-        call SetTextTagPos( ttg , GetUnitX(u)-25.0*size*0.5 , GetUnitY(u) , zOffset )
+        if(camera.model=="zoomin")then
+            set scale = 0.25
+        elseif(camera.model=="zoomout")then
+            set scale = 1
+        endif
+        call SetTextTagPos( ttg , GetUnitX(u)-StringLength(msg)*size*scale , GetUnitY(u) , zOffset )
         if( is.alive(u) == true ) then
             call SetTextTagVisibility( ttg , true )
         else

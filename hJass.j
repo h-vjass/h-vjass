@@ -5,6 +5,9 @@
 //载入 lib
 #include "lib/abstract.j"
 
+//test
+#include "lib/test.j"
+
 //载入 主游戏流程
 //#include "schedule/abstract.j"
 
@@ -16,7 +19,7 @@ function hBgm takes string s returns nothing
 endfunction
 #define SetMapDescription(s) hBgm(s)
 
-library hJass initializer init needs hmb //hmb | schedule
+library hJass initializer init needs hTest //hTest | schedule
 
 	//预读
 	private function preread takes nothing returns nothing
@@ -46,41 +49,8 @@ library hJass initializer init needs hmb //hmb | schedule
 
 	//游戏开始0秒
 	private function start takes nothing returns nothing
-		local unit u = null
-		local unit u2 = null
-		local rect r = hrect.createInLoc(0,0,3000,1500)
-		local hWeatherBean wbean = 0
-		//TODO TEST
-		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
-		call hAttrExt_addHemophagia(u,25,0)
-		call hAttrExt_addSplit(u,50,0)
-		call hAttrExt_addHuntRebound(u,50,0)
-		call hAttrExt_addCure(u,50,0)
-		call hAttrExt_addAvoid(u,80,30)
-		call hplayer.setHero(players[1],u)
-
-		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
-		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
-
-		/*
-		call hunit.createUnits(10,Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,900))
-		call PanCameraToTimedLocForPlayer( players[1] , Location(0,0), 0 )
-		*/
-
-		call hAttrExt_addAvoid(u2,50,0)
-		call hAttrExt_addAim(u2,100,15)
-
-		//rect
-		call hrect.lockByRect(r,"square",0)
-		//call hrect.lockByUnit(u2,"circle",500,500,0)
-
-		call wbean.create()
-		set wbean.loc = Location(0,0)
-		set wbean.width = 500
-		set wbean.height = 500
-		set wbean.during = 5.00
-	    call hWeather_rain(wbean)
-		call wbean.destroy()
+		
+		call hTest_run()
 
 	endfunction
 

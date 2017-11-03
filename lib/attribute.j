@@ -4,6 +4,8 @@ globals
 	
 	//系统最大移动速度
 	real MAX_MOVE_SPEED = 522
+	//默认攻速计算
+	real DEFAULT_ATTACK_SPEED = 150
 
 	//护甲 1
 	integer Attr_Ability_defend_1 = 'A01J'

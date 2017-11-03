@@ -10,6 +10,11 @@ globals
 	integer hp_damage = 10005
 	integer hp_bedamage = 10006
 	integer hp_kill = 10007
+	integer hp_selection = 10008
+	integer hp_gold = 10009
+	integer hp_gold_cost = 10010
+	integer hp_lumber = 10011
+	integer hp_lumber_cost = 10012
 
 	integer player_max_qty = 12
 	integer player_current_qty = 0
@@ -43,18 +48,38 @@ struct hPlayer
 		call addApm(GetOwningPlayer(GetTriggerUnit()))
 	endmethod
 
+	//selection
+	private static method setSelection takes player whichPlayer,unit whichUnit returns nothing
+		if(whichUnit==null or GetOwningPlayer(whichUnit)!=Player(PLAYER_NEUTRAL_PASSIVE))then
+			call SaveUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_selection, whichUnit)
+		endif
+	endmethod
+	public static method getSelection takes player whichPlayer returns unit
+		return LoadUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_selection)
+	endmethod
+	private static method triggerSelectionUnitActions takes nothing returns nothing
+		call setSelection(GetTriggerPlayer(),GetTriggerUnit())
+	endmethod
+	private static method triggerDeSelectionUnitActions takes nothing returns nothing
+		call setSelection(GetTriggerPlayer(),null)
+	endmethod
+
 	public static method create takes nothing returns hPlayer
 		local hRect x = 0
 		local integer i = 1
 		local integer pid = 0
 		local trigger triggerApm = CreateTrigger()
 		local trigger triggerApmUnit = CreateTrigger()
+		local trigger triggerSelection = CreateTrigger()
+		local trigger triggerDeSelection = CreateTrigger()
         set x = hPlayer.allocate()
         if(hp_hash==null)then
         	set hp_hash = InitHashtable()
         endif
-		call TriggerAddAction(triggerApm , function hPlayer.triggerApmActions)
-		call TriggerAddAction(triggerApmUnit , function hPlayer.triggerApmUnitActions)
+		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
+		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
+		call TriggerAddAction(triggerSelection , function thistype.triggerSelectionUnitActions)
+		call TriggerAddAction(triggerDeSelection , function thistype.triggerDeSelectionUnitActions)
 		loop
 			exitwhen i>player_max_qty
 				set players[i] = Player(i-1)
@@ -70,6 +95,8 @@ struct hPlayer
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
+		            call TriggerRegisterPlayerUnitEvent(triggerSelection, players[i], EVENT_PLAYER_UNIT_SELECTED, null)
+		            call TriggerRegisterPlayerUnitEvent(triggerDeSelection, players[i], EVENT_PLAYER_UNIT_DESELECTED, null)
 	            else
 	            	call SaveBoolean(hp_hash, pid, hp_isComputer, true)
 	            	call SaveStr(hp_hash, pid, hp_battle_status, default_status_nil)
@@ -146,38 +173,87 @@ struct hPlayer
 		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
 	endmethod
 
+	//获取玩家总获金量
+	public static method getTotalGold takes player whichPlayer returns integer
+		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_gold)
+	endmethod
+	//增加玩家总获金量
+	public static method addTotalGold takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_gold, getTotalGold(whichPlayer)+val)
+	endmethod
+	//获取玩家总耗金量
+	public static method getTotalGoldCost takes player whichPlayer returns integer
+		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_gold_cost)
+	endmethod
+	//增加玩家总耗金量
+	public static method addTotalGoldCost takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
+	endmethod
 	//获取玩家金钱
 	public static method getGold takes player whichPlayer returns integer
 	    return GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_GOLD)
 	endmethod
 	//设置玩家金钱
 	public static method setGold takes player whichPlayer,integer gold returns nothing
+		local integer old = getGold(whichPlayer)
+		if(gold-old >=0)then
+			call addTotalGold(whichPlayer,gold-old)
+		else
+			call addTotalGoldCost(whichPlayer,old-gold)
+		endif
 	    call SetPlayerStateBJ( whichPlayer, PLAYER_STATE_RESOURCE_GOLD, gold )
 	endmethod
 	//增加玩家金钱
 	public static method addGold takes player whichPlayer,integer gold returns nothing
 	    call AdjustPlayerStateBJ(gold, whichPlayer , PLAYER_STATE_RESOURCE_GOLD )
+	    call addTotalGold(whichPlayer,gold)
 	endmethod
 	//减少玩家金钱
 	public static method subGold takes player whichPlayer,integer gold returns nothing
 	    call AdjustPlayerStateBJ(-gold, whichPlayer , PLAYER_STATE_RESOURCE_GOLD )
+	    call addTotalGoldCost(whichPlayer,gold)
 	endmethod
 
-	//设置玩家木材
-	public static method setLumber takes player whichPlayer,integer lumber returns nothing
-	    call SetPlayerStateBJ( whichPlayer, PLAYER_STATE_RESOURCE_LUMBER, lumber )
+
+	//获取玩家总获木量
+	public static method getTotalLumber takes player whichPlayer returns integer
+		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber)
+	endmethod
+	//增加玩家总获木量
+	public static method addTotalLumber takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber, getTotalLumber(whichPlayer)+val)
+	endmethod
+	//获取玩家总耗木量
+	public static method getTotalLumberCost takes player whichPlayer returns integer
+		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber_cost)
+	endmethod
+	//增加玩家总耗木量
+	public static method addTotalLumberCost takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber_cost, getTotalLumberCost(whichPlayer)+val)
 	endmethod
 	//获取玩家木材
 	public static method getLumber takes player whichPlayer returns integer
 	    return GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_LUMBER)
 	endmethod
+	//设置玩家木材
+	public static method setLumber takes player whichPlayer,integer lumber returns nothing
+		local integer old = getLumber(whichPlayer)
+		if(lumber-old >=0)then
+			call addTotalLumber(whichPlayer,lumber-old)
+		else
+			call addTotalLumberCost(whichPlayer,old-lumber)
+		endif
+	    call SetPlayerStateBJ( whichPlayer, PLAYER_STATE_RESOURCE_LUMBER, lumber )
+	endmethod
 	//增加玩家木材
 	public static method addLumber takes player whichPlayer,integer lumber returns nothing
 	    call AdjustPlayerStateBJ(lumber, whichPlayer , PLAYER_STATE_RESOURCE_LUMBER )
+	    call addTotalLumber(whichPlayer,lumber)
 	endmethod
 	//减少玩家木材
 	public static method subLumber takes player whichPlayer,integer lumber returns nothing
 	    call AdjustPlayerStateBJ(-lumber, whichPlayer , PLAYER_STATE_RESOURCE_LUMBER )
+	    call addTotalLumberCost(whichPlayer,lumber)
 	endmethod
 
 endstruct

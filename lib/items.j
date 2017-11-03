@@ -1,46 +1,62 @@
 
+library hItem initializer init requires hAttrItem
 
-
-library hItem requires hAttrHunt
+    globals
+        private hashtable hash = null
+        private integer hsah_reelid = 1
+        private integer hsah_itemid = 2
+        private integer hsah_overlay = 3
+        private integer hsah_level = 4
+        private integer hsah_gold = 5
+        private integer hsah_lumber = 6
+        private integer hsah_weight = 7
+    endglobals
 
 	/**
      * 删除物品回调
      */
-    private function delItemCall takes nothing returns nothing
+    private function delCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local item it = funcs_getTimerParams_Item( t, 1 )
+        local item it = time.getItem( t, 1 )
+        call time.delTimer(t)
         if( it != null ) then
 	        call RemoveItem( it )
+            set it = null
     	endif
-        call funcs_delTimer(t,null)
     endfunction
 	/**
 	 * 删除物品，可延时
 	 */
-	public function delItem takes item it , real during returns nothing
+	public function delItem takes item it,real during returns nothing
 		local timer t = null
         if( during <= 0 ) then
             call RemoveItem( it )
+            set it = null
         else
-            set t = funcs_setTimeout( during , function delItemCall)
-            call funcs_setTimerParams_Item( t, 1 ,it )
+            set t = time.setTimeout( during , function delCall)
+            call time.setItem( t, 1 ,it )
         endif
 	endfunction
 
-    //设置全局物品
-    public function setItem takes integer reelId,integer itemId,integer maxPlus,integer level,integer gold,integer wood, real weight returns nothing
-        set ITEM_INDEX = ITEM_INDEX+10
-        set ITEM[ITEM_INDEX+1] = reelId
-        set ITEM[ITEM_INDEX+2] = itemId
-        set ITEM[ITEM_INDEX+3] = maxPlus
-        set ITEM[ITEM_INDEX+4] = level
-        set ITEM[ITEM_INDEX+5] = gold
-        set ITEM[ITEM_INDEX+6] = wood
-        set ITEM_WEIGHT[ITEM_INDEX] = weight
+    //绑定物品到系统
+    private function bind takes integer itemID,integer reelID,integer overlay,integer level,integer gold,integer lumber,real weight returns nothing
+        call SaveInteger(hash, itemID, hsah_reelid, reelID)
+        call SaveInteger(hash, itemID, hsah_overlay, overlay)
+        call SaveInteger(hash, itemID, hsah_level, level)
+        call SaveInteger(hash, itemID, hsah_gold, gold)
+        call SaveInteger(hash, itemID, hsah_lumber, lumber)
+        call SaveReal(hash, itemID, hsah_weight, weight)
+        //--
+        call SaveInteger(hash, reelID, hsah_itemid, itemID)
+        call SaveInteger(hash, reelID, hsah_overlay, overlay)
+        call SaveInteger(hash, reelID, hsah_level, level)
+        call SaveInteger(hash, reelID, hsah_gold, gold)
+        call SaveInteger(hash, reelID, hsah_lumber, lumber)
+        call SaveReal(hash, reelID, hsah_weight, weight)
     endfunction
 
-    //设置全局合成
-    public function setMix takes integer targetItemId,integer item1,integer qty1,integer item2,integer qty2,integer item3,integer qty3,integer item4,integer qty4,integer item5,integer qty5,integer item6,integer qty6 returns nothing
+    //绑定合成到系统
+    private function bindMix takes integer mixItemID,integer item1,integer qty1,integer item2,integer qty2,integer item3,integer qty3,integer item4,integer qty4,integer item5,integer qty5,integer item6,integer qty6 returns nothing
         set ITEM_MIX_INDEX = ITEM_MIX_INDEX+10
         set ITEM_MIX[ITEM_MIX_INDEX] = targetItemId
         set ITEM_MIX[ITEM_MIX_INDEX+1] = item1
@@ -479,10 +495,10 @@ library hItem requires hAttrHunt
     /**
      * 获取某单位身上某种物品的使用总次数
      */
-    public function getItemCharges takes unit u,integer itemId returns integer
+    public function getTotalCharges takes unit u,integer itemId returns integer
         local integer i
         local integer charges = 0
-        local item it
+        local item it = null
         set i = 0
         loop
             exitwhen i > 5
@@ -490,30 +506,14 @@ library hItem requires hAttrHunt
             if(it != null and GetItemTypeId(it) == itemId and GetItemCharges(it) > 0) then
                 set charges = charges + GetItemCharges(it)
             endif
-            set i = i+1
+            set i=i+1
         endloop
+        set it = null
         return charges
     endfunction
 
-    public function showItems takes integer index returns nothing
-        call funcs_print(" 1: "+I2S(ITEM[index+1]))
-        call funcs_print(" 2: "+I2S(ITEM[index+2]))
-        call funcs_print(" 3: "+I2S(ITEM[index+3]))
-        call funcs_print(" 4: "+I2S(ITEM[index+4]))
-        call funcs_print(" 5: "+I2S(ITEM[index+5]))
-    endfunction
-
-    public function showMix takes integer index returns nothing
-        call funcs_print(" 1: "+I2S(ITEM_MIX[index+1])+"q:" + I2S(ITEM_MIX_QTY[index+1]))
-        call funcs_print(" 2: "+I2S(ITEM_MIX[index+2])+"q:" + I2S(ITEM_MIX_QTY[index+2]))
-        call funcs_print(" 3: "+I2S(ITEM_MIX[index+3])+"q:" + I2S(ITEM_MIX_QTY[index+3]))
-        call funcs_print(" 4: "+I2S(ITEM_MIX[index+4])+"q:" + I2S(ITEM_MIX_QTY[index+4]))
-        call funcs_print(" 5: "+I2S(ITEM_MIX[index+5])+"q:" + I2S(ITEM_MIX_QTY[index+5]))
-        call funcs_print(" 6: "+I2S(ITEM_MIX[index+6])+"q:" + I2S(ITEM_MIX_QTY[index+6]))
-    endfunction
-
     /* 创建物品给英雄 */
-    public function createItem2Hero takes integer itemId, unit hero,integer charges returns nothing
+    public function toHero takes integer itemId,unit hero,integer charges returns item
         local location loc = GetUnitLoc(hero)
         local real x = GetLocationX(loc)
         local real y = GetLocationY(loc)
@@ -521,6 +521,12 @@ library hItem requires hAttrHunt
         call SetItemCharges( it , charges )
         call UnitAddItem(hero, it )
         call RemoveLocation(loc)
+        set loc = null
+        return it
+    endfunction
+
+    private function init takes nothing returns nothing
+        set hash = InitHashtable()
     endfunction
 
 endlibrary
