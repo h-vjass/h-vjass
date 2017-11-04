@@ -3,8 +3,8 @@ library hAttrExt initializer init needs hEvent
 	
 	globals
 		private hashtable hash = null
-		private integer ATTR_FLAG_UP_EFFECT_UNIT = 1000
-	    private integer ATTR_FLAG_UP_EFFECT_CD = 1001
+		private integer ATTR_FLAG_UP_EFFECT_UNIT = 10000
+	    private integer ATTR_FLAG_UP_EFFECT_CD = 10010
 	    //--
 		private integer ATTR_FLAG_UP_LIFE_BACK = 1001
 		private integer ATTR_FLAG_UP_LIFE_SOURCE = 1002
@@ -21,22 +21,23 @@ library hAttrExt initializer init needs hEvent
 		private integer ATTR_FLAG_UP_MORTAL_OPPOSE = 1013
 		private integer ATTR_FLAG_UP_PUNISH = 1014
 		private integer ATTR_FLAG_UP_PUNISH_CURRENT = 1015
-		private integer ATTR_FLAG_UP_MEDITATIVE = 1016
-		private integer ATTR_FLAG_UP_HELP = 1017
-		private integer ATTR_FLAG_UP_HEMOPHAGIA = 1018
-		private integer ATTR_FLAG_UP_HEMOPHAGIA_SKILL = 1019
-		private integer ATTR_FLAG_UP_SPLIT = 1020
-		private integer ATTR_FLAG_UP_GOLD_RATIO = 1021
-		private integer ATTR_FLAG_UP_LUMBER_RATIO = 1022
-		private integer ATTR_FLAG_UP_EXP_RATIO = 1023
-		private integer ATTR_FLAG_UP_SWIM_OPPOSE = 1024
-		private integer ATTR_FLAG_UP_LUCK = 1025
-		private integer ATTR_FLAG_UP_INVINCIBLE = 1026
-		private integer ATTR_FLAG_UP_WEIGHT = 1027
-		private integer ATTR_FLAG_UP_WEIGHT_CURRENT = 1028
-		private integer ATTR_FLAG_UP_HUNT_AMPLITUDE = 1029
-		private integer ATTR_FLAG_UP_HUNT_REBOUND = 1030
-		private integer ATTR_FLAG_UP_CURE = 1031
+		private integer ATTR_FLAG_UP_PUNISH_OPPOSE = 1016
+		private integer ATTR_FLAG_UP_MEDITATIVE = 1017
+		private integer ATTR_FLAG_UP_HELP = 1018
+		private integer ATTR_FLAG_UP_HEMOPHAGIA = 1019
+		private integer ATTR_FLAG_UP_HEMOPHAGIA_SKILL = 1020
+		private integer ATTR_FLAG_UP_SPLIT = 1021
+		private integer ATTR_FLAG_UP_GOLD_RATIO = 1022
+		private integer ATTR_FLAG_UP_LUMBER_RATIO = 1023
+		private integer ATTR_FLAG_UP_EXP_RATIO = 1024
+		private integer ATTR_FLAG_UP_SWIM_OPPOSE = 1025
+		private integer ATTR_FLAG_UP_LUCK = 1026
+		private integer ATTR_FLAG_UP_INVINCIBLE = 1027
+		private integer ATTR_FLAG_UP_WEIGHT = 1028
+		private integer ATTR_FLAG_UP_WEIGHT_CURRENT = 1029
+		private integer ATTR_FLAG_UP_HUNT_AMPLITUDE = 1030
+		private integer ATTR_FLAG_UP_HUNT_REBOUND = 1031
+		private integer ATTR_FLAG_UP_CURE = 1032
 	endglobals
 
 	/* 设定属性(即时/计时) */
@@ -92,14 +93,15 @@ library hAttrExt initializer init needs hEvent
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_MORTAL_OPPOSE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH_OPPOSE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_MEDITATIVE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_HELP , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_HEMOPHAGIA , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_HEMOPHAGIA_SKILL , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_SPLIT , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_UP_GOLD_RATIO , 100 )
-			call SaveReal( hash , uhid , ATTR_FLAG_UP_LUMBER_RATIO , 100 )
-			call SaveReal( hash , uhid , ATTR_FLAG_UP_EXP_RATIO , 100 )
+			call SaveReal( hash , uhid , ATTR_FLAG_UP_GOLD_RATIO , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_UP_LUMBER_RATIO , 0 )
+			call SaveReal( hash , uhid , ATTR_FLAG_UP_EXP_RATIO , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_SWIM_OPPOSE , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_LUCK , 0 )
 			call SaveReal( hash , uhid , ATTR_FLAG_UP_INVINCIBLE , 0 )
@@ -114,7 +116,6 @@ library hAttrExt initializer init needs hEvent
 				set tempReal = I2R(GetHeroStr(whichUnit, false))
 				call setAttrDo( ATTR_FLAG_UP_TOUGHNESS , whichUnit , tempReal*0.2 )
 				call setAttrDo( ATTR_FLAG_UP_KNOCKING , whichUnit , tempReal*5 )
-				call setAttrDo( ATTR_FLAG_UP_PUNISH , whichUnit , tempReal*10 )
 				call setAttrDo( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , tempReal*0.03 )
 				set tempReal = I2R(GetHeroAgi(whichUnit, false))
 				call setAttrDo( ATTR_FLAG_UP_KNOCKING , whichUnit , tempReal*3 )
@@ -132,10 +133,10 @@ library hAttrExt initializer init needs hEvent
 				call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE_CURRENT , whichUnit , 500 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
 				call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , 300 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
 				call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE_CURRENT , whichUnit , 300 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
-			else
-				call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)*1.5 )
-				call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)*1.5 )
 			endif
+			call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/3 )
+			call SaveReal( hash , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/3 )
+
 			return true
 		endif
 		return false
@@ -367,6 +368,19 @@ library hAttrExt initializer init needs hEvent
 	public function setPunishCurrent takes unit whichUnit , real value , real during returns nothing
 	   call setAttr( ATTR_FLAG_UP_PUNISH_CURRENT , whichUnit , value - getPunishCurrent(whichUnit) , during )
 	endfunction
+	/* 高级属性[punish_oppose] ------------------------------------------------------------ */
+	public function getPunishOppose takes unit whichUnit returns real
+	   return getAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit )
+	endfunction
+	public function addPunishOppose takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value , during )
+	endfunction
+	public function subPunishOppose takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , -value , during )
+	endfunction
+	public function setPunishOppose takes unit whichUnit , real value , real during returns nothing
+	   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value - getPunishOppose(whichUnit) , during )
+	endfunction
 	/* 高级属性[meditative] ------------------------------------------------------------ */
 	public function getMeditative takes unit whichUnit returns real
 	   return getAttr( ATTR_FLAG_UP_MEDITATIVE , whichUnit )
@@ -595,6 +609,7 @@ library hAttrExt initializer init needs hEvent
 		call console.info("高级属性#mortal_oppose："+R2S(getMortalOppose(whichUnit)))
 		call console.info("高级属性#punish："+R2S(getPunish(whichUnit)))
 		call console.info("高级属性#punish_current："+R2S(getPunishCurrent(whichUnit)))
+		call console.info("高级属性#punish_oppose："+R2S(getPunishOppose(whichUnit)))
 		call console.info("高级属性#meditative："+R2S(getMeditative(whichUnit)))
 		call console.info("高级属性#help："+R2S(getHelp(whichUnit)))
 		call console.info("高级属性#hemophagia："+R2S(getHemophagia(whichUnit)))

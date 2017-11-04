@@ -227,6 +227,19 @@ library hAttr initializer init needs hAttrExt
 	    private integer ATTR_FLAG_STR_WHITE = 18
 	    private integer ATTR_FLAG_AGI_WHITE = 19
 	    private integer ATTR_FLAG_INT_WHITE = 20
+
+	    private integer ATTR_MAX_LIFE = 999999
+	    private integer ATTR_MAX_MANA = 999999
+	    private integer ATTR_MIN_LIFE = 1
+	    private integer ATTR_MIN_MANA = 1
+	    private integer ATTR_MAX_DEFEND = 9999
+	    private integer ATTR_MAX_ATTACK_PHYSICAL = 99999
+	    private integer ATTR_MAX_ATTACK_MAGIC = 99999
+	    private integer ATTR_MAX_ATTACK_SPEED = 999
+	    private integer ATTR_MIN_ATTACK_SPEED = -80
+	    private integer ATTR_MAX_STR_GREEN = 99999
+	    private integer ATTR_MAX_AGI_GREEN = 99999
+	    private integer ATTR_MAX_INT_GREEN = 99999
 	endglobals
 
 	/* 单位注册所有属性技能 */
@@ -510,17 +523,17 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
-				if( futureVal >= 999999 ) then
-					if( currentVal >= 999999 ) then
+				if( futureVal >= ATTR_MAX_LIFE ) then
+					if( currentVal >= ATTR_MAX_LIFE ) then
 						set diff = 0
 					else
-						set diff = 999999 - currentVal
+						set diff = ATTR_MAX_LIFE - currentVal
 					endif
-				elseif( futureVal <= 1 ) then
-					if( currentVal <= 1 ) then
+				elseif( futureVal <= ATTR_MIN_LIFE ) then
+					if( currentVal <= ATTR_MIN_LIFE ) then
 						set diff = 0
 					else
-						set diff = 1 - currentVal
+						set diff = ATTR_MIN_LIFE - currentVal
 					endif
 				endif
 				set tempInt = R2I(diff)
@@ -568,17 +581,17 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
-				if( futureVal >= 999999 ) then
-					if( currentVal >= 999999 ) then
+				if( futureVal >= ATTR_MAX_MANA ) then
+					if( currentVal >= ATTR_MAX_MANA ) then
 						set diff = 0
 					else
-						set diff = 999999 - currentVal
+						set diff = ATTR_MAX_MANA - currentVal
 					endif
-				elseif( futureVal <= 1 ) then
-					if( currentVal <= 1 ) then
+				elseif( futureVal <= ATTR_MIN_MANA ) then
+					if( currentVal <= ATTR_MIN_MANA ) then
 						set diff = 0
 					else
-						set diff = 1 - currentVal
+						set diff = ATTR_MIN_MANA - currentVal
 					endif
 				endif
 				set tempInt = R2I(diff)
@@ -639,6 +652,11 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
+				if( futureVal < -ATTR_MAX_DEFEND ) then
+					set futureVal = -ATTR_MAX_DEFEND
+				elseif( futureVal > ATTR_MAX_DEFEND ) then
+					set futureVal = ATTR_MAX_DEFEND
+				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100,     1 )
@@ -670,8 +688,10 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
-				if( futureVal < -80 ) then
-					set futureVal = -80
+				if( futureVal < ATTR_MIN_ATTACK_SPEED ) then
+					set futureVal = ATTR_MIN_ATTACK_SPEED
+				elseif( futureVal > ATTR_MAX_ATTACK_SPEED ) then
+					set futureVal = ATTR_MAX_ATTACK_SPEED
 				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1,  1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_10, 1 )
@@ -680,11 +700,6 @@ library hAttr initializer init needs hAttrExt
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_10, 1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_100,1 )
 	        	set tempInt = R2I(futureVal)
-	        	call console.error(GetUnitName(whichUnit))
-		        call console.error(I2S(tempInt))
-		        call console.error(R2S(currentVal))
-		        call console.error(R2S(diff))
-		        call console.error(R2S(futureVal))
 	        	if(tempInt>0)then
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_100, tempInt/100+1 )
 		            set tempInt = tempInt - (tempInt/100)*100
@@ -699,16 +714,13 @@ library hAttr initializer init needs hAttrExt
 		            set tempInt = tempInt - (tempInt/10)*10
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1, tempInt+1 )
 		        endif
-		        call console.error("Attr_Ability_attackSpeed_100="+I2S(GetUnitAbilityLevel(whichUnit, Attr_Ability_attackSpeed_100)))
-		        call console.error("Attr_Ability_attackSpeed_10="+I2S(GetUnitAbilityLevel(whichUnit, Attr_Ability_attackSpeed_10)))
-		        call console.error("Attr_Ability_attackSpeed_1="+I2S(GetUnitAbilityLevel(whichUnit, Attr_Ability_attackSpeed_1)))
-		        call console.error("Attr_Ability_attackSpeed_FU_100="+I2S(GetUnitAbilityLevel(whichUnit, Attr_Ability_attackSpeed_FU_100)))
-		        call console.error("Attr_Ability_attackSpeed_FU_10="+I2S(GetUnitAbilityLevel(whichUnit, Attr_Ability_attackSpeed_FU_10)))
-		        call console.error("Attr_Ability_attackSpeed_FU_1="+I2S(GetUnitAbilityLevel(whichUnit, Attr_Ability_attackSpeed_FU_1)))
 			elseif( flag == ATTR_FLAG_ATTACK_PHYSICAL ) then
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
+				if(futureVal > ATTR_MAX_ATTACK_PHYSICAL or futureVal < -ATTR_MAX_ATTACK_PHYSICAL)then
+					set diff = 0
+				endif
 		        set tempInt = R2I(diff)
 		        if( tempInt>0 )then
 					set level = tempInt/10000
@@ -748,6 +760,11 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
+				if( futureVal > ATTR_MAX_ATTACK_MAGIC) then
+					set futureVal = ATTR_MAX_ATTACK_MAGIC
+				elseif( futureVal < -ATTR_MAX_ATTACK_MAGIC ) then
+					set futureVal = -ATTR_MAX_ATTACK_MAGIC
+				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100,     1 )
@@ -785,6 +802,11 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
+				if( futureVal > ATTR_MAX_STR_GREEN) then
+					set futureVal = ATTR_MAX_STR_GREEN
+				elseif( futureVal < -ATTR_MAX_STR_GREEN ) then
+					set futureVal = -ATTR_MAX_STR_GREEN
+				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1,        1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_100,      1 )
@@ -822,6 +844,11 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
+				if( futureVal > ATTR_MAX_AGI_GREEN) then
+					set futureVal = ATTR_MAX_AGI_GREEN
+				elseif( futureVal < -ATTR_MAX_AGI_GREEN ) then
+					set futureVal = -ATTR_MAX_AGI_GREEN
+				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1,        1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_100,      1 )
@@ -859,6 +886,11 @@ library hAttr initializer init needs hAttrExt
 				set currentVal = LoadReal( hash , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash , uhid , flag , futureVal )
+				if( futureVal > ATTR_MAX_INT_GREEN) then
+					set futureVal = ATTR_MAX_INT_GREEN
+				elseif( futureVal < -ATTR_MAX_INT_GREEN ) then
+					set futureVal = -ATTR_MAX_INT_GREEN
+				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1,        1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_100,      1 )
@@ -954,14 +986,25 @@ library hAttr initializer init needs hAttrExt
 				call setAttrDo( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , tempReal*1 )
 				call setAttrDo( ATTR_FLAG_ATTACK_MAGIC , whichUnit , tempReal*1 )
 				call setAttrDo( ATTR_FLAG_LIFE , whichUnit , tempReal*5 )
+				call hAttrExt_addToughness( whichUnit , tempReal*0.2 , 0 )
+				call hAttrExt_addKnocking( whichUnit , tempReal*5 , 0 )
+				call hAttrExt_addPunish( whichUnit , tempReal*2 , 0 )
+				call hAttrExt_addSwimOppose( whichUnit , tempReal*0.03 , 0 )
+
 				set tempReal = I2R(GetHeroAgi(whichUnit, false))
 				call SaveReal( hash , uhid , ATTR_FLAG_AGI_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , tempReal*2 )
 				call setAttrDo( ATTR_FLAG_ATTACK_SPEED , whichUnit , tempReal*0.05 )
+				call hAttrExt_addKnocking( whichUnit , tempReal*3 , 0 )
+				call hAttrExt_addAvoid( whichUnit , tempReal*0.02 , 0 )
+
 				set tempReal = I2R(GetHeroInt(whichUnit, false))
 				call SaveReal( hash , uhid , ATTR_FLAG_INT_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_MAGIC , whichUnit , tempReal*3 )
 				call setAttrDo( ATTR_FLAG_MANA , whichUnit , tempReal*5 )
+				call hAttrExt_addManaBack( whichUnit , tempReal*0.2 , 0 )
+				call hAttrExt_addViolence( whichUnit , tempReal*10 , 0 )
+				call hAttrExt_addHemophagiaSkill( whichUnit , tempReal*0.02 , 0 )
 			endif
 			return true
 		endif
@@ -1096,7 +1139,7 @@ library hAttr initializer init needs hAttrExt
 		local real life = value*3
 		local real toughness = value*0.1
 		local real knocking = value*3
-		local real punish = value*5
+		local real punish = value*1
 		local real swimOppose = value*0.01
 		local real avoid = value*2
 		local real violence = value*3
@@ -1181,7 +1224,7 @@ library hAttr initializer init needs hAttrExt
 		local real life = value*5
 		local real toughness = value*0.2
 		local real knocking = value*5
-		local real punish = value*10
+		local real punish = value*2
 		local real swimOppose = value*0.03
 		call setAttr( ATTR_FLAG_STR , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )

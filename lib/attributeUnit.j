@@ -512,9 +512,15 @@ library hAttrUnit initializer init needs hAttrHunt
 	/* 注册单位 */
 	private function triggerInAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
+		local integer utid = GetUnitTypeId(u)
 		local integer uhid = GetHandleId(u)
-		local boolean isBind = LoadBoolean( hash , uhid , 1 )
-		//todo 注册事件
+		local boolean isBind = false
+		//排除单位类型
+		if(utid==hAbility_ABILITY_TOKEN or utid==hAbility_ABILITY_BREAK or utid==hAbility_ABILITY_SWIM)then
+			return
+		endif
+		//注册事件
+		set isBind = LoadBoolean( hash , uhid , 1 )
 		if(isBind != true)then
 			call console.log(GetUnitName(u)+"注册了属性")
 			call GroupAddUnit(ATTR_GROUP, u)

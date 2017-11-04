@@ -1,17 +1,18 @@
 /* 基础能力 */
-library hAbility needs hSys
+library hAbility initializer init needs hSys
 
 	globals
 
+		//超级马甲
+		public integer ABILITY_TOKEN = 'h00J'
+		//马甲技能
+		public integer ABILITY_BREAK 	= 'A09R'
+		public integer ABILITY_SWIM = 'A09Q'
+
 		private hashtable hash = null
 		//硬直
-		private integer SKILL_PUNISH_TYPE_black = 1
-		private integer SKILL_PUNISH_TYPE_blue = 2	
-		//超级马甲
-		private integer ABILITY_TOKEN = 'h00J'
-		//马甲技能
-		private integer ABILITY_BREAK 	= 'A09R'
-		private integer ABILITY_SWIM = 'A09Q'
+		private integer PAUSE_TYPE_black = 1
+		private integer PAUSE_TYPE_blue = 2	
 
 	endglobals
 
@@ -44,31 +45,28 @@ library hAbility needs hSys
 	 * ! 注意这个方法对中立被动无效
 	 */
 	public function swim takes unit u,real during returns nothing
-	    local location loc = GetUnitLoc( u )
+	    local location loc = null
 	    local unit cu = null
-	    local timer t = LoadTimerHandle(hash, GetHandleId(u), 77583)
-
-	    if(t!=null)then
-	    	call console.error(R2S(TimerGetRemaining(t)))
+	    local timer t = LoadTimerHandle(hash, GetHandleId(u), 5241)
+	    if(t!=null and TimerGetRemaining(t)>0)then
 	    	if(during <= TimerGetRemaining(t))then
 				return
 			else
 				call time.delTimer(t)
-				set t = null
-				call hmsg.style(hmsg.ttg2Unit(u,"劲眩",6.00,"0da9e7",10,1.00,10.00)  ,"toggle",0,0.2)
+				call hmsg.style(hmsg.ttg2Unit(u,"劲眩",6.00,"64e3f2",10,1.00,10.00)  ,"scale",0,0.05)
 	    	endif
 	    endif
-	    call console.error("晕了="+GetUnitName(u))
+	    set loc = GetUnitLoc( u )
 	    set cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , ABILITY_TOKEN , loc)
 	    call RemoveLocation( loc )
 	    set loc = null
 	    call UnitAddAbility( cu, ABILITY_SWIM)
 	    call SetUnitAbilityLevel( cu , ABILITY_SWIM , 1 )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
-	    call hunit.delUnit(cu,0.3)
+	    call hunit.delUnit(cu,0.4)
 	    set t = time.setTimeout(during,function swimCall)
 	    call time.setUnit(t,1,u)
-	    call SaveTimerHandle(hash, GetHandleId(u), 77583, t)
+	    call SaveTimerHandle(hash, GetHandleId(u), 5241, t)
 	endfunction
 
 	/**
@@ -155,23 +153,23 @@ library hAbility needs hSys
 	endfunction
 
 	/**
-	 * 僵直/硬直效果回调
+	 * 暂停效果回调
 	 */
-	public function punishCallBack takes nothing returns nothing
+	public function pauseCall takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
 	    local unit whichUnit = time.getUnit(t,1)
-	    local integer skillPunishType = time.getInteger(t,2)
+	    local integer pauseType = time.getInteger(t,2)
 	    call PauseUnit( whichUnit , false )
-	    if( skillPunishType > 0 ) then
+	    if( pauseType > 0 ) then
 	        call SetUnitVertexColorBJ( whichUnit , 100, 100, 100, 0 )
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit , 100.00 )
 	    call time.delTimer(t)
 	endfunction
 	/**
-	 * 僵直/硬直效果
+	 * 暂停效果
 	 */
-	public function punish takes unit whichUnit,real during,integer skillPunishType returns nothing
+	public function pause takes unit whichUnit,real during,integer pauseType returns nothing
 	    local timer t = null
 	    local timer prevTimer = null
 	    local real prevTimeRemaining = 0
@@ -188,16 +186,16 @@ library hAbility needs hSys
 	    else
 	        set prevTimeRemaining = 0
 	    endif
-	    if( skillPunishType == SKILL_PUNISH_TYPE_black ) then
+	    if( pauseType == PAUSE_TYPE_black ) then
 	        call SetUnitVertexColorBJ( whichUnit , 30, 30, 30, 0 )
-	    elseif( skillPunishType == SKILL_PUNISH_TYPE_blue ) then
+	    elseif( pauseType == PAUSE_TYPE_blue ) then
 	        call SetUnitVertexColorBJ( whichUnit , 30, 30, 150 , 0 )
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit, 0.00 )
 	    call PauseUnit( whichUnit, true )
-	    set t = time.setTimeout( (during+prevTimeRemaining) ,function punishCallBack )
+	    set t = time.setTimeout( (during+prevTimeRemaining) ,function pauseCall )
 	    call time.setUnit(t,1,whichUnit)
-	    call time.setInteger(t,2, skillPunishType )
+	    call time.setInteger(t,2, pauseType )
 	    call SaveTimerHandle( hash , GetHandleId(whichUnit) , 3 , t )
 	endfunction
 
@@ -248,7 +246,7 @@ library hAbility needs hSys
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssuePointOrderLoc( token , orderString , targetLoc )
-	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
+	    call hunit.delUnit(token,2.00)
 	endfunction
 
 	/**
@@ -259,7 +257,7 @@ library hAbility needs hSys
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueImmediateOrder( token , orderString )
-	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
+	    call hunit.delUnit(token,2.00)
 	endfunction
 
 	/**
@@ -270,7 +268,7 @@ library hAbility needs hSys
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrder( token , orderString , targetUnit )
-	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
+	    call hunit.delUnit(token,2.00)
 	endfunction
 
 	/**
@@ -281,7 +279,7 @@ library hAbility needs hSys
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrderById( token , orderId , targetUnit )
-	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
+	    call hunit.delUnit(token,2.00)
 	endfunction	
 
 	private function init takes nothing returns nothing

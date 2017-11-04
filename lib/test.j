@@ -37,10 +37,11 @@ library hTest needs hmb
 		call hAttrExt_addHuntRebound(u,50,0)
 		call hAttrExt_addCure(u,50,0)
 		call hAttrExt_addAvoid(u,80,30)
-		call hAttrEffect_coverSwim(u,80,0)
-		call hAttrEffect_coverSwimDuring(u,5.00,0)
+		call hAttrEffect_coverSwim(u,10,0)
+		call hAttrEffect_coverSwimDuring(u,1.00,0)
 		call hplayer.setHero(players[1],u)
-		call hAttr_addAttackSpeed(u,100,0)
+		call hAttr_addAttackSpeed(u,150,0)
+		call hAttrExt_addPunishOppose(u,150,0)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
@@ -50,6 +51,10 @@ library hTest needs hmb
 		*/
 		call hAttrExt_addAvoid(u2,50,0)
 		call hAttrExt_addAim(u2,100,15)
+		call hAttr_addAttackSpeed(u2,50,0)
+		call hAttr_addAttackPhysical(u2,1500,0)
+		call hAttrEffect_coverBreak(u2,15,0)
+		call hAttrEffect_coverBreakDuring(u2,0.300,0)
 
 		//rect
 		call wbean.create()

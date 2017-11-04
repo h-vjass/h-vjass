@@ -122,6 +122,8 @@ library hAttrHunt initializer init needs hAttrNatural
     public function huntUnit takes hAttrHuntBean bean returns nothing
     	
     	local real realDamage = 0
+        local real punishEffectRatio = 0
+        local real punishEffect = 0
 
         local real fromUnitPunishHeavy = 1
 
@@ -154,6 +156,7 @@ library hAttrHunt initializer init needs hAttrNatural
     	local real toUnitInvincible = hAttrExt_getInvincible(bean.toUnit)
     	local real toUnitHuntRebound = hAttrExt_getHuntRebound(bean.toUnit)
     	local real toUnitCure = hAttrExt_getCure(bean.toUnit)
+        local real toUnitPunishOppose = hAttrExt_getPunishOppose(bean.toUnit)
         local real toUnitNaturalFireOppose = hAttrNatural_getFireOppose(bean.toUnit)
         local real toUnitNaturalSoilOppose = hAttrNatural_getSoilOppose(bean.toUnit)
         local real toUnitNaturalWaterOppose = hAttrNatural_getWaterOppose(bean.toUnit)
@@ -175,6 +178,15 @@ library hAttrHunt initializer init needs hAttrNatural
 			call heffect.toLoc(bean.huntEff,loc,0)
             call RemoveLocation( loc )
     	endif
+
+        //计算硬直抵抗
+        set punishEffectRatio = 0.99
+        if(toUnitPunishOppose>0)then
+            set punishEffectRatio = punishEffectRatio-toUnitPunishOppose*0.01
+            if(punishEffectRatio<0.01)then
+                set punishEffectRatio = 0.01
+            endif
+        endif
 
     	if(is.alive(bean.toUnit)==true and bean.damage>0.5)then
 
@@ -350,16 +362,24 @@ library hAttrHunt initializer init needs hAttrNatural
 				endif
 				//硬直
                 if( is.alive(bean.toUnit) )then
-                    if( IsUnitPaused(bean.toUnit) == false ) then
-                        if( bean.special == "effect_heavy" and bean.specialVal>1 ) then
-                            set fromUnitPunishHeavy = fromUnitPunishHeavy * bean.specialVal
-                        endif
-                        call hAttrExt_subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
+                    if( bean.special == "effect_heavy" and bean.specialVal>1 ) then
+                        set fromUnitPunishHeavy = fromUnitPunishHeavy * bean.specialVal
                     endif
+                    call hAttrExt_subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
+
                     if(hAttrExt_getPunishCurrent(bean.toUnit) <= 0 ) then
                         call hAttrExt_setPunishCurrent(bean.toUnit,hAttrExt_getPunish(bean.toUnit),0)
-                        call hAbility_punish( bean.toUnit , 3.00 , 0 )
-                        call hmsg.ttg2Unit(bean.toUnit,"僵硬",10.00,"c0c0c0",0,3.00,50.00)
+                        set punishEffect = hAttr_getAttackSpeed(bean.toUnit)*punishEffectRatio
+                        if(punishEffect<1)then
+                            set punishEffect = 1.00
+                        endif
+                        call hAttr_subAttackSpeed( bean.toUnit , punishEffect , 5.00 )
+                        set punishEffect = hAttr_getMove(bean.toUnit)*punishEffectRatio
+                        if(punishEffect<1)then
+                            set punishEffect = 1.00
+                        endif
+                        call hAttr_subMove( bean.toUnit , punishEffect , 5.00 )
+                        call hmsg.style(hmsg.ttg2Unit(bean.toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0.05)
                     endif
                 endif
                 //反射
@@ -454,13 +474,20 @@ library hAttrHunt initializer init needs hAttrNatural
                     set bean.specialVal = bean.specialVal - toUnitSwimOppose
                     set bean.specialDuring = bean.specialDuring * (1-toUnitSwimOppose*0.01)
                 endif
-                call console.error("b="+R2S(bean.specialVal))
-                call console.error("b="+R2S(bean.specialDuring))
                 if(GetRandomReal(1,100)<bean.specialVal and bean.specialDuring>0)then
                     call hAbility_swim( bean.toUnit , bean.specialDuring )
                 endif
             elseif( bean.special == "effect_break" and GetRandomReal(1,100)<bean.specialVal ) then
-                call hAbility_punish( bean.toUnit , bean.specialDuring , 0 )
+                set punishEffect = hAttr_getAttackSpeed(bean.toUnit)*punishEffectRatio
+                if(punishEffect<1)then
+                    set punishEffect = 1.00
+                endif
+                call hAttr_subAttackSpeed( bean.toUnit , punishEffect , bean.specialDuring )
+                set punishEffect = hAttr_getMove(bean.toUnit)*punishEffectRatio
+                if(punishEffect<1)then
+                    set punishEffect = 1.00
+                endif
+                call hAttr_subMove( bean.toUnit , punishEffect , bean.specialDuring )
             elseif( bean.special == "effect_unluck" ) then
                 call hAttrExt_subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
             endif
