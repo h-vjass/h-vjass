@@ -23,7 +23,7 @@ struct hAttrHuntBean
         set x = hAttrHuntBean.allocate()
         return x
     endmethod
-    method onDestroy takes nothing returns nothing
+    method destroy takes nothing returns nothing
         set fromUnit = null
         set toUnit = null
         set huntEff = null
@@ -190,6 +190,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	    		call console.error("伤害单位错误：bean.huntKind")
 	    		return
 	        endif
+            call console.error("realDamage1="+R2S(realDamage))
     		//判断伤害类型
     		if( bean.huntType=="physical" )then
 				set fromUnitViolence = 0
@@ -233,6 +234,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	       		set toUnitAvoid = toUnitAvoid * 0.5
                 call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击"+I2S(R2I(realDamage)),6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
 	        endif
+
             //计算自然属性
             if( bean.huntType == "magic_fire" and fromUnitNaturalFire>0 )then
                 set realDamage = realDamage * (1+(fromUnitNaturalFire-toUnitNaturalFireOppose)*0.01)
@@ -452,6 +454,8 @@ library hAttrHunt initializer init needs hAttrNatural
                     set bean.specialVal = bean.specialVal - toUnitSwimOppose
                     set bean.specialDuring = bean.specialDuring * (1-toUnitSwimOppose*0.01)
                 endif
+                call console.error("b="+R2S(bean.specialVal))
+                call console.error("b="+R2S(bean.specialDuring))
                 if(GetRandomReal(1,100)<bean.specialVal and bean.specialDuring>0)then
                     call hAbility_swim( bean.toUnit , bean.specialDuring )
                 endif

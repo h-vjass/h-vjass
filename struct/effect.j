@@ -1,6 +1,13 @@
 /* 特效字符串 */
 globals
 hEffect heffect = 0
+
+//眩晕 - 红
+string Effect_StasisTotemTarget = "Abilities\\Spells\\Orc\\StasisTrap\\StasisTotemTarget.mdl"
+//眩晕 - 蓝
+string Effect_StormBoltTarget = "Abilities\\Spells\\Human\\StormBolt\\StormBoltTarget.mdl"
+//睡眠
+string Effect_SleepTarget = "Abilities\\Spells\\Undead\\Sleep\\SleepTarget.mdl"
 //血
 string Effect_Boold_Cut = "Objects\\Spawnmodels\\Critters\\Albatross\\CritterBloodAlbatross.mdl"
 //红色粉碎
@@ -150,31 +157,39 @@ struct hEffect
 	/**
 	 * 特效 点
 	 */
-	public method toLoc takes string effectModel,location loc,real during returns nothing
+	public method toLoc takes string effectModel,location loc,real during returns effect
 		local effect e = null
 		local timer t = null
 		if(during > 0)then
 			set e = AddSpecialEffectLoc(effectModel, loc)
 			set t = time.setTimeout(during,function hEffect.duringDel)
 			call time.setEffect(t,1,e)
+		elseif(during < 0)then
+			set e = AddSpecialEffectLoc(effectModel, loc)
 		else
-			call del(AddSpecialEffectLoc(effectModel, loc))
+			set e = AddSpecialEffectLoc(effectModel, loc)
+			call del(e)
 		endif
+		return e
 	endmethod
 
 	/**
 	 * 特效 绑定单位
 	 */
-	public method toUnit takes string effectModel,widget targetUnit,string attach,real during returns nothing
+	public method toUnit takes string effectModel,widget targetUnit,string attach,real during returns effect
 		local effect e = null
 		local timer t = null
 		if(during > 0)then
 			set e = AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel)
 			set t = time.setTimeout(during,function hEffect.duringDel)
 			call time.setEffect(t,1,e)
+		elseif(during < 0)then
+			set e = AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel)
 		else
-			call del(AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel))
+			set e = AddSpecialEffectTargetUnitBJ(attach, targetUnit , effectModel)
+			call del(e)
 		endif
+		return e
 	endmethod
 
 endstruct

@@ -13,7 +13,7 @@ library hTest needs hmb
 		elseif(i==4)then
 			set music = gg_snd_Credits
 		endif
-		call media.musicPlay(music)
+		call media.bgmPlay(music)
 	endfunction
 
 	public function run takes nothing returns nothing
@@ -37,7 +37,10 @@ library hTest needs hmb
 		call hAttrExt_addHuntRebound(u,50,0)
 		call hAttrExt_addCure(u,50,0)
 		call hAttrExt_addAvoid(u,80,30)
+		call hAttrEffect_coverSwim(u,80,0)
+		call hAttrEffect_coverSwimDuring(u,5.00,0)
 		call hplayer.setHero(players[1],u)
+		call hAttr_addAttackSpeed(u,100,0)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )

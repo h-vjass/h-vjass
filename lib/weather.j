@@ -12,7 +12,7 @@ struct hWeatherBean
         set x = hWeatherBean.allocate()
         return x
     endmethod
-    method onDestroy takes nothing returns nothing
+    method destroy takes nothing returns nothing
         if(loc!=null)then
             call RemoveLocation(loc)
             set loc = null

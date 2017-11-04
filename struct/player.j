@@ -109,8 +109,6 @@ struct hPlayer
 	    call TriggerAddAction( triggerApmUnit, function hPlayer.triggerApmUnitActions )
 	    return x
 	endmethod
-	method onDestroy takes nothing returns nothing
-    endmethod
 
 	//是否电脑
 	public static method isComputer takes player whichPlayer returns boolean

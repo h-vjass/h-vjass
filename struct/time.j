@@ -33,8 +33,6 @@ struct hTime
         call TimerStart( CreateTimer() , 1.00 , true, function hTime.clock )
         return t
     endmethod
-    method onDestroy takes nothing returns nothing
-    endmethod
 
     //获取时
     public method hour takes nothing returns integer

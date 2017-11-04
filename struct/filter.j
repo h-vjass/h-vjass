@@ -48,7 +48,7 @@ struct hFilter
 
 		return s
 	endmethod
-	method onDestroy takes nothing returns nothing
+	method destroy takes nothing returns nothing
 		set thisUnit = null
 		set ownItemId = 0
 	endmethod

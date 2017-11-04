@@ -8,10 +8,10 @@ library hAbility needs hSys
 		private integer SKILL_PUNISH_TYPE_black = 1
 		private integer SKILL_PUNISH_TYPE_blue = 2	
 		//超级马甲
-		private integer Unit_Token = 'h00J'
+		private integer ABILITY_TOKEN = 'h00J'
 		//马甲技能
-		private integer Unit_TokenSkill_Break 	= 'A09R'
-		private integer Unit_TokenSkill_Swim_05 = 'A09Q'
+		private integer ABILITY_BREAK 	= 'A09R'
+		private integer ABILITY_SWIM = 'A09Q'
 
 	endglobals
 
@@ -21,12 +21,22 @@ library hAbility needs hSys
 	 */
 	public function break takes unit u returns nothing
 	    local location loc = GetUnitLoc( u )
-	    local unit cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , Unit_Token , loc)
-	    call UnitAddAbility( cu, Unit_TokenSkill_Break)
-	    call SetUnitAbilityLevel( cu , Unit_TokenSkill_Break , 1 )
-	    call IssueTargetOrder( cu , "thunderbolt", u )
-	    call UnitApplyTimedLifeBJ( 0.5, 'BTLF', cu )
+	    local unit cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , ABILITY_TOKEN , loc)
 	    call RemoveLocation( loc )
+	    set loc = null
+	    call UnitAddAbility( cu, ABILITY_BREAK)
+	    call SetUnitAbilityLevel( cu , ABILITY_BREAK , 1 )
+	    call IssueTargetOrder( cu , "thunderbolt", u )
+	    call hunit.delUnit(cu,0.3)
+	endfunction
+
+	/**
+	 * 眩晕回调
+	 */
+	private function swimCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		call UnitRemoveAbility(time.getUnit(t,1), 'BPSE' )
+		call time.delTimer(t)
 	endfunction
 
 	/**
@@ -34,19 +44,31 @@ library hAbility needs hSys
 	 * ! 注意这个方法对中立被动无效
 	 */
 	public function swim takes unit u,real during returns nothing
-	    local real period = 0.5
-	    local integer level = R2I(during/period)
 	    local location loc = GetUnitLoc( u )
 	    local unit cu = null
-	    if( level < 1 ) then
-	        return
+	    local timer t = LoadTimerHandle(hash, GetHandleId(u), 77583)
+
+	    if(t!=null)then
+	    	call console.error(R2S(TimerGetRemaining(t)))
+	    	if(during <= TimerGetRemaining(t))then
+				return
+			else
+				call time.delTimer(t)
+				set t = null
+				call hmsg.style(hmsg.ttg2Unit(u,"劲眩",6.00,"0da9e7",10,1.00,10.00)  ,"toggle",0,0.2)
+	    	endif
 	    endif
-	    set cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , Unit_Token , loc)
-	    call UnitAddAbility( cu, Unit_TokenSkill_Swim_05)
-	    call SetUnitAbilityLevel( cu , Unit_TokenSkill_Swim_05 , level )
-	    call IssueTargetOrder( cu , "thunderbolt", u )
-	    call UnitApplyTimedLifeBJ( 0.5, 'BTLF', cu )
+	    call console.error("晕了="+GetUnitName(u))
+	    set cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , ABILITY_TOKEN , loc)
 	    call RemoveLocation( loc )
+	    set loc = null
+	    call UnitAddAbility( cu, ABILITY_SWIM)
+	    call SetUnitAbilityLevel( cu , ABILITY_SWIM , 1 )
+	    call IssueTargetOrder( cu , "thunderbolt", u )
+	    call hunit.delUnit(cu,0.3)
+	    set t = time.setTimeout(during,function swimCall)
+	    call time.setUnit(t,1,u)
+	    call SaveTimerHandle(hash, GetHandleId(u), 77583, t)
 	endfunction
 
 	/**
@@ -188,7 +210,7 @@ library hAbility needs hSys
 	public function thunderLink takes unit attackUnit,unit beUnit,integer skillId returns nothing
 	    local location point = GetUnitLoc( attackUnit )
 	    local player owner = GetOwningPlayer(attackUnit)
-	    local unit token = CreateUnitAtLoc(owner,Unit_Token,point,bj_UNIT_FACING)
+	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN,point,bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrder( token, "chainlightning",  beUnit )
 	    call UnitApplyTimedLifeBJ( 1.00, 'BTLF', token )
@@ -223,7 +245,7 @@ library hAbility needs hSys
 	 * skillId 技能ID
 	 */
 	public function diy2loc takes player owner,location loc,location targetLoc, integer skillId,string orderString returns nothing
-	    local unit token = CreateUnitAtLoc(owner,Unit_Token , loc , bj_UNIT_FACING)
+	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssuePointOrderLoc( token , orderString , targetLoc )
 	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
@@ -234,7 +256,7 @@ library hAbility needs hSys
 	 * skillId 技能ID
 	 */
 	public function diy2once takes player owner,location loc, integer skillId,string orderString returns nothing
-	    local unit token = CreateUnitAtLoc(owner,Unit_Token , loc , bj_UNIT_FACING)
+	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueImmediateOrder( token , orderString )
 	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
@@ -245,7 +267,7 @@ library hAbility needs hSys
 	 * skillId 技能ID
 	 */
 	public function diy2unit takes player owner,location loc, unit targetUnit, integer skillId,string orderString returns nothing
-	    local unit token = CreateUnitAtLoc(owner,Unit_Token , loc , bj_UNIT_FACING)
+	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrder( token , orderString , targetUnit )
 	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )
@@ -256,7 +278,7 @@ library hAbility needs hSys
 	 * skillId 技能ID
 	 */
 	public function diy2unitById takes player owner,location loc, unit targetUnit, integer skillId,integer orderId returns nothing
-	    local unit token = CreateUnitAtLoc(owner,Unit_Token , loc , bj_UNIT_FACING)
+	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrderById( token , orderId , targetUnit )
 	    call UnitApplyTimedLifeBJ( 2.00, 'BTLF', token )

@@ -13,9 +13,6 @@ struct hMsg
         endif
         return x
     endmethod
-    method onDestroy takes nothing returns nothing
-    endmethod
-
 
     //在屏幕打印信息给所有玩家
     public static method echo takes string msg returns nothing

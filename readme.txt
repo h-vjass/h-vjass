@@ -3,15 +3,15 @@
 <pre>
 
  * author hunzsig
- * version v2.10
- * date 2017-10-26
+ * version v2.12
+ * date 2017-11-03
 
 
 提醒：
 #调用hJass需要支持vJass的编辑器，如YDWE等
 #如果保存报错，请关闭YDWE——YDWE配置——智能判断注入代码，或者自行寻找冲突代码，修改解决
 #本套代码免费提供给了解Jass/vJass的作者试用，如果不了解Jass/vJass请使用T来制作地图或自行学习，此处不提供jass教学
-#当然即使你完全不懂
+#当然即使你完全不懂jass也可以去https://www.hunzsig.org学习
 
 *以下教程以YDWE为例*
 好了，让我们开始接入：

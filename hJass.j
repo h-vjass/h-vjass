@@ -35,7 +35,7 @@ library hJass initializer init needs hTest //hTest | schedule
 	    loop
 	        exitwhen i>total
 	            set prereadUnits[i] = CreateUnitAtLoc(Player(PLAYER_NEUTRAL_PASSIVE), prereads[i], GetRectCenter(GetPlayableMapRect()), bj_UNIT_FACING)
-	            call hAttrUnit_regAllAttrSkill(prereadUnits[i])
+	            call hAttr_regAllAttrSkill(prereadUnits[i])
 	        set i = i+1
 	    endloop
 	    call PolledWait(0.00)

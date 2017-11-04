@@ -29,8 +29,6 @@ struct hRect
         endif
         return x
     endmethod
-    method onDestroy takes nothing returns nothing
-    endmethod
 
 	/**
 	 * 设定中心点（X,Y）创建一个长width宽height的矩形区域

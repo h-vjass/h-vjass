@@ -34,7 +34,7 @@ struct hMedia
 		local timer t = null
 		if(musicFileName!=null and musicFileName!="")then
 			call StopMusic( true )
-			set t = time.setTimeout(3.00,function thistype.musicPlayCall)
+			set t = time.setTimeout(3.00,function thistype.bgmPlayCall)
 			call time.setString(t,1,musicFileName)
 		endif
 	endmethod
