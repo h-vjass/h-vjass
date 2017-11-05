@@ -16,6 +16,11 @@ library hTest needs hmb
 		call media.bgmPlay(music)
 	endfunction
 
+	private function haha takes nothing returns nothing
+		local unit u = hEvent_getAttacker()
+		call hmsg.echo("hahahahaha,you are "+GetUnitName(u))
+	endfunction
+
 	public function run takes nothing returns nothing
 
 		local unit u = null
@@ -42,6 +47,7 @@ library hTest needs hmb
 		call hplayer.setHero(players[1],u)
 		call hAttr_addAttackSpeed(u,150,0)
 		call hAttrExt_addPunishOppose(u,150,0)
+		call hEvent_onAttack(u,function haha)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
@@ -55,6 +61,7 @@ library hTest needs hmb
 		call hAttr_addAttackPhysical(u2,1500,0)
 		call hAttrEffect_coverBreak(u2,15,0)
 		call hAttrEffect_coverBreakDuring(u2,0.300,0)
+		call hEvent_onAttack(u2,function haha)
 
 		//rect
 		call wbean.create()

@@ -174,9 +174,10 @@ library hAttrUnit initializer init needs hAttrHunt
 		local unit fromUnit = GetEventDamageSource()
 		local unit toUnit = GetTriggerUnit()
 		local real damage = GetEventDamage()
-		local real attackEffectDuringBuff = 5.00
-		local real attackEffectDuringDebuff = 3.00
 		local hAttrHuntBean bean = 0
+
+		local integer i = 0
+		local trigger tempTgr = null
 
 		//计算攻击特效
 		local real fromUnitLifeBack = hAttrEffect_getLifeBack(fromUnit)
@@ -480,6 +481,18 @@ library hAttrUnit initializer init needs hAttrHunt
 		   call hAttrHunt_huntUnit(bean)
 		endif
 		call bean.destroy()
+		//TODO 触发攻击事件
+		if(hEvent_isRegisterAttack(fromUnit)==true)then
+			set i = hEvent_getAttackInc(fromUnit)
+			loop
+				exitwhen i==0
+				set tempTgr = hEvent_getAttackTrigger(fromUnit,i)
+				call hEvent_setAttacker(tempTgr,fromUnit)
+				call TriggerExecute(tempTgr)
+				set tempTgr = null
+				set i=i-1
+			endloop
+		endif
 		set fromUnit = null
 		set toUnit = null
 	endfunction
