@@ -9,6 +9,7 @@ library hSys initializer init
 		set console = hConsole.create()
 		set media = hMedia.create()
 		set camera = hCamera.create()
+		set evt = hEvt.create()
 		set heffect = hEffect.create()
 		set hrect = hRect.create()
 		set hunit = hUnit.create()

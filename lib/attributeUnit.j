@@ -2,8 +2,8 @@
 library hAttrUnit initializer init needs hAttrHunt
 
 	globals
-		private boolean PUNISH_SWITCH = true 			//有的游戏不需要硬直条就把他关闭
-		private boolean PUNISH_SWITCH_ONLYHERO = false 	//是否只有英雄有硬直条
+		private boolean PUNISH_SWITCH = false 			//有的游戏不需要硬直条就把他关闭
+		private boolean PUNISH_SWITCH_ONLYHERO = true 	//是否只有英雄有硬直条
 		private real PUNISH_TEXTTAG_HEIGHT = 0
 
 		private trigger ATTR_TRIGGER_UNIT_BEHUNT = null
@@ -175,10 +175,6 @@ library hAttrUnit initializer init needs hAttrHunt
 		local unit toUnit = GetTriggerUnit()
 		local real damage = GetEventDamage()
 		local hAttrHuntBean bean = 0
-
-		local integer i = 0
-		local trigger tempTgr = null
-
 		//计算攻击特效
 		local real fromUnitLifeBack = hAttrEffect_getLifeBack(fromUnit)
 		local real fromUnitManaBack = hAttrEffect_getManaBack(fromUnit)
@@ -481,18 +477,6 @@ library hAttrUnit initializer init needs hAttrHunt
 		   call hAttrHunt_huntUnit(bean)
 		endif
 		call bean.destroy()
-		//TODO 触发攻击事件
-		if(hEvent_isRegisterAttack(fromUnit)==true)then
-			set i = hEvent_getAttackInc(fromUnit)
-			loop
-				exitwhen i==0
-				set tempTgr = hEvent_getAttackTrigger(fromUnit,i)
-				call hEvent_setAttacker(tempTgr,fromUnit)
-				call TriggerExecute(tempTgr)
-				set tempTgr = null
-				set i=i-1
-			endloop
-		endif
 		set fromUnit = null
 		set toUnit = null
 	endfunction

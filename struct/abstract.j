@@ -12,3 +12,4 @@
 #include "message.j"
 #include "camera.j"
 #include "player.j"
+#include "event.j"

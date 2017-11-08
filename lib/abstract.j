@@ -7,7 +7,6 @@
 */
 #include "system.j"
 	#include "ability.j"
-	#include "event.j"
 		#include "attributeExt.j"
 			#include "attribute.j"
 				#include "attributeEffect.j"

@@ -173,6 +173,9 @@ library hAttrHunt initializer init needs hAttrNatural
     	local unit u = null
         local hFilter filter = 0
 
+        local integer i = 0
+        local trigger tempTgr = null
+
     	if( bean.huntEff != null and bean.huntEff != "" ) then
     		set loc = GetUnitLoc( bean.toUnit )
 			call heffect.toLoc(bean.huntEff,loc,0)
@@ -202,7 +205,6 @@ library hAttrHunt initializer init needs hAttrNatural
 	    		call console.error("伤害单位错误：bean.huntKind")
 	    		return
 	        endif
-            call console.error("realDamage1="+R2S(realDamage))
     		//判断伤害类型
     		if( bean.huntType=="physical" )then
 				set fromUnitViolence = 0
@@ -221,7 +223,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	    		return
 	        endif
 
-            call console.log("bean.huntType:"+bean.huntType)
+            call console.info("bean.huntType:"+bean.huntType)
 
 	        //判断无视Break
 	        if( bean.isBreak == true ) then
@@ -318,14 +320,34 @@ library hAttrHunt initializer init needs hAttrNatural
                 set isInvincible = true
     		endif
 
-            call console.log("realDamage:"+R2S(realDamage))
-
     		//造成伤害
+            call console.info("realDamage:"+R2S(realDamage))
     		if( realDamage > 0 ) then
 				call hunit.subLife(bean.toUnit,realDamage) //#
-                call hEvent_setKiller(bean.toUnit,bean.fromUnit)
                 call hplayer.addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
                 call hplayer.addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
+                //TODO 触发攻击事件
+                set i = evt.isAttackRegister(bean.fromUnit)
+                if(bean.huntKind=="attack" and i>0)then
+                    loop
+                        exitwhen i==0
+                        set tempTgr = evt.getAttackTrigger(bean.fromUnit,i)
+                        call TriggerExecute(tempTgr)
+                        set tempTgr = null
+                        set i=i-1
+                    endloop
+                endif
+                //TODO 触发技能伤害事件
+                set i = evt.isSkillHuntRegister(bean.fromUnit)
+                if(bean.huntKind=="skill" and i>0)then
+                    loop
+                        exitwhen i==0
+                        set tempTgr = evt.getSkillHuntTrigger(bean.fromUnit,i)
+                        call TriggerExecute(tempTgr)
+                        set tempTgr = null
+                        set i=i-1
+                    endloop
+                endif
 				//分裂
 				if( bean.huntType == "physical" and fromUnitSplit >0 )then
 	                set loc = GetUnitLoc( bean.toUnit )

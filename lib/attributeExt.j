@@ -1,5 +1,5 @@
 
-library hAttrExt initializer init needs hEvent
+library hAttrExt initializer init needs hAbility
 	
 	globals
 		private hashtable hash = null
