@@ -18,7 +18,11 @@ library hTest needs hmb
 
 	private function haha takes nothing returns nothing
 		local unit u = evt.getAttacker()
-		call hmsg.echo("hahahahaha,you are "+GetUnitName(u))
+		call hmsg.echo(GetUnitName(u)+"发动了攻击")
+	endfunction
+	private function haha2 takes nothing returns nothing
+		local unit u = evt.getAttacker()
+		call hmsg.echo(GetUnitName(u)+"造成了攻击伤害")
 	endfunction
 
 	public function run takes nothing returns nothing
@@ -45,9 +49,10 @@ library hTest needs hmb
 		call hAttrEffect_coverSwim(u,10,0)
 		call hAttrEffect_coverSwimDuring(u,1.00,0)
 		call hplayer.setHero(players[1],u)
-		call hAttr_addAttackSpeed(u,150,0)
+		//call hAttr_addAttackSpeed(u,150,0)
 		call hAttrExt_addPunishOppose(u,150,0)
-		call evt.onAttack(u,function haha)
+		call evt.onAttackHappen(u,function haha)
+		call evt.onAttackDamaged(u,function haha2)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
@@ -57,11 +62,10 @@ library hTest needs hmb
 		*/
 		call hAttrExt_addAvoid(u2,50,0)
 		call hAttrExt_addAim(u2,100,15)
-		call hAttr_addAttackSpeed(u2,50,0)
+		//call hAttr_addAttackSpeed(u2,50,0)
 		call hAttr_addAttackPhysical(u2,1500,0)
 		call hAttrEffect_coverBreak(u2,15,0)
 		call hAttrEffect_coverBreakDuring(u2,0.300,0)
-		call evt.onAttack(u2,function haha)
 
 		//rect
 		call wbean.create()

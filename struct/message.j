@@ -5,8 +5,6 @@ globals
 endglobals
 struct hMsg
 
-    integer xxxx = 6666
-
     static method create takes nothing returns hMsg
         local hMsg x = 0
         set x = hMsg.allocate()

@@ -50,6 +50,10 @@ library hJass initializer init needs hTest //hTest | schedule
 	//游戏开始0秒
 	private function start takes nothing returns nothing
 		
+		//执行事件注册
+		call evt.initDefaultEvent()
+
+		//测试
 		call hTest_run()
 
 	endfunction
@@ -72,7 +76,7 @@ library hJass initializer init needs hTest //hTest | schedule
 		call console.open(true)
 		//开始触发
 		set startTrigger = CreateTrigger()
-	    call TriggerRegisterTimerEventSingle( startTrigger, 0.00 )
+	    call TriggerRegisterTimerEventSingle( startTrigger, 0.01 )
 	    call TriggerAddAction(startTrigger, function start)
     endfunction
 

@@ -173,9 +173,6 @@ library hAttrHunt initializer init needs hAttrNatural
     	local unit u = null
         local hFilter filter = 0
 
-        local integer i = 0
-        local trigger tempTgr = null
-
     	if( bean.huntEff != null and bean.huntEff != "" ) then
     		set loc = GetUnitLoc( bean.toUnit )
 			call heffect.toLoc(bean.huntEff,loc,0)
@@ -326,28 +323,16 @@ library hAttrHunt initializer init needs hAttrNatural
 				call hunit.subLife(bean.toUnit,realDamage) //#
                 call hplayer.addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
                 call hplayer.addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
-                //TODO 触发攻击事件
-                set i = evt.isAttackRegister(bean.fromUnit)
-                if(bean.huntKind=="attack" and i>0)then
-                    loop
-                        exitwhen i==0
-                        set tempTgr = evt.getAttackTrigger(bean.fromUnit,i)
-                        call TriggerExecute(tempTgr)
-                        set tempTgr = null
-                        set i=i-1
-                    endloop
+
+                //触发攻击伤害事件
+                if(bean.huntKind=="attack")then
+                    call evt.triggerAttackDamaged(bean.fromUnit)
                 endif
-                //TODO 触发技能伤害事件
-                set i = evt.isSkillHuntRegister(bean.fromUnit)
-                if(bean.huntKind=="skill" and i>0)then
-                    loop
-                        exitwhen i==0
-                        set tempTgr = evt.getSkillHuntTrigger(bean.fromUnit,i)
-                        call TriggerExecute(tempTgr)
-                        set tempTgr = null
-                        set i=i-1
-                    endloop
+                //触发技能伤害事件
+                if(bean.huntKind=="skill")then
+                    call evt.triggerAttackDamaged(bean.fromUnit)
                 endif
+                
 				//分裂
 				if( bean.huntType == "physical" and fromUnitSplit >0 )then
 	                set loc = GetUnitLoc( bean.toUnit )
