@@ -3,8 +3,8 @@
 <pre>
 
  * author hunzsig
- * version v2.12
- * date 2017-11-03
+ * version v2.13
+ * date 2017-11-12
 
 
 提醒：
