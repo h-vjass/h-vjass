@@ -7,7 +7,7 @@ struct hAttrHuntBean
     public static real damage = 0
     public static string huntKind = null
     public static string huntType = null
-    public static boolean isBreak = false
+    public static string isBreak = null
     public static boolean isNoAvoid = false
     public static string special = null
     public static real specialVal = 0
@@ -30,7 +30,7 @@ struct hAttrHuntBean
         set damage = 0
         set huntKind = null
         set huntType = null
-        set isBreak = false
+        set isBreak = null
         set isNoAvoid = false
         set special = null
         set specialVal = 0
@@ -172,6 +172,7 @@ library hAttrHunt initializer init needs hAttrNatural
     	local group g = null
     	local unit u = null
         local hFilter filter = 0
+        local hEvtBean hevtBean = 0
 
     	if( bean.huntEff != null and bean.huntEff != "" ) then
     		set loc = GetUnitLoc( bean.toUnit )
@@ -222,14 +223,22 @@ library hAttrHunt initializer init needs hAttrNatural
 
             call console.info("bean.huntType:"+bean.huntType)
 
-	        //判断无视Break
-	        if( bean.isBreak == true ) then
+	        //判断无视Break 分为 null defend resistance both
+	        if( bean.isBreak == "defend" ) then
 	        	if(toUnitDefend>0) then
 	        		set toUnitDefend = 0
 	        	endif
-	        	if(toUnitResistance>0) then
-	        		set toUnitResistance = 0
-	        	endif
+            elseif( bean.isBreak == "resistance" ) then
+                if(toUnitResistance>0) then
+                    set toUnitResistance = 0
+                endif
+            elseif( bean.isBreak == "both" ) then
+                if(toUnitDefend>0) then
+                    set toUnitDefend = 0
+                endif
+                if(toUnitResistance>0) then
+                    set toUnitResistance = 0
+                endif
 	        endif
 	        //判断无视回避
 	        if( bean.isNoAvoid == true ) then
@@ -326,11 +335,34 @@ library hAttrHunt initializer init needs hAttrNatural
 
                 //触发攻击伤害事件
                 if(bean.huntKind=="attack")then
-                    call evt.triggerAttackDamaged(bean.fromUnit)
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "attackDamaged"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = bean.damage
+                    set hevtBean.realDamage = realDamage
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "beAttackDamaged"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.targetUnit = bean.fromUnit
+                    set hevtBean.damage = bean.damage
+                    set hevtBean.realDamage = realDamage
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
                 endif
                 //触发技能伤害事件
                 if(bean.huntKind=="skill")then
-                    call evt.triggerAttackDamaged(bean.fromUnit)
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "skillDamaged"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = bean.damage
+                    set hevtBean.realDamage = realDamage
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
                 endif
                 
 				//分裂

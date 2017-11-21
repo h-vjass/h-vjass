@@ -50,9 +50,6 @@ library hJass initializer init needs hTest //hTest | schedule
 	//游戏开始0秒
 	private function start takes nothing returns nothing
 		
-		//执行事件注册
-		call evt.initDefaultEvent()
-
 		//测试
 		call hTest_run()
 

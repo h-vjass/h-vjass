@@ -17,11 +17,11 @@ library hTest needs hmb
 	endfunction
 
 	private function haha takes nothing returns nothing
-		local unit u = evt.getAttacker()
+		local unit u = evt.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"发动了攻击")
 	endfunction
 	private function haha2 takes nothing returns nothing
-		local unit u = evt.getAttacker()
+		local unit u = evt.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"造成了攻击伤害")
 	endfunction
 
@@ -51,7 +51,7 @@ library hTest needs hmb
 		call hplayer.setHero(players[1],u)
 		//call hAttr_addAttackSpeed(u,150,0)
 		call hAttrExt_addPunishOppose(u,150,0)
-		call evt.onAttackHappen(u,function haha)
+		call evt.onAttackReady(u,function haha)
 		call evt.onAttackDamaged(u,function haha2)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
