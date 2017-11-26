@@ -23,7 +23,7 @@ globals
     trigger event_trigger_summon = null
     trigger event_trigger_enterUnitRange = null
     trigger event_trigger_enterRect = null
-    trigger event_trigger_exitRect = null
+    trigger event_trigger_leaveRect = null
     trigger event_trigger_chat = null
     trigger event_trigger_chatLike = null
     trigger event_trigger_esc = null
@@ -33,12 +33,15 @@ globals
 endglobals
 
 struct hEvtBean
+    public static handle triggerHandle = null
     public static string triggerKey = null
     public static unit triggerUnit = null
+    public static unit triggerEnterUnit = null
     public static rect triggerRect = null
     public static item triggerItem = null
     public static player triggerPlayer = null
     public static string triggerString = null
+    public static string triggerStringMatched = null
     public static integer triggerSkill = 0
     public static unit targetUnit = null
     public static location targetLoc = null
@@ -53,12 +56,15 @@ struct hEvtBean
     static method create takes nothing returns thistype
         local hEvtBean s = 0
         set s = hEvtBean.allocate()
+        set s.triggerHandle = null
         set s.triggerKey = null
         set s.triggerUnit = null
+        set s.triggerEnterUnit = null
         set s.triggerRect = null
         set s.triggerItem = null
         set s.triggerPlayer = null
         set s.triggerString = null
+        set s.triggerStringMatched = null
         set s.triggerSkill = 0
         set s.targetUnit = null
         set s.targetLoc = null
@@ -73,12 +79,15 @@ struct hEvtBean
         return s
     endmethod
     method destroy takes nothing returns nothing
+        set triggerHandle = null
         set triggerKey = null
         set triggerUnit = null
+        set triggerEnterUnit = null
         set triggerRect = null
         set triggerItem = null
         set triggerPlayer = null
         set triggerString = null
+        set triggerStringMatched = null
         set triggerSkill = 0
         set targetUnit = null
         set targetLoc = null
@@ -149,7 +158,7 @@ struct hEvt
     public static integer hashkey_onSummon_inc = 5050
     public static integer hashkey_onEnterUnitRange_inc = 5051
     public static integer hashkey_onEnterRect_inc = 5052
-    public static integer hashkey_onExitRect_inc = 5053
+    public static integer hashkey_onLeaveRect_inc = 5053
     public static integer hashkey_onChat_inc = 5054
     public static integer hashkey_onChatLike_inc = 5055
     public static integer hashkey_onEsc_inc = 5056
@@ -208,7 +217,7 @@ struct hEvt
     private static integer hashkey_trigger_onSummon = 500000
     private static integer hashkey_trigger_onEnterUnitRange = 510000
     private static integer hashkey_trigger_onEnterRect = 520000
-    private static integer hashkey_trigger_onExitRect = 530000
+    private static integer hashkey_trigger_onLeaveRect = 530000
     private static integer hashkey_trigger_onChat = 540000
     private static integer hashkey_trigger_onChatLike = 550000
     private static integer hashkey_trigger_onEsc = 560000
@@ -216,21 +225,23 @@ struct hEvt
     private static integer hashkey_trigger_onUnSelection = 580000
 
     private static integer hashkey_type_TriggerUnit = 1
-    private static integer hashkey_type_TriggerRect = 2
-    private static integer hashkey_type_TriggerItem = 3
-    private static integer hashkey_type_TriggerPlayer = 4
-    private static integer hashkey_type_TriggerString = 5
-    private static integer hashkey_type_TriggerSkill = 6
-    private static integer hashkey_type_TargetUnit = 7
-    private static integer hashkey_type_TargetLoc = 8
-    private static integer hashkey_type_Damage = 9
-    private static integer hashkey_type_RealDamage = 10
-    private static integer hashkey_type_Range = 11
-    private static integer hashkey_type_AttackEffect = 12
-    private static integer hashkey_type_DamageKind = 13
-    private static integer hashkey_type_DamageType = 14
-    private static integer hashkey_type_BreakType = 15
-    private static integer hashkey_type_IsNoAvoid = 16
+    private static integer hashkey_type_TriggerEnterUnit = 2
+    private static integer hashkey_type_TriggerRect = 3
+    private static integer hashkey_type_TriggerItem = 4
+    private static integer hashkey_type_TriggerPlayer = 5
+    private static integer hashkey_type_TriggerString = 6
+    private static integer hashkey_type_TriggerStringMatched = 7
+    private static integer hashkey_type_TriggerSkill = 8
+    private static integer hashkey_type_TargetUnit = 9
+    private static integer hashkey_type_TargetLoc = 10
+    private static integer hashkey_type_Damage = 11
+    private static integer hashkey_type_RealDamage = 12
+    private static integer hashkey_type_Range = 13
+    private static integer hashkey_type_AttackEffect = 14
+    private static integer hashkey_type_DamageKind = 15
+    private static integer hashkey_type_DamageType = 16
+    private static integer hashkey_type_BreakType = 17
+    private static integer hashkey_type_IsNoAvoid = 18
 
     private static method getTriggerKeyByString takes string str returns integer
         local integer inc = -1
@@ -390,8 +401,8 @@ struct hEvt
         if(str=="enterRect")then
             set inc = hashkey_onEnterRect_inc
         endif
-        if(str=="exitRect")then
-            set inc = hashkey_onExitRect_inc
+        if(str=="leaveRect")then
+            set inc = hashkey_onLeaveRect_inc
         endif
         if(str=="chat")then
             set inc = hashkey_onChat_inc
@@ -414,7 +425,7 @@ struct hEvt
     //检查该handle是否绑定过单位事件
     private static method isHandleRegister takes handle which,integer k returns integer
         if(which==null)then
-            return -1
+            return 0
         endif
         return LoadInteger(hash_trigger_register, GetHandleId(which), k )
     endmethod
@@ -444,6 +455,10 @@ struct hEvt
     private static method setTriggerUnit takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerUnit , which )
     endmethod
+    //设置 triggerEnterUnit 单位
+    private static method setTriggerEnterUnit takes trigger tgr,unit which returns nothing
+        call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerEnterUnit , which )
+    endmethod
     //设置 triggerRect 区域
     private static method setTriggerRect takes trigger tgr,rect which returns nothing
         call SaveRectHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerRect , which )
@@ -459,6 +474,10 @@ struct hEvt
     //设置 triggerString 字符串
     private static method setTriggerString takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerString , which )
+    endmethod
+    //设置 triggerStringMatched 字符串
+    private static method setTriggerStringMatched takes trigger tgr,string which returns nothing
+        call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerStringMatched , which )
     endmethod
     //设置 triggerSkill 整型
     private static method setTriggerSkill takes trigger tgr,integer which returns nothing
@@ -510,6 +529,92 @@ struct hEvt
 
 
 
+
+
+
+
+     //-----获取触发数据-----
+    //获取 triggerUnit 单位
+    public static method getTriggerUnit takes nothing returns unit
+        return LoadUnitHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerUnit )
+    endmethod
+    //获取 triggerEnterUnit 单位
+    public static method getTriggerEnterUnit takes nothing returns unit
+        return LoadUnitHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerEnterUnit )
+    endmethod
+    //获取 triggerRect 区域
+    public static method getTriggerRect takes nothing returns rect
+        return LoadRectHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerRect )
+    endmethod
+    //获取 triggerItem 物品
+    public static method getTriggerItem takes nothing returns item
+        return LoadItemHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerItem )
+    endmethod
+    //获取 triggerPlayer 玩家
+    public static method getTriggerPlayer takes nothing returns player
+        return LoadPlayerHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerPlayer )
+    endmethod
+    //获取 triggerString 字符串
+    public static method getTriggerString takes nothing returns string
+        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerString )
+    endmethod
+    //获取 triggerStringMatched 字符串
+    public static method getTriggerStringMatched takes nothing returns string
+        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerStringMatched )
+    endmethod
+    //获取 triggerSkill 整型
+    public static method getTriggerSkill takes nothing returns integer
+        return LoadInteger(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerSkill )
+    endmethod
+    //获取 targetUnit 单位
+    public static method getTargetUnit takes nothing returns unit
+        return LoadUnitHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TargetUnit )
+    endmethod
+    //获取 targetLoc 点
+    public static method getTargetLoc takes nothing returns location
+        return LoadLocationHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TargetLoc )
+    endmethod
+    //获取 damage 实数
+    public static method getDamage takes nothing returns real
+        return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_Damage )
+    endmethod
+    //获取 realDamage 实数
+    public static method getRealDamage takes nothing returns real
+        return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_RealDamage )
+    endmethod
+    //获取 range 实数
+    public static method getRange takes nothing returns real
+        return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_Range )
+    endmethod
+    //获取 attackEffect 字符串
+    public static method getAttackEffect takes nothing returns string
+        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_AttackEffect )
+    endmethod
+    //获取 damageKind 字符串
+    public static method getDamageKind takes nothing returns string
+        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_DamageKind )
+    endmethod
+    //获取 damageType 字符串
+    public static method getDamageType takes nothing returns string
+        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_DamageType )
+    endmethod
+    //获取 breakType 字符串
+    public static method getBreakType takes nothing returns string
+        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_BreakType )
+    endmethod
+    //获取 isNoAvoid 布尔值
+    public static method getIsNoAvoid takes nothing returns boolean
+        return LoadBoolean(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_IsNoAvoid )
+    endmethod
+
+
+
+
+
+
+
+
+
     //------内部开放的方法------
 
     //triggerByHandle
@@ -517,21 +622,31 @@ struct hEvt
         local integer k = getTriggerKeyByString(hEvtBean.triggerKey)
         local trigger tempTgr = null
         local integer i = 0
-        if(bean.triggerUnit!=null)then
-            set i = isHandleRegister(bean.triggerUnit,k)
-        elseif(bean.triggerPlayer!=null)then
-            set i = isHandleRegister(bean.triggerPlayer,k)
-        elseif(bean.triggerRect!=null)then
-            set i = isHandleRegister(bean.triggerRect,k)
-        elseif(bean.triggerItem!=null)then
-            set i = isHandleRegister(bean.triggerItem,k)
+        if(bean.triggerHandle==null and bean.triggerPlayer!=null)then
+            set bean.triggerHandle = bean.triggerPlayer
         endif
-        if(i>0)then
+        if(bean.triggerHandle==null and bean.triggerRect!=null)then
+            set bean.triggerHandle = bean.triggerRect
+        endif
+        if(bean.triggerHandle==null and bean.triggerItem!=null)then
+            set bean.triggerHandle = bean.triggerItem
+        endif
+        if(bean.triggerHandle==null and bean.triggerEnterUnit!=null)then
+            set bean.triggerHandle = bean.triggerEnterUnit
+        endif
+        if(bean.triggerHandle==null and bean.triggerUnit!=null)then
+            set bean.triggerHandle = bean.triggerUnit
+        endif
+        if(bean.triggerHandle!=null)then
+            set i = isHandleRegister(bean.triggerHandle,k)
             loop
                 exitwhen i==0
-                set tempTgr = getHandleTrigger(bean.triggerUnit,k,i)
+                set tempTgr = getHandleTrigger(bean.triggerHandle,k,i)
                 if(bean.triggerUnit!=null)then
                     call setTriggerUnit(tempTgr,bean.triggerUnit)
+                endif
+                if(bean.triggerEnterUnit!=null)then
+                    call setTriggerEnterUnit(tempTgr,bean.triggerEnterUnit)
                 endif
                 if(bean.triggerRect!=null)then
                     call setTriggerRect(tempTgr,bean.triggerRect)
@@ -544,6 +659,9 @@ struct hEvt
                 endif
                 if(bean.triggerString!=null)then
                     call setTriggerString(tempTgr,bean.triggerString)
+                endif
+                if(bean.triggerStringMatched!=null)then
+                    call setTriggerStringMatched(tempTgr,bean.triggerStringMatched)
                 endif
                 if(bean.triggerSkill!=null)then
                     call setTriggerSkill(tempTgr,bean.triggerSkill)
@@ -1069,6 +1187,7 @@ struct hEvt
     endmethod
 
     //on - 被召唤时
+    //*使用 <getTriggerUnit> 获取被召唤单位
     private static method onSummonAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "summon"
@@ -1085,77 +1204,210 @@ struct hEvt
         return onEventByHandle("summon",whichUnit,action)
     endmethod
 
+    //on - 进入某单位（whichUnit）范围内
+    //*使用 <getTriggerUnit> 获取被进入范围的中心单位
+    //*使用 <getTriggerEnterUnit> 获取进入范围的单位
+    //*使用 <getRange> 获取设定范围
+    private static method onEnterUnitRangeAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "enterUnitRange"
+        set bean.triggerUnit = getTriggerUnit()
+        set bean.triggerEnterUnit = GetTriggerUnit()
+        set bean.range = getRange()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onEnterUnitRange takes unit whichUnit,real range,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        call TriggerRegisterUnitInRangeSimple( tgr,range, whichUnit )
+        call TriggerAddAction(tgr, function thistype.onEnterUnitRangeAction)
+        call setTriggerUnit(tgr,whichUnit)
+        call setRange(tgr,range)
+        return onEventByHandle("enterUnitRange",whichUnit,action)
+    endmethod
+
+    //on - 进入某区域内
+    //*使用 <getTriggerRect> 获取被进入的矩形区域
+    //*使用 <getTriggerUnit> 获取进入矩形区域的单位
+    private static method onEnterRectAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "enterRect"
+        set bean.triggerUnit = GetTriggerUnit()
+        set bean.triggerRect = getTriggerRect()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onEnterRect takes rect whichRect,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        call TriggerRegisterEnterRectSimple( tgr, whichRect )
+        call TriggerAddAction(tgr, function thistype.onEnterRectAction)
+        call setTriggerRect(tgr,whichRect)
+        return onEventByHandle("enterRect",whichRect,action)
+    endmethod
+
+    //on - 离开某区域内
+    //*使用 <getTriggerRect> 获取被离开的矩形区域
+    //*使用 <getTriggerUnit> 获取离开矩形区域的单位
+    private static method onLeaveRectAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "leaveRect"
+        set bean.triggerUnit = GetTriggerUnit()
+        set bean.triggerRect = getTriggerRect()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onLeaveRect takes rect whichRect,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        call TriggerRegisterLeaveRectSimple( tgr, whichRect )
+        call TriggerAddAction(tgr, function thistype.onLeaveRectAction)
+        call setTriggerRect(tgr,whichRect)
+        return onEventByHandle("leaveRect",whichRect,action)
+    endmethod
+
+    //on - 聊天时（全匹配）
+    //*使用 <getTriggerPlayer> 获取聊天的玩家
+    //*使用 <getTriggerString> 获取聊天的内容
+    //*使用 <getTriggerStringMatched> 获取匹配命中的内容
+    private static method onChatAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "chat"
+        set bean.triggerPlayer = GetTriggerPlayer()
+        set bean.triggerString = GetEventPlayerChatString()
+        set bean.triggerStringMatched = GetEventPlayerChatStringMatched()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onChat takes player whichPlayer,string chatStr,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        local integer i = 0
+        if(whichPlayer==null)then
+            set i = player_max_qty
+            loop
+                exitwhen i<=0
+                call TriggerRegisterPlayerChatEvent( tgr,players[i],chatStr,true)
+                set i=i-1
+            endloop
+        else
+            call TriggerRegisterPlayerChatEvent( tgr,whichPlayer,chatStr,true)
+        endif
+        call TriggerAddAction(tgr, function thistype.onChatAction)
+        return onEventByHandle("chat",whichPlayer,action)
+    endmethod
+
+    //on - 聊天时（like匹配）
+    //*使用 <getTriggerPlayer> 获取聊天的玩家
+    //*使用 <getTriggerString> 获取聊天的内容
+    //*使用 <getTriggerStringMatched> 获取匹配命中的内容
+    private static method onChatLikeAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "chatLike"
+        set bean.triggerPlayer = GetTriggerPlayer()
+        set bean.triggerString = GetEventPlayerChatString()
+        set bean.triggerStringMatched = GetEventPlayerChatStringMatched()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onChatLike takes player whichPlayer,string chatStr,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        local integer i = 0
+        if(whichPlayer==null)then
+            set i = player_max_qty
+            loop
+                exitwhen i<=0
+                call TriggerRegisterPlayerChatEvent( tgr,players[i],chatStr,false)
+                set i=i-1
+            endloop
+        else
+            call TriggerRegisterPlayerChatEvent( tgr,whichPlayer,chatStr,false)
+        endif
+        call TriggerAddAction(tgr, function thistype.onChatAction)
+        return onEventByHandle("chatLike",whichPlayer,action)
+    endmethod
+
+    //on - 按ESC
+    //*使用 <getTriggerPlayer> 获取触发玩家
+    private static method onEscAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "esc"
+        set bean.triggerPlayer = GetTriggerPlayer()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onEsc takes player whichPlayer,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        local integer i = 0
+        if(whichPlayer==null)then
+            set i = player_max_qty
+            loop
+                exitwhen i<=0
+                call TriggerRegisterPlayerEventEndCinematic( tgr, players[i] )
+                set i=i-1
+            endloop
+        else
+            call TriggerRegisterPlayerEventEndCinematic( tgr, whichPlayer )
+        endif
+        call TriggerAddAction(tgr, function thistype.onEscAction)
+        return onEventByHandle("esc",whichPlayer,action)
+    endmethod
+
+    //on - 玩家选择单位
+    //*使用 <getTriggerPlayer> 获取触发玩家
+    //*使用 <getTriggerUnit> 获取触发单位
+    private static method onSelectionAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "selection"
+        set bean.triggerPlayer = GetTriggerPlayer()
+        set bean.triggerUnit = GetTriggerUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onSelection takes player whichPlayer,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        local integer i = 0
+        if(whichPlayer==null)then
+            set i = player_max_qty
+            loop
+                exitwhen i<=0
+                call TriggerRegisterPlayerSelectionEventBJ( tgr, players[i], true )
+                set i=i-1
+            endloop
+        else
+            call TriggerRegisterPlayerSelectionEventBJ( tgr, whichPlayer, true )
+        endif
+        call TriggerAddAction(tgr, function thistype.onSelectionAction)
+        return onEventByHandle("selection",whichPlayer,action)
+    endmethod
+
+    //on - 玩家取消选择单位
+    //*使用 <getTriggerPlayer> 获取触发玩家
+    //*使用 <getTriggerUnit> 获取触发单位
+    private static method onUnSelectionAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "unSelection"
+        set bean.triggerPlayer = GetTriggerPlayer()
+        set bean.triggerUnit = GetTriggerUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onUnSelection takes player whichPlayer,code action returns trigger
+        local trigger tgr = CreateTrigger()
+        local integer i = 0
+        if(whichPlayer==null)then
+            set i = player_max_qty
+            loop
+                exitwhen i<=0
+                call TriggerRegisterPlayerSelectionEventBJ( tgr, players[i], false )
+                set i=i-1
+            endloop
+        else
+            call TriggerRegisterPlayerSelectionEventBJ( tgr, whichPlayer, false )
+        endif
+        call TriggerAddAction(tgr, function thistype.onUnSelectionAction)
+        return onEventByHandle("unSelection",whichPlayer,action)
+    endmethod
 
 
 
-
-
-
-
-    //-----获取触发数据-----
-    //获取 triggerUnit 单位
-    public static method getTriggerUnit takes nothing returns unit
-        return LoadUnitHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerUnit )
-    endmethod
-    //获取 triggerRect 区域
-    public static method getTriggerRect takes nothing returns rect
-        return LoadRectHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerRect )
-    endmethod
-    //获取 triggerItem 物品
-    public static method getTriggerItem takes nothing returns item
-        return LoadItemHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerItem )
-    endmethod
-    //获取 triggerPlayer 玩家
-    public static method getTriggerPlayer takes nothing returns player
-        return LoadPlayerHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerPlayer )
-    endmethod
-    //获取 triggerString 字符串
-    public static method getTriggerString takes nothing returns string
-        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerString )
-    endmethod
-    //获取 triggerSkill 整型
-    public static method getTriggerSkill takes nothing returns integer
-        return LoadInteger(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TriggerSkill )
-    endmethod
-    //获取 targetUnit 单位
-    public static method getTargetUnit takes nothing returns unit
-        return LoadUnitHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TargetUnit )
-    endmethod
-    //获取 targetLoc 点
-    public static method getTargetLoc takes nothing returns location
-        return LoadLocationHandle(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_TargetLoc )
-    endmethod
-    //获取 damage 实数
-    public static method getDamage takes nothing returns real
-        return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_Damage )
-    endmethod
-    //获取 realDamage 实数
-    public static method getRealDamage takes nothing returns real
-        return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_RealDamage )
-    endmethod
-    //获取 range 实数
-    public static method getRange takes nothing returns real
-        return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_Range )
-    endmethod
-    //获取 attackEffect 字符串
-    public static method getAttackEffect takes nothing returns string
-        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_AttackEffect )
-    endmethod
-    //获取 damageKind 字符串
-    public static method getDamageKind takes nothing returns string
-        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_DamageKind )
-    endmethod
-    //获取 damageType 字符串
-    public static method getDamageType takes nothing returns string
-        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_DamageType )
-    endmethod
-    //获取 breakType 字符串
-    public static method getBreakType takes nothing returns string
-        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_BreakType )
-    endmethod
-    //获取 isNoAvoid 布尔值
-    public static method getIsNoAvoid takes nothing returns boolean
-        return LoadBoolean(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_IsNoAvoid )
-    endmethod
+   
 
 endstruct

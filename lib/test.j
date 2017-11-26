@@ -4,6 +4,7 @@ library hTest needs hmb
 	private function inRect takes nothing returns nothing
 		local string music = ""
 		local integer i = GetRandomInt(1, 4)
+		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"进入了"+hrect.getName(evt.getTriggerRect()))
 		if(i==1)then
 			set music = gg_snd_Credits
 		elseif(i==2)then
@@ -15,6 +16,9 @@ library hTest needs hmb
 		endif
 		call media.bgmPlay(music)
 	endfunction
+	private function outRect takes nothing returns nothing
+		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"离开了"+hrect.getName(evt.getTriggerRect()))
+	endfunction
 
 	private function haha takes nothing returns nothing
 		local unit u = evt.getTriggerUnit()
@@ -23,6 +27,14 @@ library hTest needs hmb
 	private function haha2 takes nothing returns nothing
 		local unit u = evt.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"造成了攻击伤害")
+	endfunction
+	private function enteru takes nothing returns nothing
+		local unit u = evt.getTriggerUnit()
+		local unit eu = evt.getTriggerEnterUnit()
+		local real range = evt.getRange()
+		call hmsg.echo(GetUnitName(u)+"被进去了！")
+		call hmsg.echo(GetUnitName(eu)+"进去了！")
+		call hmsg.echo("range=="+R2S(range))
 	endfunction
 
 	public function run takes nothing returns nothing
@@ -36,8 +48,6 @@ library hTest needs hmb
 		local integer i=0
 		local integer j=0
 		local integer rand=0
-		local trigger tger = CreateTrigger()
-		call TriggerAddAction(tger, function inRect)
 
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
@@ -46,6 +56,7 @@ library hTest needs hmb
 		call hAttrExt_addHuntRebound(u,50,0)
 		call hAttrExt_addCure(u,50,0)
 		call hAttrExt_addAvoid(u,80,30)
+		call hAttr_addMove(u,500,60)
 		call hAttrEffect_coverSwim(u,10,0)
 		call hAttrEffect_coverSwimDuring(u,1.00,0)
 		call hplayer.setHero(players[1],u)
@@ -67,6 +78,8 @@ library hTest needs hmb
 		call hAttrEffect_coverBreak(u2,15,0)
 		call hAttrEffect_coverBreakDuring(u2,0.300,0)
 
+		call evt.onEnterUnitRange(u2,300,function enteru)
+
 		//rect
 		call wbean.create()
 		set i=0
@@ -76,7 +89,9 @@ library hTest needs hmb
 				loop
 					exitwhen j>=5
 						set r = hrect.createInLoc(rx+1152*j,ry-1152*i,1152,1152)
-						call TriggerRegisterEnterRectSimple( tger, r )
+						call hrect.setName(r,"平原"+I2S(i*j))
+						call evt.onEnterRect(r,function inRect)
+						call evt.onLeaveRect(r,function outRect)
 						set wbean.loc = GetRectCenter(r)
 						set wbean.width = 1152
 						set wbean.height = 1152

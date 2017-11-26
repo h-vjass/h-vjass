@@ -20,6 +20,7 @@ struct hRect
 	private static integer HASH_WIDTH = 102
 	private static integer HASH_HEIGHT = 103
 	private static integer HASH_GROUP = 104
+	private static integer HASH_NAME = 105
 
 	static method create takes nothing returns hRect
         local hRect x = 0
@@ -309,6 +310,16 @@ struct hRect
 			call time.delTimer(t)
     		call SaveTimerHandle(hash_hrect, hid, HASH_TIMER , null)
     	endif
+	endmethod
+
+	//设置区域名称
+	public method setName takes rect whichRect,string name returns nothing
+		call SaveStr(hash_hrect, GetHandleId(whichRect),HASH_NAME,name)
+	endmethod
+
+	//获取区域名称
+	public method getName takes rect whichRect returns string
+		return LoadStr(hash_hrect, GetHandleId(whichRect),HASH_NAME)
 	endmethod
 
 endstruct
