@@ -3,7 +3,7 @@
 <pre>
 
  * author hunzsig
- * version v2.15
+ * version v2.16
 
 *使用hJass的优势？
 hJass拥有优秀的demo，在开源的同时引导您学习的更多。

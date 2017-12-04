@@ -14,6 +14,10 @@ library hAbility initializer init needs hSys
 		private integer PAUSE_TYPE_black = 1
 		private integer PAUSE_TYPE_blue = 2	
 
+		//回避生命
+		private integer avoid_plus = 'A00B'
+		private integer avoid_miuns = 'A00C'
+
 	endglobals
 
 	/**
@@ -75,7 +79,9 @@ library hAbility initializer init needs hSys
 	private function avoidCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
 	    local unit whichUnit = time.getUnit(t,1)
-	    call SetUnitInvulnerable( whichUnit , false )
+	    call UnitAddAbility( whichUnit, avoid_miuns )
+		call SetUnitAbilityLevel( whichUnit, avoid_miuns, 2 )
+		call UnitRemoveAbility( whichUnit, avoid_miuns )
 	    call time.delTimer(t)
 	endfunction
 	/**
@@ -86,8 +92,32 @@ library hAbility initializer init needs hSys
 	    if(whichUnit==null) then
 	        return
 	    endif
-	    call SetUnitInvulnerable( whichUnit, true )
+	    call UnitAddAbility( whichUnit, avoid_plus )
+		call SetUnitAbilityLevel( whichUnit, avoid_plus, 2 )
+		call UnitRemoveAbility( whichUnit, avoid_plus )
 	    set t = time.setTimeout( 0.00 ,function avoidCallBack)
+	    call time.setUnit(t,1,whichUnit)
+	endfunction
+
+	/**
+	 * 0秒无敌回调
+	 */
+	private function zeroInvulnerableCallBack takes nothing returns nothing
+	    local timer t = GetExpiredTimer()
+	    local unit whichUnit = time.getUnit(t,1)
+	    call SetUnitInvulnerable( whichUnit , false )
+	    call time.delTimer(t)
+	endfunction
+	/**
+	 * 0秒无敌
+	 */
+	public function zeroInvulnerable takes unit whichUnit returns nothing
+	    local timer t
+	    if(whichUnit==null) then
+	        return
+	    endif
+	    call SetUnitInvulnerable( whichUnit, true )
+	    set t = time.setTimeout( 0.00 ,function zeroInvulnerableCallBack)
 	    call time.setUnit(t,1,whichUnit)
 	endfunction
 

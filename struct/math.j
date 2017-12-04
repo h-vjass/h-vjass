@@ -5,7 +5,7 @@ endglobals
 struct hMath
 
 	//绝对值
-	public method abs takes real value returns real
+	public method rabs takes real value returns real
 		return RAbsBJ(value)
 	endmethod
 
@@ -22,7 +22,7 @@ struct hMath
 
 	//计算属性特效效果叠加
 	public method oddsAttrEffect takes real value1,real value2 returns real
-		if(abs(value1)>abs(value2))then
+		if(rabs(value1)>rabs(value2))then
 			return value2*0.15+value1
 		else
 			return value1*0.15+value2
@@ -31,7 +31,7 @@ struct hMath
 
 	//计算属性特效持续时间叠加
 	public method oddsAttrEffectDuring takes real value1,real value2 returns real
-		if(abs(value1)>abs(value2))then
+		if(rabs(value1)>rabs(value2))then
 			return value2*0.10+value1
 		else
 			return value1*0.10+value2

@@ -20,13 +20,16 @@ library hTest needs hmb
 		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"离开了"+hrect.getName(evt.getTriggerRect()))
 	endfunction
 
-	private function haha takes nothing returns nothing
+	private function onattackready takes nothing returns nothing
 		local unit u = evt.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"发动了攻击")
 	endfunction
-	private function haha2 takes nothing returns nothing
-		local unit u = evt.getTriggerUnit()
-		call hmsg.echo(GetUnitName(u)+"造成了攻击伤害")
+	private function ondamage takes nothing returns nothing
+		call hmsg.echo(GetUnitName(evt.getSourceUnit())+"造成了攻击伤害")
+		call hmsg.echo("对"+GetUnitName(evt.getTargetUnit())+"造成1:"+R2S(evt.getDamage()))
+		call hmsg.echo("对"+GetUnitName(evt.getTargetUnit())+"造成2:"+R2S(evt.getRealDamage()))
+		call hmsg.echo(evt.getDamageKind())
+		call hmsg.echo(evt.getDamageType())
 	endfunction
 	private function enteru takes nothing returns nothing
 		local unit u = evt.getTriggerUnit()
@@ -52,18 +55,19 @@ library hTest needs hmb
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
 		call hAttrExt_addHemophagia(u,25,0)
-		call hAttrExt_addSplit(u,50,0)
-		call hAttrExt_addHuntRebound(u,50,0)
+		//call hAttrExt_addSplit(u,50,0)
+		//call hAttrExt_addHuntRebound(u,50,0)
 		call hAttrExt_addCure(u,50,0)
-		call hAttrExt_addAvoid(u,80,30)
-		call hAttr_addMove(u,500,60)
-		call hAttrEffect_coverSwim(u,10,0)
-		call hAttrEffect_coverSwimDuring(u,1.00,0)
+		call hAttrExt_addAvoid(u,100,0)
+		call hAttrExt_subKnocking(u,15000,0)
+		//call hAttr_addMove(u,500,60)
+		//call hAttrEffect_coverSwim(u,10,0)
+		//call hAttrEffect_coverSwimDuring(u,1.00,0)
 		call hplayer.setHero(players[1],u)
 		//call hAttr_addAttackSpeed(u,150,0)
-		call hAttrExt_addPunishOppose(u,150,0)
-		call evt.onAttackReady(u,function haha)
-		call evt.onAttackDamaged(u,function haha2)
+		call hAttrExt_addPunishOppose(u,90,0)
+		call evt.onAttackReady(u,function onattackready)
+		call evt.onDamage(u,function ondamage)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
@@ -71,10 +75,11 @@ library hTest needs hmb
 		call hunit.createUnits(10,Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,900))
 		call PanCameraToTimedLocForPlayer( players[1] , Location(0,0), 0 )
 		*/
-		call hAttrExt_addAvoid(u2,50,0)
-		call hAttrExt_addAim(u2,100,15)
+		call hAttrExt_addAvoid(u2,10,0)
+		//call hAttrExt_addAim(u2,100,15)
+		call hAttr_addDefend(u2,-19,0)
 		//call hAttr_addAttackSpeed(u2,50,0)
-		call hAttr_addAttackPhysical(u2,1500,0)
+		//call hAttr_addAttackPhysical(u2,1500,0)
 		call hAttrEffect_coverBreak(u2,15,0)
 		call hAttrEffect_coverBreakDuring(u2,0.300,0)
 

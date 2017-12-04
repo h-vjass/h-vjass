@@ -170,10 +170,12 @@ library hAttrUnit initializer init needs hAttrHunt
 	endfunction
 
 	/* 单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害) */
-	private function triggerUnitbeHuntAction takes nothing returns nothing
-		local unit fromUnit = GetEventDamageSource()
-		local unit toUnit = GetTriggerUnit()
-		local real damage = GetEventDamage()
+	private function triggerUnitbeHuntCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit fromUnit = time.getUnit(t,801)
+		local unit toUnit = time.getUnit(t,802)
+		local real damage = time.getReal(t,803)
+		local real oldLife = time.getReal(t,804)
 		local hAttrHuntBean bean = 0
 		//计算攻击特效
 		local real fromUnitLifeBack = hAttrEffect_getLifeBack(fromUnit)
@@ -248,19 +250,20 @@ library hAttrUnit initializer init needs hAttrHunt
 		local real fromUnitHeavyDuring = hAttrEffect_getHeavyDuring(fromUnit)
 		local real fromUnitUnluckDuring = hAttrEffect_getUnluckDuring(fromUnit)
 
-		if(damage>0.5)then
-			call console.info("basedamage"+R2S(damage))
-			call hAbility_avoid(toUnit) //抵消伤害
-			call bean.create()
-			set bean.fromUnit = fromUnit
-			set bean.toUnit = toUnit
-			set bean.damage = damage
-			set bean.huntKind = "attack"
-			set bean.huntType = "physical"
-			call hAttrHunt_huntUnit( bean )
-			call bean.destroy()
-		endif
-		//攻击特效
+		call time.delTimer(t)
+		call hAttr_subLife(toUnit,damage,0)
+		call hunit.setLife(toUnit,oldLife)
+
+		call bean.create()
+		set bean.fromUnit = fromUnit
+		set bean.toUnit = toUnit
+		set bean.damage = damage
+		set bean.huntKind = "attack"
+		set bean.huntType = "physical"
+		call hAttrHunt_huntUnit( bean )
+		call bean.destroy()
+
+		//伤害特效
 		call bean.create()
 		set bean.fromUnit = fromUnit
 		set bean.toUnit = toUnit
@@ -477,6 +480,21 @@ library hAttrUnit initializer init needs hAttrHunt
 		   call hAttrHunt_huntUnit(bean)
 		endif
 		call bean.destroy()
+	endfunction
+	private function triggerUnitbeHuntAction takes nothing returns nothing
+		local unit fromUnit = GetEventDamageSource()
+		local unit toUnit = GetTriggerUnit()
+		local real damage = GetEventDamage()
+		local real oldLife = hunit.getLife(toUnit)
+		local timer t = null
+		if(damage>0.4)then
+			call hAttr_addLife(toUnit,damage,0)
+			set t = time.setTimeout(0,function triggerUnitbeHuntCall)
+			call time.setUnit(t,801,fromUnit)
+			call time.setUnit(t,802,toUnit)
+			call time.setReal(t,803,damage)
+			call time.setReal(t,804,oldLife)
+		endif
 		set fromUnit = null
 		set toUnit = null
 	endfunction
@@ -503,6 +521,25 @@ library hAttrUnit initializer init needs hAttrHunt
 		if( PUNISH_SWITCH == true )then
 			call SaveTextTagHandle(hash, GetHandleId(u), 7896 , null)
 		endif
+		
+		//@触发死亡事件
+		set hevtBean = hEvtBean.create()
+        set hevtBean.triggerKey = "dead"
+        set hevtBean.killer = GetKillingUnit()
+        set hevtBean.triggerUnit = u
+        set hevtBean.targetUnit = GetKillingUnit()
+        call evt.triggerEvent(hevtBean)
+        call hevtBean.destroy()
+
+        //@触发击杀事件
+        set hevtBean = hEvtBean.create()
+        set hevtBean.triggerKey = "kill"
+        set hevtBean.killer = GetKillingUnit()
+        set hevtBean.triggerUnit = GetKillingUnit()
+        set hevtBean.targetUnit = u
+        call evt.triggerEvent(hevtBean)
+        call hevtBean.destroy()
+
 		set u = null
 	endfunction
 

@@ -58,7 +58,7 @@ library hAttrHunt initializer init needs hAttrNatural
 	/**
      * 伤害单位
      * heffect 特效
-     * bean.huntKind伤害类型: 
+     * bean.huntKind伤害方式: 
      		attack 攻击
      		skill 技能
      		item 物品
@@ -171,8 +171,9 @@ library hAttrHunt initializer init needs hAttrNatural
     	local location loc = null
     	local group g = null
     	local unit u = null
+        local integer tempInt = 0
+        local real tempReal = 0
         local hFilter filter = 0
-        local hEvtBean hevtBean = 0
 
     	if( bean.huntEff != null and bean.huntEff != "" ) then
     		set loc = GetUnitLoc( bean.toUnit )
@@ -190,6 +191,14 @@ library hAttrHunt initializer init needs hAttrNatural
         endif
 
     	if(is.alive(bean.toUnit)==true and bean.damage>0.5)then
+
+            //*重要* hjass必须设定护甲因子为0，这里为了修正魔兽负护甲依然因子保持0.06的bug
+            //当护甲x为负时，最大-20,公式2-(1-a)^abs(x)
+            if(toUnitDefend<0 and toUnitDefend>=-20)then
+                set bean.damage =  bean.damage / (2-Pow(0.94,math.rabs(toUnitDefend)))
+            elseif(toUnitDefend<0 and toUnitDefend<-20)then
+                set bean.damage =  bean.damage / (2-Pow(0.94,20))
+            endif
 
             //赋值伤害
             set realDamage = bean.damage
@@ -221,18 +230,77 @@ library hAttrHunt initializer init needs hAttrNatural
 	    		return
 	        endif
 
-            call console.info("bean.huntType:"+bean.huntType)
+            //call console.info("bean.huntType:"+bean.huntType)
 
 	        //判断无视Break 分为 null defend resistance both
 	        if( bean.isBreak == "defend" ) then
+                //@触发无视护甲事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "breakDefend"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                set hevtBean.breakType = bean.isBreak
+                set hevtBean.value = toUnitDefend
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被无视护甲事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beBreakDefend"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.breakType = bean.isBreak
+                set hevtBean.value = toUnitDefend
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //
 	        	if(toUnitDefend>0) then
 	        		set toUnitDefend = 0
 	        	endif
             elseif( bean.isBreak == "resistance" ) then
+                //@触发无视魔抗事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "breakResistance"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                set hevtBean.breakType = bean.isBreak
+                set hevtBean.value = toUnitResistance
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被无视魔抗事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beBreakResistance"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.breakType = bean.isBreak
+                set hevtBean.value = toUnitResistance
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //
                 if(toUnitResistance>0) then
                     set toUnitResistance = 0
                 endif
             elseif( bean.isBreak == "both" ) then
+                //@触发同时无视护甲和魔抗事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "breakDefendAndResistance"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                set hevtBean.breakType = bean.isBreak
+                set hevtBean.value = toUnitDefend
+                set hevtBean.value2 = toUnitResistance
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被同时无视护甲和魔抗事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beBreakDefendAndResistance"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.breakType = bean.isBreak
+                set hevtBean.value = toUnitDefend
+                set hevtBean.value2 = toUnitResistance
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //
                 if(toUnitDefend>0) then
                     set toUnitDefend = 0
                 endif
@@ -292,13 +360,29 @@ library hAttrHunt initializer init needs hAttrNatural
     		if( bean.huntType == "physical" and realDamage<(hunit.getMaxLife(bean.toUnit)*0.25) and R2I(toUnitAvoid-fromUnitAim)>0 and GetRandomInt(1, 100)<=R2I(toUnitAvoid-fromUnitAim))then
                 set realDamage = 0
                 call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
+                //@触发回避事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "avoid"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.attacker = bean.fromUnit
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被回避事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beAvoid"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.attacker = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
     		endif
     		//计算护甲
     		if( bean.huntType == "physical" and toUnitDefend!=0 )then
 				if(toUnitDefend>0)then
 					set realDamage = realDamage * (1-toUnitDefend/(toUnitDefend+200))
 				else
-					set realDamage = realDamage * (2-Pow(0.99, toUnitDefend))
+                    set tempReal = 1+I2R(R2I(RAbsBJ(toUnitDefend)+149)/100)
+                    set realDamage = realDamage * (tempReal-Pow(0.99, RAbsBJ(toUnitDefend)-(tempReal-2)*100))
 				endif
     		endif
     		//计算魔抗
@@ -321,49 +405,41 @@ library hAttrHunt initializer init needs hAttrNatural
     			endif
     		endif
 	        //计算单位是否无敌且不是绝对伤害,无敌属性为百分比计算，被动触发抵挡一次
-    		if( bean.huntType == "absolute" and (is.invincible(bean.toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
+    		if( bean.huntType != "absolute" and (is.invincible(bean.toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
     			set realDamage = 0
                 set isInvincible = true
     		endif
 
     		//造成伤害
-            call console.info("realDamage:"+R2S(realDamage))
+            //call console.info("realDamage:"+R2S(realDamage))
     		if( realDamage > 0 ) then
 				call hunit.subLife(bean.toUnit,realDamage) //#
                 call hplayer.addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
                 call hplayer.addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
 
-                //触发攻击伤害事件
-                if(bean.huntKind=="attack")then
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "attackDamaged"
-                    set hevtBean.triggerUnit = bean.fromUnit
-                    set hevtBean.targetUnit = bean.toUnit
-                    set hevtBean.damage = bean.damage
-                    set hevtBean.realDamage = realDamage
-                    call evt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
-
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beAttackDamaged"
-                    set hevtBean.triggerUnit = bean.toUnit
-                    set hevtBean.targetUnit = bean.fromUnit
-                    set hevtBean.damage = bean.damage
-                    set hevtBean.realDamage = realDamage
-                    call evt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
-                endif
-                //触发技能伤害事件
-                if(bean.huntKind=="skill")then
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "skillDamaged"
-                    set hevtBean.triggerUnit = bean.fromUnit
-                    set hevtBean.targetUnit = bean.toUnit
-                    set hevtBean.damage = bean.damage
-                    set hevtBean.realDamage = realDamage
-                    call evt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
-                endif
+                //@触发伤害事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "damage"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.damage = bean.damage
+                set hevtBean.realDamage = realDamage
+                set hevtBean.damageKind = bean.huntKind
+                set hevtBean.damageType = bean.huntType
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被伤害事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beDamage"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.damage = bean.damage
+                set hevtBean.realDamage = realDamage
+                set hevtBean.damageKind = bean.huntKind
+                set hevtBean.damageType = bean.huntType
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
                 
 				//分裂
 				if( bean.huntType == "physical" and fromUnitSplit >0 )then
@@ -437,45 +513,43 @@ library hAttrHunt initializer init needs hAttrNatural
     		endif
     	endif
 
-        //特殊效果,不需要伤害，一定会触发
-        if( bean.specialVal != 0 and bean.specialDuring > 0 )then
-            if(bean.huntKind=="attack")then
-                if( bean.special == "null" ) then
-                elseif( bean.special == "effect_life_back" ) then
-                    call hAttrExt_addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_mana_back" ) then
-                    call hAttrExt_addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_attack_speed" ) then
-                    call hAttr_addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_attack_physical" ) then
-                    call hAttr_addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_attack_magic" ) then
-                    call hAttr_addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_move" ) then
-                    call hAttr_addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_aim" ) then
-                    call hAttrExt_addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_str" ) then
-                    call hAttr_addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_agi" ) then
-                    call hAttr_addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_int" ) then
-                    call hAttr_addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_knocking" ) then
-                    call hAttrExt_addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_violence" ) then
-                    call hAttrExt_addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_hemophagia" ) then
-                    call hAttrExt_addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_hemophagia_skill" ) then
-                    call hAttrExt_addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_split" ) then
-                    call hAttrExt_addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_luck" ) then
-                    call hAttrExt_addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                elseif( bean.special == "effect_hunt_amplitude" ) then
-                    call hAttrExt_addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
-                endif
+        //特殊效果,不需要是攻击，不需要大于0伤害，一定会触发
+        if( isInvincible == false and bean.specialVal != 0 and bean.specialDuring > 0 )then
+            if( bean.special == "null" ) then
+            elseif( bean.special == "effect_life_back" ) then
+                call hAttrExt_addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_mana_back" ) then
+                call hAttrExt_addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_attack_speed" ) then
+                call hAttr_addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_attack_physical" ) then
+                call hAttr_addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_attack_magic" ) then
+                call hAttr_addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_move" ) then
+                call hAttr_addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_aim" ) then
+                call hAttrExt_addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_str" ) then
+                call hAttr_addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_agi" ) then
+                call hAttr_addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_int" ) then
+                call hAttr_addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_knocking" ) then
+                call hAttrExt_addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_violence" ) then
+                call hAttrExt_addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_hemophagia" ) then
+                call hAttrExt_addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_hemophagia_skill" ) then
+                call hAttrExt_addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_split" ) then
+                call hAttrExt_addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_luck" ) then
+                call hAttrExt_addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
+            elseif( bean.special == "effect_hunt_amplitude" ) then
+                call hAttrExt_addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
             endif
             if( bean.special == "null" ) then
             elseif( bean.special == "effect_poison" ) then
@@ -513,6 +587,25 @@ library hAttrHunt initializer init needs hAttrNatural
                     set bean.specialVal = bean.specialVal - toUnitSwimOppose
                     set bean.specialDuring = bean.specialDuring * (1-toUnitSwimOppose*0.01)
                 endif
+                //@触发眩晕事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "swim"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                set hevtBean.value = bean.specialVal
+                set hevtBean.during = bean.specialDuring
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被眩晕事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beSwim"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.value = bean.specialVal
+                set hevtBean.during = bean.specialDuring
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //
                 if(GetRandomReal(1,100)<bean.specialVal and bean.specialDuring>0)then
                     call hAbility_swim( bean.toUnit , bean.specialDuring )
                 endif
@@ -530,6 +623,36 @@ library hAttrHunt initializer init needs hAttrNatural
             elseif( bean.special == "effect_unluck" ) then
                 call hAttrExt_subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
             endif
+
+            //@触发伤害特效事件
+            set hevtBean = hEvtBean.create()
+            set hevtBean.triggerKey = "damageEffect"
+            set hevtBean.sourceUnit = bean.fromUnit
+            set hevtBean.triggerUnit = bean.fromUnit
+            set hevtBean.targetUnit = bean.toUnit
+            set hevtBean.damage = bean.damage
+            set hevtBean.realDamage = realDamage
+            set hevtBean.damageEffect = bean.special
+            set hevtBean.damageKind = bean.huntKind
+            set hevtBean.damageType = bean.huntType
+            set hevtBean.value = bean.specialVal
+            set hevtBean.during = bean.specialDuring
+            call evt.triggerEvent(hevtBean)
+            call hevtBean.destroy()
+            //@触发被伤害特效事件
+            set hevtBean = hEvtBean.create()
+            set hevtBean.triggerKey = "beDamageEffect"
+            set hevtBean.sourceUnit = bean.fromUnit
+            set hevtBean.triggerUnit = bean.toUnit
+            set hevtBean.damage = bean.damage
+            set hevtBean.realDamage = realDamage
+            set hevtBean.damageEffect = bean.special
+            set hevtBean.damageKind = bean.huntKind
+            set hevtBean.damageType = bean.huntType
+            set hevtBean.value = bean.specialVal
+            set hevtBean.during = bean.specialDuring
+            call evt.triggerEvent(hevtBean)
+            call hevtBean.destroy()
         endif
 
     endfunction

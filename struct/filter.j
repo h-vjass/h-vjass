@@ -1,5 +1,4 @@
 /* 判定过滤器 */
-
 struct hFilter
 
 	private static unit thisUnit = null
