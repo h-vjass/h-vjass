@@ -509,6 +509,14 @@ library hAttrUnit initializer init needs hAttrHunt
 		call hAttrExt_addWeight( u , 0.25 , 0 )
 		call hAttrExt_addLifeSource( u , 10 , 0 )
 		call hAttrExt_addManaSource( u , 10 , 0 )
+
+		//@触发升级事件
+		set hevtBean = hEvtBean.create()
+        set hevtBean.triggerKey = "levelUp"
+        set hevtBean.triggerUnit = u
+        call evt.triggerEvent(hevtBean)
+        call hevtBean.destroy()
+
 		set u = null
 	endfunction
 
@@ -525,9 +533,8 @@ library hAttrUnit initializer init needs hAttrHunt
 		//@触发死亡事件
 		set hevtBean = hEvtBean.create()
         set hevtBean.triggerKey = "dead"
-        set hevtBean.killer = GetKillingUnit()
         set hevtBean.triggerUnit = u
-        set hevtBean.targetUnit = GetKillingUnit()
+        set hevtBean.killer = GetKillingUnit()
         call evt.triggerEvent(hevtBean)
         call hevtBean.destroy()
 

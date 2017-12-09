@@ -1148,104 +1148,158 @@ struct hEvt
     endmethod
 
     //on - 反伤时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取反伤伤害
     public static method onRebound takes unit whichUnit,code action returns trigger
         return onEventByHandle("rebound",whichUnit,action)
     endmethod
 
     //on - 造成无法回避的伤害时
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取目标单位
+    //@getDamage 获取伤害值
     public static method onNoAvoid takes unit whichUnit,code action returns trigger
         return onEventByHandle("noAvoid",whichUnit,action)
     endmethod
 
     //on - 被造成无法回避的伤害时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取暴击伤害值
     public static method onBeNoAvoid takes unit whichUnit,code action returns trigger
         return onEventByHandle("beNoAvoid",whichUnit,action)
     endmethod
 
     //on - 物理暴击时
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取目标单位
+    //@getDamage 获取暴击伤害值
+    //@getValue 获取暴击几率百分比
+    //@getValue2 获取暴击增幅百分比
     public static method onKnocking takes unit whichUnit,code action returns trigger
         return onEventByHandle("knocking",whichUnit,action)
     endmethod
 
     //on - 承受物理暴击时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取暴击伤害值
+    //@getValue 获取暴击几率百分比
+    //@getValue2 获取暴击增幅百分比
     public static method onBeKnocking takes unit whichUnit,code action returns trigger
         return onEventByHandle("beKnocking",whichUnit,action)
     endmethod
 
     //on - 魔法暴击时
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取目标单位
+    //@getDamage 获取暴击伤害值
+    //@getValue 获取暴击几率百分比
+    //@getValue2 获取暴击增幅百分比
     public static method onViolence takes unit whichUnit,code action returns trigger
         return onEventByHandle("violence",whichUnit,action)
     endmethod
 
     //on - 承受魔法暴击时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取暴击伤害值
+    //@getValue 获取暴击几率百分比
+    //@getValue2 获取暴击增幅百分比
     public static method onBeViolence takes unit whichUnit,code action returns trigger
         return onEventByHandle("beViolence",whichUnit,action)
     endmethod
 
     //on - 分裂时
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取目标单位
+    //@getDamage 获取分裂伤害值
+    //@getRange 获取分裂范围(px)
+    //@getValue 获取分裂百分比
     public static method onSpilt takes unit whichUnit,code action returns trigger
         return onEventByHandle("spilt",whichUnit,action)
     endmethod
 
     //on - 承受分裂时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取分裂伤害值
+    //@getRange 获取分裂范围(px)
+    //@getValue 获取分裂百分比
     public static method onBeSpilt takes unit whichUnit,code action returns trigger
         return onEventByHandle("beSpilt",whichUnit,action)
     endmethod
 
     //on - 吸血时
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取目标单位
+    //@getDamage 获取吸血值
+    //@getValue 获取吸血百分比
     public static method onHemophagia takes unit whichUnit,code action returns trigger
         return onEventByHandle("hemophagia",whichUnit,action)
     endmethod
 
     //on - 被吸血时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取吸血值
+    //@getValue 获取吸血百分比
     public static method onBeHemophagia takes unit whichUnit,code action returns trigger
         return onEventByHandle("beHemophagia",whichUnit,action)
     endmethod
 
     //on - 技能吸血时
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取目标单位
+    //@getDamage 获取吸血值
+    //@getValue 获取吸血百分比
     public static method onSkillHemophagia takes unit whichUnit,code action returns trigger
         return onEventByHandle("skillHemophagia",whichUnit,action)
     endmethod
 
     //on - 被技能吸血时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getDamage 获取吸血值
+    //@getValue 获取吸血百分比
     public static method onBeSkillHemophagia takes unit whichUnit,code action returns trigger
         return onEventByHandle("beSkillHemophagia",whichUnit,action)
     endmethod
 
     //on - 硬直时
+    //@getTriggerUnit 获取触发单位
+    //@getSourceUnit 获取来源单位
+    //@getValue 获取硬直程度百分比
+    //@getDuring 获取持续时间
     public static method onPunish takes unit whichUnit,code action returns trigger
         return onEventByHandle("punish",whichUnit,action)
     endmethod
 
     //on - 死亡时
+    //@getTriggerUnit 获取触发单位
+    //@getKiller 获取凶手单位
     public static method onDead takes unit whichUnit,code action returns trigger
         return onEventByHandle("dead",whichUnit,action)
     endmethod
 
     //on - 击杀时
+    //@getTriggerUnit 获取触发单位
+    //@getKiller 获取凶手单位
+    //@getTargetUnit 获取死亡单位
     public static method onKill takes unit whichUnit,code action returns trigger
         return onEventByHandle("kill",whichUnit,action)
     endmethod
 
     //on - 复活时
+    //@getTriggerUnit 获取触发单位
     public static method onReborn takes unit whichUnit,code action returns trigger
         return onEventByHandle("reborn",whichUnit,action)
     endmethod
 
     //on - 提升升等级时
-    private static method onLevelUpAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
-        set bean.triggerKey = "levelUp"
-        set bean.triggerUnit = GetTriggerUnit()
-        call triggerEvent(bean)
-        call bean.destroy()
-    endmethod
+    //@getTriggerUnit 获取触发单位
     public static method onLevelUp takes unit whichUnit,code action returns trigger
-        if(event_trigger_levelUp==null)then
-            set event_trigger_levelUp = CreateTrigger()
-            call TriggerRegisterAnyUnitEventBJ( event_trigger_levelUp, EVENT_PLAYER_HERO_LEVEL )
-            call TriggerAddAction(event_trigger_levelUp, function thistype.onLevelUpAction)
-        endif
         return onEventByHandle("levelUp",whichUnit,action)
     endmethod
 
@@ -1290,8 +1344,8 @@ struct hEvt
     endmethod
 
     //on - 进入某区域内
-    //*使用 <getTriggerRect> 获取被进入的矩形区域
-    //*使用 <getTriggerUnit> 获取进入矩形区域的单位
+    //@getTriggerRect 获取被进入的矩形区域
+    //@getTriggerUnit 获取进入矩形区域的单位
     private static method onEnterRectAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "enterRect"
@@ -1309,8 +1363,8 @@ struct hEvt
     endmethod
 
     //on - 离开某区域内
-    //*使用 <getTriggerRect> 获取被离开的矩形区域
-    //*使用 <getTriggerUnit> 获取离开矩形区域的单位
+    //@getTriggerRect 获取被离开的矩形区域
+    //@getTriggerUnit 获取离开矩形区域的单位
     private static method onLeaveRectAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "leaveRect"
@@ -1328,9 +1382,9 @@ struct hEvt
     endmethod
 
     //on - 聊天时（全匹配）
-    //*使用 <getTriggerPlayer> 获取聊天的玩家
-    //*使用 <getTriggerString> 获取聊天的内容
-    //*使用 <getTriggerStringMatched> 获取匹配命中的内容
+    //@getTriggerPlayer 获取聊天的玩家
+    //@getTriggerString 获取聊天的内容
+    //@getTriggerStringMatched 获取匹配命中的内容
     private static method onChatAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "chat"
@@ -1358,9 +1412,9 @@ struct hEvt
     endmethod
 
     //on - 聊天时（like匹配）
-    //*使用 <getTriggerPlayer> 获取聊天的玩家
-    //*使用 <getTriggerString> 获取聊天的内容
-    //*使用 <getTriggerStringMatched> 获取匹配命中的内容
+    //getTriggerPlayer 获取聊天的玩家
+    //getTriggerString 获取聊天的内容
+    //getTriggerStringMatched 获取匹配命中的内容
     private static method onChatLikeAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "chatLike"
@@ -1388,7 +1442,7 @@ struct hEvt
     endmethod
 
     //on - 按ESC
-    //*使用 <getTriggerPlayer> 获取触发玩家
+    //getTriggerPlayer 获取触发玩家
     private static method onEscAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "esc"
@@ -1414,8 +1468,8 @@ struct hEvt
     endmethod
 
     //on - 玩家选择单位
-    //*使用 <getTriggerPlayer> 获取触发玩家
-    //*使用 <getTriggerUnit> 获取触发单位
+    //getTriggerPlayer 获取触发玩家
+    //getTriggerUnit 获取触发单位
     private static method onSelectionAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "selection"
@@ -1442,8 +1496,8 @@ struct hEvt
     endmethod
 
     //on - 玩家取消选择单位
-    //*使用 <getTriggerPlayer> 获取触发玩家
-    //*使用 <getTriggerUnit> 获取触发单位
+    //getTriggerPlayer 获取触发玩家
+    //getTriggerUnit 获取触发单位
     private static method onUnSelectionAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "unSelection"

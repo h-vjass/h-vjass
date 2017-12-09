@@ -181,6 +181,40 @@ struct hUnit
     endmethod
 
     /**
+     * 在某XY坐标复活英雄
+     * 只有英雄能被复活
+     * 只有调用此方法会触发复活事件
+     */
+    public static method rebornAtXY takes unit u,real x,real y returns nothing
+        if(is.hero(u))then
+            call ReviveHero( u,x,y,true )
+            //@触发复活事件
+            set hevtBean = hEvtBean.create()
+            set hevtBean.triggerKey = "reborn"
+            set hevtBean.triggerUnit = u
+            call evt.triggerEvent(hevtBean)
+            call hevtBean.destroy()
+        endif
+    endmethod
+
+    /**
+     * 在某点复活英雄
+     * 只有英雄能被复活
+     * 只有调用此方法会触发复活事件
+     */
+    public static method rebornAtLoc takes unit u,location loc returns nothing
+        if(is.hero(u))then
+            call ReviveHeroLoc( u, loc, true )
+            //@触发复活事件
+            set hevtBean = hEvtBean.create()
+            set hevtBean.triggerKey = "reborn"
+            set hevtBean.triggerUnit = u
+            call evt.triggerEvent(hevtBean)
+            call hevtBean.destroy()
+        endif
+    endmethod
+
+    /**
      * 创建1单位面向点
      * @return 最后创建单位
      */

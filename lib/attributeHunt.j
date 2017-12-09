@@ -134,7 +134,8 @@ library hAttrHunt initializer init needs hAttrNatural
     	local real fromUnitViolence = hAttrExt_getViolence(bean.fromUnit)
     	local real fromUnitHemophagia = hAttrExt_getHemophagia(bean.fromUnit)
     	local real fromUnitHemophagiaSkill = hAttrExt_getHemophagiaSkill(bean.fromUnit)
-    	local real fromUnitSplit = hAttrExt_getSplit(bean.fromUnit)
+        local real fromUnitSplit = hAttrExt_getSplit(bean.fromUnit)
+    	local real fromUnitRange = 200.00
     	local real fromUnitLuck = hAttrExt_getLuck(bean.fromUnit)
         local real fromUnitHuntAmplitude = hAttrExt_getHuntAmplitude(bean.fromUnit)
         local real fromUnitNaturalFire = hAttrNatural_getFire(bean.fromUnit)
@@ -321,6 +322,26 @@ library hAttrHunt initializer init needs hAttrNatural
 	       		set realDamage = realDamage * (1+(fromUnitKnocking-toUnitMortalOppose)*0.0004)
 	       		set toUnitAvoid = toUnitAvoid * 0.5
                 call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击"+I2S(R2I(realDamage)),6.00,"ef3215",10,1.00,10.00)  ,"toggle",0,0.2)
+                //@触发物理暴击事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "knocking"
+                set hevtBean.triggerUnit = bean.fromUnit
+                set hevtBean.targetUnit = bean.toUnit
+                set hevtBean.damage = realDamage
+                set hevtBean.value = fromUnitKnocking/300
+                set hevtBean.value2 = fromUnitKnocking*0.05
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被物理暴击事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beKnocking"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.damage = realDamage
+                set hevtBean.value = fromUnitKnocking/300
+                set hevtBean.value2 = fromUnitKnocking*0.05
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
 	        endif
 
             //计算自然属性
@@ -354,6 +375,26 @@ library hAttrHunt initializer init needs hAttrNatural
                     set realDamage = realDamage * (1+(fromUnitViolence-toUnitMortalOppose)*0.0002)
                     set toUnitAvoid = toUnitAvoid * 0.5
                     call hmsg.style(  hmsg.ttg2Unit(bean.toUnit,"暴击"+I2S(R2I(realDamage)),6.00,"15bcef",10,1.00,10.00)  ,"toggle",0,0.2)
+                    //@触发魔法暴击事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "violence"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = realDamage
+                    set hevtBean.value = fromUnitKnocking/200
+                    set hevtBean.value2 = fromUnitKnocking*0.03
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                    //@触发被魔法暴击事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "beViolence"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.sourceUnit = bean.fromUnit
+                    set hevtBean.damage = realDamage
+                    set hevtBean.value = fromUnitKnocking/200
+                    set hevtBean.value2 = fromUnitKnocking*0.03
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
                 endif
 	        endif
 	        //计算回避 X 命中
@@ -417,6 +458,25 @@ library hAttrHunt initializer init needs hAttrNatural
                 call hplayer.addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
                 call hplayer.addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
 
+                if(bean.isNoAvoid==true)then
+                    //@触发造成无法回避伤害事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "noAvoid"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = realDamage
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                    //@触发被无法回避伤害事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "beNoAvoid"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.sourceUnit = bean.fromUnit
+                    set hevtBean.damage = realDamage
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                endif
+
                 //@触发伤害事件
                 set hevtBean = hEvtBean.create()
                 set hevtBean.triggerKey = "damage"
@@ -449,7 +509,7 @@ library hAttrHunt initializer init needs hAttrNatural
                     call filter.isAlive(true)
                     call filter.isEnemy(true)
                     call filter.isBuilding(false)
-	                set g = hgroup.createByLoc(loc,200.00,function hFilter.get )
+	                set g = hgroup.createByLoc(loc,fromUnitRange,function hFilter.get )
                     call filter.destroy()
 	                loop
 			            exitwhen(IsUnitGroupEmptyBJ(g) == true)
@@ -464,16 +524,72 @@ library hAttrHunt initializer init needs hAttrNatural
 	                set g = null
 	                call heffect.toLoc("Abilities\\Spells\\Human\\Feedback\\SpellBreakerAttack.mdl",loc,0)
 	                call RemoveLocation( loc )
+                    //@触发分裂事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "spilt"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = realDamage * fromUnitSplit * 0.01
+                    set hevtBean.range = fromUnitRange
+                    set hevtBean.value = fromUnitSplit
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                    //@触发被分裂事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "beSpilt"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.sourceUnit = bean.fromUnit
+                    set hevtBean.damage = realDamage * fromUnitSplit * 0.01
+                    set hevtBean.range = fromUnitRange
+                    set hevtBean.value = fromUnitSplit
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
 	            endif
 	            //吸血
 				if( bean.huntType == "physical" and fromUnitHemophagia >0 )then
                     call hunit.addLife(bean.fromUnit,realDamage * fromUnitHemophagia * 0.01)
 					call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",bean.fromUnit,"origin",1.00)
+                    //@触发吸血事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "hemophagia"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = realDamage * fromUnitHemophagia * 0.01
+                    set hevtBean.value = fromUnitHemophagia
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                    //@触发被吸血事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "beHemophagia"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.sourceUnit = bean.fromUnit
+                    set hevtBean.damage = realDamage * fromUnitHemophagia * 0.01
+                    set hevtBean.value = fromUnitHemophagia
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
 				endif
 				//技能吸血
 				if( bean.huntType == "magic" and bean.huntKind == "skill" and fromUnitHemophagiaSkill >0 )then
                     call hunit.addLife(bean.fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
                     call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",bean.fromUnit,"weapon",1.8)
+                    //@触发技能吸血事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "skillHemophagia"
+                    set hevtBean.triggerUnit = bean.fromUnit
+                    set hevtBean.targetUnit = bean.toUnit
+                    set hevtBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
+                    set hevtBean.value = fromUnitHemophagiaSkill
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                    //@触发被技能吸血事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "beSkillHemophagia"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.sourceUnit = bean.fromUnit
+                    set hevtBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
+                    set hevtBean.value = fromUnitHemophagiaSkill
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
 				endif
 				//硬直
                 if( is.alive(bean.toUnit) )then
@@ -495,13 +611,32 @@ library hAttrHunt initializer init needs hAttrNatural
                         endif
                         call hAttr_subMove( bean.toUnit , punishEffect , 5.00 )
                         call hmsg.style(hmsg.ttg2Unit(bean.toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0.05)
+
+                        //@触发硬直事件
+                        set hevtBean = hEvtBean.create()
+                        set hevtBean.triggerKey = "punish"
+                        set hevtBean.triggerUnit = bean.toUnit
+                        set hevtBean.sourceUnit = bean.fromUnit
+                        set hevtBean.value = punishEffect
+                        set hevtBean.during = 5.00
+                        call evt.triggerEvent(hevtBean)
+                        call hevtBean.destroy()
+
                     endif
                 endif
                 //反射
                 if( toUnitHuntRebound >0 )then
 					call hunit.subLife(bean.fromUnit,realDamage * toUnitHuntRebound * 0.01)
                     call hmsg.style(hmsg.ttg2Unit(bean.fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
-				endif
+				    //@触发反伤事件
+                    set hevtBean = hEvtBean.create()
+                    set hevtBean.triggerKey = "rebound"
+                    set hevtBean.triggerUnit = bean.toUnit
+                    set hevtBean.sourceUnit = bean.fromUnit
+                    set hevtBean.damage = realDamage * toUnitHuntRebound * 0.01
+                    call evt.triggerEvent(hevtBean)
+                    call hevtBean.destroy()
+                endif
                 //治疗
                 if( toUnitCure >0 )then
                     call hunit.addLife(bean.toUnit,realDamage * toUnitCure * 0.01)
@@ -620,6 +755,17 @@ library hAttrHunt initializer init needs hAttrNatural
                     set punishEffect = 1.00
                 endif
                 call hAttr_subMove( bean.toUnit , punishEffect , bean.specialDuring )
+                
+                //@触发硬直事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "punish"
+                set hevtBean.triggerUnit = bean.toUnit
+                set hevtBean.sourceUnit = bean.fromUnit
+                set hevtBean.value = punishEffect
+                set hevtBean.during = bean.specialDuring
+                call evt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+
             elseif( bean.special == "effect_unluck" ) then
                 call hAttrExt_subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
             endif
