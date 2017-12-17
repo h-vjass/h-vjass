@@ -1,48 +1,54 @@
 /* 属性 - 单位 */
-library hAttrUnit initializer init needs hAttrHunt
 
-	globals
-		private boolean PUNISH_SWITCH = false 			//有的游戏不需要硬直条就把他关闭
-		private boolean PUNISH_SWITCH_ONLYHERO = true 	//是否只有英雄有硬直条
-		private real PUNISH_TEXTTAG_HEIGHT = 0
+globals
+	hAttrUnit attrUnit = 0
+	hashtable hash_attr_unit = InitHashtable()
+	boolean PUNISH_SWITCH = false 			//有的游戏不需要硬直条就把他关闭
+	boolean PUNISH_SWITCH_ONLYHERO = true 	//是否只有英雄有硬直条
+	real PUNISH_TEXTTAG_HEIGHT = 0
+	trigger ATTR_TRIGGER_UNIT_BEHUNT = null
+	trigger ATTR_TRIGGER_HERO_LEVEL = null
+	trigger ATTR_TRIGGER_UNIT_DEATH = null
+	group ATTR_GROUP = CreateGroup()
+endglobals
 
-		private trigger ATTR_TRIGGER_UNIT_BEHUNT = null
-		private trigger ATTR_TRIGGER_HERO_LEVEL = null
-		private trigger ATTR_TRIGGER_UNIT_DEATH = null
+struct hAttrUnit
 
-		private hashtable hash = null
-		private group ATTR_GROUP = CreateGroup()
+	static method create takes nothing returns hAttrUnit
+        local hAttrUnit x = 0
+        set x = hAttrUnit.allocate()
+        return x
+    endmethod
 
-	endglobals
 
 	/* 设定硬直条是否显示 */
-	public function punishTtgIsOpen takes boolean isOpen returns nothing
+	public static method punishTtgIsOpen takes boolean isOpen returns nothing
 		set PUNISH_SWITCH = isOpen
-	endfunction
+	endmethod
 
 	/* 设定硬直条是否只有英雄显示 */
-	public function punishTtgIsOnlyHero takes boolean isOnlyhero returns nothing
+	public static method punishTtgIsOnlyHero takes boolean isOnlyhero returns nothing
 		set PUNISH_SWITCH_ONLYHERO = isOnlyhero
-	endfunction
+	endmethod
 
 	/* 设定硬直条高度 */
-	public function punishTtgHeight takes real high returns nothing
+	public static method punishTtgHeight takes real high returns nothing
 		if(camera.model=="zoomin")then
 			set PUNISH_TEXTTAG_HEIGHT = high*0.5
 		else
 			set PUNISH_TEXTTAG_HEIGHT = high
 		endif
-	endfunction
+	endmethod
 
 	/* 把单位赶出属性组 */
-	private function groupOut takes unit whichUnit returns nothing
+	private static method groupOut takes unit whichUnit returns nothing
 		if( IsUnitInGroup( whichUnit , ATTR_GROUP ) == true ) then
 			call GroupRemoveUnit( ATTR_GROUP , whichUnit )
 		endif
-	endfunction
+	endmethod
 
 	/* 活力/魔法恢复 */
-	private function lifemanaback takes nothing returns nothing
+	private static method lifemanaback takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
 	    local real period = TimerGetTimeout(t)
 	    local group tempGroup = null
@@ -56,8 +62,8 @@ library hAttrUnit initializer init needs hAttrHunt
 	                call GroupRemoveUnit( tempGroup , tempUnit )
 	                //
 	                if( IsUnitAliveBJ(tempUnit) )then
-		                call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( hAttrExt_getLifeBack(tempUnit) * period ) ) )
-	            		call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( hAttrExt_getManaBack(tempUnit) * period ) ) )
+		                call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( attrExt.getLifeBack(tempUnit) * period ) ) )
+	            		call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( attrExt.getManaBack(tempUnit) * period ) ) )
 	                endif
 	            	//
 					set tempUnit = null
@@ -66,9 +72,9 @@ library hAttrUnit initializer init needs hAttrHunt
 	        call DestroyGroup( tempGroup )
 	        set tempGroup = null
 		endif
-	endfunction
+	endmethod
 
-	public function createBlockText takes real current,real all,integer blockMax,string colorFt,string colorBg returns string
+	public static method createBlockText takes real current,real all,integer blockMax,string colorFt,string colorBg returns string
 		local string str = ""
 		local string font = "■"
 		local real percent = 0
@@ -92,20 +98,20 @@ library hAttrUnit initializer init needs hAttrHunt
             endloop
         endif
         return str
-	endfunction
+	endmethod
 
 	/**
 	 * 设置硬直漂浮字
 	 */
-    private function punishTtgCall takes nothing returns nothing
+    private static method punishTtgCall takes nothing returns nothing
     	local timer t = GetExpiredTimer()
 		local string ttgStr = ""
 		local unit whichUnit = time.getUnit(t,1)
 		local texttag ttg = time.getTexttag(t,2)
 		local real zOffset = time.getReal(t,3)
 		local real size = time.getReal(t,4)
-		local real punishNow = hAttrExt_getPunishCurrent(whichUnit)
-		local real punishAll = hAttrExt_getPunish(whichUnit)
+		local real punishNow = attrExt.getPunishCurrent(whichUnit)
+		local real punishAll = attrExt.getPunish(whichUnit)
 		local integer blockMax = 14
 		local real scale = 0.5
 		if( ttg == null ) then
@@ -125,26 +131,26 @@ library hAttrUnit initializer init needs hAttrHunt
 	        call hmsg.setTtgMsg(ttg,ttgStr,size)
 	        call SetTextTagVisibility( ttg , true )
         endif
-	endfunction
+	endmethod
 
 	//硬直条
-	public function punishTtg takes unit whichUnit returns nothing
+	public static method punishTtg takes unit whichUnit returns nothing
 		local timer t = null
 		local texttag = ttg = null
 		local real size = 5
 		if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and is.hero(whichUnit))))then
 
 			set ttg = hmsg.ttg2Unit(whichUnit,"",size,"",10,0,PUNISH_TEXTTAG_HEIGHT)
-	        set t = time.setInterval( 0.03 , function punishTtgCall )
+	        set t = time.setInterval( 0.03 , function thistype.punishTtgCall )
 	        call time.setUnit( t , 1 , whichUnit )
 	        call time.setTexttag( t , 2 , ttg )
 	        call time.setReal( t , 3 , PUNISH_TEXTTAG_HEIGHT )
 	        call time.setReal( t , 4 , size )
 		endif
-	endfunction
+	endmethod
 
 	/* 硬直恢复器(+100/5s) */
-	private function punishback takes nothing returns nothing
+	private static method punishback takes nothing returns nothing
 	    local integer i
 	    local integer addPunish = 0
 	    local group tempGroup = null
@@ -158,7 +164,7 @@ library hAttrUnit initializer init needs hAttrHunt
 	                call GroupRemoveUnit( tempGroup , tempUnit )
 	                //
 	                if( is.hero(tempUnit) )then
-		                call hAttrExt_addPunishCurrent( tempUnit , 100 , 0 )
+		                call attrExt.addPunishCurrent( tempUnit , 100 , 0 )
 	                endif
 	            	//
 					set tempUnit = null
@@ -167,10 +173,10 @@ library hAttrUnit initializer init needs hAttrHunt
 	        call DestroyGroup( tempGroup )
 	        set tempGroup = null
 		endif
-	endfunction
+	endmethod
 
 	/* 单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害) */
-	private function triggerUnitbeHuntCall takes nothing returns nothing
+	private static method triggerUnitbeHuntCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local unit fromUnit = time.getUnit(t,801)
 		local unit toUnit = time.getUnit(t,802)
@@ -178,80 +184,80 @@ library hAttrUnit initializer init needs hAttrHunt
 		local real oldLife = time.getReal(t,804)
 		local hAttrHuntBean bean = 0
 		//计算攻击特效
-		local real fromUnitLifeBack = hAttrEffect_getLifeBack(fromUnit)
-		local real fromUnitManaBack = hAttrEffect_getManaBack(fromUnit)
-		local real fromUnitAttackSpeed = hAttrEffect_getAttackSpeed(fromUnit)
-		local real fromUnitAttackPhysical = hAttrEffect_getAttackPhysical(fromUnit)
-		local real fromUnitAttackMagic = hAttrEffect_getAttackMagic(fromUnit)
-		local real fromUnitMove = hAttrEffect_getMove(fromUnit)
-		local real fromUnitAim = hAttrEffect_getAim(fromUnit)
-		local real fromUnitStr = hAttrEffect_getStr(fromUnit)
-		local real fromUnitAgi = hAttrEffect_getAgi(fromUnit)
-		local real fromUnitInt = hAttrEffect_getInt(fromUnit)
-		local real fromUnitKnocking = hAttrEffect_getKnocking(fromUnit)
-		local real fromUnitViolence = hAttrEffect_getViolence(fromUnit)
-		local real fromUnitHemophagia = hAttrEffect_getHemophagia(fromUnit)
-		local real fromUnitHemophagiaSkill = hAttrEffect_getHemophagiaSkill(fromUnit)
-		local real fromUnitSplit = hAttrEffect_getSplit(fromUnit)
-		local real fromUnitLuck = hAttrEffect_getLuck(fromUnit)
-		local real fromUnitHuntAmplitude = hAttrEffect_getHuntAmplitude(fromUnit)
-		local real fromUnitPoison = hAttrEffect_getPoison(fromUnit)
-		local real fromUnitDry = hAttrEffect_getDry(fromUnit)
-		local real fromUnitFreeze = hAttrEffect_getFreeze(fromUnit)
-		local real fromUnitCold = hAttrEffect_getCold(fromUnit)
-		local real fromUnitBlunt = hAttrEffect_getBlunt(fromUnit)
-		local real fromUnitCorrosion = hAttrEffect_getCorrosion(fromUnit)
-		local real fromUnitChaos = hAttrEffect_getChaos(fromUnit)
-		local real fromUnitTwine = hAttrEffect_getTwine(fromUnit)
-		local real fromUnitBlind = hAttrEffect_getBlind(fromUnit)
-		local real fromUnitTortua = hAttrEffect_getTortua(fromUnit)
-		local real fromUnitWeak = hAttrEffect_getWeak(fromUnit)
-		local real fromUnitBound = hAttrEffect_getBound(fromUnit)
-		local real fromUnitFoolish = hAttrEffect_getFoolish(fromUnit)
-		local real fromUnitLazy = hAttrEffect_getLazy(fromUnit)
-		local real fromUnitSwim = hAttrEffect_getSwim(fromUnit)
-		local real fromUnitBreak = hAttrEffect_getBreak(fromUnit)
-		local real fromUnitHeavy = hAttrEffect_getHeavy(fromUnit)
-		local real fromUnitUnluck = hAttrEffect_getUnluck(fromUnit)
+		local real fromUnitLifeBack = attrEffect.getLifeBack(fromUnit)
+		local real fromUnitManaBack = attrEffect.getManaBack(fromUnit)
+		local real fromUnitAttackSpeed = attrEffect.getAttackSpeed(fromUnit)
+		local real fromUnitAttackPhysical = attrEffect.getAttackPhysical(fromUnit)
+		local real fromUnitAttackMagic = attrEffect.getAttackMagic(fromUnit)
+		local real fromUnitMove = attrEffect.getMove(fromUnit)
+		local real fromUnitAim = attrEffect.getAim(fromUnit)
+		local real fromUnitStr = attrEffect.getStr(fromUnit)
+		local real fromUnitAgi = attrEffect.getAgi(fromUnit)
+		local real fromUnitInt = attrEffect.getInt(fromUnit)
+		local real fromUnitKnocking = attrEffect.getKnocking(fromUnit)
+		local real fromUnitViolence = attrEffect.getViolence(fromUnit)
+		local real fromUnitHemophagia = attrEffect.getHemophagia(fromUnit)
+		local real fromUnitHemophagiaSkill = attrEffect.getHemophagiaSkill(fromUnit)
+		local real fromUnitSplit = attrEffect.getSplit(fromUnit)
+		local real fromUnitLuck = attrEffect.getLuck(fromUnit)
+		local real fromUnitHuntAmplitude = attrEffect.getHuntAmplitude(fromUnit)
+		local real fromUnitPoison = attrEffect.getPoison(fromUnit)
+		local real fromUnitDry = attrEffect.getDry(fromUnit)
+		local real fromUnitFreeze = attrEffect.getFreeze(fromUnit)
+		local real fromUnitCold = attrEffect.getCold(fromUnit)
+		local real fromUnitBlunt = attrEffect.getBlunt(fromUnit)
+		local real fromUnitCorrosion = attrEffect.getCorrosion(fromUnit)
+		local real fromUnitChaos = attrEffect.getChaos(fromUnit)
+		local real fromUnitTwine = attrEffect.getTwine(fromUnit)
+		local real fromUnitBlind = attrEffect.getBlind(fromUnit)
+		local real fromUnitTortua = attrEffect.getTortua(fromUnit)
+		local real fromUnitWeak = attrEffect.getWeak(fromUnit)
+		local real fromUnitBound = attrEffect.getBound(fromUnit)
+		local real fromUnitFoolish = attrEffect.getFoolish(fromUnit)
+		local real fromUnitLazy = attrEffect.getLazy(fromUnit)
+		local real fromUnitSwim = attrEffect.getSwim(fromUnit)
+		local real fromUnitBreak = attrEffect.getBreak(fromUnit)
+		local real fromUnitHeavy = attrEffect.getHeavy(fromUnit)
+		local real fromUnitUnluck = attrEffect.getUnluck(fromUnit)
 
-		local real fromUnitLifeBackDuring = hAttrEffect_getLifeBackDuring(fromUnit)
-		local real fromUnitManaBackDuring = hAttrEffect_getManaBackDuring(fromUnit)
-		local real fromUnitAttackSpeedDuring = hAttrEffect_getAttackSpeedDuring(fromUnit)
-		local real fromUnitAttackPhysicalDuring = hAttrEffect_getAttackPhysicalDuring(fromUnit)
-		local real fromUnitAttackMagicDuring = hAttrEffect_getAttackMagicDuring(fromUnit)
-		local real fromUnitMoveDuring = hAttrEffect_getMoveDuring(fromUnit)
-		local real fromUnitAimDuring = hAttrEffect_getAimDuring(fromUnit)
-		local real fromUnitStrDuring = hAttrEffect_getStrDuring(fromUnit)
-		local real fromUnitAgiDuring = hAttrEffect_getAgiDuring(fromUnit)
-		local real fromUnitIntDuring = hAttrEffect_getIntDuring(fromUnit)
-		local real fromUnitKnockingDuring = hAttrEffect_getKnockingDuring(fromUnit)
-		local real fromUnitViolenceDuring = hAttrEffect_getViolenceDuring(fromUnit)
-		local real fromUnitHemophagiaDuring = hAttrEffect_getHemophagiaDuring(fromUnit)
-		local real fromUnitHemophagiaSkillDuring = hAttrEffect_getHemophagiaSkillDuring(fromUnit)
-		local real fromUnitSplitDuring = hAttrEffect_getSplitDuring(fromUnit)
-		local real fromUnitLuckDuring = hAttrEffect_getLuckDuring(fromUnit)
-		local real fromUnitHuntAmplitudeDuring = hAttrEffect_getHuntAmplitudeDuring(fromUnit)
-		local real fromUnitPoisonDuring = hAttrEffect_getPoisonDuring(fromUnit)
-		local real fromUnitDryDuring = hAttrEffect_getDryDuring(fromUnit)
-		local real fromUnitFreezeDuring = hAttrEffect_getFreezeDuring(fromUnit)
-		local real fromUnitColdDuring = hAttrEffect_getColdDuring(fromUnit)
-		local real fromUnitBluntDuring = hAttrEffect_getBluntDuring(fromUnit)
-		local real fromUnitCorrosionDuring = hAttrEffect_getCorrosionDuring(fromUnit)
-		local real fromUnitChaosDuring = hAttrEffect_getChaosDuring(fromUnit)
-		local real fromUnitTwineDuring = hAttrEffect_getTwineDuring(fromUnit)
-		local real fromUnitBlindDuring = hAttrEffect_getBlindDuring(fromUnit)
-		local real fromUnitTortuaDuring = hAttrEffect_getTortuaDuring(fromUnit)
-		local real fromUnitWeakDuring = hAttrEffect_getWeakDuring(fromUnit)
-		local real fromUnitBoundDuring = hAttrEffect_getBoundDuring(fromUnit)
-		local real fromUnitFoolishDuring = hAttrEffect_getFoolishDuring(fromUnit)
-		local real fromUnitLazyDuring = hAttrEffect_getLazyDuring(fromUnit)
-		local real fromUnitSwimDuring = hAttrEffect_getSwimDuring(fromUnit)
-		local real fromUnitBreakDuring = hAttrEffect_getBreakDuring(fromUnit)
-		local real fromUnitHeavyDuring = hAttrEffect_getHeavyDuring(fromUnit)
-		local real fromUnitUnluckDuring = hAttrEffect_getUnluckDuring(fromUnit)
+		local real fromUnitLifeBackDuring = attrEffect.getLifeBackDuring(fromUnit)
+		local real fromUnitManaBackDuring = attrEffect.getManaBackDuring(fromUnit)
+		local real fromUnitAttackSpeedDuring = attrEffect.getAttackSpeedDuring(fromUnit)
+		local real fromUnitAttackPhysicalDuring = attrEffect.getAttackPhysicalDuring(fromUnit)
+		local real fromUnitAttackMagicDuring = attrEffect.getAttackMagicDuring(fromUnit)
+		local real fromUnitMoveDuring = attrEffect.getMoveDuring(fromUnit)
+		local real fromUnitAimDuring = attrEffect.getAimDuring(fromUnit)
+		local real fromUnitStrDuring = attrEffect.getStrDuring(fromUnit)
+		local real fromUnitAgiDuring = attrEffect.getAgiDuring(fromUnit)
+		local real fromUnitIntDuring = attrEffect.getIntDuring(fromUnit)
+		local real fromUnitKnockingDuring = attrEffect.getKnockingDuring(fromUnit)
+		local real fromUnitViolenceDuring = attrEffect.getViolenceDuring(fromUnit)
+		local real fromUnitHemophagiaDuring = attrEffect.getHemophagiaDuring(fromUnit)
+		local real fromUnitHemophagiaSkillDuring = attrEffect.getHemophagiaSkillDuring(fromUnit)
+		local real fromUnitSplitDuring = attrEffect.getSplitDuring(fromUnit)
+		local real fromUnitLuckDuring = attrEffect.getLuckDuring(fromUnit)
+		local real fromUnitHuntAmplitudeDuring = attrEffect.getHuntAmplitudeDuring(fromUnit)
+		local real fromUnitPoisonDuring = attrEffect.getPoisonDuring(fromUnit)
+		local real fromUnitDryDuring = attrEffect.getDryDuring(fromUnit)
+		local real fromUnitFreezeDuring = attrEffect.getFreezeDuring(fromUnit)
+		local real fromUnitColdDuring = attrEffect.getColdDuring(fromUnit)
+		local real fromUnitBluntDuring = attrEffect.getBluntDuring(fromUnit)
+		local real fromUnitCorrosionDuring = attrEffect.getCorrosionDuring(fromUnit)
+		local real fromUnitChaosDuring = attrEffect.getChaosDuring(fromUnit)
+		local real fromUnitTwineDuring = attrEffect.getTwineDuring(fromUnit)
+		local real fromUnitBlindDuring = attrEffect.getBlindDuring(fromUnit)
+		local real fromUnitTortuaDuring = attrEffect.getTortuaDuring(fromUnit)
+		local real fromUnitWeakDuring = attrEffect.getWeakDuring(fromUnit)
+		local real fromUnitBoundDuring = attrEffect.getBoundDuring(fromUnit)
+		local real fromUnitFoolishDuring = attrEffect.getFoolishDuring(fromUnit)
+		local real fromUnitLazyDuring = attrEffect.getLazyDuring(fromUnit)
+		local real fromUnitSwimDuring = attrEffect.getSwimDuring(fromUnit)
+		local real fromUnitBreakDuring = attrEffect.getBreakDuring(fromUnit)
+		local real fromUnitHeavyDuring = attrEffect.getHeavyDuring(fromUnit)
+		local real fromUnitUnluckDuring = attrEffect.getUnluckDuring(fromUnit)
 
 		call time.delTimer(t)
-		call hAttr_subLife(toUnit,damage,0)
+		call attr.subLife(toUnit,damage,0)
 		call hunit.setLife(toUnit,oldLife)
 
 		call bean.create()
@@ -260,7 +266,7 @@ library hAttrUnit initializer init needs hAttrHunt
 		set bean.damage = damage
 		set bean.huntKind = "attack"
 		set bean.huntType = "physical"
-		call hAttrHunt_huntUnit( bean )
+		call attrHunt.huntUnit( bean )
 		call bean.destroy()
 
 		//伤害特效
@@ -273,223 +279,223 @@ library hAttrUnit initializer init needs hAttrHunt
 		   set bean.special = "effect_life_back"
 		   set bean.specialVal = fromUnitLifeBack
 		   set bean.specialDuring = fromUnitLifeBackDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitManaBack != 0 and fromUnitManaBackDuring > 0 ) then
 		   set bean.special = "effect_mana_back"
 		   set bean.specialVal = fromUnitManaBack
 		   set bean.specialDuring = fromUnitManaBackDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitAttackSpeed != 0 and fromUnitAttackSpeedDuring > 0 ) then
 		   set bean.special = "effect_attack_speed"
 		   set bean.specialVal = fromUnitAttackSpeed
 		   set bean.specialDuring = fromUnitAttackSpeedDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitAttackPhysical != 0 and fromUnitAttackPhysicalDuring > 0 ) then
 		   set bean.special = "effect_attack_physical"
 		   set bean.specialVal = fromUnitAttackPhysical
 		   set bean.specialDuring = fromUnitAttackPhysicalDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitAttackMagic != 0 and fromUnitAttackMagicDuring > 0 ) then
 		   set bean.special = "effect_attack_magic"
 		   set bean.specialVal = fromUnitAttackMagic
 		   set bean.specialDuring = fromUnitAttackMagicDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitMove != 0 and fromUnitMoveDuring > 0 ) then
 		   set bean.special = "effect_move"
 		   set bean.specialVal = fromUnitMove
 		   set bean.specialDuring = fromUnitMoveDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitAim != 0 and fromUnitAimDuring > 0 ) then
 		   set bean.special = "effect_aim"
 		   set bean.specialVal = fromUnitAim
 		   set bean.specialDuring = fromUnitAimDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitStr != 0 and fromUnitStrDuring > 0 ) then
 		   set bean.special = "effect_str"
 		   set bean.specialVal = fromUnitStr
 		   set bean.specialDuring = fromUnitStrDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitAgi != 0 and fromUnitAgiDuring > 0 ) then
 		   set bean.special = "effect_agi"
 		   set bean.specialVal = fromUnitAgi
 		   set bean.specialDuring = fromUnitAgiDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitInt != 0 and fromUnitIntDuring > 0 ) then
 		   set bean.special = "effect_int"
 		   set bean.specialVal = fromUnitInt
 		   set bean.specialDuring = fromUnitIntDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitKnocking != 0 and fromUnitKnockingDuring > 0 ) then
 		   set bean.special = "effect_knocking"
 		   set bean.specialVal = fromUnitKnocking
 		   set bean.specialDuring = fromUnitKnockingDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitViolence != 0 and fromUnitViolenceDuring > 0 ) then
 		   set bean.special = "effect_violence"
 		   set bean.specialVal = fromUnitViolence
 		   set bean.specialDuring = fromUnitViolenceDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitHemophagia != 0 and fromUnitHemophagiaDuring > 0 ) then
 		   set bean.special = "effect_hemophagia"
 		   set bean.specialVal = fromUnitHemophagia
 		   set bean.specialDuring = fromUnitHemophagiaDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitHemophagiaSkill != 0 and fromUnitHemophagiaSkillDuring > 0 ) then
 		   set bean.special = "effect_hemophagia_skill"
 		   set bean.specialVal = fromUnitHemophagiaSkill
 		   set bean.specialDuring = fromUnitHemophagiaSkillDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitSplit != 0 and fromUnitSplitDuring > 0 ) then
 		   set bean.special = "effect_split"
 		   set bean.specialVal = fromUnitSplit
 		   set bean.specialDuring = fromUnitSplitDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitLuck != 0 and fromUnitLuckDuring > 0 ) then
 		   set bean.special = "effect_luck"
 		   set bean.specialVal = fromUnitLuck
 		   set bean.specialDuring = fromUnitLuckDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitHuntAmplitude != 0 and fromUnitHuntAmplitudeDuring > 0 ) then
 		   set bean.special = "effect_hunt_amplitude"
 		   set bean.specialVal = fromUnitHuntAmplitude
 		   set bean.specialDuring = fromUnitHuntAmplitudeDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitPoison != 0 and fromUnitPoisonDuring > 0 ) then
 		   set bean.special = "effect_poison"
 		   set bean.specialVal = fromUnitPoison
 		   set bean.specialDuring = fromUnitPoisonDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitDry != 0 and fromUnitDryDuring > 0 ) then
 		   set bean.special = "effect_dry"
 		   set bean.specialVal = fromUnitDry
 		   set bean.specialDuring = fromUnitDryDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitFreeze != 0 and fromUnitFreezeDuring > 0 ) then
 		   set bean.special = "effect_freeze"
 		   set bean.specialVal = fromUnitFreeze
 		   set bean.specialDuring = fromUnitFreezeDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitCold != 0 and fromUnitColdDuring > 0 ) then
 		   set bean.special = "effect_cold"
 		   set bean.specialVal = fromUnitCold
 		   set bean.specialDuring = fromUnitColdDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitBlunt != 0 and fromUnitBluntDuring > 0 ) then
 		   set bean.special = "effect_blunt"
 		   set bean.specialVal = fromUnitBlunt
 		   set bean.specialDuring = fromUnitBluntDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitCorrosion != 0 and fromUnitCorrosionDuring > 0 ) then
 		   set bean.special = "effect_corrosion"
 		   set bean.specialVal = fromUnitCorrosion
 		   set bean.specialDuring = fromUnitCorrosionDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitChaos != 0 and fromUnitChaosDuring > 0 ) then
 		   set bean.special = "effect_chaos"
 		   set bean.specialVal = fromUnitChaos
 		   set bean.specialDuring = fromUnitChaosDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitTwine != 0 and fromUnitTwineDuring > 0 ) then
 		   set bean.special = "effect_twine"
 		   set bean.specialVal = fromUnitTwine
 		   set bean.specialDuring = fromUnitTwineDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitBlind != 0 and fromUnitBlindDuring > 0 ) then
 		   set bean.special = "effect_blind"
 		   set bean.specialVal = fromUnitBlind
 		   set bean.specialDuring = fromUnitBlindDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitTortua != 0 and fromUnitTortuaDuring > 0 ) then
 		   set bean.special = "effect_tortua"
 		   set bean.specialVal = fromUnitTortua
 		   set bean.specialDuring = fromUnitTortuaDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitWeak != 0 and fromUnitWeakDuring > 0 ) then
 		   set bean.special = "effect_weak"
 		   set bean.specialVal = fromUnitWeak
 		   set bean.specialDuring = fromUnitWeakDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitBound != 0 and fromUnitBoundDuring > 0 ) then
 		   set bean.special = "effect_bound"
 		   set bean.specialVal = fromUnitBound
 		   set bean.specialDuring = fromUnitBoundDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitFoolish != 0 and fromUnitFoolishDuring > 0 ) then
 		   set bean.special = "effect_foolish"
 		   set bean.specialVal = fromUnitFoolish
 		   set bean.specialDuring = fromUnitFoolishDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitLazy != 0 and fromUnitLazyDuring > 0 ) then
 		   set bean.special = "effect_lazy"
 		   set bean.specialVal = fromUnitLazy
 		   set bean.specialDuring = fromUnitLazyDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitSwim != 0 and fromUnitSwimDuring > 0 ) then
 		   set bean.special = "effect_swim"
 		   set bean.specialVal = fromUnitSwim
 		   set bean.specialDuring = fromUnitSwimDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitBreak != 0 and fromUnitBreakDuring > 0 ) then
 		   set bean.special = "effect_break"
 		   set bean.specialVal = fromUnitBreak
 		   set bean.specialDuring = fromUnitBreakDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitHeavy != 0 and fromUnitHeavyDuring > 0 ) then
 		   set bean.special = "effect_heavy"
 		   set bean.specialVal = fromUnitHeavy
 		   set bean.specialDuring = fromUnitHeavyDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		if( fromUnitUnluck != 0 and fromUnitUnluckDuring > 0 ) then
 		   set bean.special = "effect_unluck"
 		   set bean.specialVal = fromUnitUnluck
 		   set bean.specialDuring = fromUnitUnluckDuring
-		   call hAttrHunt_huntUnit(bean)
+		   call attrHunt.huntUnit(bean)
 		endif
 		call bean.destroy()
-	endfunction
-	private function triggerUnitbeHuntAction takes nothing returns nothing
+	endmethod
+	private static method triggerUnitbeHuntAction takes nothing returns nothing
 		local unit fromUnit = GetEventDamageSource()
 		local unit toUnit = GetTriggerUnit()
 		local real damage = GetEventDamage()
 		local real oldLife = hunit.getLife(toUnit)
 		local timer t = null
 		if(damage>0.4)then
-			call hAttr_addLife(toUnit,damage,0)
-			set t = time.setTimeout(0,function triggerUnitbeHuntCall)
+			call attr.addLife(toUnit,damage,0)
+			set t = time.setTimeout(0,function thistype.triggerUnitbeHuntCall)
 			call time.setUnit(t,801,fromUnit)
 			call time.setUnit(t,802,toUnit)
 			call time.setReal(t,803,damage)
@@ -497,18 +503,18 @@ library hAttrUnit initializer init needs hAttrHunt
 		endif
 		set fromUnit = null
 		set toUnit = null
-	endfunction
+	endmethod
 
 	/* 英雄升级 - 计算白字 */
-	private function triggerUnitHeroLevelAction takes nothing returns nothing
+	private static method triggerUnitHeroLevelAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
-		call hAttr_setStrWhite( u , GetHeroStr(u,false) , 0 )
-		call hAttr_setAgiWhite( u , GetHeroAgi(u,false) , 0 )
-		call hAttr_setIntWhite( u , GetHeroInt(u,false) , 0 )
-		call hAttrExt_addHelp( u , 2 , 0 )
-		call hAttrExt_addWeight( u , 0.25 , 0 )
-		call hAttrExt_addLifeSource( u , 10 , 0 )
-		call hAttrExt_addManaSource( u , 10 , 0 )
+		call attr.setStrWhite( u , GetHeroStr(u,false) , 0 )
+		call attr.setAgiWhite( u , GetHeroAgi(u,false) , 0 )
+		call attr.setIntWhite( u , GetHeroInt(u,false) , 0 )
+		call attrExt.addHelp( u , 2 , 0 )
+		call attrExt.addWeight( u , 0.25 , 0 )
+		call attrExt.addLifeSource( u , 10 , 0 )
+		call attrExt.addManaSource( u , 10 , 0 )
 
 		//@触发升级事件
 		set hevtBean = hEvtBean.create()
@@ -518,16 +524,16 @@ library hAttrUnit initializer init needs hAttrHunt
         call hevtBean.destroy()
 
 		set u = null
-	endfunction
+	endmethod
 
 	/* 单位死亡（一般排除玩家的英雄） */
-	private function triggerUnitDeathAction takes nothing returns nothing
+	private static method triggerUnitDeathAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		if( is.hero(u)==false and IsUnitInGroup(u, ATTR_GROUP) ) then
 			call groupOut(u)
 		endif
 		if( PUNISH_SWITCH == true )then
-			call SaveTextTagHandle(hash, GetHandleId(u), 7896 , null)
+			call SaveTextTagHandle(hash_attr_unit, GetHandleId(u), 7896 , null)
 		endif
 		
 		//@触发死亡事件
@@ -548,20 +554,20 @@ library hAttrUnit initializer init needs hAttrHunt
         call hevtBean.destroy()
 
 		set u = null
-	endfunction
+	endmethod
 
 	/* 注册单位 */
-	private function triggerInAction takes nothing returns nothing
+	private static method triggerInAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local integer utid = GetUnitTypeId(u)
 		local integer uhid = GetHandleId(u)
 		local boolean isBind = false
 		//排除单位类型
-		if(utid==hAbility_ABILITY_TOKEN or utid==hAbility_ABILITY_BREAK or utid==hAbility_ABILITY_SWIM)then
+		if(utid==ABILITY_TOKEN or utid==ABILITY_BREAK or utid==ABILITY_SWIM)then
 			return
 		endif
 		//注册事件
-		set isBind = LoadBoolean( hash , uhid , 1 )
+		set isBind = LoadBoolean( hash_attr_unit , uhid , 1 )
 		if(isBind != true)then
 			call console.log(GetUnitName(u)+"注册了属性")
 			call GroupAddUnit(ATTR_GROUP, u)
@@ -572,32 +578,29 @@ library hAttrUnit initializer init needs hAttrHunt
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
 	        endif
 	        call punishTtg(u)
-	        call SaveBoolean( hash , uhid , 1 , true )
+	        call SaveBoolean( hash_attr_unit , uhid , 1 , true )
 		endif
         set u = null
-	endfunction
+	endmethod
 
 	/* 初始化 */
-	private function init takes nothing returns nothing
-
+	public static method initSet takes nothing returns nothing
 		local trigger triggerIn = CreateTrigger()
-		//
-		set hash = InitHashtable()
 		//触发设定
 		set ATTR_TRIGGER_UNIT_BEHUNT = CreateTrigger()
 		set ATTR_TRIGGER_HERO_LEVEL = CreateTrigger()
 		set ATTR_TRIGGER_UNIT_DEATH = CreateTrigger()
-		call TriggerAddAction(ATTR_TRIGGER_UNIT_BEHUNT,function triggerUnitbeHuntAction)
-		call TriggerAddAction(ATTR_TRIGGER_HERO_LEVEL, function triggerUnitHeroLevelAction)
-		call TriggerAddAction(ATTR_TRIGGER_UNIT_DEATH, function triggerUnitDeathAction)
+		call TriggerAddAction(ATTR_TRIGGER_UNIT_BEHUNT,function thistype.triggerUnitbeHuntAction)
+		call TriggerAddAction(ATTR_TRIGGER_HERO_LEVEL, function thistype.triggerUnitHeroLevelAction)
+		call TriggerAddAction(ATTR_TRIGGER_UNIT_DEATH, function thistype.triggerUnitDeathAction)
 
 		//单位进入区域注册
 		call TriggerRegisterEnterRectSimple( triggerIn , GetPlayableMapRect() )
-		call TriggerAddAction( triggerIn , function triggerInAction)
+		call TriggerAddAction( triggerIn , function thistype.triggerInAction)
 
-		call time.setInterval( 0.45 , function lifemanaback )
-		call time.setInterval( 5.00 , function punishback )
+		call time.setInterval( 0.45 , function thistype.lifemanaback )
+		call time.setInterval( 5.00 , function thistype.punishback )
 
-	endfunction
+	endmethod
 
-endlibrary
+endstruct

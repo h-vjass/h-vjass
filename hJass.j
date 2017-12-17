@@ -1,12 +1,9 @@
 
-//载入 struct
-#include "struct/abstract.j"
-
 //载入 lib
 #include "lib/abstract.j"
 
 //test
-#include "lib/test.j"
+#include "hTest.j"
 
 //载入 主游戏流程
 //#include "schedule/abstract.j"
@@ -35,7 +32,7 @@ library hJass initializer init needs hTest //hTest | schedule
 	    loop
 	        exitwhen i>total
 	            set prereadUnits[i] = CreateUnitAtLoc(Player(PLAYER_NEUTRAL_PASSIVE), prereads[i], GetRectCenter(GetPlayableMapRect()), bj_UNIT_FACING)
-	            call hAttr_regAllAttrSkill(prereadUnits[i])
+	            call attr.regAllAttrSkill(prereadUnits[i])
 	        set i = i+1
 	    endloop
 	    call PolledWait(0.00)
@@ -57,14 +54,43 @@ library hJass initializer init needs hTest //hTest | schedule
 
 	private function init takes nothing returns nothing
 		local trigger startTrigger = null
+		//系统初始化
+		set is = hIs.create()
+		set time = hTime.create()
+		set math = hMath.create()
+		set console = hConsole.create()
+		set media = hMedia.create()
+		set camera = hCamera.create()
+		set award = hAward.create()
+		set evt = hEvt.create()
+		set attr = hAttr.create()
+		set attrExt = hAttrExt.create()
+		set attrEffect = hAttrEffect.create()
+		set attrNatural = hAttrNatural.create()
+		set attrHunt = hAttrHunt.create()
+		set attrUnit = hAttrUnit.create()
+		set hmb = hMultiboard.create()
+
+		set heffect = hEffect.create()
+		set hrect = hRect.create()
+		set hunit = hUnit.create()
+		set hgroup = hGroup.create()
+		set hmsg = hMsg.create()
+		set hplayer = hPlayer.create()
+		set hweather = hWeather.create()
+		set hability = hAbility.create()
+		//initset
+		call attrUnit.initSet()
+		call hmb.initSet()
+
 		//预读
 		call preread()
 		//镜头模式
 		call camera.setModel("zoomin")
 		//属性 - 硬直条
-		call hAttrUnit_punishTtgIsOpen(false)
-		//call hAttrUnit_punishTtgIsOnlyHero(false)
-		//call hAttrUnit_punishTtgHeight(250.00)
+		call attrUnit.punishTtgIsOpen(false)
+		call attrUnit.punishTtgIsOnlyHero(false)
+		call attrUnit.punishTtgHeight(250.00)
 		//迷雾
 		call FogEnable( true )
 		//阴影

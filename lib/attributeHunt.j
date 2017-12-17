@@ -1,4 +1,8 @@
 /* 属性 - 伤害 */
+globals
+    hAttrHunt attrHunt = 0
+endglobals
+
 struct hAttrHuntBean
 
     public static unit fromUnit = null
@@ -21,6 +25,21 @@ struct hAttrHuntBean
     static method create takes nothing returns hAttrHuntBean
         local hAttrHuntBean x = 0
         set x = hAttrHuntBean.allocate()
+        set x.fromUnit = null
+        set x.toUnit = null
+        set x.huntEff = null
+        set x.damage = 0
+        set x.huntKind = null
+        set x.huntType = null
+        set x.isBreak = null
+        set x.isNoAvoid = false
+        set x.special = null
+        set x.specialVal = 0
+        set x.specialDuring = 0
+        set x.whichGroup = null
+        set x.whichGroupRepeat = null
+        set x.whichGroupHuntEff = null
+        set x.whichGroupHuntEffLoc = null
         return x
     endmethod
     method destroy takes nothing returns nothing
@@ -53,7 +72,7 @@ struct hAttrHuntBean
     endmethod
 endstruct
 
-library hAttrHunt initializer init needs hAttrNatural
+struct hAttrHunt
 
 	/**
      * 伤害单位
@@ -119,7 +138,7 @@ library hAttrHunt initializer init needs hAttrNatural
      * specialVal特殊数值：作用于特殊效果的数值
      * specialDuring特殊持续时间
      */
-    public function huntUnit takes hAttrHuntBean bean returns nothing
+    public static method huntUnit takes hAttrHuntBean bean returns nothing
     	
     	local real realDamage = 0
         local real punishEffectRatio = 0
@@ -127,45 +146,45 @@ library hAttrHunt initializer init needs hAttrNatural
 
         local real fromUnitPunishHeavy = 1
 
-    	local real fromUnitAttackPhysical = hAttr_getAttackPhysical(bean.fromUnit)
-        local real fromUnitAttackMagic = hAttr_getAttackMagic(bean.fromUnit)
-    	local real fromUnitAim = hAttrExt_getAim(bean.fromUnit)
-    	local real fromUnitKnocking = hAttrExt_getKnocking(bean.fromUnit)
-    	local real fromUnitViolence = hAttrExt_getViolence(bean.fromUnit)
-    	local real fromUnitHemophagia = hAttrExt_getHemophagia(bean.fromUnit)
-    	local real fromUnitHemophagiaSkill = hAttrExt_getHemophagiaSkill(bean.fromUnit)
-        local real fromUnitSplit = hAttrExt_getSplit(bean.fromUnit)
+    	local real fromUnitAttackPhysical = attr.getAttackPhysical(bean.fromUnit)
+        local real fromUnitAttackMagic = attr.getAttackMagic(bean.fromUnit)
+    	local real fromUnitAim = attrExt.getAim(bean.fromUnit)
+    	local real fromUnitKnocking = attrExt.getKnocking(bean.fromUnit)
+    	local real fromUnitViolence = attrExt.getViolence(bean.fromUnit)
+    	local real fromUnitHemophagia = attrExt.getHemophagia(bean.fromUnit)
+    	local real fromUnitHemophagiaSkill = attrExt.getHemophagiaSkill(bean.fromUnit)
+        local real fromUnitSplit = attrExt.getSplit(bean.fromUnit)
     	local real fromUnitRange = 200.00
-    	local real fromUnitLuck = hAttrExt_getLuck(bean.fromUnit)
-        local real fromUnitHuntAmplitude = hAttrExt_getHuntAmplitude(bean.fromUnit)
-        local real fromUnitNaturalFire = hAttrNatural_getFire(bean.fromUnit)
-        local real fromUnitNaturalSoil = hAttrNatural_getSoil(bean.fromUnit)
-        local real fromUnitNaturalWater = hAttrNatural_getWater(bean.fromUnit)
-        local real fromUnitNaturalWind = hAttrNatural_getWind(bean.fromUnit)
-        local real fromUnitNaturalLight = hAttrNatural_getLight(bean.fromUnit)
-        local real fromUnitNaturalDark = hAttrNatural_getDark(bean.fromUnit)
-        local real fromUnitNaturalWood = hAttrNatural_getWood(bean.fromUnit)
-    	local real fromUnitNaturalThunder = hAttrNatural_getThunder(bean.fromUnit)
+    	local real fromUnitLuck = attrExt.getLuck(bean.fromUnit)
+        local real fromUnitHuntAmplitude = attrExt.getHuntAmplitude(bean.fromUnit)
+        local real fromUnitNaturalFire = attrNatural.getFire(bean.fromUnit)
+        local real fromUnitNaturalSoil = attrNatural.getSoil(bean.fromUnit)
+        local real fromUnitNaturalWater = attrNatural.getWater(bean.fromUnit)
+        local real fromUnitNaturalWind = attrNatural.getWind(bean.fromUnit)
+        local real fromUnitNaturalLight = attrNatural.getLight(bean.fromUnit)
+        local real fromUnitNaturalDark = attrNatural.getDark(bean.fromUnit)
+        local real fromUnitNaturalWood = attrNatural.getWood(bean.fromUnit)
+    	local real fromUnitNaturalThunder = attrNatural.getThunder(bean.fromUnit)
 
-    	local real toUnitDefend = hAttr_getDefend(bean.toUnit)
-    	local real toUnitResistance = hAttrExt_getResistance(bean.toUnit)
-    	local real toUnitToughness = hAttrExt_getToughness(bean.toUnit)
-    	local real toUnitAvoid = hAttrExt_getAvoid(bean.toUnit)
-    	local real toUnitMortalOppose = hAttrExt_getMortalOppose(bean.toUnit)
-    	local real toUnitSwimOppose = hAttrExt_getSwimOppose(bean.toUnit)
-    	local real toUnitLuck = hAttrExt_getLuck(bean.toUnit)
-    	local real toUnitInvincible = hAttrExt_getInvincible(bean.toUnit)
-    	local real toUnitHuntRebound = hAttrExt_getHuntRebound(bean.toUnit)
-    	local real toUnitCure = hAttrExt_getCure(bean.toUnit)
-        local real toUnitPunishOppose = hAttrExt_getPunishOppose(bean.toUnit)
-        local real toUnitNaturalFireOppose = hAttrNatural_getFireOppose(bean.toUnit)
-        local real toUnitNaturalSoilOppose = hAttrNatural_getSoilOppose(bean.toUnit)
-        local real toUnitNaturalWaterOppose = hAttrNatural_getWaterOppose(bean.toUnit)
-        local real toUnitNaturalWindOppose = hAttrNatural_getWindOppose(bean.toUnit)
-        local real toUnitNaturalLightOppose = hAttrNatural_getLightOppose(bean.toUnit)
-        local real toUnitNaturalDarkOppose = hAttrNatural_getDarkOppose(bean.toUnit)
-        local real toUnitNaturalWoodOppose = hAttrNatural_getWoodOppose(bean.toUnit)
-        local real toUnitNaturalThunderOppose = hAttrNatural_getThunderOppose(bean.toUnit)
+    	local real toUnitDefend = attr.getDefend(bean.toUnit)
+    	local real toUnitResistance = attrExt.getResistance(bean.toUnit)
+    	local real toUnitToughness = attrExt.getToughness(bean.toUnit)
+    	local real toUnitAvoid = attrExt.getAvoid(bean.toUnit)
+    	local real toUnitMortalOppose = attrExt.getMortalOppose(bean.toUnit)
+    	local real toUnitSwimOppose = attrExt.getSwimOppose(bean.toUnit)
+    	local real toUnitLuck = attrExt.getLuck(bean.toUnit)
+    	local real toUnitInvincible = attrExt.getInvincible(bean.toUnit)
+    	local real toUnitHuntRebound = attrExt.getHuntRebound(bean.toUnit)
+    	local real toUnitCure = attrExt.getCure(bean.toUnit)
+        local real toUnitPunishOppose = attrExt.getPunishOppose(bean.toUnit)
+        local real toUnitNaturalFireOppose = attrNatural.getFireOppose(bean.toUnit)
+        local real toUnitNaturalSoilOppose = attrNatural.getSoilOppose(bean.toUnit)
+        local real toUnitNaturalWaterOppose = attrNatural.getWaterOppose(bean.toUnit)
+        local real toUnitNaturalWindOppose = attrNatural.getWindOppose(bean.toUnit)
+        local real toUnitNaturalLightOppose = attrNatural.getLightOppose(bean.toUnit)
+        local real toUnitNaturalDarkOppose = attrNatural.getDarkOppose(bean.toUnit)
+        local real toUnitNaturalWoodOppose = attrNatural.getWoodOppose(bean.toUnit)
+        local real toUnitNaturalThunderOppose = attrNatural.getThunderOppose(bean.toUnit)
 
         local boolean isInvincible = false
 
@@ -596,20 +615,20 @@ library hAttrHunt initializer init needs hAttrNatural
                     if( bean.special == "effect_heavy" and bean.specialVal>1 ) then
                         set fromUnitPunishHeavy = fromUnitPunishHeavy * bean.specialVal
                     endif
-                    call hAttrExt_subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
+                    call attrExt.subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
 
-                    if(hAttrExt_getPunishCurrent(bean.toUnit) <= 0 ) then
-                        call hAttrExt_setPunishCurrent(bean.toUnit,hAttrExt_getPunish(bean.toUnit),0)
-                        set punishEffect = hAttr_getAttackSpeed(bean.toUnit)*punishEffectRatio
+                    if(attrExt.getPunishCurrent(bean.toUnit) <= 0 ) then
+                        call attrExt.setPunishCurrent(bean.toUnit,attrExt.getPunish(bean.toUnit),0)
+                        set punishEffect = attr.getAttackSpeed(bean.toUnit)*punishEffectRatio
                         if(punishEffect<1)then
                             set punishEffect = 1.00
                         endif
-                        call hAttr_subAttackSpeed( bean.toUnit , punishEffect , 5.00 )
-                        set punishEffect = hAttr_getMove(bean.toUnit)*punishEffectRatio
+                        call attr.subAttackSpeed( bean.toUnit , punishEffect , 5.00 )
+                        set punishEffect = attr.getMove(bean.toUnit)*punishEffectRatio
                         if(punishEffect<1)then
                             set punishEffect = 1.00
                         endif
-                        call hAttr_subMove( bean.toUnit , punishEffect , 5.00 )
+                        call attr.subMove( bean.toUnit , punishEffect , 5.00 )
                         call hmsg.style(hmsg.ttg2Unit(bean.toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0.05)
 
                         //@触发硬直事件
@@ -652,71 +671,71 @@ library hAttrHunt initializer init needs hAttrNatural
         if( isInvincible == false and bean.specialVal != 0 and bean.specialDuring > 0 )then
             if( bean.special == "null" ) then
             elseif( bean.special == "effect_life_back" ) then
-                call hAttrExt_addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_mana_back" ) then
-                call hAttrExt_addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_attack_speed" ) then
-                call hAttr_addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_attack_physical" ) then
-                call hAttr_addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_attack_magic" ) then
-                call hAttr_addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_move" ) then
-                call hAttr_addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_aim" ) then
-                call hAttrExt_addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_str" ) then
-                call hAttr_addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_agi" ) then
-                call hAttr_addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_int" ) then
-                call hAttr_addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attr.addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_knocking" ) then
-                call hAttrExt_addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_violence" ) then
-                call hAttrExt_addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_hemophagia" ) then
-                call hAttrExt_addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_hemophagia_skill" ) then
-                call hAttrExt_addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_split" ) then
-                call hAttrExt_addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_luck" ) then
-                call hAttrExt_addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_hunt_amplitude" ) then
-                call hAttrExt_addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
             endif
             if( bean.special == "null" ) then
             elseif( bean.special == "effect_poison" ) then
-                call hAttrExt_subLifeBack(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subLifeBack(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_dry" ) then
-                call hAttrExt_subManaBack(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subManaBack(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_freeze" ) then
-                call hAttr_subAttackSpeed(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subAttackSpeed(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_cold" ) then
-                call hAttr_subMove(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subMove(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_blunt" ) then
-                call hAttr_subAttackPhysical(bean.toUnit,bean.specialVal,bean.specialDuring)
-                call hAttr_subAttackMagic(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subAttackPhysical(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subAttackMagic(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_corrosion" ) then
-                call hAttr_subDefend(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subDefend(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_chaos" ) then
-                call hAttrExt_subResistance(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subResistance(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_twine" ) then
-                call hAttrExt_subAvoid(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subAvoid(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_blind" ) then
-                call hAttrExt_subAim(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subAim(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_tortua" ) then
-                call hAttrExt_subToughness(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subToughness(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_weak" ) then
-                call hAttr_subStr(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subStr(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_bound" ) then
-                call hAttr_subAgi(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subAgi(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_foolish" ) then
-                call hAttr_subInt(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attr.subInt(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_lazy" ) then
-                call hAttrExt_subKnocking(bean.toUnit,bean.specialVal,bean.specialDuring)
-                call hAttrExt_subViolence(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subKnocking(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subViolence(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_swim") then
                 if(toUnitSwimOppose!=0)then
                     set bean.specialVal = bean.specialVal - toUnitSwimOppose
@@ -742,19 +761,19 @@ library hAttrHunt initializer init needs hAttrNatural
                 call hevtBean.destroy()
                 //
                 if(GetRandomReal(1,100)<bean.specialVal and bean.specialDuring>0)then
-                    call hAbility_swim( bean.toUnit , bean.specialDuring )
+                    call hability.swim( bean.toUnit , bean.specialDuring )
                 endif
             elseif( bean.special == "effect_break" and GetRandomReal(1,100)<bean.specialVal ) then
-                set punishEffect = hAttr_getAttackSpeed(bean.toUnit)*punishEffectRatio
+                set punishEffect = attr.getAttackSpeed(bean.toUnit)*punishEffectRatio
                 if(punishEffect<1)then
                     set punishEffect = 1.00
                 endif
-                call hAttr_subAttackSpeed( bean.toUnit , punishEffect , bean.specialDuring )
-                set punishEffect = hAttr_getMove(bean.toUnit)*punishEffectRatio
+                call attr.subAttackSpeed( bean.toUnit , punishEffect , bean.specialDuring )
+                set punishEffect = attr.getMove(bean.toUnit)*punishEffectRatio
                 if(punishEffect<1)then
                     set punishEffect = 1.00
                 endif
-                call hAttr_subMove( bean.toUnit , punishEffect , bean.specialDuring )
+                call attr.subMove( bean.toUnit , punishEffect , bean.specialDuring )
                 
                 //@触发硬直事件
                 set hevtBean = hEvtBean.create()
@@ -767,7 +786,7 @@ library hAttrHunt initializer init needs hAttrNatural
                 call hevtBean.destroy()
 
             elseif( bean.special == "effect_unluck" ) then
-                call hAttrExt_subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call attrExt.subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
             endif
 
             //@触发伤害特效事件
@@ -801,12 +820,12 @@ library hAttrHunt initializer init needs hAttrNatural
             call hevtBean.destroy()
         endif
 
-    endfunction
+    endmethod
 
     /**
      * 伤害群
      */
-    public function huntGroup takes hAttrHuntBean bean returns nothing
+    public static method huntGroup takes hAttrHuntBean bean returns nothing
     	local unit u = null
         local group g = null
     	if( bean.whichGroupHuntEff != null and bean.whichGroupHuntEff != "" and bean.whichGroupHuntEffLoc != null) then
@@ -825,11 +844,6 @@ library hAttrHunt initializer init needs hAttrNatural
                 endif
         endloop
         set u = null
-    endfunction
+    endmethod
 
-
-	private function init takes nothing returns nothing
-
-	endfunction
-
-endlibrary
+endstruct

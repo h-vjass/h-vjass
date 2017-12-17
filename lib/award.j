@@ -1,21 +1,23 @@
 /* 奖励 */
-library hAward requires hAttrUnit
 
-    globals
-        private real awardRange = 500.00
-    endglobals
+globals
+    hAward award = 0
+    real hAwardRange = 500.00
+endglobals
+
+struct hAward
 
     /**
      * 设置共享范围
      */
-    public function setRange takes real range returns nothing
-        set awardRange = range
-    endfunction
+    public method setRange takes real range returns nothing
+        set hAwardRange = range
+    endmethod
 
     /**
      * 奖励单位（经验黄金木头）
      */
-    public function forUnit takes unit whichUnit,integer exp,integer gold,integer lumber returns nothing
+    public method forUnit takes unit whichUnit,integer exp,integer gold,integer lumber returns nothing
         local string floatStr = ""
         local integer realExp = exp
         local integer realGold = gold
@@ -29,9 +31,9 @@ library hAward requires hAttrUnit
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
         //TODO 增益
-        set realGold 	= realGold + R2I( I2R(gold) * hAttrExt_getGoldRatio(whichUnit) / 100.00 )
-        set realLumber	= realLumber + R2I( I2R(lumber) * hAttrExt_getLumberRatio(whichUnit) / 100.00 )
-        set realExp		= realExp + R2I( I2R(exp) * hAttrExt_getExpRatio(whichUnit) / 100.00 )
+        set realGold 	= realGold + R2I( I2R(gold) * attrExt.getGoldRatio(whichUnit) / 100.00 )
+        set realLumber	= realLumber + R2I( I2R(lumber) * attrExt.getLumberRatio(whichUnit) / 100.00 )
+        set realExp		= realExp + R2I( I2R(exp) * attrExt.getExpRatio(whichUnit) / 100.00 )
 
         if(exp > 0 and is.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )
@@ -45,12 +47,12 @@ library hAward requires hAttrUnit
             call hplayer.addLumber( GetOwningPlayer( whichUnit ) , realLumber )
             call hmsg.style(hmsg.ttg2Unit(whichUnit,I2S(realLumber)+"L",12.00,"80ff80",0,2.00,50.00),"toggle",0,20)
         endif
-    endfunction
+    endmethod
 
     /**
      * 平分奖励单位组（经验黄金木头）
      */
-    public function forGroup takes unit whichUnit,integer exp,integer gold,integer lumber returns nothing
+    public method forGroup takes unit whichUnit,integer exp,integer gold,integer lumber returns nothing
         local unit u = null
         local group g = null
         local integer gCount = 0
@@ -63,7 +65,7 @@ library hAward requires hAttrUnit
         call filter.isAlly(true)
         call filter.isAlive(true)
         call filter.isBuilding(false)
-        set g = hgroup.createByUnit(whichUnit,awardRange,function hFilter.get)
+        set g = hgroup.createByUnit(whichUnit,hAwardRange,function hFilter.get)
         call filter.destroy()
         set gCount = CountUnitsInGroup( g )
         if( gCount <=0 ) then
@@ -83,6 +85,6 @@ library hAward requires hAttrUnit
         call GroupClear(g)
         call DestroyGroup(g)
         set g = null
-    endfunction
+    endmethod
 
-endlibrary
+endstruct

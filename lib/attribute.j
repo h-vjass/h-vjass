@@ -1,7 +1,6 @@
 /* 属性系统 */
 
 globals
-	
 	//系统最大移动速度
 	real MAX_MOVE_SPEED = 522
 	//默认攻速计算
@@ -206,44 +205,54 @@ globals
 	integer Attr_Ability_mana_FU_100000 = 'A009'
 endglobals
 
-library hAttr initializer init needs hAttrExt
+globals
+	hAttr attr = 0
+	hashtable hash_attr = null
+    real ATTRIBUTE_DEFAULT_HERO_ATTACKSPEED = 150		//默认攻击速度，除以100等于各个英雄的初始速度，用于计算攻击速度显示文本
+    real ATTRIBUTE_DEFAULT_CHANGING_CD = 1.00			//默认属性切换冷却时间，避免过度计算引起性能下降
+    integer ATTR_FLAG_UNIT = 1
+    integer ATTR_FLAG_CD = 2
+    integer ATTR_FLAG_LIFE = 3
+    integer ATTR_FLAG_MANA = 6
+    integer ATTR_FLAG_MOVE = 9
+    integer ATTR_FLAG_DEFEND = 10
+    integer ATTR_FLAG_ATTACK_SPEED = 12
+    integer ATTR_FLAG_ATTACK_PHYSICAL = 13
+    integer ATTR_FLAG_ATTACK_MAGIC = 14
+    integer ATTR_FLAG_STR = 15
+    integer ATTR_FLAG_AGI = 16
+    integer ATTR_FLAG_INT = 17
+    integer ATTR_FLAG_STR_WHITE = 18
+    integer ATTR_FLAG_AGI_WHITE = 19
+    integer ATTR_FLAG_INT_WHITE = 20
 
-	globals
-	    private real ATTRIBUTE_DEFAULT_HERO_ATTACKSPEED = 150		//默认攻击速度，除以100等于各个英雄的初始速度，用于计算攻击速度显示文本
-	    private real ATTRIBUTE_DEFAULT_CHANGING_CD = 1.00			//默认属性切换冷却时间，避免过度计算引起性能下降
-	    private hashtable hash = null
-	    private integer ATTR_FLAG_UNIT = 1
-	    private integer ATTR_FLAG_CD = 2
-	    private integer ATTR_FLAG_LIFE = 3
-	    private integer ATTR_FLAG_MANA = 6
-	    private integer ATTR_FLAG_MOVE = 9
-	    private integer ATTR_FLAG_DEFEND = 10
-	    private integer ATTR_FLAG_ATTACK_SPEED = 12
-	    private integer ATTR_FLAG_ATTACK_PHYSICAL = 13
-	    private integer ATTR_FLAG_ATTACK_MAGIC = 14
-	    private integer ATTR_FLAG_STR = 15
-	    private integer ATTR_FLAG_AGI = 16
-	    private integer ATTR_FLAG_INT = 17
-	    private integer ATTR_FLAG_STR_WHITE = 18
-	    private integer ATTR_FLAG_AGI_WHITE = 19
-	    private integer ATTR_FLAG_INT_WHITE = 20
+    integer ATTR_MAX_LIFE = 999999
+    integer ATTR_MAX_MANA = 999999
+    integer ATTR_MIN_LIFE = 1
+    integer ATTR_MIN_MANA = 1
+    integer ATTR_MAX_DEFEND = 9999
+    integer ATTR_MAX_ATTACK_PHYSICAL = 99999
+    integer ATTR_MAX_ATTACK_MAGIC = 99999
+    integer ATTR_MAX_ATTACK_SPEED = 999
+    integer ATTR_MIN_ATTACK_SPEED = -80
+    integer ATTR_MAX_STR_GREEN = 99999
+    integer ATTR_MAX_AGI_GREEN = 99999
+    integer ATTR_MAX_INT_GREEN = 99999
+endglobals
 
-	    private integer ATTR_MAX_LIFE = 999999
-	    private integer ATTR_MAX_MANA = 999999
-	    private integer ATTR_MIN_LIFE = 1
-	    private integer ATTR_MIN_MANA = 1
-	    private integer ATTR_MAX_DEFEND = 9999
-	    private integer ATTR_MAX_ATTACK_PHYSICAL = 99999
-	    private integer ATTR_MAX_ATTACK_MAGIC = 99999
-	    private integer ATTR_MAX_ATTACK_SPEED = 999
-	    private integer ATTR_MIN_ATTACK_SPEED = -80
-	    private integer ATTR_MAX_STR_GREEN = 99999
-	    private integer ATTR_MAX_AGI_GREEN = 99999
-	    private integer ATTR_MAX_INT_GREEN = 99999
-	endglobals
+struct hAttr
+
+	static method create takes nothing returns hAttr
+        local hAttr x = 0
+        set x = hAttr.allocate()
+        if(hash_attr==null)then
+            set hash_attr = InitHashtable()
+        endif
+        return x
+    endmethod
 
 	/* 单位注册所有属性技能 */
-	public function regAllAttrSkill takes unit whichUnit returns nothing
+	public static method regAllAttrSkill takes unit whichUnit returns nothing
 		//生命魔法
 		call UnitAddAbility( whichUnit, Attr_Ability_life_1 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_10 )
@@ -459,12 +468,12 @@ library hAttr initializer init needs hAttrExt
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000,     1 )
 
-	endfunction
+	endmethod
 
 	/**
      * 为单位添加N个同样的生命魔法技能 1级设0 2级设负 负减法（卡血牌bug）
      */
-    private function setLM takes unit u,integer abilityId ,integer qty returns nothing
+    private static method setLM takes unit u,integer abilityId ,integer qty returns nothing
     	local integer i = 1
     	if( qty <= 0 )then
 	    	return
@@ -476,12 +485,12 @@ library hAttr initializer init needs hAttrExt
 	    		call UnitRemoveAbility( u, abilityId )
 	    	set i = i+1
     	endloop
-    endfunction
+    endmethod
 
     /**
      * 为单位添加N个同样的攻击之书
      */
-    private function setWhiteAttack takes unit u,integer itemId ,integer qty returns nothing
+    private static method setWhiteAttack takes unit u,integer itemId ,integer qty returns nothing
     	local integer i = 1
     	local item it = null
     	local integer itemBox = GetUnitAbilityLevel(u, 'AInv')
@@ -501,7 +510,7 @@ library hAttr initializer init needs hAttrExt
     	if(itemBox < 1)then
 			call UnitRemoveAbility(u, 'AInv')
 		endif
-    endfunction
+    endmethod
 
 	/* 设定属性(即时/计时) */
 	//攻速 		-999% ～ 999%<*实际上为-80% ～ 400%>
@@ -511,7 +520,7 @@ library hAttr initializer init needs hAttrExt
     //活力 魔法	1 ～ 999999
     //硬直    	1 ～
     //物暴 术暴 分裂 回避 移动力 力量 敏捷 智力 救助力 吸血 负重 各率 下限：0
-	private function setAttrDo takes integer flag , unit whichUnit , real diff returns nothing
+	private static method setAttrDo takes integer flag , unit whichUnit , real diff returns nothing
 		local integer uhid = GetHandleId(whichUnit)
 		local real currentVal = 0
 		local real futureVal = 0
@@ -520,9 +529,9 @@ library hAttr initializer init needs hAttrExt
 		local integer tempInt = 0
 		if( diff!=0 )then
 			if( flag == ATTR_FLAG_LIFE ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal >= ATTR_MAX_LIFE ) then
 					if( currentVal >= ATTR_MAX_LIFE ) then
 						set diff = 0
@@ -578,9 +587,9 @@ library hAttr initializer init needs hAttrExt
 					call setLM( whichUnit , Attr_Ability_life_FU_1 , level )
 				endif
 			elseif( flag == ATTR_FLAG_MANA ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal >= ATTR_MAX_MANA ) then
 					if( currentVal >= ATTR_MAX_MANA ) then
 						set diff = 0
@@ -636,9 +645,9 @@ library hAttr initializer init needs hAttrExt
 					call setLM( whichUnit , Attr_Ability_mana_FU_1 , level )
 				endif
 			elseif( flag == ATTR_FLAG_MOVE ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal < 0 ) then
 					call SetUnitMoveSpeed( whichUnit , 0 )
 				else
@@ -649,9 +658,9 @@ library hAttr initializer init needs hAttrExt
 					endif
 				endif
 			elseif( flag == ATTR_FLAG_DEFEND ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal < -ATTR_MAX_DEFEND ) then
 					set futureVal = -ATTR_MAX_DEFEND
 				elseif( futureVal > ATTR_MAX_DEFEND ) then
@@ -685,9 +694,9 @@ library hAttr initializer init needs hAttrExt
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1, tempInt+1 )
 		        endif
 		    elseif( flag == ATTR_FLAG_ATTACK_SPEED ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal < ATTR_MIN_ATTACK_SPEED ) then
 					set futureVal = ATTR_MIN_ATTACK_SPEED
 				elseif( futureVal > ATTR_MAX_ATTACK_SPEED ) then
@@ -715,9 +724,9 @@ library hAttr initializer init needs hAttrExt
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1, tempInt+1 )
 		        endif
 			elseif( flag == ATTR_FLAG_ATTACK_PHYSICAL ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if(futureVal > ATTR_MAX_ATTACK_PHYSICAL or futureVal < -ATTR_MAX_ATTACK_PHYSICAL)then
 					set diff = 0
 				endif
@@ -757,9 +766,9 @@ library hAttr initializer init needs hAttrExt
 					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_1 , level )
 				endif
 			elseif( flag == ATTR_FLAG_ATTACK_MAGIC ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal > ATTR_MAX_ATTACK_MAGIC) then
 					set futureVal = ATTR_MAX_ATTACK_MAGIC
 				elseif( futureVal < -ATTR_MAX_ATTACK_MAGIC ) then
@@ -799,9 +808,9 @@ library hAttr initializer init needs hAttrExt
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1, tempInt+1 )
 				endif
 			elseif( flag == ATTR_FLAG_STR ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal > ATTR_MAX_STR_GREEN) then
 					set futureVal = ATTR_MAX_STR_GREEN
 				elseif( futureVal < -ATTR_MAX_STR_GREEN ) then
@@ -841,9 +850,9 @@ library hAttr initializer init needs hAttrExt
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1, tempInt+1 )
 		        endif
 			elseif( flag == ATTR_FLAG_AGI ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal > ATTR_MAX_AGI_GREEN) then
 					set futureVal = ATTR_MAX_AGI_GREEN
 				elseif( futureVal < -ATTR_MAX_AGI_GREEN ) then
@@ -883,9 +892,9 @@ library hAttr initializer init needs hAttrExt
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1, tempInt+1 )
 		        endif
 			elseif( flag == ATTR_FLAG_INT ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if( futureVal > ATTR_MAX_INT_GREEN) then
 					set futureVal = ATTR_MAX_INT_GREEN
 				elseif( futureVal < -ATTR_MAX_INT_GREEN ) then
@@ -925,214 +934,214 @@ library hAttr initializer init needs hAttrExt
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1, tempInt+1 )
 		        endif
 			elseif( flag == ATTR_FLAG_STR_WHITE ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				call SetHeroStr( whichUnit , R2I(futureVal) , true )
 			elseif( flag == ATTR_FLAG_AGI_WHITE ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				call SetHeroAgi( whichUnit , R2I(futureVal) , true )
 			elseif( flag == ATTR_FLAG_INT_WHITE ) then
-				set currentVal = LoadReal( hash , uhid , flag )
+				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
-				call SaveReal( hash , uhid , flag , futureVal )
+				call SaveReal( hash_attr , uhid , flag , futureVal )
 				call SetHeroInt( whichUnit , R2I(futureVal) , true )
 			endif
 		endif//diff
-	endfunction
+	endmethod
 
-	private function setAttrDuring takes nothing returns nothing
+	private static method setAttrDuring takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer flag = time.getInteger(t,1)
 		local unit whichUnit = time.getUnit(t,2)
 		local real diff = time.getReal(t,3)
 		call time.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
-	endfunction
+	endmethod
 
 	/* 验证单位是否初始化过参数 */
-	public function initAttr takes unit whichUnit returns boolean
+	public static method initAttr takes unit whichUnit returns boolean
 		local integer uhid = GetHandleId(whichUnit)
-		local integer judgeHandleId = LoadInteger( hash , uhid , ATTR_FLAG_UNIT )
+		local integer judgeHandleId = LoadInteger( hash_attr , uhid , ATTR_FLAG_UNIT )
 		local real tempReal = 0
 		if( uhid != judgeHandleId ) then
 			call regAllAttrSkill(whichUnit)//注册技能
-			call SaveInteger( hash , uhid , ATTR_FLAG_UNIT , uhid )
+			call SaveInteger( hash_attr , uhid , ATTR_FLAG_UNIT , uhid )
 			//todo 变量初始化
-			call SaveBoolean( hash , uhid , ATTR_FLAG_CD , false )
-			call SaveReal( hash , uhid , ATTR_FLAG_LIFE , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit) )
-			call SaveReal( hash , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
-			call SaveReal( hash , uhid , ATTR_FLAG_DEFEND , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_STR , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_AGI , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_INT , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_STR_WHITE , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_AGI_WHITE , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_INT_WHITE , 0 )
-			call SaveReal( hash , uhid , ATTR_FLAG_MOVE , GetUnitDefaultMoveSpeed(whichUnit) )
+			call SaveBoolean( hash_attr , uhid , ATTR_FLAG_CD , false )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_LIFE , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit) )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_STR , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_AGI , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_INT , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_STR_WHITE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_AGI_WHITE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_INT_WHITE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_MOVE , GetUnitDefaultMoveSpeed(whichUnit) )
 			if(camera.model=="zoomin")then
-				call SetUnitMoveSpeed( whichUnit , R2I(LoadReal( hash , uhid , ATTR_FLAG_MOVE)*0.5) )
+				call SetUnitMoveSpeed( whichUnit , R2I(LoadReal( hash_attr , uhid , ATTR_FLAG_MOVE)*0.5) )
 			endif
 			//todo 设定默认值
 			if( is.hero(whichUnit) ) then
 				//白字
 				set tempReal = I2R(GetHeroStr(whichUnit, false))
-				call SaveReal( hash , uhid , ATTR_FLAG_STR_WHITE , tempReal )
+				call SaveReal( hash_attr , uhid , ATTR_FLAG_STR_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , tempReal*1 )
 				call setAttrDo( ATTR_FLAG_ATTACK_MAGIC , whichUnit , tempReal*1 )
 				call setAttrDo( ATTR_FLAG_LIFE , whichUnit , tempReal*5 )
-				call hAttrExt_addToughness( whichUnit , tempReal*0.2 , 0 )
-				call hAttrExt_addKnocking( whichUnit , tempReal*5 , 0 )
-				call hAttrExt_addPunish( whichUnit , tempReal*2 , 0 )
-				call hAttrExt_addSwimOppose( whichUnit , tempReal*0.03 , 0 )
+				call attrExt.addToughness( whichUnit , tempReal*0.2 , 0 )
+				call attrExt.addKnocking( whichUnit , tempReal*5 , 0 )
+				call attrExt.addPunish( whichUnit , tempReal*2 , 0 )
+				call attrExt.addSwimOppose( whichUnit , tempReal*0.03 , 0 )
 
 				set tempReal = I2R(GetHeroAgi(whichUnit, false))
-				call SaveReal( hash , uhid , ATTR_FLAG_AGI_WHITE , tempReal )
+				call SaveReal( hash_attr , uhid , ATTR_FLAG_AGI_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , tempReal*2 )
 				call setAttrDo( ATTR_FLAG_ATTACK_SPEED , whichUnit , tempReal*0.05 )
-				call hAttrExt_addKnocking( whichUnit , tempReal*3 , 0 )
-				call hAttrExt_addAvoid( whichUnit , tempReal*0.02 , 0 )
+				call attrExt.addKnocking( whichUnit , tempReal*3 , 0 )
+				call attrExt.addAvoid( whichUnit , tempReal*0.02 , 0 )
 
 				set tempReal = I2R(GetHeroInt(whichUnit, false))
-				call SaveReal( hash , uhid , ATTR_FLAG_INT_WHITE , tempReal )
+				call SaveReal( hash_attr , uhid , ATTR_FLAG_INT_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_MAGIC , whichUnit , tempReal*3 )
 				call setAttrDo( ATTR_FLAG_MANA , whichUnit , tempReal*5 )
-				call hAttrExt_addManaBack( whichUnit , tempReal*0.2 , 0 )
-				call hAttrExt_addViolence( whichUnit , tempReal*10 , 0 )
-				call hAttrExt_addHemophagiaSkill( whichUnit , tempReal*0.02 , 0 )
+				call attrExt.addManaBack( whichUnit , tempReal*0.2 , 0 )
+				call attrExt.addViolence( whichUnit , tempReal*10 , 0 )
+				call attrExt.addHemophagiaSkill( whichUnit , tempReal*0.02 , 0 )
 			endif
 			return true
 		endif
 		return false
-	endfunction
+	endmethod
 
-	private function setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing
+	private static method setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing
 		local integer uhid = GetHandleId(whichUnit)
 		local timer t = null
 		call initAttr( whichUnit )
 		call setAttrDo( flag , whichUnit , diff )
 		if( during>0 ) then
-			set t = time.setTimeout( during , function setAttrDuring )
+			set t = time.setTimeout( during , function thistype.setAttrDuring )
 			call time.setInteger(t,1,flag)
 			call time.setUnit(t,2,whichUnit)
 			call time.setReal(t,3, -diff )
 		endif
-	endfunction
+	endmethod
 
-	private function getAttr takes integer flag , unit whichUnit returns real
+	private static method getAttr takes integer flag , unit whichUnit returns real
 		call initAttr( whichUnit )
-		return LoadReal( hash , GetHandleId(whichUnit) , flag )
-	endfunction
+		return LoadReal( hash_attr , GetHandleId(whichUnit) , flag )
+	endmethod
 
 
 	/* 生命 ------------------------------------------------------------ */
-	public function getLife takes unit whichUnit returns real
+	public static method getLife takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_LIFE , whichUnit )
-	endfunction
-	public function addLife takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addLife takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , value , during )
-	endfunction
-	public function subLife takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subLife takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , -value , during )
-	endfunction
-	public function setLife takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setLife takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , value - getLife(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 魔法 ------------------------------------------------------------ */
-	public function getMana takes unit whichUnit returns real
+	public static method getMana takes unit whichUnit returns real
 	    return getAttr( ATTR_FLAG_MANA , whichUnit )
-	endfunction
-	public function addMana takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addMana takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MANA , whichUnit , value , during )
-	endfunction
-	public function subMana takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subMana takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MANA , whichUnit , -value , during )
-	endfunction
-	public function setMana takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setMana takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MANA , whichUnit , value - getMana(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 移动力 ------------------------------------------------------------ */
-	public function getMove takes unit whichUnit returns real
+	public static method getMove takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_MOVE , whichUnit )
-	endfunction
-	public function addMove takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addMove takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MOVE , whichUnit , value , during )
-	endfunction
-	public function subMove takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subMove takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MOVE , whichUnit , -value , during )
-	endfunction
-	public function setMove takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setMove takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MOVE , whichUnit , value - getMove(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 护甲 ------------------------------------------------------------ */
-	public function getDefend takes unit whichUnit returns real
+	public static method getDefend takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_DEFEND , whichUnit )
-	endfunction
-	public function addDefend takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addDefend takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_DEFEND , whichUnit , value , during )
-	endfunction
-	public function subDefend takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subDefend takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_DEFEND , whichUnit , -value , during )
-	endfunction
-	public function setDefend takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setDefend takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_DEFEND , whichUnit , value - getDefend(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 攻击速度 ------------------------------------------------------------ */
-	public function getAttackSpeed takes unit whichUnit returns real
+	public static method getAttackSpeed takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit )
-	endfunction
-	public function addAttackSpeed takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , value , during )
-	endfunction
-	public function subAttackSpeed takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , -value , during )
-	endfunction
-	public function setAttackSpeed takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , value - getAttackSpeed(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 物理攻击力 ------------------------------------------------------------ */
-	public function getAttackPhysical takes unit whichUnit returns real
+	public static method getAttackPhysical takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit )
-	endfunction
-	public function addAttackPhysical takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addAttackPhysical takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , value , during )
-	endfunction
-	public function subAttackPhysical takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subAttackPhysical takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , -value , during )
-	endfunction
-	public function setAttackPhysical takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setAttackPhysical takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , value - getAttackPhysical(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 魔法攻击力 ------------------------------------------------------------ */
-	public function getAttackMagic takes unit whichUnit returns real
+	public static method getAttackMagic takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit )
-	endfunction
-	public function addAttackMagic takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method addAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , value , during )
-	endfunction
-	public function subAttackMagic takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , -value , during )
-	endfunction
-	public function setAttackMagic takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method setAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , value - getAttackMagic(whichUnit) , during )
-	endfunction
+	endmethod
 
 	/* 力量 ------------------------------------------------------------ */
-	public function getStr takes unit whichUnit returns real
+	public static method getStr takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_STR , whichUnit )
-	endfunction
-	public function setStr takes unit whichUnit , real valueSet , real during returns nothing
+	endmethod
+	public static method setStr takes unit whichUnit , real valueSet , real during returns nothing
 		local real value = valueSet - getStr(whichUnit)
 		local real attackPhysical = value*0.5
 		local real attackMagic = value*0.5
@@ -1147,25 +1156,25 @@ library hAttr initializer init needs hAttrExt
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , life , during )
-		call hAttrExt_addToughness( whichUnit , toughness , during )
-		call hAttrExt_addKnocking( whichUnit , knocking , during )
-		call hAttrExt_addPunish( whichUnit , punish , during )
-		call hAttrExt_addSwimOppose( whichUnit , swimOppose , during )
-		call hAttrExt_subAvoid( whichUnit , avoid , during )
-		call hAttrExt_subViolence( whichUnit , violence , during )
-	endfunction
-	public function addStr takes unit whichUnit , real value , real during returns nothing
+		call attrExt.addToughness( whichUnit , toughness , during )
+		call attrExt.addKnocking( whichUnit , knocking , during )
+		call attrExt.addPunish( whichUnit , punish , during )
+		call attrExt.addSwimOppose( whichUnit , swimOppose , during )
+		call attrExt.subAvoid( whichUnit , avoid , during )
+		call attrExt.subViolence( whichUnit , violence , during )
+	endmethod
+	public static method addStr takes unit whichUnit , real value , real during returns nothing
 		call setStr( whichUnit , getStr(whichUnit)+value , during )
-	endfunction
-	public function subStr takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subStr takes unit whichUnit , real value , real during returns nothing
 		call setStr( whichUnit , getStr(whichUnit)-value , during )
-	endfunction
+	endmethod
 
 	/* 敏捷 ------------------------------------------------------------ */
-	public function getAgi takes unit whichUnit returns real
+	public static method getAgi takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_AGI , whichUnit )
-	endfunction
-	public function setAgi takes unit whichUnit , real valueSet , real during returns nothing
+	endmethod
+	public static method setAgi takes unit whichUnit , real valueSet , real during returns nothing
 		local real value = valueSet - getAgi(whichUnit)
 		local real attackPhysical = value*1
 		local real attackspeed = value*0.04
@@ -1176,23 +1185,23 @@ library hAttr initializer init needs hAttrExt
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )
-		call hAttrExt_addKnocking( whichUnit , knocking , during )
-		call hAttrExt_addAvoid( whichUnit , avoid , during )
-		call hAttrExt_subPunish( whichUnit , punish , during )
-		call hAttrExt_subViolence( whichUnit , violence , during )
-	endfunction
-	public function addAgi takes unit whichUnit , real value , real during returns nothing
+		call attrExt.addKnocking( whichUnit , knocking , during )
+		call attrExt.addAvoid( whichUnit , avoid , during )
+		call attrExt.subPunish( whichUnit , punish , during )
+		call attrExt.subViolence( whichUnit , violence , during )
+	endmethod
+	public static method addAgi takes unit whichUnit , real value , real during returns nothing
 		call setAgi( whichUnit , getAgi(whichUnit)+value , during )
-	endfunction
-	public function subAgi takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subAgi takes unit whichUnit , real value , real during returns nothing
 		call setAgi( whichUnit , getAgi(whichUnit)-value , during )
-	endfunction
+	endmethod
 
 	/* 智力 ------------------------------------------------------------ */
-	public function getInt takes unit whichUnit returns real
+	public static method getInt takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_INT , whichUnit )
-	endfunction
-	public function setInt takes unit whichUnit , real valueSet , real during returns nothing
+	endmethod
+	public static method setInt takes unit whichUnit , real valueSet , real during returns nothing
 		local real value = valueSet - getInt(whichUnit)
 		local real attackMagic = value*2
 		local real mana = value*3
@@ -1202,22 +1211,22 @@ library hAttr initializer init needs hAttrExt
 		call setAttr( ATTR_FLAG_INT , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_MANA , whichUnit , mana , during )
-		call hAttrExt_addManaBack( whichUnit , manaback , during )
-		call hAttrExt_addViolence( whichUnit , violence , during )
-		call hAttrExt_addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
-	endfunction
-	public function addInt takes unit whichUnit , real value , real during returns nothing
+		call attrExt.addManaBack( whichUnit , manaback , during )
+		call attrExt.addViolence( whichUnit , violence , during )
+		call attrExt.addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
+	endmethod
+	public static method addInt takes unit whichUnit , real value , real during returns nothing
 		call setInt( whichUnit , getInt(whichUnit)+value , during )
-	endfunction
-	public function subInt takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subInt takes unit whichUnit , real value , real during returns nothing
 		call setInt( whichUnit , getInt(whichUnit)-value , during )
-	endfunction
+	endmethod
 
 	/* 力量（白字） ------------------------------------------------------------ */
-	public function getStrWhite takes unit whichUnit returns real
+	public static method getStrWhite takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_STR_WHITE , whichUnit )
-	endfunction
-	public function setStrWhite takes unit whichUnit , real valueSet , real during returns nothing
+	endmethod
+	public static method setStrWhite takes unit whichUnit , real valueSet , real during returns nothing
 		local real value = valueSet - getStrWhite(whichUnit)
 		local real attackPhysical = value*1
 		local real attackMagic = value*1
@@ -1230,23 +1239,23 @@ library hAttr initializer init needs hAttrExt
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , life , during )
-		call hAttrExt_addToughness( whichUnit , toughness , during )
-		call hAttrExt_addKnocking( whichUnit , knocking , during )
-		call hAttrExt_addPunish( whichUnit , punish , during )
-		call hAttrExt_addSwimOppose( whichUnit , swimOppose , during )
-	endfunction
-	public function addStrWhite takes unit whichUnit , real value , real during returns nothing
+		call attrExt.addToughness( whichUnit , toughness , during )
+		call attrExt.addKnocking( whichUnit , knocking , during )
+		call attrExt.addPunish( whichUnit , punish , during )
+		call attrExt.addSwimOppose( whichUnit , swimOppose , during )
+	endmethod
+	public static method addStrWhite takes unit whichUnit , real value , real during returns nothing
 		call setStrWhite( whichUnit , getStrWhite(whichUnit)+value , during )
-	endfunction
-	public function subStrWhite takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subStrWhite takes unit whichUnit , real value , real during returns nothing
 		call setStrWhite( whichUnit , getStrWhite(whichUnit)-value , during )
-	endfunction
+	endmethod
 
 	/* 敏捷（白字） ------------------------------------------------------------ */
-	public function getAgiWhite takes unit whichUnit returns real
+	public static method getAgiWhite takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_AGI_WHITE , whichUnit )
-	endfunction
-	public function setAgiWhite takes unit whichUnit , real valueSet , real during returns nothing
+	endmethod
+	public static method setAgiWhite takes unit whichUnit , real valueSet , real during returns nothing
 		local real value = valueSet - getAgiWhite(whichUnit)
 		local real attackPhysical = value*2
 		local real attackspeed = value*0.05
@@ -1255,21 +1264,21 @@ library hAttr initializer init needs hAttrExt
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )
-		call hAttrExt_addKnocking( whichUnit , knocking , during )
-		call hAttrExt_addAvoid( whichUnit , avoid , during )
-	endfunction
-	public function addAgiWhite takes unit whichUnit , real value , real during returns nothing
+		call attrExt.addKnocking( whichUnit , knocking , during )
+		call attrExt.addAvoid( whichUnit , avoid , during )
+	endmethod
+	public static method addAgiWhite takes unit whichUnit , real value , real during returns nothing
 		call setAgiWhite( whichUnit , getAgiWhite(whichUnit)+value , during )
-	endfunction
-	public function subAgiWhite takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subAgiWhite takes unit whichUnit , real value , real during returns nothing
 		call setAgiWhite( whichUnit , getAgiWhite(whichUnit)-value , during )
-	endfunction
+	endmethod
 
 	/* 智力（白字） ------------------------------------------------------------ */
-	public function getIntWhite takes unit whichUnit returns real
+	public static method getIntWhite takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_INT_WHITE , whichUnit )
-	endfunction
-	public function setIntWhite takes unit whichUnit , real valueSet , real during returns nothing
+	endmethod
+	public static method setIntWhite takes unit whichUnit , real valueSet , real during returns nothing
 		local real value = valueSet - getIntWhite(whichUnit)
 		local real attackMagic = value*3
 		local real mana = value*5
@@ -1279,21 +1288,21 @@ library hAttr initializer init needs hAttrExt
 		call setAttr( ATTR_FLAG_INT , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_MANA , whichUnit , mana , during )
-		call hAttrExt_addManaBack( whichUnit , manaback , during )
-		call hAttrExt_addViolence( whichUnit , violence , during )
-		call hAttrExt_addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
-	endfunction
-	public function addIntWhite takes unit whichUnit , real value , real during returns nothing
+		call attrExt.addManaBack( whichUnit , manaback , during )
+		call attrExt.addViolence( whichUnit , violence , during )
+		call attrExt.addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
+	endmethod
+	public static method addIntWhite takes unit whichUnit , real value , real during returns nothing
 		call setIntWhite( whichUnit , getIntWhite(whichUnit)+value , during )
-	endfunction
-	public function subIntWhite takes unit whichUnit , real value , real during returns nothing
+	endmethod
+	public static method subIntWhite takes unit whichUnit , real value , real during returns nothing
 		call setIntWhite( whichUnit , getIntWhite(whichUnit)-value , during )
-	endfunction
+	endmethod
 
 	/**
      * 打印某个单位的属性到桌面
      */
-    public function show takes unit whichUnit returns nothing
+    public static method show takes unit whichUnit returns nothing
 		call console.info("生命："+R2S(getLife(whichUnit)))
         call console.info("魔法："+R2S(getMana(whichUnit)))
 		call console.info("移动力："+R2S(getMove(whichUnit)))
@@ -1307,10 +1316,6 @@ library hAttr initializer init needs hAttrExt
 		call console.info("力量(白)："+R2S(getStrWhite(whichUnit)))
 		call console.info("敏捷(白)："+R2S(getAgiWhite(whichUnit)))
 		call console.info("智力(白)："+R2S(getIntWhite(whichUnit)))
-    endfunction
+    endmethod
 
-    private function init takes nothing returns nothing
-    	set hash = InitHashtable()
-    endfunction
-
-endlibrary
+endstruct
