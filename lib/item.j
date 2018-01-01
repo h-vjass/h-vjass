@@ -19,6 +19,18 @@
 -不叠加：数量不影响几率，如：30%几率的物品，持有100件也为30%
 *物品不说明的属性不涉及叠加规定，默认不叠加
 */
+
+globals
+    private hashtable hash_item = null
+    private integer hsah_item_reelid = 1
+    private integer hsah_item_itemid = 2
+    private integer hsah_item_overlay = 3
+    private integer hsah_item_level = 4
+    private integer hsah_item_gold = 5
+    private integer hsah_item_lumber = 6
+    private integer hsah_item_weight = 7
+endglobals
+
 struct hItemBean
     //物品基本属性
     public static integer id = 0//物品id
@@ -48,18 +60,7 @@ struct hItemBean
     endmethod
 endstruct
 
-library hItem initializer init
-
-    globals
-        private hashtable hash = null
-        private integer hsah_reelid = 1
-        private integer hsah_itemid = 2
-        private integer hsah_overlay = 3
-        private integer hsah_level = 4
-        private integer hsah_gold = 5
-        private integer hsah_lumber = 6
-        private integer hsah_weight = 7
-    endglobals
+struct hItem
 
 	/**
      * 删除物品回调

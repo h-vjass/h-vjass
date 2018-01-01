@@ -7,6 +7,8 @@ type MediaDialogue extends string array[10] //电影对白最大支持10句
 
 struct hMedia
 
+	private static real bgmDelay = 2.00
+
 	//播放音效
 	public static method soundPlay takes sound s returns nothing
 	    if (s != null) then
@@ -24,18 +26,38 @@ struct hMedia
 	    call SetSoundPosition( s, x, y, z )
 	endmethod
 
-	private static method bgmPlayCall takes nothing returns nothing
+	private static method bgmCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		call PlayMusic(time.getString(t,1))
+		call time.delTimer(t)
 	endmethod
-
 	//播放音乐
-	public static method bgmPlay takes string musicFileName returns nothing
+	public static method bgm takes string musicFileName returns nothing
 		local timer t = null
 		if(musicFileName!=null and musicFileName!="")then
 			call StopMusic( true )
-			set t = time.setTimeout(2.00,function thistype.bgmPlayCall)
+			set t = time.setTimeout(bgmDelay,function thistype.bgmCall)
 			call time.setString(t,1,musicFileName)
+		endif
+	endmethod
+
+	private static method bgm2PlayerCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		if(GetLocalPlayer() == time.getPlayer(t,2))then
+			call PlayMusic(time.getString(t,1))
+		endif
+		call time.delTimer(t)
+	endmethod
+	//对玩家播放音乐
+	public static method bgm2Player takes string musicFileName,player whichPlayer returns nothing
+		local timer t = null
+		if(musicFileName!=null and musicFileName!="" and whichPlayer != null)then
+			if(GetLocalPlayer() == whichPlayer)then
+				call StopMusic( true )
+				set t = time.setTimeout(bgmDelay,function thistype.bgm2PlayerCall)
+				call time.setString(t,1,musicFileName)
+				call time.setPlayer(t,2,whichPlayer)
+			endif
 		endif
 	endmethod
 

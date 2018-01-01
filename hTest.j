@@ -14,7 +14,7 @@ library hTest
 		elseif(i==4)then
 			set music = gg_snd_Credits
 		endif
-		call media.bgmPlay(music)
+		call media.bgm2Player(music,GetOwningPlayer(evt.getTriggerUnit()))
 	endfunction
 	private function outRect takes nothing returns nothing
 		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"离开了"+hrect.getName(evt.getTriggerRect()))
