@@ -51,6 +51,11 @@ endfunction
 
 #保存地图查看是否出错，如果没有出错则hJass库添加成功
 
+以上仅为添加hJass，而在制作地图的实践中，你应该是建立自己的main文件来引用hJass（如可参考目录中的hMain.j）
+那么文本区内现在应该改为这样的：
+
+#include "[YOUR_DIR]/hJass/hMain.j"
+
 注意：
 hJass库开源，不定时更新，可访问 https://www.hunzsig.org 查看下载最新版
 hJass库仅仅提供一些功能函数协助做图作者更加轻松制作地图

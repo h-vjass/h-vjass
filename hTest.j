@@ -1,7 +1,7 @@
 
-library hTest
+struct hTest
 
-	private function inRect takes nothing returns nothing
+	private static method inRect takes nothing returns nothing
 		local string music = ""
 		local integer i = GetRandomInt(1, 4)
 		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"进入了"+hrect.getName(evt.getTriggerRect()))
@@ -15,32 +15,32 @@ library hTest
 			set music = gg_snd_Credits
 		endif
 		call media.bgm2Player(music,GetOwningPlayer(evt.getTriggerUnit()))
-	endfunction
-	private function outRect takes nothing returns nothing
+	endmethod
+	private static method outRect takes nothing returns nothing
 		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"离开了"+hrect.getName(evt.getTriggerRect()))
-	endfunction
+	endmethod
 
-	private function onattackready takes nothing returns nothing
+	private static method onattackready takes nothing returns nothing
 		local unit u = evt.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"发动了攻击")
-	endfunction
-	private function ondamage takes nothing returns nothing
+	endmethod
+	private static method ondamage takes nothing returns nothing
 		call hmsg.echo(GetUnitName(evt.getSourceUnit())+"造成了攻击伤害")
 		call hmsg.echo("对"+GetUnitName(evt.getTargetUnit())+"造成1:"+R2S(evt.getDamage()))
 		call hmsg.echo("对"+GetUnitName(evt.getTargetUnit())+"造成2:"+R2S(evt.getRealDamage()))
 		call hmsg.echo(evt.getDamageKind())
 		call hmsg.echo(evt.getDamageType())
-	endfunction
-	private function enteru takes nothing returns nothing
+	endmethod
+	private static method enteru takes nothing returns nothing
 		local unit u = evt.getTriggerUnit()
 		local unit eu = evt.getTriggerEnterUnit()
 		local real range = evt.getRange()
 		call hmsg.echo(GetUnitName(u)+"被进去了！")
 		call hmsg.echo(GetUnitName(eu)+"进去了！")
 		call hmsg.echo("range=="+R2S(range))
-	endfunction
+	endmethod
 
-	public function run takes nothing returns nothing
+	public static method run takes nothing returns nothing
 
 		local unit u = null
 		local unit u2 = null
@@ -66,8 +66,8 @@ library hTest
 		call hplayer.setHero(players[1],u)
 		//call attr.addAttackSpeed(u,150,0)
 		call attrExt.addPunishOppose(u,90,0)
-		call evt.onAttackReady(u,function onattackready)
-		call evt.onDamage(u,function ondamage)
+		call evt.onAttackReady(u,function thistype.onattackready)
+		call evt.onDamage(u,function thistype.ondamage)
 
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
@@ -83,7 +83,7 @@ library hTest
 		call attrEffect.coverBreak(u2,15,0)
 		call attrEffect.coverBreakDuring(u2,0.300,0)
 
-		call evt.onEnterUnitRange(u2,300,function enteru)
+		call evt.onEnterUnitRange(u2,300,function thistype.enteru)
 
 		//rect
 		call wbean.create()
@@ -95,8 +95,8 @@ library hTest
 					exitwhen j>=5
 						set r = hrect.createInLoc(rx+1152*j,ry-1152*i,1152,1152)
 						call hrect.setName(r,"平原"+I2S(i*j))
-						call evt.onEnterRect(r,function inRect)
-						call evt.onLeaveRect(r,function outRect)
+						call evt.onEnterRect(r,function thistype.inRect)
+						call evt.onLeaveRect(r,function thistype.outRect)
 						set wbean.loc = GetRectCenter(r)
 						set wbean.width = 1152
 						set wbean.height = 1152
@@ -134,6 +134,6 @@ library hTest
 		endloop
 		call wbean.destroy()
 
-	endfunction
+	endmethod
 
-endlibrary
+endstruct

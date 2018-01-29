@@ -207,7 +207,7 @@ endglobals
 
 globals
 	hAttr attr = 0
-	hashtable hash_attr = null
+	hashtable hash_attr = InitHashtable()
     real ATTRIBUTE_DEFAULT_HERO_ATTACKSPEED = 150		//默认攻击速度，除以100等于各个英雄的初始速度，用于计算攻击速度显示文本
     real ATTRIBUTE_DEFAULT_CHANGING_CD = 1.00			//默认属性切换冷却时间，避免过度计算引起性能下降
     integer ATTR_FLAG_UNIT = 1
@@ -245,9 +245,6 @@ struct hAttr
 	static method create takes nothing returns hAttr
         local hAttr x = 0
         set x = hAttr.allocate()
-        if(hash_attr==null)then
-            set hash_attr = InitHashtable()
-        endif
         return x
     endmethod
 

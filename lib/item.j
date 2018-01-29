@@ -21,7 +21,7 @@
 */
 
 globals
-    private hashtable hash_item = null
+    private hashtable hash_item = InitHashtable()
     private integer hsah_item_reelid = 1
     private integer hsah_item_itemid = 2
     private integer hsah_item_overlay = 3
@@ -573,10 +573,6 @@ struct hItem
         call RemoveLocation(loc)
         set loc = null
         return it
-    endfunction
-
-    private function init takes nothing returns nothing
-        set hash = InitHashtable()
-    endfunction
+    endfunction 
 
 endlibrary
