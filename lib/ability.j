@@ -42,7 +42,7 @@ struct hAbility
 	    call UnitAddAbility( cu, ABILITY_BREAK)
 	    call SetUnitAbilityLevel( cu , ABILITY_BREAK , 1 )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
-	    call hunit.delUnit(cu,0.3)
+	    call hunit.del(cu,0.3)
 	endmethod
 
 	/**
@@ -50,8 +50,8 @@ struct hAbility
 	 */
 	private static method swimCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		call UnitRemoveAbility(time.getUnit(t,1), 'BPSE' )
-		call time.delTimer(t)
+		call UnitRemoveAbility(htime.getUnit(t,1), 'BPSE' )
+		call htime.delTimer(t)
 	endmethod
 
 	/**
@@ -66,7 +66,7 @@ struct hAbility
 	    	if(during <= TimerGetRemaining(t))then
 				return
 			else
-				call time.delTimer(t)
+				call htime.delTimer(t)
 				call hmsg.style(hmsg.ttg2Unit(u,"劲眩",6.00,"64e3f2",10,1.00,10.00)  ,"scale",0,0.05)
 	    	endif
 	    endif
@@ -77,9 +77,9 @@ struct hAbility
 	    call UnitAddAbility( cu, ABILITY_SWIM)
 	    call SetUnitAbilityLevel( cu , ABILITY_SWIM , 1 )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
-	    call hunit.delUnit(cu,0.4)
-	    set t = time.setTimeout(during,function thistype.swimCall)
-	    call time.setUnit(t,1,u)
+	    call hunit.del(cu,0.4)
+	    set t = htime.setTimeout(during,function thistype.swimCall)
+	    call htime.setUnit(t,1,u)
 	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5241, t)
 	endmethod
 
@@ -88,11 +88,11 @@ struct hAbility
 	 */
 	private static method avoidCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = time.getUnit(t,1)
+	    local unit whichUnit = htime.getUnit(t,1)
 	    call UnitAddAbility( whichUnit, ABILITY_AVOID_MIUNS )
 		call SetUnitAbilityLevel( whichUnit, ABILITY_AVOID_MIUNS, 2 )
 		call UnitRemoveAbility( whichUnit, ABILITY_AVOID_MIUNS )
-	    call time.delTimer(t)
+	    call htime.delTimer(t)
 	endmethod
 	/**
 	 * 回避
@@ -105,8 +105,8 @@ struct hAbility
 	    call UnitAddAbility( whichUnit, ABILITY_AVOID_PLUS )
 		call SetUnitAbilityLevel( whichUnit, ABILITY_AVOID_PLUS, 2 )
 		call UnitRemoveAbility( whichUnit, ABILITY_AVOID_PLUS )
-	    set t = time.setTimeout( 0.00 ,function thistype.avoidCallBack)
-	    call time.setUnit(t,1,whichUnit)
+	    set t = htime.setTimeout( 0.00 ,function thistype.avoidCallBack)
+	    call htime.setUnit(t,1,whichUnit)
 	endmethod
 
 	/**
@@ -114,9 +114,9 @@ struct hAbility
 	 */
 	private static method zeroInvulnerableCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = time.getUnit(t,1)
+	    local unit whichUnit = htime.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
-	    call time.delTimer(t)
+	    call htime.delTimer(t)
 	endmethod
 	/**
 	 * 0秒无敌
@@ -127,8 +127,8 @@ struct hAbility
 	        return
 	    endif
 	    call SetUnitInvulnerable( whichUnit, true )
-	    set t = time.setTimeout( 0.00 ,function thistype.zeroInvulnerableCallBack)
-	    call time.setUnit(t,1,whichUnit)
+	    set t = htime.setTimeout( 0.00 ,function thistype.zeroInvulnerableCallBack)
+	    call htime.setUnit(t,1,whichUnit)
 	endmethod
 
 	/**
@@ -136,9 +136,9 @@ struct hAbility
 	 */
 	private static method invulnerableCallBack takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = time.getUnit(t,1)
+	    local unit whichUnit = htime.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
-	    call time.delTimer(t)
+	    call htime.delTimer(t)
 	endmethod
 	/**
 	 * 无敌
@@ -152,8 +152,8 @@ struct hAbility
 	        set during = 0.00       //如果没有设置持续时间，则0秒无敌，跟回避效果相同
 	    endif
 	    call SetUnitInvulnerable( whichUnit, true )
-	    set t = time.setTimeout( during ,function thistype.invulnerableCallBack)
-	    call time.setUnit(t,1,whichUnit)
+	    set t = htime.setTimeout( during ,function thistype.invulnerableCallBack)
+	    call htime.setUnit(t,1,whichUnit)
 	endmethod
 
 	/**
@@ -173,7 +173,7 @@ struct hAbility
 	 */
 	private static method invulnerableGroupCallBackT takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local group whichGroup = time.getGroup( t,1 )
+	    local group whichGroup = htime.getGroup( t,1 )
 	    call ForGroup(whichGroup, function thistype.invulnerableGroupCallBack2)
 	    call GroupClear(whichGroup)
 	    call DestroyGroup(whichGroup)
@@ -188,8 +188,8 @@ struct hAbility
 	        return
 	    endif
 	    call ForGroup(whichGroup, function thistype.invulnerableGroupCallBack1)
-	    set t = time.setTimeout( during ,function thistype.invulnerableGroupCallBackT)
-	    call time.setGroup(t,1,whichGroup)
+	    set t = htime.setTimeout( during ,function thistype.invulnerableGroupCallBackT)
+	    call htime.setGroup(t,1,whichGroup)
 	endmethod
 
 	/**
@@ -197,14 +197,14 @@ struct hAbility
 	 */
 	private static method pauseCall takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = time.getUnit(t,1)
-	    local integer pauseType = time.getInteger(t,2)
+	    local unit whichUnit = htime.getUnit(t,1)
+	    local integer pauseType = htime.getInteger(t,2)
 	    call PauseUnit( whichUnit , false )
 	    if( pauseType > 0 ) then
 	        call SetUnitVertexColorBJ( whichUnit , 100, 100, 100, 0 )
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit , 100.00 )
-	    call time.delTimer(t)
+	    call htime.delTimer(t)
 	endmethod
 	/**
 	 * 暂停效果
@@ -222,7 +222,7 @@ struct hAbility
 	    set prevTimer = LoadTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 )
 	    set prevTimeRemaining = TimerGetRemaining(prevTimer)
 	    if( prevTimeRemaining > 0 )then
-	        call time.delTimer( prevTimer )
+	        call htime.delTimer( prevTimer )
 	    else
 	        set prevTimeRemaining = 0
 	    endif
@@ -233,9 +233,9 @@ struct hAbility
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit, 0.00 )
 	    call PauseUnit( whichUnit, true )
-	    set t = time.setTimeout( (during+prevTimeRemaining) ,function thistype.pauseCall )
-	    call time.setUnit(t,1,whichUnit)
-	    call time.setInteger(t,2, pauseType )
+	    set t = htime.setTimeout( (during+prevTimeRemaining) ,function thistype.pauseCall )
+	    call htime.setUnit(t,1,whichUnit)
+	    call htime.setInteger(t,2, pauseType )
 	    call SaveTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 , t )
 	endmethod
 
@@ -258,10 +258,10 @@ struct hAbility
 	//为单位添加效果只限技能类一段时间 回调
 	private static method addAbilityEffectCall takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local unit whichUnit = time.getUnit(t,1)
-	    local integer whichAbility = time.getInteger(t,2)
+	    local unit whichUnit = htime.getUnit(t,1)
+	    local integer whichAbility = htime.getInteger(t,2)
 	    call UnitRemoveAbility(whichUnit, whichAbility)
-	    call time.delTimer(t)
+	    call htime.delTimer(t)
 	endmethod
 	//为单位添加效果只限技能类一段时间
 	public static method addAbilityEffect takes unit whichUnit,integer whichAbility,integer abilityLevel,real during returns nothing
@@ -272,9 +272,9 @@ struct hAbility
 	        if( abilityLevel>0 ) then
 	            call SetUnitAbilityLevel( whichUnit, whichAbility, abilityLevel )
 	        endif
-	        set t = time.setTimeout( during,function thistype.addAbilityEffectCall )
-	        call time.setUnit(t,1,whichUnit)
-	        call time.setInteger(t,2,whichAbility)
+	        set t = htime.setTimeout( during,function thistype.addAbilityEffectCall )
+	        call htime.setUnit(t,1,whichUnit)
+	        call htime.setInteger(t,2,whichAbility)
 	    endif
 	endmethod
 
@@ -286,7 +286,7 @@ struct hAbility
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssuePointOrderLoc( token , orderString , targetLoc )
-	    call hunit.delUnit(token,2.00)
+	    call hunit.del(token,2.00)
 	endmethod
 
 	/**
@@ -297,7 +297,7 @@ struct hAbility
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueImmediateOrder( token , orderString )
-	    call hunit.delUnit(token,2.00)
+	    call hunit.del(token,2.00)
 	endmethod
 
 	/**
@@ -308,7 +308,7 @@ struct hAbility
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrder( token , orderString , targetUnit )
-	    call hunit.delUnit(token,2.00)
+	    call hunit.del(token,2.00)
 	endmethod
 
 	/**
@@ -319,7 +319,7 @@ struct hAbility
 	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN , loc , bj_UNIT_FACING)
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrderById( token , orderId , targetUnit )
-	    call hunit.delUnit(token,2.00)
+	    call hunit.del(token,2.00)
 	endmethod
 
 endstruct

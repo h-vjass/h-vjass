@@ -87,42 +87,42 @@ struct hMsg
     //设置漂浮字弹出样式
     private static method ttgshowScale takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local texttag ttg = time.getTexttag(t,1)
+        local texttag ttg = htime.getTexttag(t,1)
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
-        local real tnow = time.getReal(t,2)
-        local real tend = time.getReal(t,3)
+        local real tnow = htime.getReal(t,2)
+        local real tend = htime.getReal(t,3)
         if(tnow>=tend)then
-            call time.delTimer(t)
+            call htime.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         call SetTextTagTextBJ(ttg, msg, size*(1+tnow*0.5/tend))
-        call time.setReal(t,2,tnow)
+        call htime.setReal(t,2,tnow)
     endmethod
     private static method ttgshowShrink takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local texttag ttg = time.getTexttag(t,1)
+        local texttag ttg = htime.getTexttag(t,1)
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
-        local real tnow = time.getReal(t,2)
-        local real tend = time.getReal(t,3)
+        local real tnow = htime.getReal(t,2)
+        local real tend = htime.getReal(t,3)
         if(tnow>=tend)then
-            call time.delTimer(t)
+            call htime.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         call SetTextTagTextBJ(ttg, msg, size*(1-tnow*0.5/tend))
-        call time.setReal(t,2,tnow)
+        call htime.setReal(t,2,tnow)
     endmethod
     private static method ttgshowToggle takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local texttag ttg = time.getTexttag(t,1)
+        local texttag ttg = htime.getTexttag(t,1)
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
-        local real tnow = time.getReal(t,2)
-        local real tend1 = time.getReal(t,3)
-        local real tend2 = time.getReal(t,4)
+        local real tnow = htime.getReal(t,2)
+        local real tend1 = htime.getReal(t,3)
+        local real tend2 = htime.getReal(t,4)
         if(tnow>=tend1+tend2+0.3)then
-            call time.delTimer(t)
+            call htime.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         if(tnow<=tend1)then
@@ -130,27 +130,27 @@ struct hMsg
         elseif(tnow>tend1+0.3)then
             call SetTextTagTextBJ(ttg, msg, size*2-(3*(tnow-tend1-0.3)/tend2))
         endif
-        call time.setReal(t,2,tnow)
+        call htime.setReal(t,2,tnow)
     endmethod
     public static method style takes texttag ttg,string showtype,real xspeed,real yspeed returns nothing
         local timer t = null
         call SetTextTagVelocity( ttg, xspeed, yspeed )
         if(showtype == "scale")then //放大
-            set t = time.setInterval(0.03,function hMsg.ttgshowScale)
-            call time.setTexttag(t,1,ttg)
-            call time.setReal(t,2,0)
-            call time.setReal(t,3,0.5)
+            set t = htime.setInterval(0.03,function thistype.ttgshowScale)
+            call htime.setTexttag(t,1,ttg)
+            call htime.setReal(t,2,0)
+            call htime.setReal(t,3,0.5)
         elseif(showtype == "shrink")then //缩小
-            set t = time.setInterval(0.03,function hMsg.ttgshowShrink)
-            call time.setTexttag(t,1,ttg)
-            call time.setReal(t,2,0)
-            call time.setReal(t,3,0.5)
+            set t = htime.setInterval(0.03,function thistype.ttgshowShrink)
+            call htime.setTexttag(t,1,ttg)
+            call htime.setReal(t,2,0)
+            call htime.setReal(t,3,0.5)
         elseif(showtype == "toggle")then //放大再缩小
-            set t = time.setInterval(0.03,function hMsg.ttgshowToggle)
-            call time.setTexttag(t,1,ttg)
-            call time.setReal(t,2,0)
-            call time.setReal(t,3,0.3)
-            call time.setReal(t,4,0.3)
+            set t = htime.setInterval(0.03,function thistype.ttgshowToggle)
+            call htime.setTexttag(t,1,ttg)
+            call htime.setReal(t,2,0)
+            call htime.setReal(t,3,0.3)
+            call htime.setReal(t,4,0.3)
         endif
     endmethod
     //漂浮文字 - 默认 (在某单位头上)
@@ -165,25 +165,26 @@ struct hMsg
         call SetTextTagPos( ttg , GetLocationX(loc)-I2R(StringLength(msg))*size*0.5 , GetLocationY(loc) , zOffset )
         return ttg
     endmethod
+
     //漂浮文字 - 绑定在某单位头上，跟随移动(动作)
     private static method ttgBindUnitCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local unit u = time.getUnit( t , 1 )
-        local texttag ttg = time.getTexttag( t , 2 )
-        local real zOffset = time.getReal( t , 3 )
+        local unit u = htime.getUnit( t , 1 )
+        local texttag ttg = htime.getTexttag( t , 2 )
+        local real zOffset = htime.getReal( t , 3 )
         local string msg = getTtgMsg(ttg)
         local real size = getTtgSize(ttg)
         local real scale = 0.5
         if( ttg==null )then
-            call time.delTimer(t)
+            call htime.delTimer(t)
         endif
-        if(camera.model=="zoomin")then
+        if(hcamera.model=="zoomin")then
             set scale = 0.25
-        elseif(camera.model=="zoomout")then
+        elseif(hcamera.model=="zoomout")then
             set scale = 1
         endif
         call SetTextTagPos( ttg , GetUnitX(u)-StringLength(msg)*size*scale , GetUnitY(u) , zOffset )
-        if( is.alive(u) == true ) then
+        if( his.alive(u) == true ) then
             call SetTextTagVisibility( ttg , true )
         else
             call SetTextTagVisibility( ttg , false )
@@ -192,10 +193,10 @@ struct hMsg
     //漂浮文字 - 绑定在某单位头上，跟随移动
     public static method ttgBindUnit takes unit u,string msg,real size,string color,real opacity,real zOffset returns texttag
         local texttag ttg =  ttg2Unit(u,msg,size,color,opacity,0,zOffset)
-        local timer t = time.setInterval( 0.03 , function hMsg.ttgBindUnitCall )
-        call time.setUnit( t , 1 , u )
-        call time.setTexttag( t , 2 , ttg )
-        call time.setReal( t , 3 , zOffset )
+        local timer t = htime.setInterval( 0.03 , function thistype.ttgBindUnitCall )
+        call htime.setUnit( t , 1 , u )
+        call htime.setTexttag( t , 2 , ttg )
+        call htime.setReal( t , 3 , zOffset )
         return ttg
     endmethod
 

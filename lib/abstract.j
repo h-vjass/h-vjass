@@ -23,3 +23,4 @@
 #include "attributeHunt.j"
 #include "attributeUnit.j"
 #include "multiboard.j"
+#include "item.j"

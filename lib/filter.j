@@ -191,106 +191,106 @@ struct hFilter
 	public static method get takes nothing returns boolean
 		local unit filterUnit = GetFilterUnit()
 		local boolean status = true
-		if(is_ownItem == 1 and ownItemId!=0 and is.ownItem(filterUnit,ownItemId)==false)then
+		if(is_ownItem == 1 and ownItemId!=0 and his.ownItem(filterUnit,ownItemId)==false)then
 			set status = false
 		endif
-		if(is_ownItem == -1 and ownItemId!=0 and is.ownItem(filterUnit,ownItemId)==true)then
+		if(is_ownItem == -1 and ownItemId!=0 and his.ownItem(filterUnit,ownItemId)==true)then
 			set status = false
 		endif
-		if(is_enemy == 1 and is.enemy(filterUnit,thisUnit)==false)then
+		if(is_enemy == 1 and his.enemy(filterUnit,thisUnit)==false)then
 			set status = false
 		endif
-		if(is_enemy == -1 and is.enemy(filterUnit,thisUnit)==true)then
+		if(is_enemy == -1 and his.enemy(filterUnit,thisUnit)==true)then
 			set status = false
 		endif
-		if(is_ally == 1 and is.ally(filterUnit,thisUnit)==false)then
+		if(is_ally == 1 and his.ally(filterUnit,thisUnit)==false)then
 			set status = false
 		endif
-		if(is_ally == -1 and is.ally(filterUnit,thisUnit)==true)then
+		if(is_ally == -1 and his.ally(filterUnit,thisUnit)==true)then
 			set status = false
 		endif
-		if(is_death == 1 and is.death(filterUnit)==false)then
+		if(is_death == 1 and his.death(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_death == -1 and is.death(filterUnit)==true)then
+		if(is_death == -1 and his.death(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_alive == 1 and is.alive(filterUnit)==false)then
+		if(is_alive == 1 and his.alive(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_alive == -1 and is.alive(filterUnit)==true)then
+		if(is_alive == -1 and his.alive(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_invincible == 1 and is.invincible(filterUnit)==false)then
+		if(is_invincible == 1 and his.invincible(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_invincible == -1 and is.invincible(filterUnit)==true)then
+		if(is_invincible == -1 and his.invincible(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_hero == 1 and is.hero(filterUnit)==false)then
+		if(is_hero == 1 and his.hero(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_hero == -1 and is.hero(filterUnit)==true)then
+		if(is_hero == -1 and his.hero(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_building == 1 and is.building(filterUnit)==false)then
+		if(is_building == 1 and his.building(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_building == -1 and is.building(filterUnit)==true)then
+		if(is_building == -1 and his.building(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_illusion == 1 and is.illusion(filterUnit)==false)then
+		if(is_illusion == 1 and his.illusion(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_illusion == -1 and is.illusion(filterUnit)==true)then
+		if(is_illusion == -1 and his.illusion(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_ground == 1 and is.ground(filterUnit)==false)then
+		if(is_ground == 1 and his.ground(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_ground == -1 and is.ground(filterUnit)==true)then
+		if(is_ground == -1 and his.ground(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_flying == 1 and is.flying(filterUnit)==false)then
+		if(is_flying == 1 and his.flying(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_flying == -1 and is.flying(filterUnit)==true)then
+		if(is_flying == -1 and his.flying(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_melee == 1 and is.melee(filterUnit)==false)then
+		if(is_melee == 1 and his.melee(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_melee == -1 and is.melee(filterUnit)==true)then
+		if(is_melee == -1 and his.melee(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_ranged == 1 and is.ranged(filterUnit)==false)then
+		if(is_ranged == 1 and his.ranged(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_ranged == -1 and is.ranged(filterUnit)==true)then
+		if(is_ranged == -1 and his.ranged(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_summoned == 1 and is.summoned(filterUnit)==false)then
+		if(is_summoned == 1 and his.summoned(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_summoned == -1 and is.summoned(filterUnit)==true)then
+		if(is_summoned == -1 and his.summoned(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_ancient == 1 and is.ancient(filterUnit)==false)then
+		if(is_ancient == 1 and his.ancient(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_ancient == -1 and is.ancient(filterUnit)==true)then
+		if(is_ancient == -1 and his.ancient(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_water == 1 and is.water(filterUnit)==false)then
+		if(is_water == 1 and his.water(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_water == -1 and is.water(filterUnit)==true)then
+		if(is_water == -1 and his.water(filterUnit)==true)then
 			set status = false
 		endif
-		if(is_floor == 1 and is.floor(filterUnit)==false)then
+		if(is_floor == 1 and his.floor(filterUnit)==false)then
 			set status = false
 		endif
-		if(is_floor == -1 and is.floor(filterUnit)==true)then
+		if(is_floor == -1 and his.floor(filterUnit)==true)then
 			set status = false
 		endif
 		return status

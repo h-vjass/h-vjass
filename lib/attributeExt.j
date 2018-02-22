@@ -1,5 +1,5 @@
 globals
-	hAttrExt attrExt = 0
+	hAttrExt hattrExt = 0
 	hashtable hash_attr_ext = InitHashtable()
 	integer ATTR_EXT_FLAG_UP_EFFECT_UNIT = 10000
     integer ATTR_EXT_FLAG_UP_EFFECT_CD = 10010
@@ -117,7 +117,7 @@ struct hAttrExt
 			call SaveReal( hash_attr_ext , uhid , ATTR_EXT_FLAG_UP_HUNT_REBOUND , 0 )
 			call SaveReal( hash_attr_ext , uhid , ATTR_EXT_FLAG_UP_CURE , 0 )
 			//todo 设定默认值
-			if( is.hero(whichUnit) ) then
+			if( his.hero(whichUnit) ) then
 				//白字
 				set tempReal = I2R(GetHeroStr(whichUnit, false))
 				call setAttrDo( ATTR_EXT_FLAG_UP_TOUGHNESS , whichUnit , tempReal*0.2 )
@@ -140,8 +140,8 @@ struct hAttrExt
 				call setAttrDo( ATTR_EXT_FLAG_UP_MANA_SOURCE , whichUnit , 300 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
 				call setAttrDo( ATTR_EXT_FLAG_UP_MANA_SOURCE_CURRENT , whichUnit , 300 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
 			endif
-			call SaveReal( hash_attr_ext , uhid , ATTR_EXT_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/3 )
-			call SaveReal( hash_attr_ext , uhid , ATTR_EXT_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/3 )
+			call SaveReal( hash_attr_ext , uhid , ATTR_EXT_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
+			call SaveReal( hash_attr_ext , uhid , ATTR_EXT_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
 
 			return true
 		endif
@@ -150,10 +150,10 @@ struct hAttrExt
 
 	private static method setAttrDuring takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		local integer flag = time.getInteger(t,1)
-		local unit whichUnit = time.getUnit(t,2)
-		local real diff = time.getReal(t,3)
-		call time.delTimer( t )
+		local integer flag = htime.getInteger(t,1)
+		local unit whichUnit = htime.getUnit(t,2)
+		local real diff = htime.getReal(t,3)
+		call htime.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
 	endmethod
 
@@ -163,10 +163,10 @@ struct hAttrExt
 		call initAttr( whichUnit )
 		call setAttrDo( flag , whichUnit , diff )
 		if( during>0 ) then
-			set t = time.setTimeout( during , function thistype.setAttrDuring )
-			call time.setInteger(t,1,flag)
-			call time.setUnit(t,2,whichUnit)
-			call time.setReal(t,3, -diff )
+			set t = htime.setTimeout( during , function thistype.setAttrDuring )
+			call htime.setInteger(t,1,flag)
+			call htime.setUnit(t,2,whichUnit)
+			call htime.setReal(t,3, -diff )
 		endif
 	endmethod
 
@@ -600,38 +600,38 @@ struct hAttrExt
      * 打印某个单位的攻击特效到桌面
      */
     public static method show takes unit whichUnit returns nothing
-		call console.info("高级属性#life_back："+R2S(getLifeBack(whichUnit)))
-		call console.info("高级属性#life_source："+R2S(getLifeSource(whichUnit)))
-		call console.info("高级属性#life_source_current："+R2S(getLifeSourceCurrent(whichUnit)))
-		call console.info("高级属性#mana_back："+R2S(getManaBack(whichUnit)))
-		call console.info("高级属性#mana_source："+R2S(getManaSource(whichUnit)))
-		call console.info("高级属性#mana_source_current："+R2S(getManaSourceCurrent(whichUnit)))
-		call console.info("高级属性#resistance："+R2S(getResistance(whichUnit)))
-		call console.info("高级属性#toughness："+R2S(getToughness(whichUnit)))
-		call console.info("高级属性#avoid："+R2S(getAvoid(whichUnit)))
-		call console.info("高级属性#aim："+R2S(getAim(whichUnit)))
-		call console.info("高级属性#knocking："+R2S(getKnocking(whichUnit)))
-		call console.info("高级属性#violence："+R2S(getViolence(whichUnit)))
-		call console.info("高级属性#mortal_oppose："+R2S(getMortalOppose(whichUnit)))
-		call console.info("高级属性#punish："+R2S(getPunish(whichUnit)))
-		call console.info("高级属性#punish_current："+R2S(getPunishCurrent(whichUnit)))
-		call console.info("高级属性#punish_oppose："+R2S(getPunishOppose(whichUnit)))
-		call console.info("高级属性#meditative："+R2S(getMeditative(whichUnit)))
-		call console.info("高级属性#help："+R2S(getHelp(whichUnit)))
-		call console.info("高级属性#hemophagia："+R2S(getHemophagia(whichUnit)))
-		call console.info("高级属性#hemophagia_skill："+R2S(getHemophagiaSkill(whichUnit)))
-		call console.info("高级属性#split："+R2S(getSplit(whichUnit)))
-		call console.info("高级属性#gold_ratio："+R2S(getGoldRatio(whichUnit)))
-		call console.info("高级属性#lumber_ratio："+R2S(getLumberRatio(whichUnit)))
-		call console.info("高级属性#exp_ratio："+R2S(getExpRatio(whichUnit)))
-		call console.info("高级属性#swim_oppose："+R2S(getSwimOppose(whichUnit)))
-		call console.info("高级属性#luck："+R2S(getLuck(whichUnit)))
-		call console.info("高级属性#invincible："+R2S(getInvincible(whichUnit)))
-		call console.info("高级属性#weight："+R2S(getWeight(whichUnit)))
-		call console.info("高级属性#weight_current："+R2S(getWeightCurrent(whichUnit)))
-		call console.info("高级属性#hunt_amplitude："+R2S(getHuntAmplitude(whichUnit)))
-		call console.info("高级属性#hunt_rebound："+R2S(getHuntRebound(whichUnit)))
-		call console.info("高级属性#cure："+R2S(getCure(whichUnit)))
+		call hconsole.info("高级属性#life_back："+R2S(getLifeBack(whichUnit)))
+		call hconsole.info("高级属性#life_source："+R2S(getLifeSource(whichUnit)))
+		call hconsole.info("高级属性#life_source_current："+R2S(getLifeSourceCurrent(whichUnit)))
+		call hconsole.info("高级属性#mana_back："+R2S(getManaBack(whichUnit)))
+		call hconsole.info("高级属性#mana_source："+R2S(getManaSource(whichUnit)))
+		call hconsole.info("高级属性#mana_source_current："+R2S(getManaSourceCurrent(whichUnit)))
+		call hconsole.info("高级属性#resistance："+R2S(getResistance(whichUnit)))
+		call hconsole.info("高级属性#toughness："+R2S(getToughness(whichUnit)))
+		call hconsole.info("高级属性#avoid："+R2S(getAvoid(whichUnit)))
+		call hconsole.info("高级属性#aim："+R2S(getAim(whichUnit)))
+		call hconsole.info("高级属性#knocking："+R2S(getKnocking(whichUnit)))
+		call hconsole.info("高级属性#violence："+R2S(getViolence(whichUnit)))
+		call hconsole.info("高级属性#mortal_oppose："+R2S(getMortalOppose(whichUnit)))
+		call hconsole.info("高级属性#punish："+R2S(getPunish(whichUnit)))
+		call hconsole.info("高级属性#punish_current："+R2S(getPunishCurrent(whichUnit)))
+		call hconsole.info("高级属性#punish_oppose："+R2S(getPunishOppose(whichUnit)))
+		call hconsole.info("高级属性#meditative："+R2S(getMeditative(whichUnit)))
+		call hconsole.info("高级属性#help："+R2S(getHelp(whichUnit)))
+		call hconsole.info("高级属性#hemophagia："+R2S(getHemophagia(whichUnit)))
+		call hconsole.info("高级属性#hemophagia_skill："+R2S(getHemophagiaSkill(whichUnit)))
+		call hconsole.info("高级属性#split："+R2S(getSplit(whichUnit)))
+		call hconsole.info("高级属性#gold_ratio："+R2S(getGoldRatio(whichUnit)))
+		call hconsole.info("高级属性#lumber_ratio："+R2S(getLumberRatio(whichUnit)))
+		call hconsole.info("高级属性#exp_ratio："+R2S(getExpRatio(whichUnit)))
+		call hconsole.info("高级属性#swim_oppose："+R2S(getSwimOppose(whichUnit)))
+		call hconsole.info("高级属性#luck："+R2S(getLuck(whichUnit)))
+		call hconsole.info("高级属性#invincible："+R2S(getInvincible(whichUnit)))
+		call hconsole.info("高级属性#weight："+R2S(getWeight(whichUnit)))
+		call hconsole.info("高级属性#weight_current："+R2S(getWeightCurrent(whichUnit)))
+		call hconsole.info("高级属性#hunt_amplitude："+R2S(getHuntAmplitude(whichUnit)))
+		call hconsole.info("高级属性#hunt_rebound："+R2S(getHuntRebound(whichUnit)))
+		call hconsole.info("高级属性#cure："+R2S(getCure(whichUnit)))
     endmethod
 
 endstruct

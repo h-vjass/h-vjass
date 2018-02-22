@@ -1,6 +1,6 @@
 
 globals
-    hConsole console = 0
+    hConsole hconsole = 0
 endglobals
 
 struct hConsole

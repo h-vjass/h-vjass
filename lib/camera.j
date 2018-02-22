@@ -1,6 +1,6 @@
 
 globals
-    hCamera camera = 0
+    hCamera hcamera = 0
 endglobals
 
 struct hCamera
@@ -40,7 +40,7 @@ struct hCamera
 		loop
 			exitwhen i>player_max_qty
 				set whichUnit = hplayer.getHero(players[i])
-				if(whichUnit!=null and is.alive(whichUnit)==true and GetLocalPlayer()==players[i])then
+				if(whichUnit!=null and his.alive(whichUnit)==true and GetLocalPlayer()==players[i])then
 					call lock(players[i],whichUnit)
 				else
 					call reset(players[i],0)
@@ -51,25 +51,30 @@ struct hCamera
 	endmethod
 	private static method zoomModel takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		call SetCameraField( CAMERA_FIELD_TARGET_DISTANCE, time.getReal(t,1), 0 )
+		call SetCameraField( CAMERA_FIELD_TARGET_DISTANCE, htime.getReal(t,1), 0 )
 	endmethod
 	//镜头模式
 	public static method setModel takes string model returns nothing
 		local timer t = null
-		if(model=="lock")then
-			set t = time.setInterval(0.1,function thistype.modelLock)
+		if(model=="normal")then
+			//nothing
+		elseif(model=="lock")then
+			set t = htime.setInterval(0.1,function thistype.modelLock)
 		elseif(model=="zoomin")then
-			set t = time.setInterval(0.1,function thistype.zoomModel)
-			call time.setReal(t,1,825)
+			set t = htime.setInterval(0.1,function thistype.zoomModel)
+			call htime.setReal(t,1,825)
 			set MAX_MOVE_SPEED = MAX_MOVE_SPEED*2
 		elseif(model=="zoomout")then
-			set t = time.setInterval(0.1,function thistype.zoomModel)
-			call time.setReal(t,1,3300)
+			set t = htime.setInterval(0.1,function thistype.zoomModel)
+			call htime.setReal(t,1,3300)
 		else
 			return
 		endif
 		set thistype.model = model
 	endmethod
-
+	//获取当前镜头模式
+	public static method getModel takes nothing returns string
+		return thistype.model
+	endmethod
 
 endstruct

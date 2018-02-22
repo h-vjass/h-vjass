@@ -1,6 +1,6 @@
 /* 算法 */
 globals
-    hMath math = 0
+    hMath hmath = 0
 endglobals
 struct hMath
 

@@ -1,6 +1,6 @@
 
 globals
-    hTime time = 0
+    hTime htime = 0
     hashtable hash_time = InitHashtable()
     integer clock_h = 0
     integer clock_m = 0
@@ -24,10 +24,10 @@ struct hTime
         endif
     endmethod
 
-    static method create takes nothing returns hTime
+    static method create takes nothing returns thistype
         local hTime t = 0
         set t = hTime.allocate()
-        call TimerStart( CreateTimer() , 1.00 , true, function hTime.clock )
+        call TimerStart( CreateTimer() , 1.00 , true, function thistype.clock )
         return t
     endmethod
 

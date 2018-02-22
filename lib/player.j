@@ -7,6 +7,7 @@ globals
 	integer hp_apm = 10002
 	integer hp_battle_status = 10003
 	integer hp_hero = 10004
+	integer hp_hero_avater = 100041
 	integer hp_damage = 10005
 	integer hp_bedamage = 10006
 	integer hp_kill = 10007
@@ -32,8 +33,8 @@ struct hPlayer
 		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_apm, apm)
 	endmethod
 	public static method getApm takes player whichPlayer returns integer
-		if(time.count() > 60) then
-			return R2I( I2R(LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_apm))  / ( I2R(time.count()) / 60.00 ))
+		if(htime.count() > 60) then
+			return R2I( I2R(LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_apm))  / ( I2R(htime.count()) / 60.00 ))
 	    else
 	        return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_apm)
 	    endif
@@ -107,17 +108,12 @@ struct hPlayer
 	    return x
 	endmethod
 
-	//是否电脑
-	public static method isComputer takes player whichPlayer returns boolean
-		return LoadBoolean(hp_hash, GetHandleId(whichPlayer), hp_isComputer)
-	endmethod
-
-	//设置玩家战斗状态
-	public static method setBattleStatus takes player whichPlayer,string status returns nothing
+	//设置玩家状态
+	public static method setStatus takes player whichPlayer,string status returns nothing
 		call SaveStr(hp_hash, GetHandleId(whichPlayer), hp_battle_status, status)
 	endmethod
-	//获取玩家战斗状态
-	public static method getBattleStatus takes player whichPlayer returns string
+	//获取玩家状态
+	public static method getStatus takes player whichPlayer returns string
 		return LoadStr(hp_hash, GetHandleId(whichPlayer), hp_battle_status)
 	endmethod
 
@@ -132,13 +128,22 @@ struct hPlayer
 	endmethod
 
 	//设置玩家英雄
-	public static method setHero takes player whichPlayer,unit hero returns nothing
-		call console.log("playerhero="+GetUnitName(hero))
+	public static method setHero takes player whichPlayer,unit hero,string avater returns nothing
+		call hconsole.log("playerhero="+GetUnitName(hero))
 		call SaveUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_hero, hero)
+		call SaveStr(hp_hash, GetHandleId(whichPlayer), hp_hero_avater, avater)
 	endmethod
-	//获取玩家英雄
+	//获取玩家英雄单位
 	public static method getHero takes player whichPlayer returns unit
 		return LoadUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_hero)
+	endmethod
+	//获取玩家英雄名称
+	public static method getHeroName takes player whichPlayer returns string
+		return GetUnitName(getHero(whichPlayer))
+	endmethod
+	//获取玩家英雄头像（路径串）
+	public static method getHeroAvatar takes player whichPlayer returns string
+		return LoadStr(hp_hash, GetHandleId(whichPlayer), hp_hero_avater)
 	endmethod
 
 	//获取玩家造成的总伤害
@@ -201,12 +206,20 @@ struct hPlayer
 	//增加玩家金钱
 	public static method addGold takes player whichPlayer,integer gold returns nothing
 	    call AdjustPlayerStateBJ(gold, whichPlayer , PLAYER_STATE_RESOURCE_GOLD )
-	    call addTotalGold(whichPlayer,gold)
+	    if(gold>=0)then
+	    	call addTotalGold(whichPlayer,gold)
+	    else
+	    	call addTotalGoldCost(whichPlayer,-gold)
+	    endif
 	endmethod
 	//减少玩家金钱
 	public static method subGold takes player whichPlayer,integer gold returns nothing
 	    call AdjustPlayerStateBJ(-gold, whichPlayer , PLAYER_STATE_RESOURCE_GOLD )
-	    call addTotalGoldCost(whichPlayer,gold)
+	    if(gold<=0)then
+	    	call addTotalGold(whichPlayer,-gold)
+	    else
+	    	call addTotalGoldCost(whichPlayer,gold)
+	    endif
 	endmethod
 
 
@@ -243,12 +256,20 @@ struct hPlayer
 	//增加玩家木材
 	public static method addLumber takes player whichPlayer,integer lumber returns nothing
 	    call AdjustPlayerStateBJ(lumber, whichPlayer , PLAYER_STATE_RESOURCE_LUMBER )
-	    call addTotalLumber(whichPlayer,lumber)
+	    if(lumber>=0)then
+	    	call addTotalLumber(whichPlayer,lumber)
+	    else
+	    	call addTotalLumberCost(whichPlayer,-lumber)
+	    endif
 	endmethod
 	//减少玩家木材
 	public static method subLumber takes player whichPlayer,integer lumber returns nothing
 	    call AdjustPlayerStateBJ(-lumber, whichPlayer , PLAYER_STATE_RESOURCE_LUMBER )
-	    call addTotalLumberCost(whichPlayer,lumber)
+	    if(lumber<=0)then
+	    	call addTotalLumber(whichPlayer,-lumber)
+	    else
+	    	call addTotalLumberCost(whichPlayer,lumber)
+	    endif
 	endmethod
 
 endstruct

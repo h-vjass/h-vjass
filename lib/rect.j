@@ -51,11 +51,11 @@ struct hRect
 	//锁定do
 	private static method lockCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		local string doit = time.getString(t,hash_hrect_do)
-		local string ty = time.getString(t,hash_hrect_type)
-		local real during = time.getReal(t,hash_hrect_during)
-		local real inc = time.getReal(t,hash_hrect_inc)
-		local group baseG = time.getGroup(t,hash_hrect_group)
+		local string doit = htime.getString(t,hash_hrect_do)
+		local string ty = htime.getString(t,hash_hrect_type)
+		local real during = htime.getReal(t,hash_hrect_during)
+		local real inc = htime.getReal(t,hash_hrect_inc)
+		local group baseG = htime.getGroup(t,hash_hrect_group)
 
 		local rect area = null
 
@@ -72,17 +72,17 @@ struct hRect
 		local unit u = null
 
 		if(ty!="square" and ty!="circle")then
-			call time.delTimer(t)
+			call htime.delTimer(t)
 			return
 		endif
 		if(inc>0 and during>0 and inc>=during)then
-			call time.delTimer(t)
+			call htime.delTimer(t)
 			return
 		endif
 		if(doit == "rect")then
-			set area = time.getRect(t,hash_hrect_rect)
+			set area = htime.getRect(t,hash_hrect_rect)
 			if(area==null)then
-				call time.delTimer(t)
+				call htime.delTimer(t)
 				return
 			endif
 			set rectCenter = GetRectCenter(area)
@@ -90,34 +90,34 @@ struct hRect
 			set lockW = LoadReal(hash_hrect, recthid, hRect.HASH_WIDTH)
 			set lockH = LoadReal(hash_hrect, recthid, hRect.HASH_HEIGHT)
 		elseif(doit == "loc")then
-			set rectCenter = time.getLoc(t,hash_hrect_loc)
+			set rectCenter = htime.getLoc(t,hash_hrect_loc)
 			if(rectCenter==null)then
-				call time.delTimer(t)
+				call htime.delTimer(t)
 				return
 			endif
-			set lockW = time.getReal(t,hash_hrect_width)
-			set lockH = time.getReal(t,hash_hrect_height)
+			set lockW = htime.getReal(t,hash_hrect_width)
+			set lockH = htime.getReal(t,hash_hrect_height)
 		elseif(doit == "unit")then
-			set rectCenter = GetUnitLoc(time.getUnit(t,hash_hrect_unit))
+			set rectCenter = GetUnitLoc(htime.getUnit(t,hash_hrect_unit))
 			if(rectCenter==null)then
-				call time.delTimer(t)
+				call htime.delTimer(t)
 				return
 			endif
-			set lockW = time.getReal(t,hash_hrect_width)
-			set lockH = time.getReal(t,hash_hrect_height)
+			set lockW = htime.getReal(t,hash_hrect_width)
+			set lockH = htime.getReal(t,hash_hrect_height)
 		else
-			call console.error("lockCall hash_hrect_do error")
+			call hconsole.error("lockCall hash_hrect_do error")
 		endif
 
 		set lockDegA = (180 * Atan(lockH/lockW)) / bj_PI
 		set lockDegB = 90 - lockDegA
 		if(lockW<=0 or lockH<=0)then
-			call console.error("lockCall rect worh<=0")
-			call time.delTimer(t)
+			call hconsole.error("lockCall rect worh<=0")
+			call htime.delTimer(t)
 			return
 		endif
 
-		call time.setReal(t,hash_hrect_inc,inc+time.getSetTime(t))
+		call htime.setReal(t,hash_hrect_inc,inc+htime.getSetTime(t))
 
 		set g = GetUnitsInRectAll(area)
 		call GroupAddGroup(g, baseG)
@@ -141,7 +141,7 @@ struct hRect
                 set distance = 0.000
                 if(ty == "square")then
                 	set loc = GetUnitLoc(u)
-					if(is.borderRect(area,GetLocationX(loc),GetLocationY(loc))==true)then
+					if(his.borderRect(area,GetLocationX(loc),GetLocationY(loc))==true)then
 						set deg = AngleBetweenPoints(rectCenter, loc)
 						if(deg==0 or deg==180 or deg==-180)then//横
 							set distance = lockW
@@ -206,20 +206,20 @@ struct hRect
 		local timer t = null
 		local integer recthid = 0
 		if(area==null)then
-			call console.error("hRect.lockByRect")
+			call hconsole.error("hRect.lockByRect")
 			return
 		endif
 		set recthid = GetHandleId(area)
 		set t = LoadTimerHandle(hash_hrect, recthid, HASH_TIMER)
 		if(t == null)then
 			call SaveTimerHandle(hash_hrect, recthid, HASH_TIMER , t)
-			set t = time.setInterval(0.1,function hRect.lockCall)
-			call time.setString(t,hash_hrect_do,"rect")
-			call time.setRect(t,hash_hrect_rect,area)
-			call time.setString(t,hash_hrect_type,ty)
-			call time.setReal(t,hash_hrect_during,during)
-			call time.setReal(t,hash_hrect_inc,0)
-			call time.setGroup(t,hash_hrect_group,CreateGroup())
+			set t = htime.setInterval(0.1,function thistype.lockCall)
+			call htime.setString(t,hash_hrect_do,"rect")
+			call htime.setRect(t,hash_hrect_rect,area)
+			call htime.setString(t,hash_hrect_type,ty)
+			call htime.setReal(t,hash_hrect_during,during)
+			call htime.setReal(t,hash_hrect_inc,0)
+			call htime.setGroup(t,hash_hrect_group,CreateGroup())
 		endif
 	endmethod
 
@@ -233,22 +233,22 @@ struct hRect
 		local timer t = null
 		local integer locid = 0
 		if(loc==null)then
-			call console.error("hRect.lockByLoc")
+			call hconsole.error("hRect.lockByLoc")
 			return
 		endif
 		set locid = GetHandleId(loc)
 		set t = LoadTimerHandle(hash_hrect, locid, HASH_TIMER)
 		if(t == null)then
 			call SaveTimerHandle(hash_hrect, locid, HASH_TIMER , t)
-			set t = time.setInterval(0.1,function hRect.lockCall)
-			call time.setString(t,hash_hrect_do,"loc")
-			call time.setLoc(t,hash_hrect_loc,loc)
-			call time.setString(t,hash_hrect_type,ty)
-			call time.setReal(t,hash_hrect_during,during)
-			call time.setReal(t,hash_hrect_inc,0)
-			call time.setReal(t,hash_hrect_width,width)
-			call time.setReal(t,hash_hrect_height,height)
-			call time.setGroup(t,hash_hrect_group,CreateGroup())
+			set t = htime.setInterval(0.1,function thistype.lockCall)
+			call htime.setString(t,hash_hrect_do,"loc")
+			call htime.setLoc(t,hash_hrect_loc,loc)
+			call htime.setString(t,hash_hrect_type,ty)
+			call htime.setReal(t,hash_hrect_during,during)
+			call htime.setReal(t,hash_hrect_inc,0)
+			call htime.setReal(t,hash_hrect_width,width)
+			call htime.setReal(t,hash_hrect_height,height)
+			call htime.setGroup(t,hash_hrect_group,CreateGroup())
 		endif
 	endmethod
 
@@ -262,22 +262,22 @@ struct hRect
 		local timer t = null
 		local integer hid = 0
 		if(u==null)then
-			call console.error("hRect.lockByUnit")
+			call hconsole.error("hRect.lockByUnit")
 			return
 		endif
 		set hid = GetHandleId(u)
 		set t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t == null)then
 			call SaveTimerHandle(hash_hrect, hid, HASH_TIMER , t)
-			set t = time.setInterval(0.1,function hRect.lockCall)
-			call time.setString(t,hash_hrect_do,"unit")
-			call time.setUnit(t,hash_hrect_unit,u)
-			call time.setString(t,hash_hrect_type,ty)
-			call time.setReal(t,hash_hrect_during,during)
-			call time.setReal(t,hash_hrect_inc,0)
-			call time.setReal(t,hash_hrect_width,width)
-			call time.setReal(t,hash_hrect_height,height)
-			call time.setGroup(t,hash_hrect_group,CreateGroup())
+			set t = htime.setInterval(0.1,function thistype.lockCall)
+			call htime.setString(t,hash_hrect_do,"unit")
+			call htime.setUnit(t,hash_hrect_unit,u)
+			call htime.setString(t,hash_hrect_type,ty)
+			call htime.setReal(t,hash_hrect_during,during)
+			call htime.setReal(t,hash_hrect_inc,0)
+			call htime.setReal(t,hash_hrect_width,width)
+			call htime.setReal(t,hash_hrect_height,height)
+			call htime.setGroup(t,hash_hrect_group,CreateGroup())
 		endif
 	endmethod
 
@@ -286,7 +286,7 @@ struct hRect
 		local integer hid = GetHandleId(area)
 		local timer t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t != null)then
-			call time.delTimer(t)
+			call htime.delTimer(t)
     		call SaveTimerHandle(hash_hrect, hid, HASH_TIMER , null)
     	endif
 	endmethod
@@ -295,7 +295,7 @@ struct hRect
 		local integer hid = GetHandleId(loc)
 		local timer t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t != null)then
-			call time.delTimer(t)
+			call htime.delTimer(t)
     		call SaveTimerHandle(hash_hrect, hid, HASH_TIMER , null)
     	endif
 	endmethod
@@ -304,7 +304,7 @@ struct hRect
 		local integer hid = GetHandleId(u)
 		local timer t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t != null)then
-			call time.delTimer(t)
+			call htime.delTimer(t)
     		call SaveTimerHandle(hash_hrect, hid, HASH_TIMER , null)
     	endif
 	endmethod

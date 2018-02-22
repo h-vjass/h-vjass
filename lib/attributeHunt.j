@@ -1,6 +1,6 @@
 /* 属性 - 伤害 */
 globals
-    hAttrHunt attrHunt = 0
+    hAttrHunt hattrHunt = 0
 endglobals
 
 struct hAttrHuntBean
@@ -146,45 +146,45 @@ struct hAttrHunt
 
         local real fromUnitPunishHeavy = 1
 
-    	local real fromUnitAttackPhysical = attr.getAttackPhysical(bean.fromUnit)
-        local real fromUnitAttackMagic = attr.getAttackMagic(bean.fromUnit)
-    	local real fromUnitAim = attrExt.getAim(bean.fromUnit)
-    	local real fromUnitKnocking = attrExt.getKnocking(bean.fromUnit)
-    	local real fromUnitViolence = attrExt.getViolence(bean.fromUnit)
-    	local real fromUnitHemophagia = attrExt.getHemophagia(bean.fromUnit)
-    	local real fromUnitHemophagiaSkill = attrExt.getHemophagiaSkill(bean.fromUnit)
-        local real fromUnitSplit = attrExt.getSplit(bean.fromUnit)
+    	local real fromUnitAttackPhysical = hattr.getAttackPhysical(bean.fromUnit)
+        local real fromUnitAttackMagic = hattr.getAttackMagic(bean.fromUnit)
+    	local real fromUnitAim = hattrExt.getAim(bean.fromUnit)
+    	local real fromUnitKnocking = hattrExt.getKnocking(bean.fromUnit)
+    	local real fromUnitViolence = hattrExt.getViolence(bean.fromUnit)
+    	local real fromUnitHemophagia = hattrExt.getHemophagia(bean.fromUnit)
+    	local real fromUnitHemophagiaSkill = hattrExt.getHemophagiaSkill(bean.fromUnit)
+        local real fromUnitSplit = hattrExt.getSplit(bean.fromUnit)
     	local real fromUnitRange = 200.00
-    	local real fromUnitLuck = attrExt.getLuck(bean.fromUnit)
-        local real fromUnitHuntAmplitude = attrExt.getHuntAmplitude(bean.fromUnit)
-        local real fromUnitNaturalFire = attrNatural.getFire(bean.fromUnit)
-        local real fromUnitNaturalSoil = attrNatural.getSoil(bean.fromUnit)
-        local real fromUnitNaturalWater = attrNatural.getWater(bean.fromUnit)
-        local real fromUnitNaturalWind = attrNatural.getWind(bean.fromUnit)
-        local real fromUnitNaturalLight = attrNatural.getLight(bean.fromUnit)
-        local real fromUnitNaturalDark = attrNatural.getDark(bean.fromUnit)
-        local real fromUnitNaturalWood = attrNatural.getWood(bean.fromUnit)
-    	local real fromUnitNaturalThunder = attrNatural.getThunder(bean.fromUnit)
+    	local real fromUnitLuck = hattrExt.getLuck(bean.fromUnit)
+        local real fromUnitHuntAmplitude = hattrExt.getHuntAmplitude(bean.fromUnit)
+        local real fromUnitNaturalFire = hattrNatural.getFire(bean.fromUnit)
+        local real fromUnitNaturalSoil = hattrNatural.getSoil(bean.fromUnit)
+        local real fromUnitNaturalWater = hattrNatural.getWater(bean.fromUnit)
+        local real fromUnitNaturalWind = hattrNatural.getWind(bean.fromUnit)
+        local real fromUnitNaturalLight = hattrNatural.getLight(bean.fromUnit)
+        local real fromUnitNaturalDark = hattrNatural.getDark(bean.fromUnit)
+        local real fromUnitNaturalWood = hattrNatural.getWood(bean.fromUnit)
+    	local real fromUnitNaturalThunder = hattrNatural.getThunder(bean.fromUnit)
 
-    	local real toUnitDefend = attr.getDefend(bean.toUnit)
-    	local real toUnitResistance = attrExt.getResistance(bean.toUnit)
-    	local real toUnitToughness = attrExt.getToughness(bean.toUnit)
-    	local real toUnitAvoid = attrExt.getAvoid(bean.toUnit)
-    	local real toUnitMortalOppose = attrExt.getMortalOppose(bean.toUnit)
-    	local real toUnitSwimOppose = attrExt.getSwimOppose(bean.toUnit)
-    	local real toUnitLuck = attrExt.getLuck(bean.toUnit)
-    	local real toUnitInvincible = attrExt.getInvincible(bean.toUnit)
-    	local real toUnitHuntRebound = attrExt.getHuntRebound(bean.toUnit)
-    	local real toUnitCure = attrExt.getCure(bean.toUnit)
-        local real toUnitPunishOppose = attrExt.getPunishOppose(bean.toUnit)
-        local real toUnitNaturalFireOppose = attrNatural.getFireOppose(bean.toUnit)
-        local real toUnitNaturalSoilOppose = attrNatural.getSoilOppose(bean.toUnit)
-        local real toUnitNaturalWaterOppose = attrNatural.getWaterOppose(bean.toUnit)
-        local real toUnitNaturalWindOppose = attrNatural.getWindOppose(bean.toUnit)
-        local real toUnitNaturalLightOppose = attrNatural.getLightOppose(bean.toUnit)
-        local real toUnitNaturalDarkOppose = attrNatural.getDarkOppose(bean.toUnit)
-        local real toUnitNaturalWoodOppose = attrNatural.getWoodOppose(bean.toUnit)
-        local real toUnitNaturalThunderOppose = attrNatural.getThunderOppose(bean.toUnit)
+    	local real toUnitDefend = hattr.getDefend(bean.toUnit)
+    	local real toUnitResistance = hattrExt.getResistance(bean.toUnit)
+    	local real toUnitToughness = hattrExt.getToughness(bean.toUnit)
+    	local real toUnitAvoid = hattrExt.getAvoid(bean.toUnit)
+    	local real toUnitMortalOppose = hattrExt.getMortalOppose(bean.toUnit)
+    	local real toUnitSwimOppose = hattrExt.getSwimOppose(bean.toUnit)
+    	local real toUnitLuck = hattrExt.getLuck(bean.toUnit)
+    	local real toUnitInvincible = hattrExt.getInvincible(bean.toUnit)
+    	local real toUnitHuntRebound = hattrExt.getHuntRebound(bean.toUnit)
+    	local real toUnitCure = hattrExt.getCure(bean.toUnit)
+        local real toUnitPunishOppose = hattrExt.getPunishOppose(bean.toUnit)
+        local real toUnitNaturalFireOppose = hattrNatural.getFireOppose(bean.toUnit)
+        local real toUnitNaturalSoilOppose = hattrNatural.getSoilOppose(bean.toUnit)
+        local real toUnitNaturalWaterOppose = hattrNatural.getWaterOppose(bean.toUnit)
+        local real toUnitNaturalWindOppose = hattrNatural.getWindOppose(bean.toUnit)
+        local real toUnitNaturalLightOppose = hattrNatural.getLightOppose(bean.toUnit)
+        local real toUnitNaturalDarkOppose = hattrNatural.getDarkOppose(bean.toUnit)
+        local real toUnitNaturalWoodOppose = hattrNatural.getWoodOppose(bean.toUnit)
+        local real toUnitNaturalThunderOppose = hattrNatural.getThunderOppose(bean.toUnit)
 
         local boolean isInvincible = false
 
@@ -210,12 +210,12 @@ struct hAttrHunt
             endif
         endif
 
-    	if(is.alive(bean.toUnit)==true and bean.damage>0.5)then
+    	if(his.alive(bean.toUnit)==true and bean.damage>0.5)then
 
             //*重要* hjass必须设定护甲因子为0，这里为了修正魔兽负护甲依然因子保持0.06的bug
             //当护甲x为负时，最大-20,公式2-(1-a)^abs(x)
             if(toUnitDefend<0 and toUnitDefend>=-20)then
-                set bean.damage =  bean.damage / (2-Pow(0.94,math.rabs(toUnitDefend)))
+                set bean.damage =  bean.damage / (2-Pow(0.94,hmath.rabs(toUnitDefend)))
             elseif(toUnitDefend<0 and toUnitDefend<-20)then
                 set bean.damage =  bean.damage / (2-Pow(0.94,20))
             endif
@@ -229,7 +229,7 @@ struct hAttrHunt
 	        elseif( bean.huntKind=="skill" )then
 	    	elseif( bean.huntKind=="item" )then
 	    	else
-	    		call console.error("伤害单位错误：bean.huntKind")
+	    		call hconsole.error("伤害单位错误：bean.huntKind")
 	    		return
 	        endif
     		//判断伤害类型
@@ -246,7 +246,7 @@ struct hAttrHunt
 	    		set fromUnitViolence = 0
 	    		set fromUnitKnocking = 0
 	    	else
-	    		call console.error("伤害单位错误：bean.huntType")
+	    		call hconsole.error("伤害单位错误：bean.huntType")
 	    		return
 	        endif
 
@@ -261,7 +261,7 @@ struct hAttrHunt
                 set hevtBean.targetUnit = bean.toUnit
                 set hevtBean.breakType = bean.isBreak
                 set hevtBean.value = toUnitDefend
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被无视护甲事件
                 set hevtBean = hEvtBean.create()
@@ -270,7 +270,7 @@ struct hAttrHunt
                 set hevtBean.sourceUnit = bean.fromUnit
                 set hevtBean.breakType = bean.isBreak
                 set hevtBean.value = toUnitDefend
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //
 	        	if(toUnitDefend>0) then
@@ -284,7 +284,7 @@ struct hAttrHunt
                 set hevtBean.targetUnit = bean.toUnit
                 set hevtBean.breakType = bean.isBreak
                 set hevtBean.value = toUnitResistance
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被无视魔抗事件
                 set hevtBean = hEvtBean.create()
@@ -293,7 +293,7 @@ struct hAttrHunt
                 set hevtBean.sourceUnit = bean.fromUnit
                 set hevtBean.breakType = bean.isBreak
                 set hevtBean.value = toUnitResistance
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //
                 if(toUnitResistance>0) then
@@ -308,7 +308,7 @@ struct hAttrHunt
                 set hevtBean.breakType = bean.isBreak
                 set hevtBean.value = toUnitDefend
                 set hevtBean.value2 = toUnitResistance
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被同时无视护甲和魔抗事件
                 set hevtBean = hEvtBean.create()
@@ -318,7 +318,7 @@ struct hAttrHunt
                 set hevtBean.breakType = bean.isBreak
                 set hevtBean.value = toUnitDefend
                 set hevtBean.value2 = toUnitResistance
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //
                 if(toUnitDefend>0) then
@@ -349,7 +349,7 @@ struct hAttrHunt
                 set hevtBean.damage = realDamage
                 set hevtBean.value = fromUnitKnocking/300
                 set hevtBean.value2 = fromUnitKnocking*0.05
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被物理暴击事件
                 set hevtBean = hEvtBean.create()
@@ -359,7 +359,7 @@ struct hAttrHunt
                 set hevtBean.damage = realDamage
                 set hevtBean.value = fromUnitKnocking/300
                 set hevtBean.value2 = fromUnitKnocking*0.05
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
 	        endif
 
@@ -402,7 +402,7 @@ struct hAttrHunt
                     set hevtBean.damage = realDamage
                     set hevtBean.value = fromUnitKnocking/200
                     set hevtBean.value2 = fromUnitKnocking*0.03
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                     //@触发被魔法暴击事件
                     set hevtBean = hEvtBean.create()
@@ -412,7 +412,7 @@ struct hAttrHunt
                     set hevtBean.damage = realDamage
                     set hevtBean.value = fromUnitKnocking/200
                     set hevtBean.value2 = fromUnitKnocking*0.03
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                 endif
 	        endif
@@ -425,7 +425,7 @@ struct hAttrHunt
                 set hevtBean.triggerKey = "avoid"
                 set hevtBean.triggerUnit = bean.toUnit
                 set hevtBean.attacker = bean.fromUnit
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被回避事件
                 set hevtBean = hEvtBean.create()
@@ -433,7 +433,7 @@ struct hAttrHunt
                 set hevtBean.triggerUnit = bean.fromUnit
                 set hevtBean.attacker = bean.fromUnit
                 set hevtBean.targetUnit = bean.toUnit
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
     		endif
     		//计算护甲
@@ -465,7 +465,7 @@ struct hAttrHunt
     			endif
     		endif
 	        //计算单位是否无敌且不是绝对伤害,无敌属性为百分比计算，被动触发抵挡一次
-    		if( bean.huntType != "absolute" and (is.invincible(bean.toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
+    		if( bean.huntType != "absolute" and (his.invincible(bean.toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
     			set realDamage = 0
                 set isInvincible = true
     		endif
@@ -473,9 +473,10 @@ struct hAttrHunt
     		//造成伤害
             //call console.info("realDamage:"+R2S(realDamage))
     		if( realDamage > 0 ) then
-				call hunit.subLife(bean.toUnit,realDamage) //#
+                call hevt.setLastDamageUnit(bean.toUnit,bean.fromUnit)
                 call hplayer.addDamage(GetOwningPlayer(bean.fromUnit),realDamage)
                 call hplayer.addBeDamage(GetOwningPlayer(bean.toUnit),realDamage)
+                call hunit.subLife(bean.toUnit,realDamage) //#
 
                 if(bean.isNoAvoid==true)then
                     //@触发造成无法回避伤害事件
@@ -484,7 +485,7 @@ struct hAttrHunt
                     set hevtBean.triggerUnit = bean.fromUnit
                     set hevtBean.targetUnit = bean.toUnit
                     set hevtBean.damage = realDamage
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                     //@触发被无法回避伤害事件
                     set hevtBean = hEvtBean.create()
@@ -492,7 +493,7 @@ struct hAttrHunt
                     set hevtBean.triggerUnit = bean.toUnit
                     set hevtBean.sourceUnit = bean.fromUnit
                     set hevtBean.damage = realDamage
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                 endif
 
@@ -506,7 +507,7 @@ struct hAttrHunt
                 set hevtBean.realDamage = realDamage
                 set hevtBean.damageKind = bean.huntKind
                 set hevtBean.damageType = bean.huntType
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被伤害事件
                 set hevtBean = hEvtBean.create()
@@ -517,7 +518,7 @@ struct hAttrHunt
                 set hevtBean.realDamage = realDamage
                 set hevtBean.damageKind = bean.huntKind
                 set hevtBean.damageType = bean.huntType
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 
 				//分裂
@@ -551,7 +552,7 @@ struct hAttrHunt
                     set hevtBean.damage = realDamage * fromUnitSplit * 0.01
                     set hevtBean.range = fromUnitRange
                     set hevtBean.value = fromUnitSplit
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                     //@触发被分裂事件
                     set hevtBean = hEvtBean.create()
@@ -561,7 +562,7 @@ struct hAttrHunt
                     set hevtBean.damage = realDamage * fromUnitSplit * 0.01
                     set hevtBean.range = fromUnitRange
                     set hevtBean.value = fromUnitSplit
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
 	            endif
 	            //吸血
@@ -575,7 +576,7 @@ struct hAttrHunt
                     set hevtBean.targetUnit = bean.toUnit
                     set hevtBean.damage = realDamage * fromUnitHemophagia * 0.01
                     set hevtBean.value = fromUnitHemophagia
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                     //@触发被吸血事件
                     set hevtBean = hEvtBean.create()
@@ -584,7 +585,7 @@ struct hAttrHunt
                     set hevtBean.sourceUnit = bean.fromUnit
                     set hevtBean.damage = realDamage * fromUnitHemophagia * 0.01
                     set hevtBean.value = fromUnitHemophagia
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
 				endif
 				//技能吸血
@@ -598,7 +599,7 @@ struct hAttrHunt
                     set hevtBean.targetUnit = bean.toUnit
                     set hevtBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
                     set hevtBean.value = fromUnitHemophagiaSkill
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                     //@触发被技能吸血事件
                     set hevtBean = hEvtBean.create()
@@ -607,28 +608,28 @@ struct hAttrHunt
                     set hevtBean.sourceUnit = bean.fromUnit
                     set hevtBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
                     set hevtBean.value = fromUnitHemophagiaSkill
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
 				endif
 				//硬直
-                if( is.alive(bean.toUnit) )then
+                if( his.alive(bean.toUnit) )then
                     if( bean.special == "effect_heavy" and bean.specialVal>1 ) then
                         set fromUnitPunishHeavy = fromUnitPunishHeavy * bean.specialVal
                     endif
-                    call attrExt.subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
+                    call hattrExt.subPunishCurrent(bean.toUnit,realDamage*fromUnitPunishHeavy,0)
 
-                    if(attrExt.getPunishCurrent(bean.toUnit) <= 0 ) then
-                        call attrExt.setPunishCurrent(bean.toUnit,attrExt.getPunish(bean.toUnit),0)
-                        set punishEffect = attr.getAttackSpeed(bean.toUnit)*punishEffectRatio
+                    if(hattrExt.getPunishCurrent(bean.toUnit) <= 0 ) then
+                        call hattrExt.setPunishCurrent(bean.toUnit,hattrExt.getPunish(bean.toUnit),0)
+                        set punishEffect = hattr.getAttackSpeed(bean.toUnit)*punishEffectRatio
                         if(punishEffect<1)then
                             set punishEffect = 1.00
                         endif
-                        call attr.subAttackSpeed( bean.toUnit , punishEffect , 5.00 )
-                        set punishEffect = attr.getMove(bean.toUnit)*punishEffectRatio
+                        call hattr.subAttackSpeed( bean.toUnit , punishEffect , 5.00 )
+                        set punishEffect = hattr.getMove(bean.toUnit)*punishEffectRatio
                         if(punishEffect<1)then
                             set punishEffect = 1.00
                         endif
-                        call attr.subMove( bean.toUnit , punishEffect , 5.00 )
+                        call hattr.subMove( bean.toUnit , punishEffect , 5.00 )
                         call hmsg.style(hmsg.ttg2Unit(bean.toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0.05)
 
                         //@触发硬直事件
@@ -638,7 +639,7 @@ struct hAttrHunt
                         set hevtBean.sourceUnit = bean.fromUnit
                         set hevtBean.value = punishEffect
                         set hevtBean.during = 5.00
-                        call evt.triggerEvent(hevtBean)
+                        call hevt.triggerEvent(hevtBean)
                         call hevtBean.destroy()
 
                     endif
@@ -653,7 +654,7 @@ struct hAttrHunt
                     set hevtBean.triggerUnit = bean.toUnit
                     set hevtBean.sourceUnit = bean.fromUnit
                     set hevtBean.damage = realDamage * toUnitHuntRebound * 0.01
-                    call evt.triggerEvent(hevtBean)
+                    call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                 endif
                 //治疗
@@ -671,71 +672,71 @@ struct hAttrHunt
         if( isInvincible == false and bean.specialVal != 0 and bean.specialDuring > 0 )then
             if( bean.special == "null" ) then
             elseif( bean.special == "effect_life_back" ) then
-                call attrExt.addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addLifeBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_mana_back" ) then
-                call attrExt.addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addManaBack(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_attack_speed" ) then
-                call attr.addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addAttackSpeed(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_attack_physical" ) then
-                call attr.addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addAttackPhysical(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_attack_magic" ) then
-                call attr.addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addAttackMagic(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_move" ) then
-                call attr.addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addMove(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_aim" ) then
-                call attrExt.addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addAim(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_str" ) then
-                call attr.addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addStr(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_agi" ) then
-                call attr.addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addAgi(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_int" ) then
-                call attr.addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattr.addInt(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_knocking" ) then
-                call attrExt.addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addKnocking(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_violence" ) then
-                call attrExt.addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addViolence(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_hemophagia" ) then
-                call attrExt.addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addHemophagia(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_hemophagia_skill" ) then
-                call attrExt.addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addHemophagiaSkill(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_split" ) then
-                call attrExt.addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addSplit(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_luck" ) then
-                call attrExt.addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addLuck(bean.fromUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_hunt_amplitude" ) then
-                call attrExt.addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.addHuntAmplitude(bean.fromUnit,bean.specialVal,bean.specialDuring)
             endif
             if( bean.special == "null" ) then
             elseif( bean.special == "effect_poison" ) then
-                call attrExt.subLifeBack(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subLifeBack(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_dry" ) then
-                call attrExt.subManaBack(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subManaBack(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_freeze" ) then
-                call attr.subAttackSpeed(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subAttackSpeed(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_cold" ) then
-                call attr.subMove(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subMove(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_blunt" ) then
-                call attr.subAttackPhysical(bean.toUnit,bean.specialVal,bean.specialDuring)
-                call attr.subAttackMagic(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subAttackPhysical(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subAttackMagic(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_corrosion" ) then
-                call attr.subDefend(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subDefend(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_chaos" ) then
-                call attrExt.subResistance(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subResistance(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_twine" ) then
-                call attrExt.subAvoid(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subAvoid(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_blind" ) then
-                call attrExt.subAim(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subAim(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_tortua" ) then
-                call attrExt.subToughness(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subToughness(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_weak" ) then
-                call attr.subStr(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subStr(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_bound" ) then
-                call attr.subAgi(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subAgi(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_foolish" ) then
-                call attr.subInt(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattr.subInt(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_lazy" ) then
-                call attrExt.subKnocking(bean.toUnit,bean.specialVal,bean.specialDuring)
-                call attrExt.subViolence(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subKnocking(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subViolence(bean.toUnit,bean.specialVal,bean.specialDuring)
             elseif( bean.special == "effect_swim") then
                 if(toUnitSwimOppose!=0)then
                     set bean.specialVal = bean.specialVal - toUnitSwimOppose
@@ -748,7 +749,7 @@ struct hAttrHunt
                 set hevtBean.targetUnit = bean.toUnit
                 set hevtBean.value = bean.specialVal
                 set hevtBean.during = bean.specialDuring
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //@触发被眩晕事件
                 set hevtBean = hEvtBean.create()
@@ -757,23 +758,23 @@ struct hAttrHunt
                 set hevtBean.sourceUnit = bean.fromUnit
                 set hevtBean.value = bean.specialVal
                 set hevtBean.during = bean.specialDuring
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
                 //
                 if(GetRandomReal(1,100)<bean.specialVal and bean.specialDuring>0)then
                     call hability.swim( bean.toUnit , bean.specialDuring )
                 endif
             elseif( bean.special == "effect_break" and GetRandomReal(1,100)<bean.specialVal ) then
-                set punishEffect = attr.getAttackSpeed(bean.toUnit)*punishEffectRatio
+                set punishEffect = hattr.getAttackSpeed(bean.toUnit)*punishEffectRatio
                 if(punishEffect<1)then
                     set punishEffect = 1.00
                 endif
-                call attr.subAttackSpeed( bean.toUnit , punishEffect , bean.specialDuring )
-                set punishEffect = attr.getMove(bean.toUnit)*punishEffectRatio
+                call hattr.subAttackSpeed( bean.toUnit , punishEffect , bean.specialDuring )
+                set punishEffect = hattr.getMove(bean.toUnit)*punishEffectRatio
                 if(punishEffect<1)then
                     set punishEffect = 1.00
                 endif
-                call attr.subMove( bean.toUnit , punishEffect , bean.specialDuring )
+                call hattr.subMove( bean.toUnit , punishEffect , bean.specialDuring )
                 
                 //@触发硬直事件
                 set hevtBean = hEvtBean.create()
@@ -782,11 +783,11 @@ struct hAttrHunt
                 set hevtBean.sourceUnit = bean.fromUnit
                 set hevtBean.value = punishEffect
                 set hevtBean.during = bean.specialDuring
-                call evt.triggerEvent(hevtBean)
+                call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
 
             elseif( bean.special == "effect_unluck" ) then
-                call attrExt.subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
+                call hattrExt.subLuck(bean.toUnit,bean.specialVal,bean.specialDuring)
             endif
 
             //@触发伤害特效事件
@@ -802,7 +803,7 @@ struct hAttrHunt
             set hevtBean.damageType = bean.huntType
             set hevtBean.value = bean.specialVal
             set hevtBean.during = bean.specialDuring
-            call evt.triggerEvent(hevtBean)
+            call hevt.triggerEvent(hevtBean)
             call hevtBean.destroy()
             //@触发被伤害特效事件
             set hevtBean = hEvtBean.create()
@@ -816,7 +817,7 @@ struct hAttrHunt
             set hevtBean.damageType = bean.huntType
             set hevtBean.value = bean.specialVal
             set hevtBean.during = bean.specialDuring
-            call evt.triggerEvent(hevtBean)
+            call hevt.triggerEvent(hevtBean)
             call hevtBean.destroy()
         endif
 

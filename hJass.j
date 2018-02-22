@@ -6,22 +6,21 @@ library hJass initializer init
 
 	private function init takes nothing returns nothing
 		//系统初始化,请勿在不了解的情况下轻易修改
-		set is = hIs.create()
-		set time = hTime.create()
-		set math = hMath.create()
-		set console = hConsole.create()
-		set media = hMedia.create()
-		set camera = hCamera.create()
-		set award = hAward.create()
-		set evt = hEvt.create()
-		set attr = hAttr.create()
-		set attrExt = hAttrExt.create()
-		set attrEffect = hAttrEffect.create()
-		set attrNatural = hAttrNatural.create()
-		set attrHunt = hAttrHunt.create()
-		set attrUnit = hAttrUnit.create()
+		set his = hIs.create()
+		set htime = hTime.create()
+		set hmath = hMath.create()
+		set hconsole = hConsole.create()
+		set hmedia = hMedia.create()
+		set hcamera = hCamera.create()
+		set haward = hAward.create()
+		set hevt = hEvt.create()
+		set hattr = hAttr.create()
+		set hattrExt = hAttrExt.create()
+		set hattrEffect = hAttrEffect.create()
+		set hattrNatural = hAttrNatural.create()
+		set hattrHunt = hAttrHunt.create()
+		set hattrUnit = hAttrUnit.create()
 		set hmb = hMultiboard.create()
-
 		set heffect = hEffect.create()
 		set hrect = hRect.create()
 		set hunit = hUnit.create()
@@ -30,8 +29,9 @@ library hJass initializer init
 		set hplayer = hPlayer.create()
 		set hweather = hWeather.create()
 		set hability = hAbility.create()
+		set hitem = hItem.create()
 		//initset
-		call attrUnit.initSet()
+		call hattrUnit.initSet()
 		call hmb.initSet()
     endfunction
 

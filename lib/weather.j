@@ -63,7 +63,7 @@ struct hWeather
             set i=i+1
         endloop
         if(i>100)then
-            call console.error("weatherHashCacheMax too small")
+            call hconsole.error("weatherHashCacheMax too small")
         endif
     endmethod
 
@@ -78,7 +78,7 @@ struct hWeather
         local integer i = LoadInteger(hash_weather, GetHandleId(t), 0)
         local weathereffect w = weatherHashCache[i]
         call del(w)
-        call time.delTimer(t)
+        call htime.delTimer(t)
         set weatherHashCache[i] = null
     endmethod
 
@@ -88,18 +88,18 @@ struct hWeather
         local rect area = null
         local timer t = null
         if(bean.loc==null)then
-            call console.error("hWeather.build")
+            call hconsole.error("hWeather.build")
             return null
         endif
         if(bean.loc!=null)then
             if(bean.width<=0 or bean.height<=0)then
-                call console.error("hWeather.build -w-h")
+                call hconsole.error("hWeather.build -w-h")
                 return null
             else
                 set area = hrect.createInLoc(GetLocationX(bean.loc),GetLocationY(bean.loc),bean.width,bean.height)
                 set w = AddWeatherEffect( area , bean.id )
                 if(bean.during>0)then
-                    set t = time.setTimeout(bean.during,function thistype.delCall)
+                    set t = htime.setTimeout(bean.during,function thistype.delCall)
                     call saveWatherHashCache(t,w)
                 endif
                 call RemoveRect(area)

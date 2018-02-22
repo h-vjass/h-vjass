@@ -1,6 +1,6 @@
 /* 事件.j */
 globals
-    hEvt evt = 0
+    hEvt hevt = 0
     hEvtBean hevtBean = 0
     hashtable hash_trigger_register = InitHashtable()
     hashtable hash_trigger = InitHashtable()
@@ -29,6 +29,12 @@ globals
     trigger event_trigger_esc = null
     trigger event_trigger_selection = null
     trigger event_trigger_unSelection = null
+    trigger event_trigger_upgradeStart = null
+    trigger event_trigger_upgradeCancel = null
+    trigger event_trigger_upgradeFinish = null
+    trigger event_trigger_constructStart = null
+    trigger event_trigger_constructCancel = null
+    trigger event_trigger_constructFinish = null
 
 endglobals
 
@@ -127,6 +133,8 @@ struct hEvt
 
     private static integer trigger_limit = 9999
 
+    private static integer hashkey_last_damage = 9991999
+
     public static integer hashkey_onAttackReady_inc = 5001
     public static integer hashkey_onBeAttackReady_inc = 5002
     public static integer hashkey_onSkillStudy_inc = 5003
@@ -182,6 +190,12 @@ struct hEvt
     public static integer hashkey_onEsc_inc = 5053
     public static integer hashkey_onSelection_inc = 5054
     public static integer hashkey_onUnSelection_inc = 5055
+    public static integer hashkey_onUpgradeStart_inc = 5056
+    public static integer hashkey_onUpgradeCancel_inc = 5057
+    public static integer hashkey_onUpgradeFinish_inc = 5058
+    public static integer hashkey_onConstructStart_inc = 5059
+    public static integer hashkey_onConstructCancel_inc = 5060
+    public static integer hashkey_onConstructFinish_inc = 5061
 
     private static integer hashkey_trigger_onAttackReady = 10000
     private static integer hashkey_trigger_onBeAttackReady = 20000
@@ -238,6 +252,12 @@ struct hEvt
     private static integer hashkey_trigger_onEsc = 530000
     private static integer hashkey_trigger_onSelection = 540000
     private static integer hashkey_trigger_onUnSelection = 550000
+    private static integer hashkey_trigger_onUpgradeStart = 560000
+    private static integer hashkey_trigger_onUpgradeCancel = 570000
+    private static integer hashkey_trigger_onUpgradeFinish = 580000
+    private static integer hashkey_trigger_onConstructStart = 590000
+    private static integer hashkey_trigger_onConstructCancel = 600000
+    private static integer hashkey_trigger_onConstructFinish = 610000
 
     private static integer hashkey_type_TriggerHandle = 1
     private static integer hashkey_type_TriggerUnit = 2
@@ -329,6 +349,12 @@ struct hEvt
         //! runtextmacro getTriggerKeyByStringInc("esc","Esc")
         //! runtextmacro getTriggerKeyByStringInc("selection","Selection")
         //! runtextmacro getTriggerKeyByStringInc("unSelection","UnSelection")
+        //! runtextmacro getTriggerKeyByStringInc("upgradeStart","UpgradeStart")
+        //! runtextmacro getTriggerKeyByStringInc("upgradeCancel","UpgradeCancel")
+        //! runtextmacro getTriggerKeyByStringInc("upgradeFinish","UpgradeFinish")
+        //! runtextmacro getTriggerKeyByStringInc("constructStart","ConstructStart")
+        //! runtextmacro getTriggerKeyByStringInc("constructCancel","ConstructCancel")
+        //! runtextmacro getTriggerKeyByStringInc("constructFinish","ConstructFinish")
         return inc
     endmethod
 
@@ -353,11 +379,20 @@ struct hEvt
             set inc = 1
         endif
         if(inc >= trigger_limit)then
-            call console.error("break<"+I2S(k)+">trigger_limit:"+I2S(trigger_limit))
+            call hconsole.error("break<"+I2S(k)+">trigger_limit:"+I2S(trigger_limit))
             return -1
         endif
         call SaveInteger(hash_trigger_register, hid, k,inc )
         return inc
+    endmethod
+
+    //set最后一位伤害的单位
+    public static method setLastDamageUnit takes unit which,unit last returns nothing
+        call SaveUnitHandle(hash_trigger, GetHandleId(which), hashkey_last_damage , last )
+    endmethod
+    //get最后一位伤害的单位
+    public static method getLastDamageUnit takes unit which returns unit
+        return LoadUnitHandle(hash_trigger, GetHandleId(which), hashkey_last_damage )
     endmethod
 
     //-- TODO SET GET DATA --
@@ -1523,7 +1558,82 @@ struct hEvt
         return onEventByHandle("unSelection",whichPlayer,action)
     endmethod
 
+    //on - 建筑升级开始时
+    //@getTriggerUnit 获取触发单位
+    private static method onUpgradeStartAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "upgradeStart"
+        set bean.triggerUnit = GetTriggerUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onUpgradeStart takes unit whichUnit,code action returns trigger
+        if(event_trigger_upgradeStart==null)then
+            set event_trigger_upgradeStart = CreateTrigger()
+            call TriggerRegisterUnitEvent( event_trigger_upgradeStart, whichUnit, EVENT_UNIT_UPGRADE_START )
+            call TriggerAddAction(event_trigger_upgradeStart, function thistype.onUpgradeStartAction)
+        endif
+        return onEventByHandle("upgradeStart",whichUnit,action)
+    endmethod
+    //on - 建筑升级取消时
+    //@getTriggerUnit 获取触发单位
+    private static method onUpgradeCancelAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "upgradeCancel"
+        set bean.triggerUnit = GetTriggerUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onUpgradeCancel takes unit whichUnit,code action returns trigger
+        if(event_trigger_upgradeCancel==null)then
+            set event_trigger_upgradeCancel = CreateTrigger()
+            call TriggerRegisterUnitEvent( event_trigger_upgradeCancel, whichUnit, EVENT_UNIT_UPGRADE_CANCEL )
+            call TriggerAddAction(event_trigger_upgradeCancel, function thistype.onUpgradeCancelAction)
+        endif
+        return onEventByHandle("upgradeCancel",whichUnit,action)
+    endmethod
+    //on - 建筑升级完成时
+    //@getTriggerUnit 获取触发单位
+    private static method onUpgradeFinishAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "upgradeFinish"
+        set bean.triggerUnit = GetTriggerUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onUpgradeFinish takes unit whichUnit,code action returns trigger
+        if(event_trigger_upgradeFinish==null)then
+            set event_trigger_upgradeFinish = CreateTrigger()
+            call TriggerRegisterUnitEvent( event_trigger_upgradeFinish, whichUnit, EVENT_UNIT_UPGRADE_FINISH )
+            call TriggerAddAction(event_trigger_upgradeFinish, function thistype.onUpgradeFinishAction)
+        endif
+        return onEventByHandle("upgradeFinish",whichUnit,action)
+    endmethod
 
+    //on - 任意建筑建造开始时
+    //@使用默认的 GetTriggerUnit 获取触发单位
+    public static method onConstructStart takes code action returns trigger
+        local trigger tg = CreateTrigger()
+        call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_CONSTRUCT_START )
+        call TriggerAddAction(tg, action)
+        return tg
+    endmethod
+    //on - 任意建筑建造取消时
+    //@使用默认的 GetCancelledStructure 获取触发单位
+    public static method onConstructCancel takes code action returns trigger
+        local trigger tg = CreateTrigger()
+        call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_CONSTRUCT_CANCEL )
+        call TriggerAddAction(tg, action)
+        return tg
+    endmethod
+    //on - 任意建筑建造完成时
+    //@使用默认的 GetConstructedStructure 获取触发单位
+    public static method onConstructFinish takes code action returns trigger
+        local trigger tg = CreateTrigger()
+        call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_CONSTRUCT_FINISH )
+        call TriggerAddAction(tg, action)
+        return tg
+    endmethod
 
    
 

@@ -75,6 +75,19 @@ struct hUnit
         call SetUnitState(u, UNIT_STATE_MANA, getMana(u)-val)
     endmethod
 
+    /**
+     * 获取单位百分比生命
+     */
+    public static method getLifePercent takes unit u returns real
+        return GetUnitLifePercent(u)
+    endmethod
+
+    /**
+     * 获取单位百分比魔法
+     */
+    public static method getManaPercent takes unit u returns real
+        return GetUnitManaPercent(u)
+    endmethod
 
     /**
      * 设置单位百分比生命
@@ -100,27 +113,27 @@ struct hUnit
     /**
      * 删除单位回调
      */
-    private static method delUnitCall takes nothing returns nothing
+    private static method delCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local unit targetUnit = time.getUnit( t, -1 )
+        local unit targetUnit = htime.getUnit( t, -1 )
         if( targetUnit != null ) then
             call RemoveUnit( targetUnit )
             set targetUnit = null
         endif
-        call time.delTimer(t)
+        call htime.delTimer(t)
     endmethod
 
     /**
      * 删除单位，可延时
      */
-    public static method delUnit takes unit targetUnit , real during returns nothing
+    public static method del takes unit targetUnit , real during returns nothing
         local timer t = null
         if( during <= 0 ) then
             call RemoveUnit( targetUnit )
             set targetUnit = null
         else
-            set t = time.setTimeout( during , function hUnit.delUnitCall)
-            call time.setUnit( t, -1 ,targetUnit )
+            set t = htime.setTimeout( during , function thistype.delCall)
+            call htime.setUnit( t, -1 ,targetUnit )
         endif
     endmethod
 
@@ -186,13 +199,13 @@ struct hUnit
      * 只有调用此方法会触发复活事件
      */
     public static method rebornAtXY takes unit u,real x,real y returns nothing
-        if(is.hero(u))then
+        if(his.hero(u))then
             call ReviveHero( u,x,y,true )
             //@触发复活事件
             set hevtBean = hEvtBean.create()
             set hevtBean.triggerKey = "reborn"
             set hevtBean.triggerUnit = u
-            call evt.triggerEvent(hevtBean)
+            call hevt.triggerEvent(hevtBean)
             call hevtBean.destroy()
         endif
     endmethod
@@ -203,13 +216,13 @@ struct hUnit
      * 只有调用此方法会触发复活事件
      */
     public static method rebornAtLoc takes unit u,location loc returns nothing
-        if(is.hero(u))then
+        if(his.hero(u))then
             call ReviveHeroLoc( u, loc, true )
             //@触发复活事件
             set hevtBean = hEvtBean.create()
             set hevtBean.triggerKey = "reborn"
             set hevtBean.triggerUnit = u
-            call evt.triggerEvent(hevtBean)
+            call hevt.triggerEvent(hevtBean)
             call hevtBean.destroy()
         endif
     endmethod

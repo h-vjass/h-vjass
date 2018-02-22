@@ -1,6 +1,6 @@
 /* 自然属性 */
 globals
-	hAttrNatural attrNatural = 0
+	hAttrNatural hattrNatural = 0
 	hashtable hash_attr_natural = InitHashtable()
 	integer AF_EFFECT_NATURAL_UNIT = 1000
 	integer AF_EFFECT_NATURAL_CD = 1001
@@ -69,10 +69,10 @@ struct hAttrNatural
 
 	private static method setAttrDuring takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		local integer flag = time.getInteger(t,1)
-		local unit whichUnit = time.getUnit(t,2)
-		local real diff = time.getReal(t,3)
-		call time.delTimer( t )
+		local integer flag =  htime.getInteger(t,1)
+		local unit whichUnit =  htime.getUnit(t,2)
+		local real diff =  htime.getReal(t,3)
+		call htime.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
 	endmethod
 
@@ -82,10 +82,10 @@ struct hAttrNatural
 		call initAttr( whichUnit )
 		call setAttrDo( flag , whichUnit , diff )
 		if( during>0 ) then
-			set t = time.setTimeout( during , function thistype.setAttrDuring )
-			call time.setInteger(t,1,flag)
-			call time.setUnit(t,2,whichUnit)
-			call time.setReal(t,3, -diff )
+			set t =  htime.setTimeout( during , function thistype.setAttrDuring )
+			call htime.setInteger(t,1,flag)
+			call htime.setUnit(t,2,whichUnit)
+			call htime.setReal(t,3, -diff )
 		endif
 	endmethod
 
@@ -310,22 +310,22 @@ struct hAttrNatural
      * 打印某个单位的攻击特效到桌面
      */
     public static method showAttr takes unit whichUnit returns nothing
-		call console.info("自然属性#fire："+R2S(getFire(whichUnit)))
-		call console.info("自然属性#soil："+R2S(getSoil(whichUnit)))
-		call console.info("自然属性#water："+R2S(getWater(whichUnit)))
-		call console.info("自然属性#wind："+R2S(getWind(whichUnit)))
-		call console.info("自然属性#light："+R2S(getLight(whichUnit)))
-		call console.info("自然属性#dark："+R2S(getDark(whichUnit)))
-		call console.info("自然属性#wood："+R2S(getWood(whichUnit)))
-		call console.info("自然属性#thunder："+R2S(getThunder(whichUnit)))
-		call console.info("自然属性#fire_oppose："+R2S(getFireOppose(whichUnit)))
-		call console.info("自然属性#soil_oppose："+R2S(getSoilOppose(whichUnit)))
-		call console.info("自然属性#water_oppose："+R2S(getWaterOppose(whichUnit)))
-		call console.info("自然属性#wind_oppose："+R2S(getWindOppose(whichUnit)))
-		call console.info("自然属性#light_oppose："+R2S(getLightOppose(whichUnit)))
-		call console.info("自然属性#dark_oppose："+R2S(getDarkOppose(whichUnit)))
-		call console.info("自然属性#wood_oppose："+R2S(getWoodOppose(whichUnit)))
-		call console.info("自然属性#thunder_oppose："+R2S(getThunderOppose(whichUnit)))
+		call hconsole.info("自然属性#fire："+R2S(getFire(whichUnit)))
+		call hconsole.info("自然属性#soil："+R2S(getSoil(whichUnit)))
+		call hconsole.info("自然属性#water："+R2S(getWater(whichUnit)))
+		call hconsole.info("自然属性#wind："+R2S(getWind(whichUnit)))
+		call hconsole.info("自然属性#light："+R2S(getLight(whichUnit)))
+		call hconsole.info("自然属性#dark："+R2S(getDark(whichUnit)))
+		call hconsole.info("自然属性#wood："+R2S(getWood(whichUnit)))
+		call hconsole.info("自然属性#thunder："+R2S(getThunder(whichUnit)))
+		call hconsole.info("自然属性#fire_oppose："+R2S(getFireOppose(whichUnit)))
+		call hconsole.info("自然属性#soil_oppose："+R2S(getSoilOppose(whichUnit)))
+		call hconsole.info("自然属性#water_oppose："+R2S(getWaterOppose(whichUnit)))
+		call hconsole.info("自然属性#wind_oppose："+R2S(getWindOppose(whichUnit)))
+		call hconsole.info("自然属性#light_oppose："+R2S(getLightOppose(whichUnit)))
+		call hconsole.info("自然属性#dark_oppose："+R2S(getDarkOppose(whichUnit)))
+		call hconsole.info("自然属性#wood_oppose："+R2S(getWoodOppose(whichUnit)))
+		call hconsole.info("自然属性#thunder_oppose："+R2S(getThunderOppose(whichUnit)))
     endmethod
 
 endstruct

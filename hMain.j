@@ -29,7 +29,7 @@ library Main initializer init needs hJass
 	    loop
 	        exitwhen i>total
 	            set prereadUnits[i] = CreateUnitAtLoc(Player(PLAYER_NEUTRAL_PASSIVE), prereads[i], GetRectCenter(GetPlayableMapRect()), bj_UNIT_FACING)
-	            call attr.regAllAttrSkill(prereadUnits[i])
+	            call hattr.regAllAttrSkill(prereadUnits[i])
 	        set i = i+1
 	    endloop
 	    call PolledWait(0.00)
@@ -53,17 +53,17 @@ library Main initializer init needs hJass
 		//预读
 		call preread()
 		//镜头模式
-		call camera.setModel("zoomin")
+		call hcamera.setModel("zoomin")
 		//属性 - 硬直条
-		call attrUnit.punishTtgIsOpen(false)
-		call attrUnit.punishTtgIsOnlyHero(false)
-		call attrUnit.punishTtgHeight(250.00)
+		call hattrUnit.punishTtgIsOpen(false)
+		call hattrUnit.punishTtgIsOnlyHero(false)
+		call hattrUnit.punishTtgHeight(250.00)
 		//迷雾
 		call FogEnable( true )
 		//阴影
 		call FogMaskEnable( true )
 		//开启日志
-		call console.open(true)
+		call hconsole.open(true)
 		//开始触发
 		set startTrigger = CreateTrigger()
 	    call TriggerRegisterTimerEventSingle( startTrigger, 0.01 )

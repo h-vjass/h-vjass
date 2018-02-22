@@ -1,17 +1,24 @@
 /* 单位组 */
 globals
-hMedia media = 0
+hMedia hmedia = 0
 endglobals
 
 type MediaDialogue extends string array[10] //电影对白最大支持10句
 
 struct hMedia
 
-	private static real bgmDelay = 2.00
+	private static real bgmDelay = 3.00
 
 	//播放音效
 	public static method soundPlay takes sound s returns nothing
 	    if (s != null) then
+	        call StartSound(s)
+	    endif
+	endmethod
+
+	//播放音效对某个玩家
+	public static method soundPlay2Player takes sound s,player whichPlayer returns nothing
+	    if (s != null and GetLocalPlayer()==whichPlayer) then
 	        call StartSound(s)
 	    endif
 	endmethod
@@ -28,25 +35,25 @@ struct hMedia
 
 	private static method bgmCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		call PlayMusic(time.getString(t,1))
-		call time.delTimer(t)
+		call PlayMusic(htime.getString(t,1))
+		call htime.delTimer(t)
 	endmethod
-	//播放音乐
+	//播放音乐，如果背景音乐无法循环播放，尝试格式工厂转wav再转回mp3
 	public static method bgm takes string musicFileName returns nothing
 		local timer t = null
 		if(musicFileName!=null and musicFileName!="")then
 			call StopMusic( true )
-			set t = time.setTimeout(bgmDelay,function thistype.bgmCall)
-			call time.setString(t,1,musicFileName)
+			set t = htime.setTimeout(bgmDelay,function thistype.bgmCall)
+			call htime.setString(t,1,musicFileName)
 		endif
 	endmethod
 
 	private static method bgm2PlayerCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		if(GetLocalPlayer() == time.getPlayer(t,2))then
-			call PlayMusic(time.getString(t,1))
+		if(GetLocalPlayer() == htime.getPlayer(t,2))then
+			call PlayMusic(htime.getString(t,1))
 		endif
-		call time.delTimer(t)
+		call htime.delTimer(t)
 	endmethod
 	//对玩家播放音乐
 	public static method bgm2Player takes string musicFileName,player whichPlayer returns nothing
@@ -54,9 +61,9 @@ struct hMedia
 		if(musicFileName!=null and musicFileName!="" and whichPlayer != null)then
 			if(GetLocalPlayer() == whichPlayer)then
 				call StopMusic( true )
-				set t = time.setTimeout(bgmDelay,function thistype.bgm2PlayerCall)
-				call time.setString(t,1,musicFileName)
-				call time.setPlayer(t,2,whichPlayer)
+				set t = htime.setTimeout(bgmDelay,function thistype.bgm2PlayerCall)
+				call htime.setString(t,1,musicFileName)
+				call htime.setPlayer(t,2,whichPlayer)
 			endif
 		endif
 	endmethod

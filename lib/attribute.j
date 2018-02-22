@@ -1,212 +1,17 @@
 /* 属性系统 */
 
+//#include "attributeIds.j" //当使用自行设定属性技能时，请注释此行
+
 globals
 	//系统最大移动速度
 	real MAX_MOVE_SPEED = 522
 	//默认攻速计算
 	real DEFAULT_ATTACK_SPEED = 150
-
-	//护甲 1
-	integer Attr_Ability_defend_1 = 'A01J'
-	//护甲 10
-	integer Attr_Ability_defend_10 = 'A07I'
-	//护甲 100
-	integer Attr_Ability_defend_100 = 'A07M'
-	//护甲 1000
-	integer Attr_Ability_defend_1000 = 'A0FC'
-	//物理攻击力 1
-	integer Attr_Ability_attack_physical_1 = 'A01T'
-	//物理攻击力 10
-	integer Attr_Ability_attack_physical_10 = 'A01R'
-	//物理攻击力 100
-	integer Attr_Ability_attack_physical_100 = 'A01U'
-	//物理攻击力 1000
-	integer Attr_Ability_attack_physical_1000 =  'A025'
-	//物理攻击力 10000
-	integer Attr_Ability_attack_physical_10000 =  'A029'
-	//物理攻击力书 1
-	integer Attr_Ability_attack_physical_item_1 = 'I00M'
-	//物理攻击力书 10
-	integer Attr_Ability_attack_physical_item_10 = 'I00N'
-	//物理攻击力书 100
-	integer Attr_Ability_attack_physical_item_100 = 'I00O'
-	//物理攻击力书 1000
-	integer Attr_Ability_attack_physical_item_1000 =  'I00P'
-	//物理攻击力书 10000
-	integer Attr_Ability_attack_physical_item_10000 =  'I00Q'
-	//魔法攻击力 1
-	integer Attr_Ability_attack_magic_1 = 'A01K'
-	//魔法攻击力 10
-	integer Attr_Ability_attack_magic_10 = 'A01V'
-	//魔法攻击力 100
-	integer Attr_Ability_attack_magic_100 = 'A07H'
-	//魔法攻击力 1000
-	integer Attr_Ability_attack_magic_1000 =  'A07N'
-	//魔法攻击力 10000
-	integer Attr_Ability_attack_magic_10000 =  'A03D'
-	//攻击速度% 1
-	integer Attr_Ability_attackSpeed_1 = 'A01M'
-	//攻击速度% 10
-	integer Attr_Ability_attackSpeed_10 = 'A01P'
-	//攻击速度% 100
-	integer Attr_Ability_attackSpeed_100 = 'A01Q'
-	//力量 1
-	integer Attr_Ability_str_1 = 'A015'
-	//力量 10
-	integer Attr_Ability_str_10 =  'A018'
-	//力量 100
-	integer Attr_Ability_str_100 =  'A00P'
-	//力量 1000
-	integer Attr_Ability_str_1000 = 'A00Q'
-	//力量 1000
-	integer Attr_Ability_str_10000 = 'A000'
-	//敏捷 1
-	integer Attr_Ability_agi_1 = 'A00U'
-	//敏捷 10
-	integer Attr_Ability_agi_10 = 'A00V'
-	//敏捷 100
-	integer Attr_Ability_agi_100 = 'A00X'
-	//敏捷 1000
-	integer Attr_Ability_agi_1000 = 'A00Y'
-	//敏捷 10000
-	integer Attr_Ability_agi_10000 = 'A001'
-	//智力 1
-	integer Attr_Ability_int_1 = 'A00Z'
-	//智力 10
-	integer Attr_Ability_int_10 = 'A010'
-	//智力 100
-	integer Attr_Ability_int_100 =  'A012'
-	//智力 1000
-	integer Attr_Ability_int_1000 = 'A011'
-	//智力 10000
-	integer Attr_Ability_int_10000 = 'A002'
-	//生命 1
-	integer Attr_Ability_life_1 = 'A0F2'
-	//生命 10
-	integer Attr_Ability_life_10 = 'A0F4'
-	//生命 100
-	integer Attr_Ability_life_100 = 'A0F5'
-	//生命 1000
-	integer Attr_Ability_life_1000 = 'A0F6'
-	//生命 10000
-	integer Attr_Ability_life_10000 = 'A0F7'
-	//生命 100000
-	integer Attr_Ability_life_100000 = 'A006'
-	//魔法 1
-	integer Attr_Ability_mana_1 = 'A0F3'
-	//魔法 10
-	integer Attr_Ability_mana_10 = 'A0F8'
-	//魔法 100
-	integer Attr_Ability_mana_100 = 'A0F9'
-	//魔法 1000
-	integer Attr_Ability_mana_1000 = 'A0FA'
-	//魔法 10000
-	integer Attr_Ability_mana_10000 = 'A0FB'
-	//魔法 100000
-	integer Attr_Ability_mana_100000 = 'A007'
-	//******************正负分割线******************//
-	//-护甲 1
-	integer Attr_Ability_defend_FU_1 = 'A01B'
-	//-护甲 10
-	integer Attr_Ability_defend_FU_10 = 'A01C'
-	//-护甲 100
-	integer Attr_Ability_defend_FU_100 = 'A01D'
-	//-护甲 1000
-	integer Attr_Ability_defend_FU_1000 = 'A0FD'
-	//物理攻击力 1
-	integer Attr_Ability_attack_physical_FU_1 = 'A02J'
-	//物理攻击力 10
-	integer Attr_Ability_attack_physical_FU_10 = 'A02I'
-	//物理攻击力 100
-	integer Attr_Ability_attack_physical_FU_100 = 'A02H'
-	//物理攻击力 1000
-	integer Attr_Ability_attack_physical_FU_1000 =  'A02E'
-	//物理攻击力 10000
-	integer Attr_Ability_attack_physical_FU_10000 =  'A02A'
-	//物理攻击力书 1
-	integer Attr_Ability_attack_physical_FU_item_1 = 'I00R'
-	//物理攻击力书 10
-	integer Attr_Ability_attack_physical_FU_item_10 = 'I00V'
-	//物理攻击力书 100
-	integer Attr_Ability_attack_physical_FU_item_100 = 'I00U'
-	//物理攻击力书 1000
-	integer Attr_Ability_attack_physical_FU_item_1000 =  'I00T'
-	//物理攻击力书 10000
-	integer Attr_Ability_attack_physical_FU_item_10000 =  'I00S'
-	//-魔法攻击力 1
-	integer Attr_Ability_attack_magic_FU_1 = 'A01G'
-	//-魔法攻击力 10
-	integer Attr_Ability_attack_magic_FU_10 = 'A01L'
-	//-魔法攻击力 100
-	integer Attr_Ability_attack_magic_FU_100 = 'A01O'
-	//-魔法攻击力 1000
-	integer Attr_Ability_attack_magic_FU_1000 =  'A01S'
-	//-魔法攻击力 10000
-	integer Attr_Ability_attack_magic_FU_10000 =  'A03E'
-	//-攻击速度% 1
-	integer Attr_Ability_attackSpeed_FU_1 = 'A01W'
-	//-攻击速度% 10
-	integer Attr_Ability_attackSpeed_FU_10 = 'A021'
-	//-攻击速度% 100
-	integer Attr_Ability_attackSpeed_FU_100 = 'A020'
-	//-力量 1
-	integer Attr_Ability_str_FU_1 = 'A022'
-	//-力量 10
-	integer Attr_Ability_str_FU_10 =  'A024'
-	//-力量 100
-	integer Attr_Ability_str_FU_100 =  'A023'
-	//-力量 1000
-	integer Attr_Ability_str_FU_1000 = 'A02B'
-	//-力量 10000
-	integer Attr_Ability_str_FU_10000 = 'A003'
-	//-敏捷 1
-	integer Attr_Ability_agi_FU_1 = 'A02C'
-	//-敏捷 10
-	integer Attr_Ability_agi_FU_10 = 'A02D'
-	//-敏捷 100
-	integer Attr_Ability_agi_FU_100 = 'A02Y'
-	//-敏捷 1000
-	integer Attr_Ability_agi_FU_1000 = 'A02K'
-	//-敏捷 10000
-	integer Attr_Ability_agi_FU_10000 = 'A004'
-	//-智力 1
-	integer Attr_Ability_int_FU_1 = 'A03X'
-	//-智力 10
-	integer Attr_Ability_int_FU_10 = 'A04L'
-	//-智力 100
-	integer Attr_Ability_int_FU_100 =  'A04V'
-	//-智力 1000
-	integer Attr_Ability_int_FU_1000 = 'A04N'
-	//-智力 10000
-	integer Attr_Ability_int_FU_10000 = 'A005'
-	//-生命 1
-	integer Attr_Ability_life_FU_1 = 'A0FE'
-	//-生命 10
-	integer Attr_Ability_life_FU_10 = 'A0FF'
-	//-生命 100
-	integer Attr_Ability_life_FU_100 = 'A0FG'
-	//-生命 1000
-	integer Attr_Ability_life_FU_1000 = 'A0FH'
-	//-生命 10000
-	integer Attr_Ability_life_FU_10000 = 'A0FI'
-	//-生命 100000
-	integer Attr_Ability_life_FU_100000 = 'A008'
-	//-魔法 1
-	integer Attr_Ability_mana_FU_1 = 'A0FJ'
-	//-魔法 10
-	integer Attr_Ability_mana_FU_10 = 'A0FK'
-	//-魔法 100
-	integer Attr_Ability_mana_FU_100 = 'A0FL'
-	//-魔法 1000
-	integer Attr_Ability_mana_FU_1000 = 'A0FM'
-	//-魔法 10000
-	integer Attr_Ability_mana_FU_10000 = 'A0FN'
-	//-魔法 100000
-	integer Attr_Ability_mana_FU_100000 = 'A009'
+    integer ITEM_ABILITY = 'AInv'
 endglobals
 
 globals
-	hAttr attr = 0
+	hAttr hattr = 0
 	hashtable hash_attr = InitHashtable()
     real ATTRIBUTE_DEFAULT_HERO_ATTACKSPEED = 150		//默认攻击速度，除以100等于各个英雄的初始速度，用于计算攻击速度显示文本
     real ATTRIBUTE_DEFAULT_CHANGING_CD = 1.00			//默认属性切换冷却时间，避免过度计算引起性能下降
@@ -293,8 +98,10 @@ struct hAttr
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_10000 )
 
 		//白字攻击
-		call UnitAddAbility(whichUnit, 'AInv')
-		call UnitRemoveAbility(whichUnit, 'AInv')
+        if(GetUnitAbilityLevel(whichUnit,ITEM_ABILITY)<1)then
+            call UnitAddAbility(whichUnit, ITEM_ABILITY)
+            call UnitRemoveAbility(whichUnit, ITEM_ABILITY)
+        endif
 		//绿字攻击
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_1)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_10)
@@ -485,17 +292,17 @@ struct hAttr
     endmethod
 
     /**
-     * 为单位添加N个同样的攻击之书
+     * 为单位添加N个同样的攻击之书 （ITEM_ABILITY 为物品栏技能）
      */
     private static method setWhiteAttack takes unit u,integer itemId ,integer qty returns nothing
     	local integer i = 1
     	local item it = null
-    	local integer itemBox = GetUnitAbilityLevel(u, 'AInv')
+    	local integer itemBox = GetUnitAbilityLevel(u, ITEM_ABILITY)
     	if( qty <= 0 )then
 	    	return
 		endif
 		if(itemBox < 1)then
-			call UnitAddAbility(u, 'AInv')
+			call UnitAddAbility(u, ITEM_ABILITY)
 		endif
     	loop
 	    	exitwhen i > qty
@@ -505,7 +312,7 @@ struct hAttr
 	    	set i = i+1
     	endloop
     	if(itemBox < 1)then
-			call UnitRemoveAbility(u, 'AInv')
+			call UnitRemoveAbility(u, ITEM_ABILITY)
 		endif
     endmethod
 
@@ -648,7 +455,7 @@ struct hAttr
 				if( futureVal < 0 ) then
 					call SetUnitMoveSpeed( whichUnit , 0 )
 				else
-					if(camera.model=="zoomin")then
+					if(hcamera.model=="zoomin")then
 						call SetUnitMoveSpeed( whichUnit , R2I(futureVal*0.5) )
 					else
 						call SetUnitMoveSpeed( whichUnit , R2I(futureVal) )
@@ -951,10 +758,10 @@ struct hAttr
 
 	private static method setAttrDuring takes nothing returns nothing
 		local timer t = GetExpiredTimer()
-		local integer flag = time.getInteger(t,1)
-		local unit whichUnit = time.getUnit(t,2)
-		local real diff = time.getReal(t,3)
-		call time.delTimer( t )
+		local integer flag = htime.getInteger(t,1)
+		local unit whichUnit = htime.getUnit(t,2)
+		local real diff = htime.getReal(t,3)
+		call htime.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
 	endmethod
 
@@ -981,36 +788,36 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_AGI_WHITE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_INT_WHITE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_MOVE , GetUnitDefaultMoveSpeed(whichUnit) )
-			if(camera.model=="zoomin")then
+			if(hcamera.model=="zoomin")then
 				call SetUnitMoveSpeed( whichUnit , R2I(LoadReal( hash_attr , uhid , ATTR_FLAG_MOVE)*0.5) )
 			endif
 			//todo 设定默认值
-			if( is.hero(whichUnit) ) then
+			if( his.hero(whichUnit) ) then
 				//白字
 				set tempReal = I2R(GetHeroStr(whichUnit, false))
 				call SaveReal( hash_attr , uhid , ATTR_FLAG_STR_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , tempReal*1 )
 				call setAttrDo( ATTR_FLAG_ATTACK_MAGIC , whichUnit , tempReal*1 )
 				call setAttrDo( ATTR_FLAG_LIFE , whichUnit , tempReal*5 )
-				call attrExt.addToughness( whichUnit , tempReal*0.2 , 0 )
-				call attrExt.addKnocking( whichUnit , tempReal*5 , 0 )
-				call attrExt.addPunish( whichUnit , tempReal*2 , 0 )
-				call attrExt.addSwimOppose( whichUnit , tempReal*0.03 , 0 )
+				call hattrExt.addToughness( whichUnit , tempReal*0.2 , 0 )
+				call hattrExt.addKnocking( whichUnit , tempReal*5 , 0 )
+				call hattrExt.addPunish( whichUnit , tempReal*2 , 0 )
+				call hattrExt.addSwimOppose( whichUnit , tempReal*0.03 , 0 )
 
 				set tempReal = I2R(GetHeroAgi(whichUnit, false))
 				call SaveReal( hash_attr , uhid , ATTR_FLAG_AGI_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , tempReal*2 )
 				call setAttrDo( ATTR_FLAG_ATTACK_SPEED , whichUnit , tempReal*0.05 )
-				call attrExt.addKnocking( whichUnit , tempReal*3 , 0 )
-				call attrExt.addAvoid( whichUnit , tempReal*0.02 , 0 )
+				call hattrExt.addKnocking( whichUnit , tempReal*3 , 0 )
+				call hattrExt.addAvoid( whichUnit , tempReal*0.02 , 0 )
 
 				set tempReal = I2R(GetHeroInt(whichUnit, false))
 				call SaveReal( hash_attr , uhid , ATTR_FLAG_INT_WHITE , tempReal )
 				call setAttrDo( ATTR_FLAG_ATTACK_MAGIC , whichUnit , tempReal*3 )
 				call setAttrDo( ATTR_FLAG_MANA , whichUnit , tempReal*5 )
-				call attrExt.addManaBack( whichUnit , tempReal*0.2 , 0 )
-				call attrExt.addViolence( whichUnit , tempReal*10 , 0 )
-				call attrExt.addHemophagiaSkill( whichUnit , tempReal*0.02 , 0 )
+				call hattrExt.addManaBack( whichUnit , tempReal*0.2 , 0 )
+				call hattrExt.addViolence( whichUnit , tempReal*10 , 0 )
+				call hattrExt.addHemophagiaSkill( whichUnit , tempReal*0.02 , 0 )
 			endif
 			return true
 		endif
@@ -1023,10 +830,10 @@ struct hAttr
 		call initAttr( whichUnit )
 		call setAttrDo( flag , whichUnit , diff )
 		if( during>0 ) then
-			set t = time.setTimeout( during , function thistype.setAttrDuring )
-			call time.setInteger(t,1,flag)
-			call time.setUnit(t,2,whichUnit)
-			call time.setReal(t,3, -diff )
+			set t = htime.setTimeout( during , function thistype.setAttrDuring )
+			call htime.setInteger(t,1,flag)
+			call htime.setUnit(t,2,whichUnit)
+			call htime.setReal(t,3, -diff )
 		endif
 	endmethod
 
@@ -1153,12 +960,12 @@ struct hAttr
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , life , during )
-		call attrExt.addToughness( whichUnit , toughness , during )
-		call attrExt.addKnocking( whichUnit , knocking , during )
-		call attrExt.addPunish( whichUnit , punish , during )
-		call attrExt.addSwimOppose( whichUnit , swimOppose , during )
-		call attrExt.subAvoid( whichUnit , avoid , during )
-		call attrExt.subViolence( whichUnit , violence , during )
+		call hattrExt.addToughness( whichUnit , toughness , during )
+		call hattrExt.addKnocking( whichUnit , knocking , during )
+		call hattrExt.addPunish( whichUnit , punish , during )
+		call hattrExt.addSwimOppose( whichUnit , swimOppose , during )
+		call hattrExt.subAvoid( whichUnit , avoid , during )
+		call hattrExt.subViolence( whichUnit , violence , during )
 	endmethod
 	public static method addStr takes unit whichUnit , real value , real during returns nothing
 		call setStr( whichUnit , getStr(whichUnit)+value , during )
@@ -1182,10 +989,10 @@ struct hAttr
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )
-		call attrExt.addKnocking( whichUnit , knocking , during )
-		call attrExt.addAvoid( whichUnit , avoid , during )
-		call attrExt.subPunish( whichUnit , punish , during )
-		call attrExt.subViolence( whichUnit , violence , during )
+		call hattrExt.addKnocking( whichUnit , knocking , during )
+		call hattrExt.addAvoid( whichUnit , avoid , during )
+		call hattrExt.subPunish( whichUnit , punish , during )
+		call hattrExt.subViolence( whichUnit , violence , during )
 	endmethod
 	public static method addAgi takes unit whichUnit , real value , real during returns nothing
 		call setAgi( whichUnit , getAgi(whichUnit)+value , during )
@@ -1208,9 +1015,9 @@ struct hAttr
 		call setAttr( ATTR_FLAG_INT , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_MANA , whichUnit , mana , during )
-		call attrExt.addManaBack( whichUnit , manaback , during )
-		call attrExt.addViolence( whichUnit , violence , during )
-		call attrExt.addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
+		call hattrExt.addManaBack( whichUnit , manaback , during )
+		call hattrExt.addViolence( whichUnit , violence , during )
+		call hattrExt.addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
 	endmethod
 	public static method addInt takes unit whichUnit , real value , real during returns nothing
 		call setInt( whichUnit , getInt(whichUnit)+value , during )
@@ -1236,10 +1043,10 @@ struct hAttr
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , life , during )
-		call attrExt.addToughness( whichUnit , toughness , during )
-		call attrExt.addKnocking( whichUnit , knocking , during )
-		call attrExt.addPunish( whichUnit , punish , during )
-		call attrExt.addSwimOppose( whichUnit , swimOppose , during )
+		call hattrExt.addToughness( whichUnit , toughness , during )
+		call hattrExt.addKnocking( whichUnit , knocking , during )
+		call hattrExt.addPunish( whichUnit , punish , during )
+		call hattrExt.addSwimOppose( whichUnit , swimOppose , during )
 	endmethod
 	public static method addStrWhite takes unit whichUnit , real value , real during returns nothing
 		call setStrWhite( whichUnit , getStrWhite(whichUnit)+value , during )
@@ -1261,8 +1068,8 @@ struct hAttr
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )
-		call attrExt.addKnocking( whichUnit , knocking , during )
-		call attrExt.addAvoid( whichUnit , avoid , during )
+		call hattrExt.addKnocking( whichUnit , knocking , during )
+		call hattrExt.addAvoid( whichUnit , avoid , during )
 	endmethod
 	public static method addAgiWhite takes unit whichUnit , real value , real during returns nothing
 		call setAgiWhite( whichUnit , getAgiWhite(whichUnit)+value , during )
@@ -1285,9 +1092,9 @@ struct hAttr
 		call setAttr( ATTR_FLAG_INT , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
 		call setAttr( ATTR_FLAG_MANA , whichUnit , mana , during )
-		call attrExt.addManaBack( whichUnit , manaback , during )
-		call attrExt.addViolence( whichUnit , violence , during )
-		call attrExt.addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
+		call hattrExt.addManaBack( whichUnit , manaback , during )
+		call hattrExt.addViolence( whichUnit , violence , during )
+		call hattrExt.addHemophagiaSkill( whichUnit , hemophagiaSkill , during )
 	endmethod
 	public static method addIntWhite takes unit whichUnit , real value , real during returns nothing
 		call setIntWhite( whichUnit , getIntWhite(whichUnit)+value , during )
@@ -1300,19 +1107,19 @@ struct hAttr
      * 打印某个单位的属性到桌面
      */
     public static method show takes unit whichUnit returns nothing
-		call console.info("生命："+R2S(getLife(whichUnit)))
-        call console.info("魔法："+R2S(getMana(whichUnit)))
-		call console.info("移动力："+R2S(getMove(whichUnit)))
-		call console.info("防御："+R2S(getDefend(whichUnit)))
-		call console.info("攻击速度："+R2S(getAttackSpeed(whichUnit)))
-		call console.info("物理攻击力："+R2S(getAttackPhysical(whichUnit)))
-		call console.info("魔法攻击力："+R2S(getAttackMagic(whichUnit)))
-		call console.info("力量"+R2S(getStr(whichUnit)))
-		call console.info("敏捷："+R2S(getAgi(whichUnit)))
-		call console.info("智力："+R2S(getInt(whichUnit)))
-		call console.info("力量(白)："+R2S(getStrWhite(whichUnit)))
-		call console.info("敏捷(白)："+R2S(getAgiWhite(whichUnit)))
-		call console.info("智力(白)："+R2S(getIntWhite(whichUnit)))
+		call hconsole.info("生命："+R2S(getLife(whichUnit)))
+        call hconsole.info("魔法："+R2S(getMana(whichUnit)))
+		call hconsole.info("移动力："+R2S(getMove(whichUnit)))
+		call hconsole.info("防御："+R2S(getDefend(whichUnit)))
+		call hconsole.info("攻击速度："+R2S(getAttackSpeed(whichUnit)))
+		call hconsole.info("物理攻击力："+R2S(getAttackPhysical(whichUnit)))
+		call hconsole.info("魔法攻击力："+R2S(getAttackMagic(whichUnit)))
+		call hconsole.info("力量"+R2S(getStr(whichUnit)))
+		call hconsole.info("敏捷："+R2S(getAgi(whichUnit)))
+		call hconsole.info("智力："+R2S(getInt(whichUnit)))
+		call hconsole.info("力量(白)："+R2S(getStrWhite(whichUnit)))
+		call hconsole.info("敏捷(白)："+R2S(getAgiWhite(whichUnit)))
+		call hconsole.info("智力(白)："+R2S(getIntWhite(whichUnit)))
     endmethod
 
 endstruct

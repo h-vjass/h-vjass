@@ -21,19 +21,14 @@
 */
 
 globals
-    private hashtable hash_item = InitHashtable()
-    private integer hsah_item_reelid = 1
-    private integer hsah_item_itemid = 2
-    private integer hsah_item_overlay = 3
-    private integer hsah_item_level = 4
-    private integer hsah_item_gold = 5
-    private integer hsah_item_lumber = 6
-    private integer hsah_item_weight = 7
+    hItem hitem = 0
+    hashtable hash_item = InitHashtable()
 endglobals
 
 struct hItemBean
     //物品基本属性
     public static integer id = 0//物品id
+    public static integer reelid = 0//物品id
     public static string item_type = null//物品类型 永久
     public static integer overlay = 10//最大叠加,默认10
     public static integer level = 1//等级，默认1级
@@ -47,6 +42,7 @@ struct hItemBean
         local hItemBean x = 0
         set x = hItemBean.allocate()
         set x.id = 0
+        set x.reelid = 0
         set x.item_type = null
         set x.overlay = 10
         set x.level = 1
@@ -62,51 +58,60 @@ endstruct
 
 struct hItem
 
+    private static integer key_reelid = 1
+    private static integer key_itemid = 2
+    private static integer key_overlay = 3
+    private static integer key_level = 4
+    private static integer key_gold = 5
+    private static integer key_lumber = 6
+    private static integer key_weight = 7
+
 	/**
      * 删除物品回调
      */
-    private function delCall takes nothing returns nothing
+    private static method delCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local item it = time.getItem( t, 1 )
-        call time.delTimer(t)
+        local item it = htime.getItem( t, 1 )
+        call htime.delTimer(t)
         if( it != null ) then
 	        call RemoveItem( it )
             set it = null
     	endif
-    endfunction
+    endmethod
 	/**
 	 * 删除物品，可延时
 	 */
-	public function del takes item it,real during returns nothing
+	public static method del takes item it,real during returns nothing
 		local timer t = null
         if( during <= 0 ) then
             call RemoveItem( it )
             set it = null
         else
-            set t = time.setTimeout( during , function delCall)
-            call time.setItem( t, 1 ,it )
+            set t = htime.setTimeout( during , function thistype.delCall)
+            call htime.setItem( t, 1 ,it )
         endif
-	endfunction
+	endmethod
 
     //绑定物品到系统
-    private function bind takes integer itemID,integer reelID,integer overlay,integer level,integer gold,integer lumber,real weight returns nothing
-        call SaveInteger(hash, itemID, hsah_reelid, reelID)
-        call SaveInteger(hash, itemID, hsah_overlay, overlay)
-        call SaveInteger(hash, itemID, hsah_level, level)
-        call SaveInteger(hash, itemID, hsah_gold, gold)
-        call SaveInteger(hash, itemID, hsah_lumber, lumber)
-        call SaveReal(hash, itemID, hsah_weight, weight)
+    private method bind takes integer itemID,integer reelID,integer overlay,integer level,integer gold,integer lumber,real weight returns nothing
+        call SaveInteger(hash_item, itemID, key_reelid, reelID)
+        call SaveInteger(hash_item, itemID, key_overlay, overlay)
+        call SaveInteger(hash_item, itemID, key_level, level)
+        call SaveInteger(hash_item, itemID, key_gold, gold)
+        call SaveInteger(hash_item, itemID, key_lumber, lumber)
+        call SaveReal(hash_item, itemID, key_weight, weight)
         //--
-        call SaveInteger(hash, reelID, hsah_itemid, itemID)
-        call SaveInteger(hash, reelID, hsah_overlay, overlay)
-        call SaveInteger(hash, reelID, hsah_level, level)
-        call SaveInteger(hash, reelID, hsah_gold, gold)
-        call SaveInteger(hash, reelID, hsah_lumber, lumber)
-        call SaveReal(hash, reelID, hsah_weight, weight)
-    endfunction
+        call SaveInteger(hash_item, reelID, key_itemid, itemID)
+        call SaveInteger(hash_item, reelID, key_overlay, overlay)
+        call SaveInteger(hash_item, reelID, key_level, level)
+        call SaveInteger(hash_item, reelID, key_gold, gold)
+        call SaveInteger(hash_item, reelID, key_lumber, lumber)
+        call SaveReal(hash_item, reelID, key_weight, weight)
+    endmethod
 
+    /*
     //绑定合成到系统
-    private function bindMix takes integer mixItemID,integer item1,integer qty1,integer item2,integer qty2,integer item3,integer qty3,integer item4,integer qty4,integer item5,integer qty5,integer item6,integer qty6 returns nothing
+    private method bindMix takes integer mixItemID,integer item1,integer qty1,integer item2,integer qty2,integer item3,integer qty3,integer item4,integer qty4,integer item5,integer qty5,integer item6,integer qty6 returns nothing
         set ITEM_MIX_INDEX = ITEM_MIX_INDEX+10
         set ITEM_MIX[ITEM_MIX_INDEX] = targetItemId
         set ITEM_MIX[ITEM_MIX_INDEX+1] = item1
@@ -121,125 +126,11 @@ struct hItem
         set ITEM_MIX_QTY[ITEM_MIX_INDEX+4] = qty4
         set ITEM_MIX_QTY[ITEM_MIX_INDEX+5] = qty5
         set ITEM_MIX_QTY[ITEM_MIX_INDEX+6] = qty6
-    endfunction
+    endmethod
 
-    /**
-     * 根据tag获取属性
-     * 3最大叠加数 4等级 5金额 6木头
-     */
-    private function getAttrByItemId takes integer itemId,integer tag returns integer
-        local integer i = 0
-        local integer attr = 0
-        //debug
-        if( tag < 2 or tag > 6)then
-            return 0
-        endif
-        set i = 10
-        loop
-            exitwhen i > Max_Item_num
-                if( itemId == ITEM[(i+2)] ) then
-                    set attr = ITEM[(i+tag)]
-                    call DoNothing() YDNL exitwhen true//(  )
-                endif
-            set i = i + 10
-        endloop
-        return attr
-    endfunction
-
-    /**
-     * 根据ItemId获取重量
-     */
-    public function getWeightByItemId takes integer itemId returns real
-        local integer i = 0
-        local real attr = 0
-        set i = 10
-        loop
-            exitwhen i > Max_Item_num
-                if( itemId == ITEM[(i+2)] ) then
-                    set attr = ITEM_WEIGHT[i]
-                    call DoNothing() YDNL exitwhen true//(  )
-                endif
-            set i = i + 10
-        endloop
-        return attr
-    endfunction
-
-    /**
-     * 根据Item获取重量(包含数量)
-     */
-    public function getWeightByItem takes item it returns real
-        local integer i = 0
-        local real attr = 0
-        local integer itemId = GetItemTypeId(it)
-        if( it == null)then
-            return 0.00
-        endif
-        set i = 10
-        loop
-            exitwhen i > Max_Item_num
-                if( itemId == ITEM[(i+2)] ) then
-                    set attr = ITEM_WEIGHT[i] * GetItemCharges(it)
-                    call DoNothing() YDNL exitwhen true//(  )
-                endif
-            set i = i + 10
-        endloop
-        return attr
-    endfunction
-
-    /**
-     * 根据物品ID获取金额
-     */
-    public function getGoldByItemId takes integer itemId returns integer
-        return getAttrByItemId( itemId , 5 )
-    endfunction
-
-    /**
-     * 根据物品ID获取木头
-     */
-    public function getLumberByItemId takes integer itemId returns integer
-        return getAttrByItemId( itemId , 6 )
-    endfunction
-
-    /**
-     * 根据卷轴ID获得真实物品ID
-     */
-    public function getItemIdByReelId takes integer reelId returns integer
-        local integer i = 0
-        local integer itemId = 0
-        set i = 10
-        loop
-            exitwhen i > Max_Item_num
-                if( reelId == ITEM[(i+1)] ) then
-                    set itemId = ITEM[(i+2)]
-                    call DoNothing() YDNL exitwhen true//(  )
-                endif
-            set i = i + 10
-        endloop
-        return itemId
-    endfunction
-
-    /**
-     * 根据真实物品ID获得卷轴ID
-     */
-    public function getReelIdByItemId takes integer itemId returns integer
-        local integer i = 0
-        local integer reelId = 0
-        set i = 10
-        loop
-            exitwhen i > Max_Item_num
-                if( itemId == ITEM[(i+2)] ) then
-                    set reelId = ITEM[(i+1)]
-                    call DoNothing() YDNL exitwhen true//(  )
-                endif
-            set i = i + 10
-        endloop
-        return reelId
-    endfunction
-
-	/**
-	 * 根据卷轴ID检查物品是否合成品
-	 */
-    public function isMixByReelId takes integer reelId returns boolean
+    
+	//根据卷轴ID检查物品是否合成品
+    public static method isMixByReelId takes integer reelId returns boolean
     	local integer i = 0
     	local boolean isMix = false
     	set i = 10
@@ -252,12 +143,10 @@ struct hItem
             set i = i + 10
         endloop
         return isMix
-    endfunction
+    endmethod
 
-    /**
-	 * 根据每页多少个来 获取合成品的页数
-	 */
-    public function getMixPageNum takes integer perPage returns integer
+    //根据每页多少个来 获取合成品的页数
+    public static method getMixPageNum takes integer perPage returns integer
     	local integer i = 0
     	local integer j = 0
     	local integer totalPage = 1
@@ -273,12 +162,9 @@ struct hItem
             set j = j + 1
         endloop
         return totalPage
-    endfunction
+    endmethod
 
-    /**
-    *
-    */
-    private function check_slot takes unit u,integer target_index,integer reelId,item realIt returns boolean
+    private method check_slot takes unit u,integer target_index,integer reelId,item realIt returns boolean
         local integer i
         local integer j
         local integer slot_index
@@ -380,11 +266,10 @@ struct hItem
             return TRUE
         endif
         return FALSE
-    endfunction
-    /**
-     * 检测某单位的6格物品栏 + 第七件 是否形成合成
-     */
-    private function check_mix takes unit u,integer reelId, item realIt returns boolean
+    endmethod
+
+    //检测某单位的6格物品栏 + 第七件 是否形成合成
+    private method check_mix takes unit u,integer reelId, item realIt returns boolean
         local integer i
         local integer j
         local boolean isMix = FALSE
@@ -416,10 +301,10 @@ struct hItem
             call RemoveItem(realIt)
         endif
         return isMix
-    endfunction
+    endmethod
 
     //物品叠加
-    public function addItem takes integer reelId,integer reel_charges,unit u returns nothing
+    public static method addItem takes integer reelId,integer reel_charges,unit u returns nothing
     	local integer i = 0
         local item it                            	//背包物品临时变量
         local item it_get                            //获得的卷轴
@@ -450,7 +335,6 @@ struct hItem
         endloop
 
         //检查负重
-        /*
         set weight = items_getWeightByItem( it_real )
         if( attribute_getWeightCurrent(u) + weight > attribute_getWeight(u) ) then
 			//set tempGold = items_getGoldByItemId( GetItemTypeId(it_real) ) * GetItemCharges( it_real )
@@ -462,7 +346,6 @@ struct hItem
             //call RemoveItem(it_real)
             return
         endif
-        */
 
         set i = 1
         loop
@@ -540,12 +423,10 @@ struct hItem
                 set it_real = null
             endif
         endif
-    endfunction
+    endmethod
 
-    /**
-     * 获取某单位身上某种物品的使用总次数
-     */
-    public function getTotalCharges takes unit u,integer itemId returns integer
+    //获取某单位身上某种物品的使用总次数
+    public static method getTotalCharges takes unit u,integer itemId returns integer
         local integer i
         local integer charges = 0
         local item it = null
@@ -560,19 +441,20 @@ struct hItem
         endloop
         set it = null
         return charges
-    endfunction
+    endmethod
+    */
 
     /* 创建物品给英雄 */
-    public function toHero takes integer itemId,unit hero,integer charges returns item
-        local location loc = GetUnitLoc(hero)
+    public static method toUnit takes unit whichUnit,integer itemId,integer charges returns item
+        local location loc = GetUnitLoc(whichUnit)
         local real x = GetLocationX(loc)
         local real y = GetLocationY(loc)
         local item it = CreateItem(itemId , x, y )
         call SetItemCharges( it , charges )
-        call UnitAddItem(hero, it )
+        call UnitAddItem(whichUnit, it )
         call RemoveLocation(loc)
         set loc = null
         return it
-    endfunction 
+    endmethod
 
-endlibrary
+endstruct
