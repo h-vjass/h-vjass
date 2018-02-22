@@ -1,6 +1,6 @@
 /* 属性系统 */
 
-//#include "attributeIds.j" //当使用自行设定属性技能时，请注释此行
+#include "attributeIds.j" //当使用自行设定属性技能时，请注释此行
 
 globals
 	//系统最大移动速度
