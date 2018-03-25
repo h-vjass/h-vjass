@@ -1,6 +1,13 @@
-/* 单位 */
+/**
+ * 单位
+ */
+
 globals
-hUnit hunit = 0
+hUnit hunit
+hashtable hash_unit = null
+integer hashkey_unit_issilent = 76100
+integer hashkey_unit_isunarm = 76101
+integer hashkey_unit_crackfly = 76102
 endglobals
 
 struct hUnit

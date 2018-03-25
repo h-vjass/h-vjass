@@ -1,6 +1,6 @@
 
 globals
-    hConsole hconsole = 0
+    hConsole hconsole
 endglobals
 
 struct hConsole
@@ -34,18 +34,32 @@ struct hConsole
 		endif
 	endmethod
 
-	//! textmacro hConsoleEcho takes FNAME
-	public method $FNAME$ takes string msg returns nothing
+	public method log takes string msg returns nothing
 		if(this.status) then
-			set msg = "|cff"+this.color_$FNAME$+"[log]"+msg+"|r"
+			set msg = "|cff"+this.color_log+"[log]"+msg+"|r"
 	    	call DisplayTextToForce( GetPlayersAll(), msg )
 	    endif
 	endmethod
-	//! endtextmacro
 
-	//! runtextmacro hConsoleEcho("log")
-	//! runtextmacro hConsoleEcho("info")
-	//! runtextmacro hConsoleEcho("warning")
-	//! runtextmacro hConsoleEcho("error")
+	public method error takes string msg returns nothing
+		if(this.status) then
+			set msg = "|cff"+this.color_error+"[log]"+msg+"|r"
+	    	call DisplayTextToForce( GetPlayersAll(), msg )
+	    endif
+	endmethod
+
+	public method info takes string msg returns nothing
+		if(this.status) then
+			set msg = "|cff"+this.color_info+"[log]"+msg+"|r"
+	    	call DisplayTextToForce( GetPlayersAll(), msg )
+	    endif
+	endmethod
+
+	public method warning takes string msg returns nothing
+		if(this.status) then
+			set msg = "|cff"+this.color_warning+"[log]"+msg+"|r"
+	    	call DisplayTextToForce( GetPlayersAll(), msg )
+	    endif
+	endmethod
 
 endstruct

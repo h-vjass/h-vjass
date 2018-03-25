@@ -1,7 +1,7 @@
-/* 消息 */
+//消息
 globals
-    hMsg hmsg = 0
-    hashtable hash_hmsg = InitHashtable()
+    hMsg hmsg
+    hashtable hash_hmsg = null
 endglobals
 struct hMsg
 
@@ -121,14 +121,14 @@ struct hMsg
         local real tnow = htime.getReal(t,2)
         local real tend1 = htime.getReal(t,3)
         local real tend2 = htime.getReal(t,4)
-        if(tnow>=tend1+tend2+0.3)then
+        if(tnow>=tend1+tend2+0.2)then
             call htime.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         if(tnow<=tend1)then
             call SetTextTagTextBJ(ttg, msg, size*(1+tnow/tend1))
-        elseif(tnow>tend1+0.3)then
-            call SetTextTagTextBJ(ttg, msg, size*2-(3*(tnow-tend1-0.3)/tend2))
+        elseif(tnow>tend1+0.2)then
+            call SetTextTagTextBJ(ttg, msg, size*2-(3*(tnow-tend1-0.2)/tend2))
         endif
         call htime.setReal(t,2,tnow)
     endmethod
@@ -150,7 +150,7 @@ struct hMsg
             call htime.setTexttag(t,1,ttg)
             call htime.setReal(t,2,0)
             call htime.setReal(t,3,0.3)
-            call htime.setReal(t,4,0.3)
+            call htime.setReal(t,4,0.2)
         endif
     endmethod
     //漂浮文字 - 默认 (在某单位头上)

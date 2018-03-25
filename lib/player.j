@@ -1,8 +1,8 @@
 
 globals
 	
-	hPlayer hplayer = 0
-	hashtable hp_hash = InitHashtable()
+	hPlayer hplayer
+	hashtable hash_player = null
 	integer hp_isComputer = 10001
 	integer hp_apm = 10002
 	integer hp_battle_status = 10003
@@ -30,17 +30,17 @@ struct hPlayer
 
 	//apm
 	private static method setApm takes player whichPlayer , integer apm returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_apm, apm)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_apm, apm)
 	endmethod
 	public static method getApm takes player whichPlayer returns integer
 		if(htime.count() > 60) then
-			return R2I( I2R(LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_apm))  / ( I2R(htime.count()) / 60.00 ))
+			return R2I( I2R(LoadInteger(hash_player, GetHandleId(whichPlayer), hp_apm))  / ( I2R(htime.count()) / 60.00 ))
 	    else
-	        return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_apm)
+	        return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_apm)
 	    endif
 	endmethod
 	private static method addApm takes player whichPlayer returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_apm , LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_apm)+1)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_apm , LoadInteger(hash_player, GetHandleId(whichPlayer), hp_apm)+1)
 	endmethod
 	private static method triggerApmActions takes nothing returns nothing
 		call addApm(GetTriggerPlayer())
@@ -51,12 +51,12 @@ struct hPlayer
 
 	//selection
 	private static method setSelection takes player whichPlayer,unit whichUnit returns nothing
-		if(whichUnit==null or GetOwningPlayer(whichUnit)!=Player(PLAYER_NEUTRAL_PASSIVE))then
-			call SaveUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_selection, whichUnit)
+		if(whichPlayer!=null)then
+			call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection, whichUnit)
 		endif
 	endmethod
 	public static method getSelection takes player whichPlayer returns unit
-		return LoadUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_selection)
+		return LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection)
 	endmethod
 	private static method triggerSelectionUnitActions takes nothing returns nothing
 		call setSelection(GetTriggerPlayer(),GetTriggerUnit())
@@ -86,8 +86,8 @@ struct hPlayer
 				call setApm(players[i],0)
 				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
 					set player_current_qty = player_current_qty + 1
-					call SaveBoolean(hp_hash, pid, hp_isComputer, false)
-					call SaveStr(hp_hash, pid, hp_battle_status, default_status_gaming)
+					call SaveBoolean(hash_player, pid, hp_isComputer, false)
+					call SaveStr(hash_player, pid, hp_battle_status, default_status_gaming)
 	                call TriggerRegisterPlayerSelectionEventBJ( triggerApm , players[i] , true )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_LEFT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
@@ -96,8 +96,8 @@ struct hPlayer
 		            call TriggerRegisterPlayerUnitEvent(triggerSelection, players[i], EVENT_PLAYER_UNIT_SELECTED, null)
 		            call TriggerRegisterPlayerUnitEvent(triggerDeSelection, players[i], EVENT_PLAYER_UNIT_DESELECTED, null)
 	            else
-	            	call SaveBoolean(hp_hash, pid, hp_isComputer, true)
-	            	call SaveStr(hp_hash, pid, hp_battle_status, default_status_nil)
+	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
+	            	call SaveStr(hash_player, pid, hp_battle_status, default_status_nil)
 	            endif
 			set i = i + 1
 		endloop
@@ -110,11 +110,11 @@ struct hPlayer
 
 	//设置玩家状态
 	public static method setStatus takes player whichPlayer,string status returns nothing
-		call SaveStr(hp_hash, GetHandleId(whichPlayer), hp_battle_status, status)
+		call SaveStr(hash_player, GetHandleId(whichPlayer), hp_battle_status, status)
 	endmethod
 	//获取玩家状态
 	public static method getStatus takes player whichPlayer returns string
-		return LoadStr(hp_hash, GetHandleId(whichPlayer), hp_battle_status)
+		return LoadStr(hash_player, GetHandleId(whichPlayer), hp_battle_status)
 	endmethod
 
 	//设置失败
@@ -130,12 +130,12 @@ struct hPlayer
 	//设置玩家英雄
 	public static method setHero takes player whichPlayer,unit hero,string avater returns nothing
 		call hconsole.log("playerhero="+GetUnitName(hero))
-		call SaveUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_hero, hero)
-		call SaveStr(hp_hash, GetHandleId(whichPlayer), hp_hero_avater, avater)
+		call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_hero, hero)
+		call SaveStr(hash_player, GetHandleId(whichPlayer), hp_hero_avater, avater)
 	endmethod
 	//获取玩家英雄单位
 	public static method getHero takes player whichPlayer returns unit
-		return LoadUnitHandle(hp_hash, GetHandleId(whichPlayer), hp_hero)
+		return LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_hero)
 	endmethod
 	//获取玩家英雄名称
 	public static method getHeroName takes player whichPlayer returns string
@@ -143,51 +143,51 @@ struct hPlayer
 	endmethod
 	//获取玩家英雄头像（路径串）
 	public static method getHeroAvatar takes player whichPlayer returns string
-		return LoadStr(hp_hash, GetHandleId(whichPlayer), hp_hero_avater)
+		return LoadStr(hash_player, GetHandleId(whichPlayer), hp_hero_avater)
 	endmethod
 
 	//获取玩家造成的总伤害
 	public static method getDamage takes player whichPlayer returns real
-		return LoadReal(hp_hash, GetHandleId(whichPlayer), hp_damage)
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_damage)
 	endmethod
 	//增加玩家造成的总伤害
 	public static method addDamage takes player whichPlayer,real val returns nothing
-		call SaveReal(hp_hash, GetHandleId(whichPlayer), hp_damage, getDamage(whichPlayer)+val)
+		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_damage, getDamage(whichPlayer)+val)
 	endmethod
 
 	//获取玩家是受到的总伤害
 	public static method getBeDamage takes player whichPlayer returns real
-		return LoadReal(hp_hash, GetHandleId(whichPlayer), hp_bedamage)
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_bedamage)
 	endmethod
 	//增加玩家受到的总伤害
 	public static method addBeDamage takes player whichPlayer,real val returns nothing
-		call SaveReal(hp_hash, GetHandleId(whichPlayer), hp_bedamage, getBeDamage(whichPlayer)+val)
+		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_bedamage, getBeDamage(whichPlayer)+val)
 	endmethod
 
 	//获取玩家杀敌数
 	public static method getKill takes player whichPlayer returns integer
-		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_kill)
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_kill)
 	endmethod
 	//增加玩家杀敌数
 	public static method addKill takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
 	endmethod
 
 	//获取玩家总获金量
 	public static method getTotalGold takes player whichPlayer returns integer
-		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_gold)
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold)
 	endmethod
 	//增加玩家总获金量
 	public static method addTotalGold takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_gold, getTotalGold(whichPlayer)+val)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold, getTotalGold(whichPlayer)+val)
 	endmethod
 	//获取玩家总耗金量
 	public static method getTotalGoldCost takes player whichPlayer returns integer
-		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_gold_cost)
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost)
 	endmethod
 	//增加玩家总耗金量
 	public static method addTotalGoldCost takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
 	endmethod
 	//获取玩家金钱
 	public static method getGold takes player whichPlayer returns integer
@@ -225,19 +225,19 @@ struct hPlayer
 
 	//获取玩家总获木量
 	public static method getTotalLumber takes player whichPlayer returns integer
-		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber)
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber)
 	endmethod
 	//增加玩家总获木量
 	public static method addTotalLumber takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber, getTotalLumber(whichPlayer)+val)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber, getTotalLumber(whichPlayer)+val)
 	endmethod
 	//获取玩家总耗木量
 	public static method getTotalLumberCost takes player whichPlayer returns integer
-		return LoadInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber_cost)
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost)
 	endmethod
 	//增加玩家总耗木量
 	public static method addTotalLumberCost takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hp_hash, GetHandleId(whichPlayer), hp_lumber_cost, getTotalLumberCost(whichPlayer)+val)
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost, getTotalLumberCost(whichPlayer)+val)
 	endmethod
 	//获取玩家木材
 	public static method getLumber takes player whichPlayer returns integer

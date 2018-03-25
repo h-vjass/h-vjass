@@ -1,9 +1,10 @@
-/* is.j */
+//is.j 
 globals
-    hIs his = 0
+    hIs his
 endglobals
 
 struct hIs
+
     
     /**
      * 是否夜晚
@@ -23,11 +24,11 @@ struct hIs
      * 是否电脑
      */
     public static method computer takes player whichPlayer returns boolean
-        return LoadBoolean(hp_hash, GetHandleId(whichPlayer), hp_isComputer)
+        return LoadBoolean(hash_player, GetHandleId(whichPlayer), hp_isComputer)
     endmethod
 
     /*
-     * 是否玩家位置
+     * 是否玩家位置(如果位置为真实玩家或为空，则为true；而如果选择了电脑玩家补充，则为false)
      */
     public static method playerSite takes player whichPlayer returns boolean
         return GetPlayerController(whichPlayer) == MAP_CONTROL_USER
@@ -38,6 +39,32 @@ struct hIs
      */
     public static method playing takes player whichPlayer returns boolean
         return GetPlayerSlotState(whichPlayer) == PLAYER_SLOT_STATE_PLAYING
+    endmethod
+
+    /*
+     * 是否中立玩家（包括中立敌对 中立被动 中立受害 中立特殊）
+     */
+    public static method isNeutral takes player whichPlayer returns boolean
+        local boolean flag = false
+        if(whichPlayer == null) then
+            set flag = false
+        elseif(whichPlayer == Player(PLAYER_NEUTRAL_AGGRESSIVE)) then
+            set flag = true
+        elseif(whichPlayer == Player(bj_PLAYER_NEUTRAL_VICTIM)) then
+            set flag = true
+        elseif(whichPlayer == Player(bj_PLAYER_NEUTRAL_EXTRA)) then
+            set flag = true
+        elseif(whichPlayer == Player(PLAYER_NEUTRAL_PASSIVE)) then
+            set flag = true
+        endif
+        return flag
+    endmethod
+
+    /**
+     * 是否某个特定单位
+     */
+    public static method unit takes unit whichUnit,unit otherUnit returns boolean
+        return whichUnit == otherUnit
     endmethod
 
     /**
@@ -130,8 +157,30 @@ struct hIs
     public static method ancient takes unit whichUnit returns boolean
         return IsUnitType( whichUnit , UNIT_TYPE_ANCIENT)
     endmethod
+
+    /*
+     * 是否被沉默
+     */
+    public static method silent takes unit whichUnit returns boolean
+        return LoadBoolean(hash_unit,GetHandleId(whichUnit),hashkey_unit_issilent)
+    endmethod
+
+    /*
+     * 是否被缴械
+     */
+    public static method unarm takes unit whichUnit returns boolean
+        return LoadBoolean(hash_unit,GetHandleId(whichUnit),hashkey_unit_isunarm)
+    endmethod
+
+    /*
+     * 是否被击飞
+     */
+    public static method crackfly takes unit whichUnit returns boolean
+        return LoadBoolean(hash_unit,GetHandleId(whichUnit),hashkey_unit_crackfly)
+    endmethod
+
     /**
-     * 判断是否水面
+     * 判断是否处在水面
      */
     public static method water takes unit whichUnit returns boolean
         local location loc = GetUnitLoc(whichUnit)

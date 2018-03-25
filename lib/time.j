@@ -1,7 +1,7 @@
 
 globals
-    hTime htime = 0
-    hashtable hash_time = InitHashtable()
+    hTime htime
+    hashtable hash_time = null
     integer clock_h = 0
     integer clock_m = 0
     integer clock_i = 0
@@ -133,6 +133,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveBooleanExprHandle(hash_time, timerHandleId, k, value)
     endmethod
+    public method setTrigger takes timer t,integer k,trigger value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveTriggerHandle(hash_time, timerHandleId, k, value)
+    endmethod
     //GET
     public method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
@@ -189,6 +193,10 @@ struct hTime
     public method getBx takes timer t,integer k returns boolexpr
         local integer timerHandleId = GetHandleId(t)
         return LoadBooleanExprHandle(hash_time, timerHandleId, k)
+    endmethod
+    public method getTrigger takes timer t,integer k returns trigger
+        local integer timerHandleId = GetHandleId(t)
+        return LoadTriggerHandle(hash_time, timerHandleId, k)
     endmethod
 
     /**
@@ -276,6 +284,7 @@ struct hTime
                 call DestroyTimerDialog(td)
                 set td = null
             endif
+            call PauseTimer(t)
             call DestroyTimer(t)
             set t = null
         endif

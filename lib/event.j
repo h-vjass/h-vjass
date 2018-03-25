@@ -1,9 +1,9 @@
-/* 事件.j */
+//事件.j
 globals
-    hEvt hevt = 0
-    hEvtBean hevtBean = 0
-    hashtable hash_trigger_register = InitHashtable()
-    hashtable hash_trigger = InitHashtable()
+    hEvt hevt
+    hEvtBean hevtBean
+    hashtable hash_trigger_register = null
+    hashtable hash_trigger = null
     
     trigger event_trigger_attackReady = null
     trigger event_trigger_beAttackReady = null
@@ -61,7 +61,6 @@ struct hEvtBean
     public static real value2 = 0
     public static real value3 = 0
     public static real during = 0
-    public static string damageEffect = null
     public static string damageKind = null
     public static string damageType = null
     public static string breakType = null
@@ -91,7 +90,6 @@ struct hEvtBean
         set s.value2 = 0
         set s.value3 = 0
         set s.during = 0
-        set s.damageEffect = null
         set s.damageKind = null
         set s.damageType = null
         set s.breakType = null
@@ -121,7 +119,6 @@ struct hEvtBean
         set value2 = 0
         set value3 = 0
         set during = 0
-        set damageEffect = null
         set damageKind = null
         set damageType = null
         set breakType = null
@@ -280,11 +277,10 @@ struct hEvt
     private static integer hashkey_type_Value2 = 19
     private static integer hashkey_type_Value3 = 20
     private static integer hashkey_type_During = 21
-    private static integer hashkey_type_DamageEffect = 22
-    private static integer hashkey_type_DamageKind = 23
-    private static integer hashkey_type_DamageType = 24
-    private static integer hashkey_type_BreakType = 25
-    private static integer hashkey_type_IsNoAvoid = 26
+    private static integer hashkey_type_DamageKind = 22
+    private static integer hashkey_type_DamageType = 23
+    private static integer hashkey_type_BreakType = 24
+    private static integer hashkey_type_IsNoAvoid = 25
 
     private static method getTriggerKeyByString takes string str returns integer
         local integer inc = -1
@@ -310,8 +306,6 @@ struct hEvt
         //! runtextmacro getTriggerKeyByStringInc("itemDestroy","ItemDestroy")
         //! runtextmacro getTriggerKeyByStringInc("damage","Damage")
         //! runtextmacro getTriggerKeyByStringInc("beDamage","BeDamage")
-        //! runtextmacro getTriggerKeyByStringInc("damageEffect","DamageEffect")
-        //! runtextmacro getTriggerKeyByStringInc("beDamageEffect","BeDamageEffect")
         //! runtextmacro getTriggerKeyByStringInc("avoid","Avoid")
         //! runtextmacro getTriggerKeyByStringInc("beAvoid","BeAvoid")
         //! runtextmacro getTriggerKeyByStringInc("breakDefend","BreakDefend")
@@ -476,10 +470,6 @@ struct hEvt
     private static method setDuring takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_During , which )
     endmethod
-    //设置 damageEffect 字符串
-    private static method setDamageEffect takes trigger tgr,string which returns nothing
-        call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_DamageEffect , which )
-    endmethod
     //设置 damageKind 字符串
     private static method setDamageKind takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_DamageKind , which )
@@ -576,10 +566,6 @@ struct hEvt
     //获取 during 实数
     public static method getDuring takes nothing returns real
         return LoadReal(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_During )
-    endmethod
-    //获取 damageEffect 字符串
-    public static method getDamageEffect takes nothing returns string
-        return LoadStr(hash_trigger, GetHandleId(GetTriggeringTrigger()), hashkey_type_DamageEffect )
     endmethod
     //获取 damageKind 字符串
     public static method getDamageKind takes nothing returns string
@@ -693,9 +679,6 @@ struct hEvt
                 endif
                 if(bean.during!=0)then
                     call setDuring(tempTgr,bean.during)
-                endif
-                if(bean.damageEffect!=null)then
-                    call setDamageEffect(tempTgr,bean.damageEffect)
                 endif
                 if(bean.damageKind!=null)then
                     call setDamageKind(tempTgr,bean.damageKind)
@@ -1043,7 +1026,7 @@ struct hEvt
 
     //on - 造成伤害
     //@getTriggerUnit 获取伤害来源
-    //@getTargetUnit 获取被攻击单位
+    //@getTargetUnit 获取被伤害单位
     //@getSourceUnit 获取伤害来源
     //@getDamage 获取初始伤害
     //@getRealDamage 获取实际伤害
@@ -1062,35 +1045,6 @@ struct hEvt
     //@getDamageType 获取伤害类型
     public static method onBeDamage takes unit whichUnit,code action returns trigger
         return onEventByHandle("beDamage",whichUnit,action)
-    endmethod
-
-    //on - 触发伤害特效
-    //@getTriggerUnit 获取伤害来源
-    //@getTargetUnit 获取被伤害单位
-    //@getSourceUnit 获取伤害来源
-    //@getDamage 获取初始伤害
-    //@getRealDamage 获取实际伤害
-    //@getDamageEffect 获取触发特效
-    //@getDamageKind 获取伤害方式
-    //@getDamageType 获取伤害类型
-    //@getValue 获取触发特效数值
-    //@getDuring 获取触发特效持续时间
-    public static method onDamageEffect takes unit whichUnit,code action returns trigger
-        return onEventByHandle("damageEffect",whichUnit,action)
-    endmethod
-
-    //on - 被伤害并附带伤害特效
-    //@getTriggerUnit 获取被伤害单位
-    //@getSourceUnit 获取伤害来源
-    //@getDamage 获取初始伤害
-    //@getRealDamage 获取实际伤害
-    //@getDamageEffect 获取触发特效
-    //@getDamageKind 获取伤害方式[攻击、技能、物品]
-    //@getDamageType 获取伤害类型[物理、魔法<包含火水雷等>、真实、绝对]
-    //@getValue 获取触发特效数值
-    //@getDuring 获取触发特效持续时间
-    public static method onBeDamageEffect takes unit whichUnit,code action returns trigger
-        return onEventByHandle("beDamageEffect",whichUnit,action)
     endmethod
 
     //on - 回避攻击成功

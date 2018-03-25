@@ -4,7 +4,7 @@ struct hTest
 	private static method inRect takes nothing returns nothing
 		local string music = ""
 		local integer i = GetRandomInt(1, 4)
-		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"进入了"+hrect.getName(evt.getTriggerRect()))
+		call hmsg.echo("getTriggerUnit=="+GetUnitName(hevt.getTriggerUnit())+"进入了"+hrect.getName(hevt.getTriggerRect()))
 		if(i==1)then
 			set music = gg_snd_Credits
 		elseif(i==2)then
@@ -14,27 +14,27 @@ struct hTest
 		elseif(i==4)then
 			set music = gg_snd_Credits
 		endif
-		call media.bgm2Player(music,GetOwningPlayer(evt.getTriggerUnit()))
+		call hmedia.bgm2Player(music,GetOwningPlayer(hevt.getTriggerUnit()))
 	endmethod
 	private static method outRect takes nothing returns nothing
-		call hmsg.echo("getTriggerUnit=="+GetUnitName(evt.getTriggerUnit())+"离开了"+hrect.getName(evt.getTriggerRect()))
+		call hmsg.echo("getTriggerUnit=="+GetUnitName(hevt.getTriggerUnit())+"离开了"+hrect.getName(hevt.getTriggerRect()))
 	endmethod
 
 	private static method onattackready takes nothing returns nothing
-		local unit u = evt.getTriggerUnit()
+		local unit u = hevt.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"发动了攻击")
 	endmethod
 	private static method ondamage takes nothing returns nothing
-		call hmsg.echo(GetUnitName(evt.getSourceUnit())+"造成了攻击伤害")
-		call hmsg.echo("对"+GetUnitName(evt.getTargetUnit())+"造成1:"+R2S(evt.getDamage()))
-		call hmsg.echo("对"+GetUnitName(evt.getTargetUnit())+"造成2:"+R2S(evt.getRealDamage()))
-		call hmsg.echo(evt.getDamageKind())
-		call hmsg.echo(evt.getDamageType())
+		call hmsg.echo(GetUnitName(hevt.getSourceUnit())+"造成了攻击伤害")
+		call hmsg.echo("对"+GetUnitName(hevt.getTargetUnit())+"进入伤害"+R2S(hevt.getDamage()))
+		call hmsg.echo("对"+GetUnitName(hevt.getTargetUnit())+"真实伤害:"+R2S(hevt.getRealDamage()))
+		call hmsg.echo(hevt.getDamageKind())
+		call hmsg.echo(hevt.getDamageType())
 	endmethod
 	private static method enteru takes nothing returns nothing
-		local unit u = evt.getTriggerUnit()
-		local unit eu = evt.getTriggerEnterUnit()
-		local real range = evt.getRange()
+		local unit u = hevt.getTriggerUnit()
+		local unit eu = hevt.getTriggerEnterUnit()
+		local real range = hevt.getRange()
 		call hmsg.echo(GetUnitName(u)+"被进去了！")
 		call hmsg.echo(GetUnitName(eu)+"进去了！")
 		call hmsg.echo("range=="+R2S(range))
@@ -47,46 +47,67 @@ struct hTest
 		local rect r = null
 		local real rx = -256
 		local real ry = 6016
-		local hWeatherBean wbean = 0
+		local hWeatherBean wbean = hWeatherBean.create()
 		local integer i=0
 		local integer j=0
 		local integer rand=0
 
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
-		call attrExt.addHemophagia(u,25,0)
-		//call attrExt.addSplit(u,50,0)
-		//call attrExt.addHuntRebound(u,50,0)
-		call attrExt.addCure(u,50,0)
-		call attrExt.addAvoid(u,100,0)
-		call attrExt.subKnocking(u,15000,0)
-		call attr.addMove(u,500,60)
-		//call attrEffect.coverSwim(u,10,0)
-		//call attrEffect.coverSwimDuring(u,1.00,0)
-		call hplayer.setHero(players[1],u)
-		//call attr.addAttackSpeed(u,150,0)
-		call attrExt.addPunishOppose(u,90,0)
-		call evt.onAttackReady(u,function thistype.onattackready)
-		call evt.onDamage(u,function thistype.ondamage)
+		call hplayer.setHero(players[1],u,"")
+		//测试吸血
+		//call hattr.addHemophagia(u,25,0)
+		//测试眩晕
+		//call hattrEffect.setSwimOdds(u,30,0)
+		//call hattrEffect.setSwimDuring(u,1.00,0)
+		//测试攻击特效
+		call hattr.addAttackHuntType(u,"fire",10)
+		call hattr.addAttackHuntType(u,"water",20)
+		call hattr.addAttackHuntType(u,"thunder",30)
+		call hattr.addSplit(u,25,0)
+		call hattr.addSplitRange(u,500,0)
+		call hattr.addMana(u,10000,0)
+		call hattr.addManaBack(u,1000,0)
+		call hattrEffect.setLifeBackVal(u,1.10,0)
+		call hattrEffect.setLifeBackDuring(u,10.00,0)
+		call hattrEffect.setManaBackVal(u,1.20,0)
+		call hattrEffect.setManaBackDuring(u,10.00,0)
+		call hattrEffect.setAttackSpeedVal(u,1.30,0)
+		call hattrEffect.setAttackSpeedDuring(u,10.00,0)
+		call hattrEffect.setPoisonVal(u,1.30,0)
+		call hattrEffect.setPoisonDuring(u,10.00,0)
+		call hattrEffect.setFireVal(u,1.30,0)
+		call hattrEffect.setFireDuring(u,10.00,0)
+		call hattrEffect.setBombVal(u,50,0)
+		call hattrEffect.setBombRange(u,300.00,0)
+		//call hattrEffect.setFetterOdds(u,50,0)
+		//call hattrEffect.setFetterDuring(u,10.00,0)
+		//call hattrEffect.setFreezeVal(u,50,0)
+		//call hattrEffect.setFreezeDuring(u,10,0)
+		//call hattrEffect.setColdVal(u,50,0)
+		//call hattrEffect.setColdDuring(u,10,0)
+		call hAttrNatural.setFire(u,300,0)
 
+		call hevt.onAttackReady(u,function thistype.onattackready)
+		call hevt.onDamage(u,function thistype.ondamage)
+
+		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
+		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
+		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
+		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
-		
-		//call hunit.createUnits(10,Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,900))
-		//call PanCameraToTimedLocForPlayer( players[1] , Location(0,0), 0 )
-		
-		call attrExt.addAvoid(u2,10,0)
-		//call attrExt.addAim(u2,100,15)
-		call attr.addDefend(u2,-19,0)
-		//call attr.addAttackSpeed(u2,50,0)
-		//call attr.addAttackPhysical(u2,1500,0)
-		call attrEffect.coverBreak(u2,15,0)
-		call attrEffect.coverBreakDuring(u2,0.300,0)
+		call hattr.addLife(u2,50000,0)
+		call hattr.addAvoid(u2,30,0)
+		call hattr.addDefend(u2,-19,0)
+		//call hattrEffect.setSilentOdds(u2,5,0)
+		//call hattrEffect.setSilentDuring(u2,5.00,0)
+		//call hattrEffect.setUnarmOdds(u2,5,0)
+		//call hattrEffect.setUnarmDuring(u2,10.00,0)
 
-		call evt.onEnterUnitRange(u2,300,function thistype.enteru)
+		call hevt.onEnterUnitRange(u2,300,function thistype.enteru)
 
 		//rect
-		call wbean.create()
 		set i=0
 		loop
 			exitwhen i>=3
@@ -95,8 +116,8 @@ struct hTest
 					exitwhen j>=5
 						set r = hrect.createInLoc(rx+1152*j,ry-1152*i,1152,1152)
 						call hrect.setName(r,"平原"+I2S(i*j))
-						call evt.onEnterRect(r,function thistype.inRect)
-						call evt.onLeaveRect(r,function thistype.outRect)
+						call hevt.onEnterRect(r,function thistype.inRect)
+						call hevt.onLeaveRect(r,function thistype.outRect)
 						set wbean.loc = GetRectCenter(r)
 						set wbean.width = 1152
 						set wbean.height = 1152

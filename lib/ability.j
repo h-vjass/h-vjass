@@ -1,10 +1,10 @@
-/* 基础能力 */
+// 基础能力
 
 globals
 
-    hAbility hability = 0
+    hAbility hability
 
-	hashtable hash_ability = InitHashtable()
+	hashtable hash_ability = null
 
 	//超级马甲
 	integer ABILITY_TOKEN = 'h00J'
@@ -81,6 +81,118 @@ struct hAbility
 	    set t = htime.setTimeout(during,function thistype.swimCall)
 	    call htime.setUnit(t,1,u)
 	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5241, t)
+	endmethod
+
+	/**
+	 * 沉默回调
+	 */
+	private static method silentCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit u = htime.getUnit(t,1)
+		local effect eff = htime.getEffect(t,2)
+		local trigger tgr = htime.getTrigger(t,3)
+		call heffect.del(eff)
+		call DisableTrigger( tgr )
+    	call DestroyTrigger( tgr )
+		call htime.delTimer(t)
+		set eff = null
+		set tgr = null
+		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_issilent,false)
+	endmethod
+	/**
+	 * 沉默执行
+	 */
+	private static method silentDo takes nothing returns nothing
+		local unit u = hevt.getTriggerUnit()
+		call IssueImmediateOrder( u , "stop" )
+	endmethod
+	/**
+	 * 沉默
+	 */
+	public static method silent takes unit u,real during returns nothing
+	    local location loc = null
+	    local timer t = LoadTimerHandle(hash_ability, GetHandleId(u), 5242)
+		local effect eff = null
+		local trigger tgr = null
+	    if(t!=null and TimerGetRemaining(t)>0)then
+	    	if(during <= TimerGetRemaining(t))then
+				return
+			else
+				set eff = htime.getEffect(t,2)
+				set tgr = htime.getTrigger(t,3)
+				call heffect.del(eff)
+				call DisableTrigger( tgr )
+    			call DestroyTrigger( tgr )
+				call htime.delTimer(t)
+				set eff = null
+				set tgr = null
+				call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_issilent,false)
+	    	endif
+	    endif
+		set tgr = hevt.onSkillReady(u,function thistype.silentDo)
+	    set t = htime.setTimeout(during,function thistype.silentCall)
+		set eff = heffect.toUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl",u,"head",-1)
+	    call htime.setUnit(t,1,u)
+	    call htime.setEffect(t,2,eff)
+	    call htime.setTrigger(t,3,tgr)
+	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5242, t)
+		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_issilent,true)
+	endmethod
+
+	/**
+	 * 缴械回调
+	 */
+	private static method unarmCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit u = htime.getUnit(t,1)
+		local effect eff = htime.getEffect(t,2)
+		local trigger tgr = htime.getTrigger(t,3)
+		call heffect.del(eff)
+		call DisableTrigger( tgr )
+    	call DestroyTrigger( tgr )
+		call htime.delTimer(t)
+		set eff = null
+		set tgr = null
+		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isunarm,false)
+	endmethod
+	/**
+	 * 缴械执行
+	 */
+	private static method unarmDo takes nothing returns nothing
+		local unit u = hevt.getTriggerUnit()
+		call IssueImmediateOrder( u , "stop" )
+	endmethod
+	/**
+	 * 缴械
+	 */
+	public static method unarm takes unit u,real during returns nothing
+	    local location loc = null
+	    local timer t = LoadTimerHandle(hash_ability, GetHandleId(u), 5243)
+		local effect eff = null
+		local trigger tgr = null
+	    if(t!=null and TimerGetRemaining(t)>0)then
+	    	if(during <= TimerGetRemaining(t))then
+				return
+			else
+				set eff = htime.getEffect(t,2)
+				set tgr = htime.getTrigger(t,3)
+				call heffect.del(eff)
+				call DisableTrigger( tgr )
+    			call DestroyTrigger( tgr )
+				call htime.delTimer(t)
+				set eff = null
+				set tgr = null
+				call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isunarm,false)
+	    	endif
+	    endif
+		set tgr = hevt.onAttackReady(u,function thistype.unarmDo)
+	    set t = htime.setTimeout(during,function thistype.unarmCall)
+		set eff = heffect.toUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl",u,"weapon",-1)
+	    call htime.setUnit(t,1,u)
+	    call htime.setEffect(t,2,eff)
+	    call htime.setTrigger(t,3,tgr)
+	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5243, t)
+		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isunarm,true)
 	endmethod
 
 	/**
@@ -237,22 +349,6 @@ struct hAbility
 	    call htime.setUnit(t,1,whichUnit)
 	    call htime.setInteger(t,2, pauseType )
 	    call SaveTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 , t )
-	endmethod
-
-	 /**
-	 * 通用闪电链
-	 * attackUnit 攻击单位
-	 * beUnit 被攻击单位
-	 * skillId 技能ID
-	 */
-	public static method thunderLink takes unit attackUnit,unit beUnit,integer skillId returns nothing
-	    local location point = GetUnitLoc( attackUnit )
-	    local player owner = GetOwningPlayer(attackUnit)
-	    local unit token = CreateUnitAtLoc(owner,ABILITY_TOKEN,point,bj_UNIT_FACING)
-	    call UnitAddAbility( token, skillId)
-	    call IssueTargetOrder( token, "chainlightning",  beUnit )
-	    call UnitApplyTimedLifeBJ( 1.00, 'BTLF', token )
-	    call RemoveLocation(  point )
 	endmethod
 
 	//为单位添加效果只限技能类一段时间 回调

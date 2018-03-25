@@ -1,4 +1,4 @@
-/* 物品系统 */
+//物品系统
 /*
 物品分为
 1、永久型物品 permanent
@@ -21,8 +21,8 @@
 */
 
 globals
-    hItem hitem = 0
-    hashtable hash_item = InitHashtable()
+    hItem hitem
+    hashtable hash_item = null
 endglobals
 
 struct hItemBean

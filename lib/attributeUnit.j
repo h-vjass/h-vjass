@@ -1,8 +1,8 @@
-/* 属性 - 单位 */
+//属性 - 单位
 
 globals
-	hAttrUnit hattrUnit = 0
-	hashtable hash_attr_unit = InitHashtable()
+	hAttrUnit hattrUnit
+	hashtable hash_attr_unit = null
 	boolean PUNISH_SWITCH = false 			//有的游戏不需要硬直条就把他关闭
 	boolean PUNISH_SWITCH_ONLYHERO = true 	//是否只有英雄有硬直条
 	real PUNISH_TEXTTAG_HEIGHT = 0
@@ -21,17 +21,358 @@ struct hAttrUnit
     endmethod
 
 
-	/* 设定硬直条是否显示 */
+
+	//根据bean修改单位属性
+	public static method modifyAttrByBean takes unit whichUnit,hAttrBean bean,real during returns nothing
+		if(bean.attackHuntType!="")then
+			call hattr.setAttackHuntType(whichUnit,bean.attackHuntType,during)
+		endif
+		//COPY
+		if(bean.life>0)then
+			call hattr.addLife(whichUnit,bean.life,during)
+		elseif(bean.life<0)then
+			call hattr.subLife(whichUnit,bean.life,during)
+		endif
+		if(bean.mana>0)then
+			call hattr.addMana(whichUnit,bean.mana,during)
+		elseif(bean.mana<0)then
+			call hattr.subMana(whichUnit,bean.mana,during)
+		endif
+		if(bean.move>0)then
+			call hattr.addMove(whichUnit,bean.move,during)
+		elseif(bean.move<0)then
+			call hattr.subMove(whichUnit,bean.move,during)
+		endif
+		if(bean.defend>0)then
+			call hattr.addDefend (whichUnit,bean.defend ,during)
+		elseif(bean.defend<0)then
+			call hattr.subDefend (whichUnit,bean.defend ,during)
+		endif
+		if(bean.attackSpeed>0)then
+			call hattr.addAttackSpeed(whichUnit,bean.attackSpeed ,during)
+		elseif(bean.attackSpeed<0)then
+			call hattr.subAttackSpeed(whichUnit,bean.attackSpeed ,during)
+		endif
+		if(bean.attackPhysical>0)then
+			call hattr.addAttackPhysical(whichUnit,bean.attackPhysical,during)
+		elseif(bean.attackPhysical<0)then
+			call hattr.subAttackPhysical(whichUnit,bean.attackPhysical,during)
+		endif
+		if(bean.attackMagic>0)then
+			call hattr.addAttackMagic(whichUnit,bean.attackMagic,during)
+		elseif(bean.attackMagic<0)then
+			call hattr.subAttackMagic(whichUnit,bean.attackMagic,during)
+		endif
+		if(bean.str>0)then
+			call hattr.addStr(whichUnit,bean.str,during)
+		elseif(bean.str<0)then
+			call hattr.subStr(whichUnit,bean.str,during)
+		endif
+		if(bean.agi>0)then
+			call hattr.addAgi(whichUnit,bean.agi,during)
+		elseif(bean.agi<0)then
+			call hattr.subAgi(whichUnit,bean.agi,during)
+		endif
+		if(bean.int>0)then
+			call hattr.addInt(whichUnit,bean.int,during)
+		elseif(bean.int<0)then
+			call hattr.subInt(whichUnit,bean.int,during)
+		endif
+		if(bean.strWhite>0)then
+			call hattr.addStrWhite(whichUnit,bean.strWhite,during)
+		elseif(bean.strWhite<0)then
+			call hattr.subStrWhite(whichUnit,bean.strWhite,during)
+		endif
+		if(bean.agiWhite>0)then
+			call hattr.addAgiWhite(whichUnit,bean.agiWhite,during)
+		elseif(bean.agiWhite<0)then
+			call hattr.subAgiWhite(whichUnit,bean.agiWhite,during)
+		endif
+		if(bean.intWhite>0)then
+			call hattr.addIntWhite(whichUnit,bean.intWhite,during)
+		elseif(bean.intWhite<0)then
+			call hattr.subIntWhite(whichUnit,bean.intWhite,during)
+		endif
+		if(bean.lifeBack>0)then
+			call hattr.addLifeBack(whichUnit,bean.lifeBack,during)
+		elseif(bean.lifeBack<0)then
+			call hattr.subLifeBack(whichUnit,bean.lifeBack,during)
+		endif
+		if(bean.lifeSource>0)then
+			call hattr.addLifeSource(whichUnit,bean.lifeSource,during)
+		elseif(bean.lifeSource<0)then
+			call hattr.subLifeSource(whichUnit,bean.lifeSource,during)
+		endif
+		if(bean.lifeSourceCurrent>0)then
+			call hattr.addLifeSourceCurrent(whichUnit,bean.lifeSourceCurrent,during)
+		elseif(bean.lifeSourceCurrent<0)then
+			call hattr.subLifeSourceCurrent(whichUnit,bean.lifeSourceCurrent,during)
+		endif
+		if(bean.manaBack>0)then
+			call hattr.addManaBack(whichUnit,bean.manaBack,during)
+		elseif(bean.manaBack<0)then
+			call hattr.subManaBack(whichUnit,bean.manaBack,during)
+		endif
+		if(bean.manaSource>0)then
+			call hattr.addManaSource(whichUnit,bean.manaSource,during)
+		elseif(bean.manaSource<0)then
+			call hattr.subManaSource(whichUnit,bean.manaSource,during)
+		endif
+		if(bean.manaSourceCurrent>0)then
+			call hattr.addManaSourceCurrent(whichUnit,bean.manaSourceCurrent,during)
+		elseif(bean.manaSourceCurrent<0)then
+			call hattr.subManaSourceCurrent(whichUnit,bean.manaSourceCurrent,during)
+		endif
+		if(bean.resistance>0)then
+			call hattr.addResistance(whichUnit,bean.resistance,during)
+		elseif(bean.resistance<0)then
+			call hattr.subResistance(whichUnit,bean.resistance,during)
+		endif
+		if(bean.toughness>0)then
+			call hattr.addToughness(whichUnit,bean.toughness,during)
+		elseif(bean.toughness<0)then
+			call hattr.subToughness(whichUnit,bean.toughness,during)
+		endif
+		if(bean.avoid>0)then
+			call hattr.addAvoid(whichUnit,bean.avoid,during)
+		elseif(bean.avoid<0)then
+			call hattr.subAvoid(whichUnit,bean.avoid,during)
+		endif
+		if(bean.aim>0)then
+			call hattr.addAim(whichUnit,bean.aim,during)
+		elseif(bean.aim<0)then
+			call hattr.subAim(whichUnit,bean.aim,during)
+		endif
+		if(bean.knocking>0)then
+			call hattr.addKnocking(whichUnit,bean.knocking,during)
+		elseif(bean.knocking<0)then
+			call hattr.subKnocking(whichUnit,bean.knocking,during)
+		endif
+		if(bean.violence>0)then
+			call hattr.addViolence(whichUnit,bean.violence,during)
+		elseif(bean.violence<0)then
+			call hattr.subViolence(whichUnit,bean.violence,during)
+		endif
+		if(bean.mortalOppose>0)then
+			call hattr.addMortalOppose(whichUnit,bean.mortalOppose,during)
+		elseif(bean.mortalOppose<0)then
+			call hattr.subMortalOppose(whichUnit,bean.mortalOppose,during)
+		endif
+		if(bean.punish>0)then
+			call hattr.addPunish(whichUnit,bean.punish,during)
+		elseif(bean.punish<0)then
+			call hattr.subPunish(whichUnit,bean.punish,during)
+		endif
+		if(bean.punishCurrent>0)then
+			call hattr.addPunishCurrent(whichUnit,bean.punishCurrent,during)
+		elseif(bean.punishCurrent<0)then
+			call hattr.subPunishCurrent(whichUnit,bean.punishCurrent,during)
+		endif
+		if(bean.punishOppose>0)then
+			call hattr.addPunishOppose(whichUnit,bean.punishOppose,during)
+		elseif(bean.punishOppose<0)then
+			call hattr.subPunishOppose(whichUnit,bean.punishOppose,during)
+		endif
+		if(bean.meditative>0)then
+			call hattr.addMeditative(whichUnit,bean.meditative,during)
+		elseif(bean.meditative<0)then
+			call hattr.subMeditative(whichUnit,bean.meditative,during)
+		endif
+		if(bean.help>0)then
+			call hattr.addHelp(whichUnit,bean.help,during)
+		elseif(bean.help<0)then
+			call hattr.subHelp(whichUnit,bean.help,during)
+		endif
+		if(bean.hemophagia>0)then
+			call hattr.addHemophagia(whichUnit,bean.hemophagia,during)
+		elseif(bean.hemophagia<0)then
+			call hattr.subHemophagia(whichUnit,bean.hemophagia,during)
+		endif
+		if(bean.hemophagiaSkill>0)then
+			call hattr.addHemophagiaSkill(whichUnit,bean.hemophagiaSkill,during)
+		elseif(bean.hemophagiaSkill<0)then
+			call hattr.subHemophagiaSkill(whichUnit,bean.hemophagiaSkill,during)
+		endif
+		if(bean.split>0)then
+			call hattr.addSplit(whichUnit,bean.split,during)
+		elseif(bean.split<0)then
+			call hattr.subSplit(whichUnit,bean.split,during)
+		endif
+		if(bean.splitRange>0)then
+			call hattr.addSplitRange(whichUnit,bean.splitRange,during)
+		elseif(bean.splitRange<0)then
+			call hattr.subSplitRange(whichUnit,bean.splitRange,during)
+		endif
+		if(bean.goldRatio>0)then
+			call hattr.addGoldRatio(whichUnit,bean.goldRatio,during)
+		elseif(bean.goldRatio<0)then
+			call hattr.subGoldRatio(whichUnit,bean.goldRatio,during)
+		endif
+		if(bean.lumberRatio>0)then
+			call hattr.addLumberRatio(whichUnit,bean.lumberRatio,during)
+		elseif(bean.lumberRatio<0)then
+			call hattr.subLumberRatio(whichUnit,bean.lumberRatio,during)
+		endif
+		if(bean.expRatio>0)then
+			call hattr.addExpRatio(whichUnit,bean.expRatio,during)
+		elseif(bean.expRatio<0)then
+			call hattr.subExpRatio(whichUnit,bean.expRatio,during)
+		endif
+		if(bean.swimOppose>0)then
+			call hattr.addSwimOppose(whichUnit,bean.swimOppose,during)
+		elseif(bean.swimOppose<0)then
+			call hattr.subSwimOppose(whichUnit,bean.swimOppose,during)
+		endif
+		if(bean.luck>0)then
+			call hattr.addLuck(whichUnit,bean.luck,during)
+		elseif(bean.luck<0)then
+			call hattr.subLuck(whichUnit,bean.luck,during)
+		endif
+		if(bean.invincible>0)then
+			call hattr.addInvincible(whichUnit,bean.invincible,during)
+		elseif(bean.invincible<0)then
+			call hattr.subInvincible(whichUnit,bean.invincible,during)
+		endif
+		if(bean.weight>0)then
+			call hattr.addWeight(whichUnit,bean.weight,during)
+		elseif(bean.weight<0)then
+			call hattr.subWeight(whichUnit,bean.weight,during)
+		endif
+		if(bean.weightCurrent>0)then
+			call hattr.addWeightCurrent(whichUnit,bean.weightCurrent,during)
+		elseif(bean.weightCurrent<0)then
+			call hattr.subWeightCurrent(whichUnit,bean.weightCurrent,during)
+		endif
+		if(bean.huntAmplitude>0)then
+			call hattr.addHuntAmplitude(whichUnit,bean.huntAmplitude,during)
+		elseif(bean.huntAmplitude<0)then
+			call hattr.subHuntAmplitude(whichUnit,bean.huntAmplitude,during)
+		endif
+		if(bean.huntRebound>0)then
+			call hattr.addHuntRebound(whichUnit,bean.huntRebound,during)
+		elseif(bean.huntRebound<0)then
+			call hattr.subHuntRebound(whichUnit,bean.huntRebound,during)
+		endif
+		if(bean.cure>0)then
+			call hattr.addCure(whichUnit,bean.cure,during)
+		elseif(bean.cure<0)then
+			call hattr.subCure(whichUnit,bean.cure,during)
+		endif
+		if(bean.fire>0)then
+			call hattrNatural.addFire(whichUnit,bean.fire,during)
+		elseif(bean.fire<0)then
+			call hattrNatural.subFire(whichUnit,bean.fire,during)
+		endif
+		if(bean.soil>0)then
+			call hattrNatural.addSoil(whichUnit,bean.soil,during)
+		elseif(bean.soil<0)then
+			call hattrNatural.subSoil(whichUnit,bean.soil,during)
+		endif
+		if(bean.water>0)then
+			call hattrNatural.addWater(whichUnit,bean.water,during)
+		elseif(bean.water<0)then
+			call hattrNatural.subWater(whichUnit,bean.water,during)
+		endif
+		if(bean.ice>0)then
+			call hattrNatural.addIce(whichUnit,bean.ice,during)
+		elseif(bean.ice<0)then
+			call hattrNatural.subIce(whichUnit,bean.ice,during)
+		endif
+		if(bean.wind>0)then
+			call hattrNatural.addWind(whichUnit,bean.wind,during)
+		elseif(bean.wind<0)then
+			call hattrNatural.subWind(whichUnit,bean.wind,during)
+		endif
+		if(bean.light>0)then
+			call hattrNatural.addLight(whichUnit,bean.light,during)
+		elseif(bean.light<0)then
+			call hattrNatural.subLight(whichUnit,bean.light,during)
+		endif
+		if(bean.dark>0)then
+			call hattrNatural.addDark(whichUnit,bean.dark,during)
+		elseif(bean.dark<0)then
+			call hattrNatural.subDark(whichUnit,bean.dark,during)
+		endif
+		if(bean.wood>0)then
+			call hattrNatural.addWood(whichUnit,bean.wood,during)
+		elseif(bean.wood<0)then
+			call hattrNatural.subWood(whichUnit,bean.wood,during)
+		endif
+		if(bean.thunder>0)then
+			call hattrNatural.addThunder(whichUnit,bean.thunder,during)
+		elseif(bean.thunder<0)then
+			call hattrNatural.subThunder(whichUnit,bean.thunder,during)
+		endif
+		if(bean.poison>0)then
+			call hattrNatural.addPoison(whichUnit,bean.poison,during)
+		elseif(bean.poison<0)then
+			call hattrNatural.subPoison(whichUnit,bean.poison,during)
+		endif
+		if(bean.fireOppose>0)then
+			call hattrNatural.addFireOppose(whichUnit,bean.fireOppose,during)
+		elseif(bean.fireOppose<0)then
+			call hattrNatural.subFireOppose(whichUnit,bean.fireOppose,during)
+		endif
+		if(bean.soilOppose>0)then
+			call hattrNatural.addSoilOppose(whichUnit,bean.soilOppose,during)
+		elseif(bean.soilOppose<0)then
+			call hattrNatural.subSoilOppose(whichUnit,bean.soilOppose,during)
+		endif
+		if(bean.waterOppose>0)then
+			call hattrNatural.addWaterOppose(whichUnit,bean.waterOppose,during)
+		elseif(bean.waterOppose<0)then
+			call hattrNatural.subWaterOppose(whichUnit,bean.waterOppose,during)
+		endif
+		if(bean.iceOppose>0)then
+			call hattrNatural.addIceOppose(whichUnit,bean.iceOppose,during)
+		elseif(bean.iceOppose<0)then
+			call hattrNatural.subIceOppose(whichUnit,bean.iceOppose,during)
+		endif
+		if(bean.windOppose>0)then
+			call hattrNatural.addWindOppose(whichUnit,bean.windOppose,during)
+		elseif(bean.windOppose<0)then
+			call hattrNatural.subWindOppose(whichUnit,bean.windOppose,during)
+		endif
+		if(bean.lightOppose>0)then
+			call hattrNatural.addLightOppose(whichUnit,bean.lightOppose,during)
+		elseif(bean.lightOppose<0)then
+			call hattrNatural.subLightOppose(whichUnit,bean.lightOppose,during)
+		endif
+		if(bean.darkOppose>0)then
+			call hattrNatural.addDarkOppose(whichUnit,bean.darkOppose,during)
+		elseif(bean.darkOppose<0)then
+			call hattrNatural.subDarkOppose(whichUnit,bean.darkOppose,during)
+		endif
+		if(bean.woodOppose>0)then
+			call hattrNatural.addWoodOppose(whichUnit,bean.woodOppose,during)
+		elseif(bean.woodOppose<0)then
+			call hattrNatural.subWoodOppose(whichUnit,bean.woodOppose,during)
+		endif
+		if(bean.thunderOppose>0)then
+			call hattrNatural.addThunderOppose(whichUnit,bean.thunderOppose,during)
+		elseif(bean.thunderOppose<0)then
+			call hattrNatural.subThunderOppose(whichUnit,bean.thunderOppose,during)
+		endif
+		if(bean.poisonOppose>0)then
+			call hattrNatural.addPoisonOppose(whichUnit,bean.poisonOppose,during)
+		elseif(bean.poisonOppose<0)then
+			call hattrNatural.subPoisonOppose(whichUnit,bean.poisonOppose,during)
+		endif
+	endmethod
+
+
+
+	//设定硬直条是否显示
 	public static method punishTtgIsOpen takes boolean isOpen returns nothing
 		set PUNISH_SWITCH = isOpen
 	endmethod
 
-	/* 设定硬直条是否只有英雄显示 */
+	//设定硬直条是否只有英雄显示
 	public static method punishTtgIsOnlyHero takes boolean isOnlyhero returns nothing
 		set PUNISH_SWITCH_ONLYHERO = isOnlyhero
 	endmethod
 
-	/* 设定硬直条高度 */
+	//设定硬直条高度
 	public static method punishTtgHeight takes real high returns nothing
 		if(hcamera.model=="zoomin")then
 			set PUNISH_TEXTTAG_HEIGHT = high*0.5
@@ -40,14 +381,14 @@ struct hAttrUnit
 		endif
 	endmethod
 
-	/* 把单位赶出属性组 */
+	//把单位赶出属性组
 	private static method groupOut takes unit whichUnit returns nothing
 		if( IsUnitInGroup( whichUnit , ATTR_GROUP ) == true ) then
 			call GroupRemoveUnit( ATTR_GROUP , whichUnit )
 		endif
 	endmethod
 
-	/* 活力/魔法恢复 */
+	//活力/魔法恢复
 	private static method lifemanaback takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
 	    local real period = TimerGetTimeout(t)
@@ -62,8 +403,8 @@ struct hAttrUnit
 	                call GroupRemoveUnit( tempGroup , tempUnit )
 	                //
 	                if( IsUnitAliveBJ(tempUnit) )then
-		                call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( hattrExt.getLifeBack(tempUnit) * period ) ) )
-	            		call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( hattrExt.getManaBack(tempUnit) * period ) ) )
+		                call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( hattr.getLifeBack(tempUnit) * period ) ) )
+	            		call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( hattr.getManaBack(tempUnit) * period ) ) )
 	                endif
 	            	//
 					set tempUnit = null
@@ -110,8 +451,8 @@ struct hAttrUnit
 		local texttag ttg =  htime.getTexttag(t,2)
 		local real zOffset =  htime.getReal(t,3)
 		local real size =  htime.getReal(t,4)
-		local real punishNow = hattrExt.getPunishCurrent(whichUnit)
-		local real punishAll = hattrExt.getPunish(whichUnit)
+		local real punishNow = hattr.getPunishCurrent(whichUnit)
+		local real punishAll = hattr.getPunish(whichUnit)
 		local integer blockMax = 14
 		local real scale = 0.5
 		if( ttg == null ) then
@@ -148,7 +489,7 @@ struct hAttrUnit
 		endif
 	endmethod
 
-	/* 硬直恢复器(+100/5s) */
+	//硬直恢复器(+100/5s)
 	private static method punishback takes nothing returns nothing
 	    local integer i
 	    local integer addPunish = 0
@@ -161,7 +502,7 @@ struct hAttrUnit
 	            exitwhen(IsUnitGroupEmptyBJ(tempGroup) == true)
 	                set tempUnit = FirstOfGroup(tempGroup)
 	                call GroupRemoveUnit( tempGroup , tempUnit )
-	                call hattrExt.addPunishCurrent( tempUnit , 100 , 0 )
+	                call hattr.addPunishCurrent( tempUnit , 100 , 0 )
 					set tempUnit = null
 	        endloop
 	        call GroupClear( tempGroup )
@@ -170,318 +511,29 @@ struct hAttrUnit
 		endif
 	endmethod
 
-	/* 单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害) */
+	//单位收到伤害(因为所有的伤害有hunt方法接管，所以这里的伤害全部是攻击伤害)
 	private static method triggerUnitbeHuntCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local unit fromUnit =  htime.getUnit(t,801)
 		local unit toUnit =  htime.getUnit(t,802)
 		local real damage =  htime.getReal(t,803)
 		local real oldLife =  htime.getReal(t,804)
-		local hAttrHuntBean bean = 0
-		//计算攻击特效
-		local real fromUnitLifeBack = hattrEffect.getLifeBack(fromUnit)
-		local real fromUnitManaBack = hattrEffect.getManaBack(fromUnit)
-		local real fromUnitAttackSpeed = hattrEffect.getAttackSpeed(fromUnit)
-		local real fromUnitAttackPhysical = hattrEffect.getAttackPhysical(fromUnit)
-		local real fromUnitAttackMagic = hattrEffect.getAttackMagic(fromUnit)
-		local real fromUnitMove = hattrEffect.getMove(fromUnit)
-		local real fromUnitAim = hattrEffect.getAim(fromUnit)
-		local real fromUnitStr = hattrEffect.getStr(fromUnit)
-		local real fromUnitAgi = hattrEffect.getAgi(fromUnit)
-		local real fromUnitInt = hattrEffect.getInt(fromUnit)
-		local real fromUnitKnocking = hattrEffect.getKnocking(fromUnit)
-		local real fromUnitViolence = hattrEffect.getViolence(fromUnit)
-		local real fromUnitHemophagia = hattrEffect.getHemophagia(fromUnit)
-		local real fromUnitHemophagiaSkill = hattrEffect.getHemophagiaSkill(fromUnit)
-		local real fromUnitSplit = hattrEffect.getSplit(fromUnit)
-		local real fromUnitLuck = hattrEffect.getLuck(fromUnit)
-		local real fromUnitHuntAmplitude = hattrEffect.getHuntAmplitude(fromUnit)
-		local real fromUnitPoison = hattrEffect.getPoison(fromUnit)
-		local real fromUnitDry = hattrEffect.getDry(fromUnit)
-		local real fromUnitFreeze = hattrEffect.getFreeze(fromUnit)
-		local real fromUnitCold = hattrEffect.getCold(fromUnit)
-		local real fromUnitBlunt = hattrEffect.getBlunt(fromUnit)
-		local real fromUnitCorrosion = hattrEffect.getCorrosion(fromUnit)
-		local real fromUnitChaos = hattrEffect.getChaos(fromUnit)
-		local real fromUnitTwine = hattrEffect.getTwine(fromUnit)
-		local real fromUnitBlind = hattrEffect.getBlind(fromUnit)
-		local real fromUnitTortua = hattrEffect.getTortua(fromUnit)
-		local real fromUnitWeak = hattrEffect.getWeak(fromUnit)
-		local real fromUnitBound = hattrEffect.getBound(fromUnit)
-		local real fromUnitFoolish = hattrEffect.getFoolish(fromUnit)
-		local real fromUnitLazy = hattrEffect.getLazy(fromUnit)
-		local real fromUnitSwim = hattrEffect.getSwim(fromUnit)
-		local real fromUnitBreak = hattrEffect.getBreak(fromUnit)
-		local real fromUnitHeavy = hattrEffect.getHeavy(fromUnit)
-		local real fromUnitUnluck = hattrEffect.getUnluck(fromUnit)
-
-		local real fromUnitLifeBackDuring = hattrEffect.getLifeBackDuring(fromUnit)
-		local real fromUnitManaBackDuring = hattrEffect.getManaBackDuring(fromUnit)
-		local real fromUnitAttackSpeedDuring = hattrEffect.getAttackSpeedDuring(fromUnit)
-		local real fromUnitAttackPhysicalDuring = hattrEffect.getAttackPhysicalDuring(fromUnit)
-		local real fromUnitAttackMagicDuring = hattrEffect.getAttackMagicDuring(fromUnit)
-		local real fromUnitMoveDuring = hattrEffect.getMoveDuring(fromUnit)
-		local real fromUnitAimDuring = hattrEffect.getAimDuring(fromUnit)
-		local real fromUnitStrDuring = hattrEffect.getStrDuring(fromUnit)
-		local real fromUnitAgiDuring = hattrEffect.getAgiDuring(fromUnit)
-		local real fromUnitIntDuring = hattrEffect.getIntDuring(fromUnit)
-		local real fromUnitKnockingDuring = hattrEffect.getKnockingDuring(fromUnit)
-		local real fromUnitViolenceDuring = hattrEffect.getViolenceDuring(fromUnit)
-		local real fromUnitHemophagiaDuring = hattrEffect.getHemophagiaDuring(fromUnit)
-		local real fromUnitHemophagiaSkillDuring = hattrEffect.getHemophagiaSkillDuring(fromUnit)
-		local real fromUnitSplitDuring = hattrEffect.getSplitDuring(fromUnit)
-		local real fromUnitLuckDuring = hattrEffect.getLuckDuring(fromUnit)
-		local real fromUnitHuntAmplitudeDuring = hattrEffect.getHuntAmplitudeDuring(fromUnit)
-		local real fromUnitPoisonDuring = hattrEffect.getPoisonDuring(fromUnit)
-		local real fromUnitDryDuring = hattrEffect.getDryDuring(fromUnit)
-		local real fromUnitFreezeDuring = hattrEffect.getFreezeDuring(fromUnit)
-		local real fromUnitColdDuring = hattrEffect.getColdDuring(fromUnit)
-		local real fromUnitBluntDuring = hattrEffect.getBluntDuring(fromUnit)
-		local real fromUnitCorrosionDuring = hattrEffect.getCorrosionDuring(fromUnit)
-		local real fromUnitChaosDuring = hattrEffect.getChaosDuring(fromUnit)
-		local real fromUnitTwineDuring = hattrEffect.getTwineDuring(fromUnit)
-		local real fromUnitBlindDuring = hattrEffect.getBlindDuring(fromUnit)
-		local real fromUnitTortuaDuring = hattrEffect.getTortuaDuring(fromUnit)
-		local real fromUnitWeakDuring = hattrEffect.getWeakDuring(fromUnit)
-		local real fromUnitBoundDuring = hattrEffect.getBoundDuring(fromUnit)
-		local real fromUnitFoolishDuring = hattrEffect.getFoolishDuring(fromUnit)
-		local real fromUnitLazyDuring = hattrEffect.getLazyDuring(fromUnit)
-		local real fromUnitSwimDuring = hattrEffect.getSwimDuring(fromUnit)
-		local real fromUnitBreakDuring = hattrEffect.getBreakDuring(fromUnit)
-		local real fromUnitHeavyDuring = hattrEffect.getHeavyDuring(fromUnit)
-		local real fromUnitUnluckDuring = hattrEffect.getUnluckDuring(fromUnit)
+		local hAttrHuntBean bean
 
 		call htime.delTimer(t)
 		call hattr.subLife(toUnit,damage,0)
 		call hunit.setLife(toUnit,oldLife)
 
-		call bean.create()
+		set bean = hAttrHuntBean.create()
 		set bean.fromUnit = fromUnit
 		set bean.toUnit = toUnit
 		set bean.damage = damage
 		set bean.huntKind = "attack"
-		set bean.huntType = "physical"
+		set bean.huntType = hattr.getAttackHuntType(fromUnit)
 		call hattrHunt.huntUnit( bean )
 		call bean.destroy()
-
-		//伤害特效
-		call bean.create()
-		set bean.fromUnit = fromUnit
-		set bean.toUnit = toUnit
-		set bean.huntKind = "attack"
-		set bean.huntType = "physical"
-		if( fromUnitLifeBack != 0 and fromUnitLifeBackDuring > 0 ) then
-		   set bean.special = "effect_life_back"
-		   set bean.specialVal = fromUnitLifeBack
-		   set bean.specialDuring = fromUnitLifeBackDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitManaBack != 0 and fromUnitManaBackDuring > 0 ) then
-		   set bean.special = "effect_mana_back"
-		   set bean.specialVal = fromUnitManaBack
-		   set bean.specialDuring = fromUnitManaBackDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitAttackSpeed != 0 and fromUnitAttackSpeedDuring > 0 ) then
-		   set bean.special = "effect_attack_speed"
-		   set bean.specialVal = fromUnitAttackSpeed
-		   set bean.specialDuring = fromUnitAttackSpeedDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitAttackPhysical != 0 and fromUnitAttackPhysicalDuring > 0 ) then
-		   set bean.special = "effect_attack_physical"
-		   set bean.specialVal = fromUnitAttackPhysical
-		   set bean.specialDuring = fromUnitAttackPhysicalDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitAttackMagic != 0 and fromUnitAttackMagicDuring > 0 ) then
-		   set bean.special = "effect_attack_magic"
-		   set bean.specialVal = fromUnitAttackMagic
-		   set bean.specialDuring = fromUnitAttackMagicDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitMove != 0 and fromUnitMoveDuring > 0 ) then
-		   set bean.special = "effect_move"
-		   set bean.specialVal = fromUnitMove
-		   set bean.specialDuring = fromUnitMoveDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitAim != 0 and fromUnitAimDuring > 0 ) then
-		   set bean.special = "effect_aim"
-		   set bean.specialVal = fromUnitAim
-		   set bean.specialDuring = fromUnitAimDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitStr != 0 and fromUnitStrDuring > 0 ) then
-		   set bean.special = "effect_str"
-		   set bean.specialVal = fromUnitStr
-		   set bean.specialDuring = fromUnitStrDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitAgi != 0 and fromUnitAgiDuring > 0 ) then
-		   set bean.special = "effect_agi"
-		   set bean.specialVal = fromUnitAgi
-		   set bean.specialDuring = fromUnitAgiDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitInt != 0 and fromUnitIntDuring > 0 ) then
-		   set bean.special = "effect_int"
-		   set bean.specialVal = fromUnitInt
-		   set bean.specialDuring = fromUnitIntDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitKnocking != 0 and fromUnitKnockingDuring > 0 ) then
-		   set bean.special = "effect_knocking"
-		   set bean.specialVal = fromUnitKnocking
-		   set bean.specialDuring = fromUnitKnockingDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitViolence != 0 and fromUnitViolenceDuring > 0 ) then
-		   set bean.special = "effect_violence"
-		   set bean.specialVal = fromUnitViolence
-		   set bean.specialDuring = fromUnitViolenceDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitHemophagia != 0 and fromUnitHemophagiaDuring > 0 ) then
-		   set bean.special = "effect_hemophagia"
-		   set bean.specialVal = fromUnitHemophagia
-		   set bean.specialDuring = fromUnitHemophagiaDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitHemophagiaSkill != 0 and fromUnitHemophagiaSkillDuring > 0 ) then
-		   set bean.special = "effect_hemophagia_skill"
-		   set bean.specialVal = fromUnitHemophagiaSkill
-		   set bean.specialDuring = fromUnitHemophagiaSkillDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitSplit != 0 and fromUnitSplitDuring > 0 ) then
-		   set bean.special = "effect_split"
-		   set bean.specialVal = fromUnitSplit
-		   set bean.specialDuring = fromUnitSplitDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitLuck != 0 and fromUnitLuckDuring > 0 ) then
-		   set bean.special = "effect_luck"
-		   set bean.specialVal = fromUnitLuck
-		   set bean.specialDuring = fromUnitLuckDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitHuntAmplitude != 0 and fromUnitHuntAmplitudeDuring > 0 ) then
-		   set bean.special = "effect_hunt_amplitude"
-		   set bean.specialVal = fromUnitHuntAmplitude
-		   set bean.specialDuring = fromUnitHuntAmplitudeDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitPoison != 0 and fromUnitPoisonDuring > 0 ) then
-		   set bean.special = "effect_poison"
-		   set bean.specialVal = fromUnitPoison
-		   set bean.specialDuring = fromUnitPoisonDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitDry != 0 and fromUnitDryDuring > 0 ) then
-		   set bean.special = "effect_dry"
-		   set bean.specialVal = fromUnitDry
-		   set bean.specialDuring = fromUnitDryDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitFreeze != 0 and fromUnitFreezeDuring > 0 ) then
-		   set bean.special = "effect_freeze"
-		   set bean.specialVal = fromUnitFreeze
-		   set bean.specialDuring = fromUnitFreezeDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitCold != 0 and fromUnitColdDuring > 0 ) then
-		   set bean.special = "effect_cold"
-		   set bean.specialVal = fromUnitCold
-		   set bean.specialDuring = fromUnitColdDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitBlunt != 0 and fromUnitBluntDuring > 0 ) then
-		   set bean.special = "effect_blunt"
-		   set bean.specialVal = fromUnitBlunt
-		   set bean.specialDuring = fromUnitBluntDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitCorrosion != 0 and fromUnitCorrosionDuring > 0 ) then
-		   set bean.special = "effect_corrosion"
-		   set bean.specialVal = fromUnitCorrosion
-		   set bean.specialDuring = fromUnitCorrosionDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitChaos != 0 and fromUnitChaosDuring > 0 ) then
-		   set bean.special = "effect_chaos"
-		   set bean.specialVal = fromUnitChaos
-		   set bean.specialDuring = fromUnitChaosDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitTwine != 0 and fromUnitTwineDuring > 0 ) then
-		   set bean.special = "effect_twine"
-		   set bean.specialVal = fromUnitTwine
-		   set bean.specialDuring = fromUnitTwineDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitBlind != 0 and fromUnitBlindDuring > 0 ) then
-		   set bean.special = "effect_blind"
-		   set bean.specialVal = fromUnitBlind
-		   set bean.specialDuring = fromUnitBlindDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitTortua != 0 and fromUnitTortuaDuring > 0 ) then
-		   set bean.special = "effect_tortua"
-		   set bean.specialVal = fromUnitTortua
-		   set bean.specialDuring = fromUnitTortuaDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitWeak != 0 and fromUnitWeakDuring > 0 ) then
-		   set bean.special = "effect_weak"
-		   set bean.specialVal = fromUnitWeak
-		   set bean.specialDuring = fromUnitWeakDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitBound != 0 and fromUnitBoundDuring > 0 ) then
-		   set bean.special = "effect_bound"
-		   set bean.specialVal = fromUnitBound
-		   set bean.specialDuring = fromUnitBoundDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitFoolish != 0 and fromUnitFoolishDuring > 0 ) then
-		   set bean.special = "effect_foolish"
-		   set bean.specialVal = fromUnitFoolish
-		   set bean.specialDuring = fromUnitFoolishDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitLazy != 0 and fromUnitLazyDuring > 0 ) then
-		   set bean.special = "effect_lazy"
-		   set bean.specialVal = fromUnitLazy
-		   set bean.specialDuring = fromUnitLazyDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitSwim != 0 and fromUnitSwimDuring > 0 ) then
-		   set bean.special = "effect_swim"
-		   set bean.specialVal = fromUnitSwim
-		   set bean.specialDuring = fromUnitSwimDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitBreak != 0 and fromUnitBreakDuring > 0 ) then
-		   set bean.special = "effect_break"
-		   set bean.specialVal = fromUnitBreak
-		   set bean.specialDuring = fromUnitBreakDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitHeavy != 0 and fromUnitHeavyDuring > 0 ) then
-		   set bean.special = "effect_heavy"
-		   set bean.specialVal = fromUnitHeavy
-		   set bean.specialDuring = fromUnitHeavyDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		if( fromUnitUnluck != 0 and fromUnitUnluckDuring > 0 ) then
-		   set bean.special = "effect_unluck"
-		   set bean.specialVal = fromUnitUnluck
-		   set bean.specialDuring = fromUnitUnluckDuring
-		   call hattrHunt.huntUnit(bean)
-		endif
-		call bean.destroy()
 	endmethod
+
 	private static method triggerUnitbeHuntAction takes nothing returns nothing
 		local unit fromUnit = GetEventDamageSource()
 		local unit toUnit = GetTriggerUnit()
@@ -500,16 +552,16 @@ struct hAttrUnit
 		set toUnit = null
 	endmethod
 
-	/* 英雄升级 - 计算白字 */
+	//英雄升级 - 计算白字
 	private static method triggerUnitHeroLevelAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		call hattr.setStrWhite( u , GetHeroStr(u,false) , 0 )
 		call hattr.setAgiWhite( u , GetHeroAgi(u,false) , 0 )
 		call hattr.setIntWhite( u , GetHeroInt(u,false) , 0 )
-		call hattrExt.addHelp( u , 2 , 0 )
-		call hattrExt.addWeight( u , 0.25 , 0 )
-		call hattrExt.addLifeSource( u , 10 , 0 )
-		call hattrExt.addManaSource( u , 10 , 0 )
+		call hattr.addHelp( u , 2 , 0 )
+		call hattr.addWeight( u , 0.25 , 0 )
+		call hattr.addLifeSource( u , 10 , 0 )
+		call hattr.addManaSource( u , 10 , 0 )
 
 		//@触发升级事件
 		set hevtBean = hEvtBean.create()
@@ -521,7 +573,7 @@ struct hAttrUnit
 		set u = null
 	endmethod
 
-	/* 单位死亡（一般排除玩家的英雄） */
+	//单位死亡（一般排除玩家的英雄）
 	private static method triggerUnitDeathAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local unit killer = hevt.getLastDamageUnit(u)
@@ -549,7 +601,7 @@ struct hAttrUnit
 		set u = null
 	endmethod
 
-	/* 注册单位 */
+	//注册单位
 	private static method triggerInAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local integer utid = GetUnitTypeId(u)
@@ -562,7 +614,7 @@ struct hAttrUnit
 		//注册事件
 		set isBind = LoadBoolean( hash_attr_unit , uhid , 1 )
 		if(isBind != true)then
-			call hconsole.log(GetUnitName(u)+"注册了属性")
+			call hconsole.log(GetUnitName(u)+"进入了地图")
 			call GroupAddUnit(ATTR_GROUP, u)
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_BEHUNT , u , EVENT_UNIT_DAMAGED )
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
@@ -576,7 +628,7 @@ struct hAttrUnit
         set u = null
 	endmethod
 
-	/* 初始化 */
+	//初始化
 	public static method initSet takes nothing returns nothing
 		local trigger triggerIn = CreateTrigger()
 		//触发设定

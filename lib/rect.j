@@ -1,7 +1,7 @@
-/* 区域 */
+//区域
 globals
-    hRect hrect = 0
-    hashtable hash_hrect = InitHashtable()
+    hRect hrect
+    hashtable hash_hrect = null
     integer hash_hrect_do = 100
     integer hash_hrect_rect = 101
     integer hash_hrect_loc = 102

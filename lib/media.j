@@ -1,6 +1,6 @@
-/* 单位组 */
+//单位组
 globals
-hMedia hmedia = 0
+hMedia hmedia
 endglobals
 
 type MediaDialogue extends string array[10] //电影对白最大支持10句

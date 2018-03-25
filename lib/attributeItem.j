@@ -26,7 +26,7 @@ library attributeItem requires attributeHunt
 		return LoadBoolean( HASH_Attribute_ItemCache , GetHandleId(whichUnit) , ATTR_FLAG_CD )
 	endfunction
 
-	/* ------------------------------------------------- 计算物品栏属性 ------------------------------------------------------------ */
+	// ------ 计算物品栏属性 ---- 
 	//物品加成
     //物品的全局判断计算
     //注意需要计算次数

@@ -1,7 +1,9 @@
-/* 奖励 */
+/** 
+ * 奖励
+ */
 
 globals
-    hAward haward = 0
+    hAward haward
     real hAwardRange = 2000.00
 endglobals
 
@@ -32,9 +34,9 @@ struct hAward
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
         //TODO 增益
-        set realGold 	= realGold + R2I( I2R(gold) * hattrExt.getGoldRatio(whichUnit) / 100.00 )
-        set realLumber	= realLumber + R2I( I2R(lumber) * hattrExt.getLumberRatio(whichUnit) / 100.00 )
-        set realExp		= realExp + R2I( I2R(exp) * hattrExt.getExpRatio(whichUnit) / 100.00 )
+        set realGold 	= realGold + R2I( I2R(gold) * hattr.getGoldRatio(whichUnit) / 100.00 )
+        set realLumber	= realLumber + R2I( I2R(lumber) * hattr.getLumberRatio(whichUnit) / 100.00 )
+        set realExp		= realExp + R2I( I2R(exp) * hattr.getExpRatio(whichUnit) / 100.00 )
 
         if(exp > 0 and his.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )

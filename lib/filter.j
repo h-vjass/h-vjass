@@ -1,8 +1,10 @@
-/* 判定过滤器 */
+//判定过滤器
 struct hFilter
 
 	private static unit thisUnit = null
 	private static integer ownItemId = 0
+	private static unit isWhichUnit = null
+
 	private static integer is_enemy = 0
 	private static integer is_ally = 0
 	private static integer is_death = 0
@@ -50,6 +52,25 @@ struct hFilter
 	method destroy takes nothing returns nothing
 		set thisUnit = null
 		set ownItemId = 0
+		set isWhichUnit = null
+		set is_enemy = 0
+		set is_ally = 0
+		set is_death = 0
+		set is_alive = 0
+		set is_invincible = 0
+		set is_hero = 0
+		set is_building = 0
+		set is_illusion = 0
+		set is_ground = 0
+		set is_flying = 0
+		set is_melee = 0
+		set is_ranged = 0
+		set is_summoned = 0
+		set is_mechanical = 0
+		set is_ancient = 0
+		set is_water = 0
+		set is_floor = 0
+		set is_ownItem = 0
 	endmethod
 
 	//
@@ -60,6 +81,7 @@ struct hFilter
 	public method setOwnItemId takes integer itemId returns nothing
         set ownItemId = itemId
 	endmethod
+
 	//-COPY
 	public method isEnemy takes boolean status returns nothing
 	    if(status==true)then

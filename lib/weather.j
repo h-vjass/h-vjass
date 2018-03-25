@@ -1,7 +1,7 @@
-/* 天气 */
+//天气
 globals
-    hWeather hweather = 0
-    hashtable hash_weather = InitHashtable()
+    hWeather hweather
+    hashtable hash_weather = null
     integer weatherHashCacheIndex = 0
     integer weatherHashCacheMax = 100
     weathereffect array weatherHashCache
@@ -110,26 +110,57 @@ struct hWeather
 		return w
 	endmethod
 
-    //阳光
-    //! textmacro hWeatherEcho takes FNAME
-    public static method $FNAME$ takes hWeatherBean bean returns weathereffect
-        set bean.id = hweather_id_$FNAME$
+    public static method sun takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_sun
         return build(bean)
     endmethod
-    //! endtextmacro
-
-    //! runtextmacro hWeatherEcho("sun")
-    //! runtextmacro hWeatherEcho("moon")
-    //! runtextmacro hWeatherEcho("shield")
-    //! runtextmacro hWeatherEcho("rain")
-    //! runtextmacro hWeatherEcho("rainstorm")
-    //! runtextmacro hWeatherEcho("snow")
-    //! runtextmacro hWeatherEcho("snowstorm")
-    //! runtextmacro hWeatherEcho("wind")
-    //! runtextmacro hWeatherEcho("windstorm")
-    //! runtextmacro hWeatherEcho("mistwhite")
-    //! runtextmacro hWeatherEcho("mistgreen")
-    //! runtextmacro hWeatherEcho("mistblue")
-    //! runtextmacro hWeatherEcho("mistred")
+    public static method moon takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_moon
+        return build(bean)
+    endmethod
+    public static method shield takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_shield
+        return build(bean)
+    endmethod
+    public static method rain takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_rain
+        return build(bean)
+    endmethod
+    public static method rainstorm takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_rainstorm
+        return build(bean)
+    endmethod
+    public static method snow takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_snow
+        return build(bean)
+    endmethod
+    public static method snowstorm takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_snowstorm
+        return build(bean)
+    endmethod
+    public static method wind takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_wind
+        return build(bean)
+    endmethod
+    public static method windstorm takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_windstorm
+        return build(bean)
+    endmethod
+    public static method mistwhite takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_mistwhite
+        return build(bean)
+    endmethod
+    public static method mistgreen takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_mistgreen
+        return build(bean)
+    endmethod
+    public static method mistblue takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_mistblue
+        return build(bean)
+    endmethod
+    public static method mistred takes hWeatherBean bean returns weathereffect
+        set bean.id = hweather_id_mistred
+        return build(bean)
+    endmethod
 
 endstruct

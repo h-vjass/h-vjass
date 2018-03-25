@@ -1,9 +1,18 @@
-/* 单位组 */
+/* 
+ * 单位组 
+ */
 globals
-hGroup hgroup = 0
+hGroup hgroup
 endglobals
 
 struct hGroup
+
+	/**
+	 * 统计单位组当前单位数
+	 */
+	public static method count takes group whichGroup returns integer
+		return CountUnitsInGroup(whichGroup)
+	endmethod
 
 	/**
 	 * 单位组
@@ -13,6 +22,10 @@ struct hGroup
 	public static method createByLoc takes location loc,real radius,code filter returns group
 	    local group g = null
 	    local boolexpr bx = Condition(filter)
+		//镜头放大模式下，范围缩小一半
+		if(hcamera.model=="zoomin")then
+			set radius = radius * 0.5
+		endif
 	    set g = CreateGroup()
 	    call GroupEnumUnitsInRangeOfLoc(g, loc , radius, bx)
 	    call DestroyBoolExpr(bx)
