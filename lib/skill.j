@@ -17,13 +17,109 @@ struct hSkill
     endmethod
 
     /**
+	 * 闪电链循环
+     */
+    private static method lightningChainLoop takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local unit prevUnit = htime.getUnit(t,1)
+        local unit nextUnit = null
+        local integer qty = htime.getInteger(t,2)
+        local real reduce = htime.getReal(t,3)
+        local real damage = htime.getReal(t,4)
+        local string huntKind = htime.getString(t,5)
+        local string huntType = htime.getString(t,6)
+        local string codename = htime.getString(t,97)
+        local string huntEff = htime.getString(t,98)
+        local unit fromUnit = htime.getUnit(t,99)
+        local group repeatGroup = htime.getGroup(t,100)
+        local group g = null
+        local unit u = null
+        local hAttrHuntBean bean
+        local hFilter filter
+        set filter = hFilter.create()
+        call filter.setUnit(fromUnit)
+        call filter.isEnemy(true)
+        call filter.isBuilding(false)
+        call filter.isAlive(true)
+        set g = hgroup.createByUnit(prevUnit,400,function hFilter.get)
+        call filter.destroy()
+        if(hgroup.count(g)>0)then
+            loop
+            exitwhen(IsUnitGroupEmptyBJ(g) == true)
+                set u = FirstOfGroup(g)
+                call GroupRemoveUnit( g , u )
+                if(u!=prevUnit)then
+                    if(repeatGroup==null or hgroup.isin(u,repeatGroup)==false)then
+                        set nextUnit = u
+                        call GroupAddUnit(repeatGroup,u)
+                        call DoNothing() YDNL exitwhen true//(  )
+                    endif
+                endif
+            endloop
+        endif
+        call GroupClear( g )
+        call DestroyGroup( g )
+        set g = null
+        set u = null
+        if(nextUnit!=null)then
+            call htime.setUnit(t,1,nextUnit)
+            call hlightning.unit2unit(codename,prevUnit,nextUnit,0.2*qty)
+            set bean = hAttrHuntBean.create()
+            set bean.fromUnit = fromUnit
+            set bean.toUnit = prevUnit
+            set bean.damage = damage
+            set bean.huntEff = huntEff
+            set bean.huntKind = huntKind
+            set bean.huntType = huntType
+            call hattrHunt.huntUnit(bean)
+            call bean.destroy()
+        else
+            call htime.delTimer(t)
+            return
+        endif
+        set qty = qty-1
+        set damage = damage*(1.00+reduce*0.01)
+        if(qty<=0 or damage<=2)then
+            call htime.delTimer(t)
+            return
+        endif
+        call htime.setInteger(t,2,qty)
+        call htime.setReal(t,4,damage)
+    endmethod
+    /**
 	 * 闪电链
-	 * attackUnit 攻击单位
-	 * beUnit 被攻击单位
-	 * skillId 技能ID
+	 * codename 闪电效果类型 详情查看 hLightning
+	 * qty 传递单位数
+	 * reduce 递减率
+	 * eff 击打特效
+	 * isRepeat 是否允许同一个单位重复打击（临近2次不会同一个）
+	 * bean 伤害bean
 	 */
-	public static method lightningChain takes unit fromUnit,unit toUnit,integer skillId returns nothing
-
+	public static method lightningChain takes string codename,integer qty,real reduce,boolean isRepeat,hAttrHuntBean bean returns nothing
+        local timer t = null
+        set qty = qty-1
+        if(qty<0)then
+            set qty = 0
+        endif
+        call hlightning.unit2unit(codename,bean.fromUnit,bean.toUnit,0.2*qty)
+        call hattrHunt.huntUnit(bean)
+        if(qty>0)then
+            set t = htime.setInterval(0.35,function thistype.lightningChainLoop)
+            call htime.setUnit(t,1,bean.toUnit)
+            call htime.setInteger(t,2,qty)
+            call htime.setReal(t,3,reduce)
+            call htime.setReal(t,4,bean.damage)
+            call htime.setString(t,5,bean.huntKind)
+            call htime.setString(t,6,bean.huntType)
+            call htime.setString(t,97,codename)
+            call htime.setString(t,98,bean.huntEff)
+            call htime.setUnit(t,99,bean.fromUnit)
+            if(isRepeat == false)then
+                call htime.setGroup(t,100,CreateGroup())
+            else
+                call htime.setGroup(t,100,null)
+            endif
+        endif
 	endmethod
 
 	/**
@@ -39,12 +135,12 @@ struct hSkill
 		call heffect.toUnitLoc( eff , u , 1.5 )
     	call UnitAddAbility( u , modelFrom )
 		call UnitRemoveAbility( u , modelFrom )
+        call hAttr.resetSkill(u)
     endmethod
-
 	/**
-	 * 变身
-     * modelFrom 技能模板
-     * modelTo 技能模板
+	 * 变身[参考 hJass变身技能模板]
+     * modelFrom 技能模板 参考 'A00D'
+     * modelTo 技能模板 参考 'A00E'
 	 */
     public static method shapeshift takes unit u, real during, integer modelFrom,integer modelTo,string eff,hAttrBean bean returns nothing
     	local timer t = null
@@ -52,13 +148,128 @@ struct hSkill
 		call heffect.toUnitLoc( eff , u , 1.5 )
     	call UnitAddAbility( u , modelTo )
 		call UnitRemoveAbility( u , modelTo )
+        call hAttr.resetSkill(u)
 		set t = htime.setTimeout( during , function thistype.shapeshiftCall )
 	    call htime.setUnit( t , 1 , u )
 	    call htime.setInteger( t , 2 , modelFrom )
 	    call htime.setString( t , 3 , eff )
-	    call PolledWait(0.10)
         //根据bean影响属性
         call hAttrUnit.modifyAttrByBean(u,bean,during)
+    endmethod
+
+    /**
+	 * 击飞回调
+	 */
+    private static method crackFlyCall takes nothing returns nothing
+    	local timer t = GetExpiredTimer()
+        local real cost = htime.getReal( t , 0 )
+    	local unit toUnit = htime.getUnit( t , 1 )
+	    local unit fromUnit = htime.getUnit( t , 2 )
+	    local real distance = htime.getReal( t , 3 )
+	    local real high = htime.getReal( t , 4 )
+	    local real damage = htime.getReal( t , 5 )
+        local string huntKind = htime.getString(t, 10)
+        local string huntType = htime.getString(t, 11)
+        local string huntEff = htime.getString(t, 12)
+        local real during = htime.getReal( t , 13 )
+        local real originHigh = htime.getReal( t , 14 )
+        local real originFacing = htime.getReal( t , 15 )
+        local real originDeg = htime.getReal( t , 16 )
+        local real xy = 0
+        local real z = 0
+        local real timerSetTime = htime.getSetTime(t)
+        local hAttrHuntBean bean
+        if(cost>during)then
+            call htime.delTimer(t)
+            set bean = hAttrHuntBean.create()
+            set bean.fromUnit = fromUnit
+            set bean.toUnit = toUnit
+            set bean.damage = damage
+            set bean.huntEff = huntEff
+            set bean.huntKind = huntKind
+            set bean.huntType = huntType
+            call hattrHunt.huntUnit(bean)
+            call bean.destroy()
+            call SetUnitFlyHeight( toUnit , originHigh , 10000 )
+            call SetUnitPathing( toUnit, true )
+            call SaveBoolean(hash_skill,GetHandleId(toUnit),7772,false)
+            if( his.water(toUnit) == true ) then                //如果是水面，创建水花
+                call heffect.toUnitLoc("Abilities\\Spells\\Other\\CrushingWave\\CrushingWaveDamage.mdl",toUnit,0)
+            else                                                //如果是地面，创建沙尘
+                call heffect.toUnitLoc("Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl",toUnit,0)
+            endif
+            return
+        endif
+        call htime.setReal( t , 0 , cost+timerSetTime )
+        if(cost<during*0.35)then
+            set xy = distance/(during*0.5/timerSetTime)
+            set z = high/(during*0.35/timerSetTime)
+            if(xy>0)then
+                set hxy.x = GetUnitX(toUnit)
+                set hxy.y = GetUnitY(toUnit)
+                set hxy = hmath.polarProjection(hxy, xy, originDeg)
+                call SetUnitFacing( toUnit, originFacing )
+                call SetUnitPosition( toUnit, hxy.x, hxy.y )
+            endif
+            if(z>0)then
+                call SetUnitFlyHeight( toUnit , GetUnitFlyHeight(toUnit)+z, z/timerSetTime )
+            endif
+        else
+            set xy = distance/(during*0.5/timerSetTime)
+            set z = high/(during*0.65/timerSetTime)
+            if(xy>0)then
+                set hxy.x = GetUnitX(toUnit)
+                set hxy.y = GetUnitY(toUnit)
+                set hxy = hmath.polarProjection(hxy, xy, originDeg)
+                call SetUnitFacing( toUnit, originFacing )
+                call SetUnitPosition( toUnit, hxy.x, hxy.y )
+            endif
+            if(z>0)then
+                call SetUnitFlyHeight( toUnit , GetUnitFlyHeight(toUnit)-z, z/timerSetTime )
+            endif
+        endif
+    endmethod
+    /**
+	 * 击飞
+     * distance 击退距离
+     * high 击飞高度
+	 */
+    public static method crackFly takes real distance,real high,real during,hAttrHuntBean bean returns nothing
+        local timer t = null
+        if(bean.fromUnit == null or bean.toUnit == null)then
+            return
+        endif
+        if(LoadBoolean(hash_skill,GetHandleId(bean.toUnit),7772)==true)then//不二次击飞
+            return
+        endif
+        if(during < 0.5)then
+            set during = 0.5
+        endif
+        //镜头放大模式下，距离缩小一半
+		if(hcamera.model=="zoomin")then
+			set distance = distance * 0.5
+			set high = high * 0.5
+		endif
+        call hability.unarm(bean.toUnit,during)
+        call hability.silent(bean.toUnit,during)
+        call hattr.subMove(bean.toUnit,1044,during)
+        call SaveBoolean(hash_skill,GetHandleId(bean.toUnit),7772,true)
+        call hunit.setUnitFly(bean.toUnit)
+        call SetUnitPathing( bean.toUnit, false )
+		set t = htime.setInterval( 0.05 , function thistype.crackFlyCall )
+	    call htime.setReal( t , 0 , 0.0 )
+	    call htime.setUnit( t , 1 , bean.toUnit )
+	    call htime.setUnit( t , 2 , bean.fromUnit )
+	    call htime.setReal( t , 3 , distance )
+	    call htime.setReal( t , 4 , high )
+	    call htime.setReal( t , 5 , bean.damage )
+        call htime.setString(t, 10,bean.huntKind)
+        call htime.setString(t, 11,bean.huntType)
+        call htime.setString(t, 12,bean.huntEff)
+        call htime.setReal(t, 13,during)
+        call htime.setReal(t, 14,GetUnitFlyHeight(bean.toUnit))
+        call htime.setReal(t, 15,hunit.getFacing(bean.toUnit))
+        call htime.setReal(t, 16,hunit.getFacingBetween(bean.fromUnit,bean.toUnit))
     endmethod
 
     /*

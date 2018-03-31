@@ -358,6 +358,467 @@ struct hAttrUnit
 		elseif(bean.poisonOppose<0)then
 			call hattrNatural.subPoisonOppose(whichUnit,bean.poisonOppose,during)
 		endif
+		if(bean.lifeBackVal>0)then
+			call hattrEffect.addLifeBackVal(whichUnit,bean.lifeBackVal,during)
+		elseif(bean.lifeBackVal<0)then
+			call hattrEffect.subLifeBackVal(whichUnit,bean.lifeBackVal,during)
+		endif
+		if(bean.lifeBackDuring>0)then
+			call hattrEffect.addLifeBackDuring(whichUnit,bean.lifeBackDuring,during)
+		elseif(bean.lifeBackDuring<0)then
+			call hattrEffect.subLifeBackDuring(whichUnit,bean.lifeBackDuring,during)
+		endif
+		if(bean.manaBackVal>0)then
+			call hattrEffect.addManaBackVal(whichUnit,bean.manaBackVal,during)
+		elseif(bean.manaBackVal<0)then
+			call hattrEffect.subManaBackVal(whichUnit,bean.manaBackVal,during)
+		endif
+		if(bean.manaBackDuring>0)then
+			call hattrEffect.addManaBackDuring(whichUnit,bean.manaBackDuring,during)
+		elseif(bean.manaBackDuring<0)then
+			call hattrEffect.subManaBackDuring(whichUnit,bean.manaBackDuring,during)
+		endif
+		if(bean.attackSpeedVal>0)then
+			call hattrEffect.addAttackSpeedVal(whichUnit,bean.attackSpeedVal,during)
+		elseif(bean.attackSpeedVal<0)then
+			call hattrEffect.subAttackSpeedVal(whichUnit,bean.attackSpeedVal,during)
+		endif
+		if(bean.attackSpeedDuring>0)then
+			call hattrEffect.addAttackSpeedDuring(whichUnit,bean.attackSpeedDuring,during)
+		elseif(bean.attackSpeedDuring<0)then
+			call hattrEffect.subAttackSpeedDuring(whichUnit,bean.attackSpeedDuring,during)
+		endif
+		if(bean.attackPhysicalVal>0)then
+			call hattrEffect.addAttackPhysicalVal(whichUnit,bean.attackPhysicalVal,during)
+		elseif(bean.attackPhysicalVal<0)then
+			call hattrEffect.subAttackPhysicalVal(whichUnit,bean.attackPhysicalVal,during)
+		endif
+		if(bean.attackPhysicalDuring>0)then
+			call hattrEffect.addAttackPhysicalDuring(whichUnit,bean.attackPhysicalDuring,during)
+		elseif(bean.attackPhysicalDuring<0)then
+			call hattrEffect.subAttackPhysicalDuring(whichUnit,bean.attackPhysicalDuring,during)
+		endif
+		if(bean.attackMagicVal>0)then
+			call hattrEffect.addAttackMagicVal(whichUnit,bean.attackMagicVal,during)
+		elseif(bean.attackMagicVal<0)then
+			call hattrEffect.subAttackMagicVal(whichUnit,bean.attackMagicVal,during)
+		endif
+		if(bean.attackMagicDuring>0)then
+			call hattrEffect.addAttackMagicDuring(whichUnit,bean.attackMagicDuring,during)
+		elseif(bean.attackMagicDuring<0)then
+			call hattrEffect.subAttackMagicDuring(whichUnit,bean.attackMagicDuring,during)
+		endif
+		if(bean.moveVal>0)then
+			call hattrEffect.addMoveVal(whichUnit,bean.moveVal,during)
+		elseif(bean.moveVal<0)then
+			call hattrEffect.subMoveVal(whichUnit,bean.moveVal,during)
+		endif
+		if(bean.moveDuring>0)then
+			call hattrEffect.addMoveDuring(whichUnit,bean.moveDuring,during)
+		elseif(bean.moveDuring<0)then
+			call hattrEffect.subMoveDuring(whichUnit,bean.moveDuring,during)
+		endif
+		if(bean.aimVal>0)then
+			call hattrEffect.addAimVal(whichUnit,bean.aimVal,during)
+		elseif(bean.aimVal<0)then
+			call hattrEffect.subAimVal(whichUnit,bean.aimVal,during)
+		endif
+		if(bean.aimDuring>0)then
+			call hattrEffect.addAimDuring(whichUnit,bean.aimDuring,during)
+		elseif(bean.aimDuring<0)then
+			call hattrEffect.subAimDuring(whichUnit,bean.aimDuring,during)
+		endif
+		if(bean.strVal>0)then
+			call hattrEffect.addStrVal(whichUnit,bean.strVal,during)
+		elseif(bean.strVal<0)then
+			call hattrEffect.subStrVal(whichUnit,bean.strVal,during)
+		endif
+		if(bean.strDuring>0)then
+			call hattrEffect.addStrDuring(whichUnit,bean.strDuring,during)
+		elseif(bean.strDuring<0)then
+			call hattrEffect.subStrDuring(whichUnit,bean.strDuring,during)
+		endif
+		if(bean.agiVal>0)then
+			call hattrEffect.addAgiVal(whichUnit,bean.agiVal,during)
+		elseif(bean.agiVal<0)then
+			call hattrEffect.subAgiVal(whichUnit,bean.agiVal,during)
+		endif
+		if(bean.agiDuring>0)then
+			call hattrEffect.addAgiDuring(whichUnit,bean.agiDuring,during)
+		elseif(bean.agiDuring<0)then
+			call hattrEffect.subAgiDuring(whichUnit,bean.agiDuring,during)
+		endif
+		if(bean.intVal>0)then
+			call hattrEffect.addIntVal(whichUnit,bean.intVal,during)
+		elseif(bean.intVal<0)then
+			call hattrEffect.subIntVal(whichUnit,bean.intVal,during)
+		endif
+		if(bean.intDuring>0)then
+			call hattrEffect.addIntDuring(whichUnit,bean.intDuring,during)
+		elseif(bean.intDuring<0)then
+			call hattrEffect.subIntDuring(whichUnit,bean.intDuring,during)
+		endif
+		if(bean.knockingVal>0)then
+			call hattrEffect.addKnockingVal(whichUnit,bean.knockingVal,during)
+		elseif(bean.knockingVal<0)then
+			call hattrEffect.subKnockingVal(whichUnit,bean.knockingVal,during)
+		endif
+		if(bean.knockingDuring>0)then
+			call hattrEffect.addKnockingDuring(whichUnit,bean.knockingDuring,during)
+		elseif(bean.knockingDuring<0)then
+			call hattrEffect.subKnockingDuring(whichUnit,bean.knockingDuring,during)
+		endif
+		if(bean.violenceVal>0)then
+			call hattrEffect.addViolenceVal(whichUnit,bean.violenceVal,during)
+		elseif(bean.violenceVal<0)then
+			call hattrEffect.subViolenceVal(whichUnit,bean.violenceVal,during)
+		endif
+		if(bean.violenceDuring>0)then
+			call hattrEffect.addViolenceDuring(whichUnit,bean.violenceDuring,during)
+		elseif(bean.violenceDuring<0)then
+			call hattrEffect.subViolenceDuring(whichUnit,bean.violenceDuring,during)
+		endif
+		if(bean.hemophagiaVal>0)then
+			call hattrEffect.addHemophagiaVal(whichUnit,bean.hemophagiaVal,during)
+		elseif(bean.hemophagiaVal<0)then
+			call hattrEffect.subHemophagiaVal(whichUnit,bean.hemophagiaVal,during)
+		endif
+		if(bean.hemophagiaDuring>0)then
+			call hattrEffect.addHemophagiaDuring(whichUnit,bean.hemophagiaDuring,during)
+		elseif(bean.hemophagiaDuring<0)then
+			call hattrEffect.subHemophagiaDuring(whichUnit,bean.hemophagiaDuring,during)
+		endif
+		if(bean.hemophagiaSkillVal>0)then
+			call hattrEffect.addHemophagiaSkillVal(whichUnit,bean.hemophagiaSkillVal,during)
+		elseif(bean.hemophagiaSkillVal<0)then
+			call hattrEffect.subHemophagiaSkillVal(whichUnit,bean.hemophagiaSkillVal,during)
+		endif
+		if(bean.hemophagiaSkillDuring>0)then
+			call hattrEffect.addHemophagiaSkillDuring(whichUnit,bean.hemophagiaSkillDuring,during)
+		elseif(bean.hemophagiaSkillDuring<0)then
+			call hattrEffect.subHemophagiaSkillDuring(whichUnit,bean.hemophagiaSkillDuring,during)
+		endif
+		if(bean.splitVal>0)then
+			call hattrEffect.addSplitVal(whichUnit,bean.splitVal,during)
+		elseif(bean.splitVal<0)then
+			call hattrEffect.subSplitVal(whichUnit,bean.splitVal,during)
+		endif
+		if(bean.splitDuring>0)then
+			call hattrEffect.addSplitDuring(whichUnit,bean.splitDuring,during)
+		elseif(bean.splitDuring<0)then
+			call hattrEffect.subSplitDuring(whichUnit,bean.splitDuring,during)
+		endif
+		if(bean.luckVal>0)then
+			call hattrEffect.addLuckVal(whichUnit,bean.luckVal,during)
+		elseif(bean.luckVal<0)then
+			call hattrEffect.subLuckVal(whichUnit,bean.luckVal,during)
+		endif
+		if(bean.luckDuring>0)then
+			call hattrEffect.addLuckDuring(whichUnit,bean.luckDuring,during)
+		elseif(bean.luckDuring<0)then
+			call hattrEffect.subLuckDuring(whichUnit,bean.luckDuring,during)
+		endif
+		if(bean.huntAmplitudeVal>0)then
+			call hattrEffect.addHuntAmplitudeVal(whichUnit,bean.huntAmplitudeVal,during)
+		elseif(bean.huntAmplitudeVal<0)then
+			call hattrEffect.subHuntAmplitudeVal(whichUnit,bean.huntAmplitudeVal,during)
+		endif
+		if(bean.huntAmplitudeDuring>0)then
+			call hattrEffect.addHuntAmplitudeDuring(whichUnit,bean.huntAmplitudeDuring,during)
+		elseif(bean.huntAmplitudeDuring<0)then
+			call hattrEffect.subHuntAmplitudeDuring(whichUnit,bean.huntAmplitudeDuring,during)
+		endif
+		if(bean.poisonVal>0)then
+			call hattrEffect.addPoisonVal(whichUnit,bean.poisonVal,during)
+		elseif(bean.poisonVal<0)then
+			call hattrEffect.subPoisonVal(whichUnit,bean.poisonVal,during)
+		endif
+		if(bean.poisonDuring>0)then
+			call hattrEffect.addPoisonDuring(whichUnit,bean.poisonDuring,during)
+		elseif(bean.poisonDuring<0)then
+			call hattrEffect.subPoisonDuring(whichUnit,bean.poisonDuring,during)
+		endif
+		if(bean.fireVal>0)then
+			call hattrEffect.addFireVal(whichUnit,bean.fireVal,during)
+		elseif(bean.fireVal<0)then
+			call hattrEffect.subFireVal(whichUnit,bean.fireVal,during)
+		endif
+		if(bean.fireDuring>0)then
+			call hattrEffect.addFireDuring(whichUnit,bean.fireDuring,during)
+		elseif(bean.fireDuring<0)then
+			call hattrEffect.subFireDuring(whichUnit,bean.fireDuring,during)
+		endif
+		if(bean.dryVal>0)then
+			call hattrEffect.addDryVal(whichUnit,bean.dryVal,during)
+		elseif(bean.dryVal<0)then
+			call hattrEffect.subDryVal(whichUnit,bean.dryVal,during)
+		endif
+		if(bean.dryDuring>0)then
+			call hattrEffect.addDryDuring(whichUnit,bean.dryDuring,during)
+		elseif(bean.dryDuring<0)then
+			call hattrEffect.subDryDuring(whichUnit,bean.dryDuring,during)
+		endif
+		if(bean.freezeVal>0)then
+			call hattrEffect.addFreezeVal(whichUnit,bean.freezeVal,during)
+		elseif(bean.freezeVal<0)then
+			call hattrEffect.subFreezeVal(whichUnit,bean.freezeVal,during)
+		endif
+		if(bean.freezeDuring>0)then
+			call hattrEffect.addFreezeDuring(whichUnit,bean.freezeDuring,during)
+		elseif(bean.freezeDuring<0)then
+			call hattrEffect.subFreezeDuring(whichUnit,bean.freezeDuring,during)
+		endif
+		if(bean.coldVal>0)then
+			call hattrEffect.addColdVal(whichUnit,bean.coldVal,during)
+		elseif(bean.coldVal<0)then
+			call hattrEffect.subColdVal(whichUnit,bean.coldVal,during)
+		endif
+		if(bean.coldDuring>0)then
+			call hattrEffect.addColdDuring(whichUnit,bean.coldDuring,during)
+		elseif(bean.coldDuring<0)then
+			call hattrEffect.subColdDuring(whichUnit,bean.coldDuring,during)
+		endif
+		if(bean.bluntVal>0)then
+			call hattrEffect.addBluntVal(whichUnit,bean.bluntVal,during)
+		elseif(bean.bluntVal<0)then
+			call hattrEffect.subBluntVal(whichUnit,bean.bluntVal,during)
+		endif
+		if(bean.bluntDuring>0)then
+			call hattrEffect.addBluntDuring(whichUnit,bean.bluntDuring,during)
+		elseif(bean.bluntDuring<0)then
+			call hattrEffect.subBluntDuring(whichUnit,bean.bluntDuring,during)
+		endif
+		if(bean.muggleVal>0)then
+			call hattrEffect.addMuggleVal(whichUnit,bean.muggleVal,during)
+		elseif(bean.muggleVal<0)then
+			call hattrEffect.subMuggleVal(whichUnit,bean.muggleVal,during)
+		endif
+		if(bean.muggleDuring>0)then
+			call hattrEffect.addMuggleDuring(whichUnit,bean.muggleDuring,during)
+		elseif(bean.muggleDuring<0)then
+			call hattrEffect.subMuggleDuring(whichUnit,bean.muggleDuring,during)
+		endif
+		if(bean.corrosionVal>0)then
+			call hattrEffect.addCorrosionVal(whichUnit,bean.corrosionVal,during)
+		elseif(bean.corrosionVal<0)then
+			call hattrEffect.subCorrosionVal(whichUnit,bean.corrosionVal,during)
+		endif
+		if(bean.corrosionDuring>0)then
+			call hattrEffect.addCorrosionDuring(whichUnit,bean.corrosionDuring,during)
+		elseif(bean.corrosionDuring<0)then
+			call hattrEffect.subCorrosionDuring(whichUnit,bean.corrosionDuring,during)
+		endif
+		if(bean.chaosVal>0)then
+			call hattrEffect.addChaosVal(whichUnit,bean.chaosVal,during)
+		elseif(bean.chaosVal<0)then
+			call hattrEffect.subChaosVal(whichUnit,bean.chaosVal,during)
+		endif
+		if(bean.chaosDuring>0)then
+			call hattrEffect.addChaosDuring(whichUnit,bean.chaosDuring,during)
+		elseif(bean.chaosDuring<0)then
+			call hattrEffect.subChaosDuring(whichUnit,bean.chaosDuring,during)
+		endif
+		if(bean.twineVal>0)then
+			call hattrEffect.addTwineVal(whichUnit,bean.twineVal,during)
+		elseif(bean.twineVal<0)then
+			call hattrEffect.subTwineVal(whichUnit,bean.twineVal,during)
+		endif
+		if(bean.twineDuring>0)then
+			call hattrEffect.addTwineDuring(whichUnit,bean.twineDuring,during)
+		elseif(bean.twineDuring<0)then
+			call hattrEffect.subTwineDuring(whichUnit,bean.twineDuring,during)
+		endif
+		if(bean.blindVal>0)then
+			call hattrEffect.addBlindVal(whichUnit,bean.blindVal,during)
+		elseif(bean.blindVal<0)then
+			call hattrEffect.subBlindVal(whichUnit,bean.blindVal,during)
+		endif
+		if(bean.blindDuring>0)then
+			call hattrEffect.addBlindDuring(whichUnit,bean.blindDuring,during)
+		elseif(bean.blindDuring<0)then
+			call hattrEffect.subBlindDuring(whichUnit,bean.blindDuring,during)
+		endif
+		if(bean.tortuaVal>0)then
+			call hattrEffect.addTortuaVal(whichUnit,bean.tortuaVal,during)
+		elseif(bean.tortuaVal<0)then
+			call hattrEffect.subTortuaVal(whichUnit,bean.tortuaVal,during)
+		endif
+		if(bean.tortuaDuring>0)then
+			call hattrEffect.addTortuaDuring(whichUnit,bean.tortuaDuring,during)
+		elseif(bean.tortuaDuring<0)then
+			call hattrEffect.subTortuaDuring(whichUnit,bean.tortuaDuring,during)
+		endif
+		if(bean.weakVal>0)then
+			call hattrEffect.addWeakVal(whichUnit,bean.weakVal,during)
+		elseif(bean.weakVal<0)then
+			call hattrEffect.subWeakVal(whichUnit,bean.weakVal,during)
+		endif
+		if(bean.weakDuring>0)then
+			call hattrEffect.addWeakDuring(whichUnit,bean.weakDuring,during)
+		elseif(bean.weakDuring<0)then
+			call hattrEffect.subWeakDuring(whichUnit,bean.weakDuring,during)
+		endif
+		if(bean.astrictVal>0)then
+			call hattrEffect.addAstrictVal(whichUnit,bean.astrictVal,during)
+		elseif(bean.astrictVal<0)then
+			call hattrEffect.subAstrictVal(whichUnit,bean.astrictVal,during)
+		endif
+		if(bean.astrictDuring>0)then
+			call hattrEffect.addAstrictDuring(whichUnit,bean.astrictDuring,during)
+		elseif(bean.astrictDuring<0)then
+			call hattrEffect.subAstrictDuring(whichUnit,bean.astrictDuring,during)
+		endif
+		if(bean.foolishVal>0)then
+			call hattrEffect.addFoolishVal(whichUnit,bean.foolishVal,during)
+		elseif(bean.foolishVal<0)then
+			call hattrEffect.subFoolishVal(whichUnit,bean.foolishVal,during)
+		endif
+		if(bean.foolishDuring>0)then
+			call hattrEffect.addFoolishDuring(whichUnit,bean.foolishDuring,during)
+		elseif(bean.foolishDuring<0)then
+			call hattrEffect.subFoolishDuring(whichUnit,bean.foolishDuring,during)
+		endif
+		if(bean.dullVal>0)then
+			call hattrEffect.addDullVal(whichUnit,bean.dullVal,during)
+		elseif(bean.dullVal<0)then
+			call hattrEffect.subDullVal(whichUnit,bean.dullVal,during)
+		endif
+		if(bean.dullDuring>0)then
+			call hattrEffect.addDullDuring(whichUnit,bean.dullDuring,during)
+		elseif(bean.dullDuring<0)then
+			call hattrEffect.subDullDuring(whichUnit,bean.dullDuring,during)
+		endif
+		if(bean.dirtVal>0)then
+			call hattrEffect.addDirtVal(whichUnit,bean.dirtVal,during)
+		elseif(bean.dirtVal<0)then
+			call hattrEffect.subDirtVal(whichUnit,bean.dirtVal,during)
+		endif
+		if(bean.dirtDuring>0)then
+			call hattrEffect.addDirtDuring(whichUnit,bean.dirtDuring,during)
+		elseif(bean.dirtDuring<0)then
+			call hattrEffect.subDirtDuring(whichUnit,bean.dirtDuring,during)
+		endif
+		if(bean.swimOdds>0)then
+			call hattrEffect.addSwimOdds(whichUnit,bean.swimOdds,during)
+		elseif(bean.swimOdds<0)then
+			call hattrEffect.subSwimOdds(whichUnit,bean.swimOdds,during)
+		endif
+		if(bean.swimDuring>0)then
+			call hattrEffect.addSwimDuring(whichUnit,bean.swimDuring,during)
+		elseif(bean.swimDuring<0)then
+			call hattrEffect.subSwimDuring(whichUnit,bean.swimDuring,during)
+		endif
+		if(bean.heavyOdds>0)then
+			call hattrEffect.addHeavyOdds(whichUnit,bean.heavyOdds,during)
+		elseif(bean.heavyOdds<0)then
+			call hattrEffect.subHeavyOdds(whichUnit,bean.heavyOdds,during)
+		endif
+		if(bean.heavyVal>0)then
+			call hattrEffect.addHeavyVal(whichUnit,bean.heavyVal,during)
+		elseif(bean.heavyVal<0)then
+			call hattrEffect.subHeavyVal(whichUnit,bean.heavyVal,during)
+		endif
+		if(bean.breakOdds>0)then
+			call hattrEffect.addBreakOdds(whichUnit,bean.breakOdds,during)
+		elseif(bean.breakOdds<0)then
+			call hattrEffect.subBreakOdds(whichUnit,bean.breakOdds,during)
+		endif
+		if(bean.breakDuring>0)then
+			call hattrEffect.addBreakDuring(whichUnit,bean.breakDuring,during)
+		elseif(bean.breakDuring<0)then
+			call hattrEffect.subBreakDuring(whichUnit,bean.breakDuring,during)
+		endif
+		if(bean.unluckVal>0)then
+			call hattrEffect.addUnluckVal(whichUnit,bean.unluckVal,during)
+		elseif(bean.unluckVal<0)then
+			call hattrEffect.subUnluckVal(whichUnit,bean.unluckVal,during)
+		endif
+		if(bean.unluckDuring>0)then
+			call hattrEffect.addUnluckDuring(whichUnit,bean.unluckDuring,during)
+		elseif(bean.unluckDuring<0)then
+			call hattrEffect.subUnluckDuring(whichUnit,bean.unluckDuring,during)
+		endif
+		if(bean.silentOdds>0)then
+			call hattrEffect.addSilentOdds(whichUnit,bean.silentOdds,during)
+		elseif(bean.silentOdds<0)then
+			call hattrEffect.subSilentOdds(whichUnit,bean.silentOdds,during)
+		endif
+		if(bean.silentDuring>0)then
+			call hattrEffect.addSilentDuring(whichUnit,bean.silentDuring,during)
+		elseif(bean.silentDuring<0)then
+			call hattrEffect.subSilentDuring(whichUnit,bean.silentDuring,during)
+		endif
+		if(bean.unarmOdds>0)then
+			call hattrEffect.addUnarmOdds(whichUnit,bean.unarmOdds,during)
+		elseif(bean.unarmOdds<0)then
+			call hattrEffect.subUnarmOdds(whichUnit,bean.unarmOdds,during)
+		endif
+		if(bean.unarmDuring>0)then
+			call hattrEffect.addUnarmDuring(whichUnit,bean.unarmDuring,during)
+		elseif(bean.unarmDuring<0)then
+			call hattrEffect.subUnarmDuring(whichUnit,bean.unarmDuring,during)
+		endif
+		if(bean.fetterOdds>0)then
+			call hattrEffect.addFetterOdds(whichUnit,bean.fetterOdds,during)
+		elseif(bean.fetterOdds<0)then
+			call hattrEffect.subFetterOdds(whichUnit,bean.fetterOdds,during)
+		endif
+		if(bean.fetterDuring>0)then
+			call hattrEffect.addFetterDuring(whichUnit,bean.fetterDuring,during)
+		elseif(bean.fetterDuring<0)then
+			call hattrEffect.subFetterDuring(whichUnit,bean.fetterDuring,during)
+		endif
+		if(bean.bombVal>0)then
+			call hattrEffect.addBombVal(whichUnit,bean.bombVal,during)
+		elseif(bean.bombVal<0)then
+			call hattrEffect.subBombVal(whichUnit,bean.bombVal,during)
+		endif
+		if(bean.bombModel!="")then
+			call hattrEffect.setBombModel(whichUnit,bean.bombModel)
+		endif
+		if(bean.lightningChainVal>0)then
+			call hattrEffect.addLightningChainVal(whichUnit,bean.lightningChainVal,during)
+		elseif(bean.lightningChainVal<0)then
+			call hattrEffect.subLightningChainVal(whichUnit,bean.lightningChainVal,during)
+		endif
+		if(bean.lightningChainOdds>0)then
+			call hattrEffect.addLightningChainOdds(whichUnit,bean.lightningChainOdds,during)
+		elseif(bean.lightningChainOdds<0)then
+			call hattrEffect.subLightningChainOdds(whichUnit,bean.lightningChainOdds,during)
+		endif
+		if(bean.lightningChainQty>0)then
+			call hattrEffect.addLightningChainQty(whichUnit,bean.lightningChainQty,during)
+		elseif(bean.lightningChainQty<0)then
+			call hattrEffect.subLightningChainQty(whichUnit,bean.lightningChainQty,during)
+		endif
+		if(bean.lightningChainReduce>0)then
+			call hattrEffect.addLightningChainReduce(whichUnit,bean.lightningChainReduce,during)
+		elseif(bean.lightningChainReduce<0)then
+			call hattrEffect.subLightningChainReduce(whichUnit,bean.lightningChainReduce,during)
+		endif
+		if(bean.lightningChainModel!="")then
+			call hattrEffect.setLightningChainModel(whichUnit,bean.lightningChainModel)
+		endif
+		if(bean.crackFlyVal>0)then
+			call hattrEffect.addCrackFlyVal(whichUnit,bean.crackFlyVal,during)
+		elseif(bean.crackFlyVal<0)then
+			call hattrEffect.subCrackFlyVal(whichUnit,bean.crackFlyVal,during)
+		endif
+		if(bean.crackFlyOdds>0)then
+			call hattrEffect.addCrackFlyOdds(whichUnit,bean.crackFlyOdds,during)
+		elseif(bean.crackFlyOdds<0)then
+			call hattrEffect.subCrackFlyOdds(whichUnit,bean.crackFlyOdds,during)
+		endif
+		if(bean.crackFlyDistance>0)then
+			call hattrEffect.addCrackFlyDistance(whichUnit,bean.crackFlyDistance,during)
+		elseif(bean.crackFlyDistance<0)then
+			call hattrEffect.subCrackFlyDistance(whichUnit,bean.crackFlyDistance,during)
+		endif
+		if(bean.crackFlyHigh>0)then
+			call hattrEffect.addCrackFlyHigh(whichUnit,bean.crackFlyHigh,during)
+		elseif(bean.crackFlyHigh<0)then
+			call hattrEffect.subCrackFlyHigh(whichUnit,bean.crackFlyHigh,during)
+		endif
 	endmethod
 
 

@@ -15,6 +15,13 @@ struct hGroup
 	endmethod
 
 	/**
+	 * 判断单位是否在单位组内
+	 */
+	public static method isin takes unit whichunit,group whichGroup returns boolean
+		return IsUnitInGroup(whichunit, whichGroup)
+	endmethod
+
+	/**
 	 * 单位组
 	 * 以loc点为中心radius距离
 	 * filter 条件适配器

@@ -1,7 +1,12 @@
 //算法
 globals
     hMath hmath
+    hXY hxy
 endglobals
+struct hXY
+	public real x = 0
+	public real y = 0
+endstruct
 struct hMath
 
 	//绝对值
@@ -12,6 +17,12 @@ struct hMath
 	//两整型相除得到real
 	public method II2R takes integer i1,integer i2 returns real
 	    return ( I2R(i1) / I2R(i2) )
+	endmethod
+
+	public method polarProjection takes hXY xy, real dist, real angle returns hXY
+		set xy.x = xy.x + dist * Cos(angle * bj_DEGTORAD)
+		set xy.y = xy.y + dist * Sin(angle * bj_DEGTORAD)
+		return xy
 	endmethod
 
 	//获取物品几率叠加几率

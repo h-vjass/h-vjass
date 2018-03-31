@@ -125,6 +125,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveEffectHandle(hash_time, timerHandleId, k, value)
     endmethod
+    public method setLightning takes timer t,integer k,lightning value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveLightningHandle(hash_time, timerHandleId, k, value)
+    endmethod
     public method setRect takes timer t,integer k,rect value returns nothing
         local integer timerHandleId = GetHandleId(t)
         call SaveRectHandle(hash_time, timerHandleId, k, value)
@@ -185,6 +189,10 @@ struct hTime
     public method getEffect takes timer t,integer k returns effect
         local integer timerHandleId = GetHandleId(t)
         return LoadEffectHandle(hash_time, timerHandleId, k)
+    endmethod
+    public method getLightning takes timer t,integer k returns lightning
+        local integer timerHandleId = GetHandleId(t)
+        return LoadLightningHandle(hash_time, timerHandleId, k)
     endmethod
     public method getRect takes timer t,integer k returns rect
         local integer timerHandleId = GetHandleId(t)

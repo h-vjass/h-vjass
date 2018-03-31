@@ -18,12 +18,13 @@ library Main initializer init needs hJass
 	//预读
 	private function preread takes nothing returns nothing
 	    local integer i = 0
-	    local integer total = 1
+	    local integer total = 3
 	    local integer array prereads
 	    local unit array prereadUnits
 
 	    set prereads[1] = 'H00B'
 	    set prereads[2] = 'n00F'
+	    set prereads[3] = 'E000'
 	    
 	    set i = 1
 	    loop

@@ -959,7 +959,7 @@ struct hAttrHunt
             //技能吸血
             if( bean.huntKind == "skill" and fromUnitHemophagiaSkill >0 )then
                 call hunit.addLife(fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
-                call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",fromUnit,"weapon",1.8)
+                call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",fromUnit,"origin",1.8)
                 //@触发技能吸血事件
                 set hevtBean = hEvtBean.create()
                 set hevtBean.triggerKey = "skillHemophagia"
@@ -1246,20 +1246,36 @@ endif
                             call thistype.huntUnit(huntBean)
                             call huntBean.destroy()
                         endif
-                        set u = null
                 endloop
                 call GroupClear( g )
                 call DestroyGroup( g )
                 set g = null
+                set u = null
             endif
             if( GetRandomReal(1,100)<=fromUnitHuntEffectLightningChainOdds and fromUnitHuntEffectLightningChainVal>0 and fromUnitHuntEffectLightningChainQty>0 ) then
                 if(fromUnitHuntEffectLightningChainModel=="")then
                     set fromUnitHuntEffectLightningChainModel = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
                 endif
-                
+                set huntBean = hAttrHuntBean.create()
+                set huntBean.fromUnit = fromUnit
+                set huntBean.toUnit = toUnit
+                set huntBean.damage = fromUnitHuntEffectLightningChainVal
+                set huntBean.huntEff = fromUnitHuntEffectLightningChainModel
+                set huntBean.huntKind = "special"
+                set huntBean.huntType = "magicthunder"
+                call hskill.lightningChain(lightningCode_shandianlian_ci,R2I(fromUnitHuntEffectLightningChainQty),fromUnitHuntEffectLightningChainReduce,false,huntBean)
+                call huntBean.destroy()
             endif
             if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal>0 ) then
-                //
+                set huntBean = hAttrHuntBean.create()
+                set huntBean.fromUnit = fromUnit
+                set huntBean.toUnit = toUnit
+                set huntBean.damage = fromUnitHuntEffectCrackFlyVal
+                //set huntBean.huntEff = "Abilities\\Spells\\Human\\Polymorph\\PolyMorphTarget.mdl"
+                set huntBean.huntKind = "special"
+                set huntBean.huntType = "physical"
+                call hskill.crackFly(fromUnitHuntEffectCrackFlyDistance,fromUnitHuntEffectCrackFlyHigh,0.6,huntBean)
+                call huntBean.destroy()
             endif
           
         endif

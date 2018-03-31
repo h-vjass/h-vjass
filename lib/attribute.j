@@ -524,19 +524,6 @@ struct hAttr
     private static integer ATTR_FLAG_AGI_WHITE = 20
     private static integer ATTR_FLAG_INT_WHITE = 21
 
-    private static integer ATTR_MAX_LIFE = 999999
-    private static integer ATTR_MAX_MANA = 999999
-    private static integer ATTR_MIN_LIFE = 1
-    private static integer ATTR_MIN_MANA = 1
-    private static integer ATTR_MAX_DEFEND = 9999
-    private static integer ATTR_MAX_ATTACK_PHYSICAL = 99999
-    private static integer ATTR_MAX_ATTACK_MAGIC = 99999
-    private static integer ATTR_MAX_ATTACK_SPEED = 999
-    private static integer ATTR_MIN_ATTACK_SPEED = -80
-    private static integer ATTR_MAX_STR_GREEN = 99999
-    private static integer ATTR_MAX_AGI_GREEN = 99999
-    private static integer ATTR_MAX_INT_GREEN = 99999
-
 	private static integer ATTR_FLAG_UP_LIFE_BACK = 1001
 	private static integer ATTR_FLAG_UP_LIFE_SOURCE = 1002
 	private static integer ATTR_FLAG_UP_LIFE_SOURCE_CURRENT = 1003
@@ -585,41 +572,73 @@ struct hAttr
 		call UnitAddAbility( whichUnit, Attr_Ability_life_100 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_1000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_10000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_100000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_1000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_10000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_100000000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_1 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_10 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_100 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_1000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_10000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_100000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_1000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_10000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_life_FU_100000000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_1 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_10 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_100 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_1000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_10000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_100000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_1000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_10000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_100000000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_1 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_10 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_100 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_1000 )
 		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_10000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_100000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_1000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_10000000 )
+		call UnitAddAbility( whichUnit, Attr_Ability_mana_FU_100000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_1 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_10 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_100 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_1000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_10000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_100000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_1000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_10000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_100000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_1 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_10 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_100 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_1000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_10000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_100000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_1000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_10000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_life_FU_100000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_1 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_10 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_100 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_1000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_10000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_100000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_1000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_10000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_100000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_1 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_10 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_100 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_1000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_10000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_100000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_1000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_10000000 )
+		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_100000000 )
 
 		//白字攻击
         if(GetUnitAbilityLevel(whichUnit,ITEM_ABILITY)<1)then
@@ -632,58 +651,90 @@ struct hAttr
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_100)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_10000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_100000000)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_1)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_10)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_100)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_10000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_attack_magic_FU_100000000)
 		//绿色属性
 		call UnitAddAbility( whichUnit , Attr_Ability_str_1)
         call UnitAddAbility( whichUnit , Attr_Ability_str_10)
         call UnitAddAbility( whichUnit , Attr_Ability_str_100)
         call UnitAddAbility( whichUnit , Attr_Ability_str_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_str_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_str_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_str_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_str_10000000)
         call UnitAddAbility( whichUnit , Attr_Ability_str_FU_1)
         call UnitAddAbility( whichUnit , Attr_Ability_str_FU_10)
         call UnitAddAbility( whichUnit , Attr_Ability_str_FU_100)
         call UnitAddAbility( whichUnit , Attr_Ability_str_FU_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_str_FU_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_str_FU_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_str_FU_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_str_FU_10000000)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_1)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_10)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_100)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_agi_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_agi_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_agi_10000000)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_1)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_10)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_100)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_agi_FU_10000000)
         call UnitAddAbility( whichUnit , Attr_Ability_int_1)
         call UnitAddAbility( whichUnit , Attr_Ability_int_10)
         call UnitAddAbility( whichUnit , Attr_Ability_int_100)
         call UnitAddAbility( whichUnit , Attr_Ability_int_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_int_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_int_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_int_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_int_10000000)
         call UnitAddAbility( whichUnit , Attr_Ability_int_FU_1)
         call UnitAddAbility( whichUnit , Attr_Ability_int_FU_10)
         call UnitAddAbility( whichUnit , Attr_Ability_int_FU_100)
         call UnitAddAbility( whichUnit , Attr_Ability_int_FU_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_int_FU_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_int_FU_100000)
+        call UnitAddAbility( whichUnit , Attr_Ability_int_FU_1000000)
+        call UnitAddAbility( whichUnit , Attr_Ability_int_FU_10000000)
         //攻击速度
         call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_1)
         call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_10)
         call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_100)
+        call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_1000)
         call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_FU_1)
         call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_FU_10)
         call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_FU_100)
+        call UnitAddAbility( whichUnit , Attr_Ability_attackSpeed_FU_1000)
         //防御
 		call UnitAddAbility( whichUnit , Attr_Ability_defend_1)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_10)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_100)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_1000)
+        call UnitAddAbility( whichUnit , Attr_Ability_defend_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_defend_100000)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_FU_1)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_FU_10)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_FU_100)
         call UnitAddAbility( whichUnit , Attr_Ability_defend_FU_1000)
+        call UnitAddAbility( whichUnit , Attr_Ability_defend_FU_10000)
+        call UnitAddAbility( whichUnit , Attr_Ability_defend_FU_100000)
 
         //设定特殊技能永久性
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_1 )
@@ -691,110 +742,174 @@ struct hAttr
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_100 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_1000 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_10000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_100000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_1000000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_10000000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_100000000 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_1 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_10 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_100 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_1000 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_10000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_100000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_1000000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_10000000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attack_physical_FU_100000000 )
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_100000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_1000000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_10000000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_100000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_1000000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_str_FU_10000000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_100000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_1000000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_10000000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_100000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_1000000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_agi_FU_1000000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_100000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_1000000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_10000000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_100000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_1000000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_int_FU_10000000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_100)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_FU_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_FU_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_FU_100)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_attackSpeed_FU_1000)
 		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_1000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_100000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_1)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_10)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_100)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_1000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_10000)
+        call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_100000)
 
-        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1,  1 )
-    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_10, 1 )
-    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_100,1 )
-    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1,  1 )
-    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_10, 1 )
-    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_100,1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1,   	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_10,  	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_100, 	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1000,	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1,  	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_10, 	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_100,	1 )
+    	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1000,	1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000,    1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100000,  1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000,    1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100000,  1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1000,    1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1000000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10000000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100000000,   1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1000,    1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1000000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000000,   1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100000000,   1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1,        1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_100,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_100000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1000000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1,        1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_100,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_100000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1000000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1,        1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_100,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_100000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1000000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1,        1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_100,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_100000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1000000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1,        1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_100,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_100000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1000000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1,        1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10,       1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_100,      1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_100000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000000,     1 )
+        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000000,     1 )
 
 	endmethod
 
@@ -841,11 +956,13 @@ struct hAttr
     endmethod
 
 	//设定属性(即时/计时)
-	//攻速 		-999% ～ 999%<*实际上为-80% ～ 400%>
+	//白字攻击	-999999999 ～ 999999999
+	//绿字攻击	-999999999 ～ 999999999
+	//攻速 		-9999% ～ 9999%<*实际上为-80% ～ 400%>
     //力敏智		～
-    //力敏智(绿)	-99999 ～ 99999
-    //护甲		-9999 ～ 9999
-    //活力 魔法	1 ～ 999999
+    //力敏智(绿)	-99999999 ～ 99999999
+    //护甲		-999999 ～ 999999
+    //活力 魔法	1 ～ 9999999999
     //硬直    	1 ～
     //物暴 术暴 分裂 回避 移动力 力量 敏捷 智力 救助力 吸血 负重 各率 下限：0
 	private static method setAttrDo takes integer flag , unit whichUnit , real diff returns nothing
@@ -875,6 +992,15 @@ struct hAttr
 				endif
 				set tempInt = R2I(diff)
 				if( tempInt>0 )then
+					set level = tempInt/100000000
+					set tempInt = tempInt - (tempInt/100000000)*100000000
+					call setLM( whichUnit , Attr_Ability_life_100000000 , level )
+					set level = tempInt/10000000
+					set tempInt = tempInt - (tempInt/10000000)*10000000
+					call setLM( whichUnit , Attr_Ability_life_10000000 , level )
+					set level = tempInt/1000000
+					set tempInt = tempInt - (tempInt/1000000)*1000000
+					call setLM( whichUnit , Attr_Ability_life_1000000 , level )
 					set level = tempInt/100000
 					set tempInt = tempInt - (tempInt/100000)*100000
 					call setLM( whichUnit , Attr_Ability_life_100000 , level )
@@ -895,6 +1021,15 @@ struct hAttr
 					call setLM( whichUnit , Attr_Ability_life_1 , level )
 				elseif( tempInt<0 )then
 					set tempInt = IAbsBJ(tempInt)
+					set level = tempInt/100000000
+					set tempInt = tempInt - (tempInt/100000000)*100000000
+					call setLM( whichUnit , Attr_Ability_life_FU_100000000 , level )
+					set level = tempInt/10000000
+					set tempInt = tempInt - (tempInt/10000000)*10000000
+					call setLM( whichUnit , Attr_Ability_life_FU_10000000 , level )
+					set level = tempInt/1000000
+					set tempInt = tempInt - (tempInt/1000000)*1000000
+					call setLM( whichUnit , Attr_Ability_life_FU_1000000 , level )
 					set level = tempInt/100000
 					set tempInt = tempInt - (tempInt/100000)*100000
 					call setLM( whichUnit , Attr_Ability_life_FU_100000 , level )
@@ -933,6 +1068,15 @@ struct hAttr
 				endif
 				set tempInt = R2I(diff)
 				if( tempInt>0 )then
+					set level = tempInt/100000000
+					set tempInt = tempInt - (tempInt/100000000)*100000000
+					call setLM( whichUnit , Attr_Ability_mana_100000000 , level )
+					set level = tempInt/10000000
+					set tempInt = tempInt - (tempInt/10000000)*10000000
+					call setLM( whichUnit , Attr_Ability_mana_10000000 , level )
+					set level = tempInt/1000000
+					set tempInt = tempInt - (tempInt/1000000)*1000000
+					call setLM( whichUnit , Attr_Ability_mana_1000000 , level )
 					set level = tempInt/100000
 					set tempInt = tempInt - (tempInt/100000)*100000
 					call setLM( whichUnit , Attr_Ability_mana_100000 , level )
@@ -953,6 +1097,15 @@ struct hAttr
 					call setLM( whichUnit , Attr_Ability_mana_1 , level )
 				elseif( tempInt<0 )then
 					set tempInt = IAbsBJ(tempInt)
+					set level = tempInt/100000000
+					set tempInt = tempInt - (tempInt/100000000)*100000000
+					call setLM( whichUnit , Attr_Ability_mana_FU_100000000 , level )
+					set level = tempInt/10000000
+					set tempInt = tempInt - (tempInt/10000000)*10000000
+					call setLM( whichUnit , Attr_Ability_mana_FU_10000000 , level )
+					set level = tempInt/1000000
+					set tempInt = tempInt - (tempInt/1000000)*1000000
+					call setLM( whichUnit , Attr_Ability_mana_FU_1000000 , level )
 					set level = tempInt/100000
 					set tempInt = tempInt - (tempInt/100000)*100000
 					call setLM( whichUnit , Attr_Ability_mana_FU_100000 , level )
@@ -998,12 +1151,20 @@ struct hAttr
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000,    1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10000,    1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100000,    1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000,    1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10000,    1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100000,    1 )
 		        set tempInt = R2I(futureVal)
 				if(tempInt>=0)then
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10000, (tempInt/10000)+1 )
+		            set tempInt = tempInt - (tempInt/10000)*10000
 			        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000, (tempInt/1000)+1 )
 		            set tempInt = tempInt - (tempInt/1000)*1000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100, (tempInt/100)+1 )
@@ -1013,6 +1174,10 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1, tempInt+1 )
 		        else
 		            set tempInt = IAbsBJ(tempInt)
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10000, (tempInt/10000)+1 )
+		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000, (tempInt/1000)+1 )
 		            set tempInt = tempInt - (tempInt/1000)*1000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100, (tempInt/100)+1 )
@@ -1033,11 +1198,15 @@ struct hAttr
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1,  1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_10, 1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_100,1 )
+	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1000,1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1,  1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_10, 1 )
 	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_100,1 )
+	        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1000,1 )
 	        	set tempInt = R2I(futureVal)
 	        	if(tempInt>0)then
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1000, tempInt/1000+1 )
+		            set tempInt = tempInt - (tempInt/1000)*1000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_100, tempInt/100+1 )
 		            set tempInt = tempInt - (tempInt/100)*100
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_10, tempInt/10+1 )
@@ -1045,6 +1214,8 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1, tempInt+1 )
 		        elseif(tempInt<0)then
 		            set tempInt = IAbsBJ(tempInt)
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1000, tempInt/1000+1 )
+		            set tempInt = tempInt - (tempInt/1000)*1000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_100, tempInt/100+1 )
 		            set tempInt = tempInt - (tempInt/100)*100
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_10, tempInt/10+1 )
@@ -1060,6 +1231,18 @@ struct hAttr
 				endif
 		        set tempInt = R2I(diff)
 		        if( tempInt>0 )then
+					set level = tempInt/100000000
+					set tempInt = tempInt - (tempInt/100000000)*100000000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_100000000 , level )
+					set level = tempInt/10000000
+					set tempInt = tempInt - (tempInt/10000000)*10000000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_10000000 , level )
+					set level = tempInt/1000000
+					set tempInt = tempInt - (tempInt/1000000)*1000000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_1000000 , level )
+					set level = tempInt/100000
+					set tempInt = tempInt - (tempInt/100000)*100000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_100000 , level )
 					set level = tempInt/10000
 					set tempInt = tempInt - (tempInt/10000)*10000
 					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_10000 , level )
@@ -1077,6 +1260,18 @@ struct hAttr
 					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_1 , level )
 				elseif( tempInt<0 )then
 					set tempInt = IAbsBJ(tempInt)
+					set level = tempInt/100000000
+					set tempInt = tempInt - (tempInt/100000000)*100000000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_100000000 , level )
+					set level = tempInt/10000000
+					set tempInt = tempInt - (tempInt/10000000)*10000000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_10000000 , level )
+					set level = tempInt/1000000
+					set tempInt = tempInt - (tempInt/1000000)*1000000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_1000000 , level )
+					set level = tempInt/100000
+					set tempInt = tempInt - (tempInt/100000)*100000
+					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_100000 , level )
 					set level = tempInt/10000
 					set tempInt = tempInt - (tempInt/10000)*10000
 					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_10000 , level )
@@ -1107,13 +1302,29 @@ struct hAttr
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1000,    1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1000000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10000000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100000000,   1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1000,    1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1000000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000000,   1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100000000,   1 )
 		        set tempInt = R2I(futureVal)
 				if(tempInt>=0)then
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100000000, (tempInt/100000000)+1 )
+		            set tempInt = tempInt - (tempInt/100000000)*100000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1000, (tempInt/1000)+1 )
@@ -1125,6 +1336,14 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_1, tempInt+1 )
 		        else
 		            set tempInt = IAbsBJ(tempInt)
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100000000, (tempInt/100000000)+1 )
+		            set tempInt = tempInt - (tempInt/100000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_10000, (tempInt/1000)+1 )
@@ -1149,13 +1368,25 @@ struct hAttr
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_100,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_100000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1000000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10000000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1,        1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_100,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_100000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1000000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10000000,     1 )
 		        set tempInt = R2I(futureVal)
 		        if(tempInt>=0)then
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1000, (tempInt/1000)+1 )
@@ -1167,6 +1398,12 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_1, tempInt+1 )
 		        else
 		            set tempInt = IAbsBJ(tempInt)
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_str_FU_1000, (tempInt/1000)+1 )
@@ -1191,13 +1428,25 @@ struct hAttr
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_100,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_100000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1000000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10000000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1,        1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_100,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_100000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1000000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10000000,     1 )
 		        set tempInt = R2I(futureVal)
 		        if(tempInt>=0)then
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1000, (tempInt/1000)+1 )
@@ -1209,6 +1458,12 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_1, tempInt+1 )
 		        else
 		            set tempInt = IAbsBJ(tempInt)
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_agi_FU_1000, (tempInt/1000)+1 )
@@ -1233,13 +1488,25 @@ struct hAttr
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_100,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_100000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1000000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10000000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1,        1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10,       1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_100,      1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000,     1 )
 		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_100000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000000,     1 )
+		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000000,     1 )
 		        set tempInt = R2I(futureVal)
 		        if(tempInt>=0)then
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		        	call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1000, (tempInt/1000)+1 )
@@ -1251,6 +1518,12 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_1, tempInt+1 )
 		        else
 		            set tempInt = IAbsBJ(tempInt)
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000000, (tempInt/10000000)+1 )
+		            set tempInt = tempInt - (tempInt/10000000)*10000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000000, (tempInt/1000000)+1 )
+		            set tempInt = tempInt - (tempInt/1000000)*1000000
+					call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_100000, (tempInt/100000)+1 )
+		            set tempInt = tempInt - (tempInt/100000)*100000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000, (tempInt/10000)+1 )
 		            set tempInt = tempInt - (tempInt/10000)*10000
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000, (tempInt/1000)+1 )
@@ -1420,6 +1693,58 @@ struct hAttr
 			return true
 		endif
 		return false
+	endmethod
+
+	public static method resetSkill takes unit whichUnit returns nothing
+		local integer uhid = GetHandleId(whichUnit)
+		local real life = LoadReal( hash_attr , uhid , ATTR_FLAG_LIFE )
+		local real mana = LoadReal( hash_attr , uhid , ATTR_FLAG_MANA )
+		local real move = LoadReal( hash_attr , uhid , ATTR_FLAG_MOVE )
+		local real strGreen = LoadReal( hash_attr , uhid , ATTR_FLAG_STR )
+		local real agiGreen = LoadReal( hash_attr , uhid , ATTR_FLAG_AGI )
+		local real intGreen = LoadReal( hash_attr , uhid , ATTR_FLAG_INT )
+		local real strWhite = LoadReal( hash_attr , uhid , ATTR_FLAG_STR_WHITE )
+		local real agiWhite = LoadReal( hash_attr , uhid , ATTR_FLAG_AGI_WHITE )
+		local real intWhite = LoadReal( hash_attr , uhid , ATTR_FLAG_INT_WHITE )
+		local real attackPhysical = LoadReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL )
+		local real attackMagic = LoadReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC )
+		local real attackSpeed = LoadReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED )
+		local real defend = LoadReal( hash_attr , uhid , ATTR_FLAG_DEFEND )
+		//注册技能
+		call regAllAttrSkill(whichUnit)
+		//弥补属性
+		call SetHeroStr(whichUnit,R2I(strWhite),true)
+		call SetHeroAgi(whichUnit,R2I(agiWhite),true)
+		call SetHeroInt(whichUnit,R2I(intWhite),true)
+		if( move < 0 ) then
+			call SetUnitMoveSpeed( whichUnit , 0 )
+		else
+			if(hcamera.model=="zoomin")then
+				call SetUnitMoveSpeed( whichUnit , R2I(move*0.5) )
+			else
+				call SetUnitMoveSpeed( whichUnit , R2I(move) )
+			endif
+		endif
+
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_LIFE , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit) )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_STR , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_AGI , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_INT , 0 )
+
+		call thistype.addLife(whichUnit,life-GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit),0)
+		call thistype.addMana(whichUnit,mana-GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit),0)
+		call thistype.addStr(whichUnit,strGreen,0)
+		call thistype.addAgi(whichUnit,agiGreen,0)
+		call thistype.addInt(whichUnit,intGreen,0)
+		call thistype.addAttackPhysical(whichUnit,attackPhysical,0)
+		call thistype.addAttackMagic(whichUnit,attackMagic,0)
+		call thistype.addAttackSpeed(whichUnit,attackSpeed,0)
+		call thistype.addDefend(whichUnit,defend,0)
 	endmethod
 
 	private static method setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing

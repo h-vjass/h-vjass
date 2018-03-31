@@ -4,6 +4,7 @@
 #include "filter.j"
 #include "time.j"
 #include "effect.j"
+#include "lightning.j"
 #include "math.j"
 #include "rect.j"
 #include "unit.j"

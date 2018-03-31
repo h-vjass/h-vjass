@@ -51,6 +51,7 @@ struct hTest
 		local integer i=0
 		local integer j=0
 		local integer rand=0
+		local hAttrBean hattrbean
 
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
@@ -61,6 +62,8 @@ struct hTest
 		//call hattrEffect.setSwimOdds(u,30,0)
 		//call hattrEffect.setSwimDuring(u,1.00,0)
 		//测试攻击特效
+		call hattr.addLife(u,10000,0)
+		call hattr.addPunish(u,1000,0)
 		call hattr.addAttackHuntType(u,"fire",10)
 		call hattr.addAttackHuntType(u,"water",20)
 		call hattr.addAttackHuntType(u,"thunder",30)
@@ -78,8 +81,20 @@ struct hTest
 		call hattrEffect.setPoisonDuring(u,10.00,0)
 		call hattrEffect.setFireVal(u,1.30,0)
 		call hattrEffect.setFireDuring(u,10.00,0)
-		call hattrEffect.setBombVal(u,50,0)
-		call hattrEffect.setBombRange(u,300.00,0)
+
+		//call hattrEffect.setBombVal(u,50,0)
+		//call hattrEffect.setBombRange(u,300.00,0)
+
+		//call hattrEffect.setLightningChainOdds(u,50.00,0)
+		//call hattrEffect.setLightningChainVal(u,100.00,0)
+		//call hattrEffect.setLightningChainQty(u,5,0)
+		//call hattrEffect.setLightningChainReduce(u,5.00,0)
+
+		call hattrEffect.setCrackFlyOdds(u,50.00,0)
+		call hattrEffect.setCrackFlyVal(u,300.00,0)
+		call hattrEffect.setCrackFlyDistance(u,500,0)
+		call hattrEffect.setCrackFlyHigh(u,50,0)
+
 		//call hattrEffect.setFetterOdds(u,50,0)
 		//call hattrEffect.setFetterDuring(u,10.00,0)
 		//call hattrEffect.setFreezeVal(u,50,0)
@@ -154,6 +169,13 @@ struct hTest
 			set i=i+1
 		endloop
 		call wbean.destroy()
+
+		set hattrbean = hAttrBean.create()
+		set hattrbean.attackPhysical = 1000
+		call hconsole.error("name"+GetUnitName(u))
+		call hskill.shapeshift(u,5.0,'A00D','A00E',"",hattrbean)
+		call hconsole.error("name"+GetUnitName(u))
+		call hattrbean.destroy()
 
 	endmethod
 
