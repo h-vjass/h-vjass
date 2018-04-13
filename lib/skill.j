@@ -11,7 +11,7 @@ endglobals
 struct hSkill
 
     static method create takes nothing returns hSkill
-        local hAbility x = 0
+        local hSkill x = 0
         set x = hSkill.allocate()
         return x
     endmethod
@@ -207,7 +207,7 @@ struct hSkill
             if(xy>0)then
                 set hxy.x = GetUnitX(toUnit)
                 set hxy.y = GetUnitY(toUnit)
-                set hxy = hmath.polarProjection(hxy, xy, originDeg)
+                set hxy = hlogic.polarProjection(hxy, xy, originDeg)
                 call SetUnitFacing( toUnit, originFacing )
                 call SetUnitPosition( toUnit, hxy.x, hxy.y )
             endif
@@ -220,7 +220,7 @@ struct hSkill
             if(xy>0)then
                 set hxy.x = GetUnitX(toUnit)
                 set hxy.y = GetUnitY(toUnit)
-                set hxy = hmath.polarProjection(hxy, xy, originDeg)
+                set hxy = hlogic.polarProjection(hxy, xy, originDeg)
                 call SetUnitFacing( toUnit, originFacing )
                 call SetUnitPosition( toUnit, hxy.x, hxy.y )
             endif

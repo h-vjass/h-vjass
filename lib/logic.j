@@ -1,14 +1,46 @@
 //算法
 globals
-    hMath hmath
+	hashtable hash_hlogic = null
+    hLogic hlogic
     hXY hxy
 endglobals
 struct hXY
 	public real x = 0
 	public real y = 0
 endstruct
-struct hMath
+struct hLogic
 
+	private static integer HASH_KEY_CHINA_QTY_CACHE = 21
+	private static integer HASH_KEY_HEX2STR_CACHE = 31
+	private static integer HASH_KEY_STR2HEX_CACHE = 32
+	private static integer HASH_KEY_CHAR = 44
+	private static integer HASH_KEY_CHARNUM = 45
+	private static string bincharmap  ="01"
+    private static string octcharmap = "012345678"
+    private static string hexcharmap = "0123456789ABCDEF"
+    private static string idcharmap = ".................................!.#$%&'()*+,-./0123456789:;<=>.@ABCDEFGHIJKLMNOPQRSTUVWXYZ[.]^_`abcdefghijklmnopqrstuvwxyz{|}~................................................................................................................................."
+
+	static method create takes nothing returns hLogic
+        local hLogic x = 0
+		local integer i = 1
+		local string objname = GetObjectName('A038')
+		local string str = ""
+        set x = hLogic.allocate()
+		call SaveStr(hash_hlogic,HASH_KEY_CHAR,0,"")
+		call SaveInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(str),0)
+		loop
+			exitwhen i>255
+			set str = SubString(objname,i-1,i)
+			call SaveStr(hash_hlogic,HASH_KEY_CHAR,i,str)
+			call SaveInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(str),i)
+			set i=i+1
+		endloop
+		set str = "}"
+		call SaveStr(hash_hlogic,HASH_KEY_CHAR,0x7D,str)
+		call SaveInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(str),0x7D)
+        return x
+    endmethod
+	
 	//绝对值
 	public method rabs takes real value returns real
 		return RAbsBJ(value)
@@ -54,7 +86,7 @@ struct hMath
 	endmethod
 
 	//整型格式化
-	public method integerformat takes integer value returns string
+	public static method integerformat takes integer value returns string
 		local string s = ""
 		if(value>100000000)then
 			set s = I2S(value/100000000)+"Y"
@@ -67,7 +99,7 @@ struct hMath
 	endmethod
 
 	//字符串截取
-	public method substr takes string haystack,integer start,integer len returns string
+	public static method substr takes string haystack,integer start,integer len returns string
 		local integer haystackLen = StringLength(haystack)
 		local integer iend = start+len
 		if(start>=0)then
@@ -84,7 +116,7 @@ struct hMath
 	endmethod
 
 	//找出字符串needle在haystack的位置，找不到返回-1 同php
-	public method strpos takes string haystack,string needle returns integer
+	public static method strpos takes string haystack,string needle returns integer
 		local integer i = 0
 		local integer site = -1
 		local integer haystackLen = StringLength(haystack)
@@ -100,6 +132,117 @@ struct hMath
 			endloop
 		endif
 		return site
+	endmethod
+
+	//按进制map 将字符串转换成整数
+	private static method str2intByMap takes string s,string map returns integer
+		local integer i = StringLength(s)
+		local integer m = 0
+		local integer n = StringLength(map)
+		local integer f = -1
+		loop
+			exitwhen i == 0
+			set f = thistype.strpos(map, SubString(s, i - 1, i)) * R2I(Pow(n, I2R(StringLength(s) - i)))
+			if f == -1 then
+				return m
+			endif
+			set m = m + f
+			set i = i - 1
+		endloop
+		return m
+	endmethod
+
+	//按进制map 将整数转换成字符串
+	private static method int2strByMap takes integer m,string map returns string
+		local integer i = m
+		local string s = ""
+		local integer n = StringLength(map)
+		loop
+			exitwhen i == 0
+			set s = thistype.substr(map, ModuloInteger(i, n), 1) + s
+			set i = i / n
+		endloop
+		return s
+	endmethod
+
+	private static method asc takes string s returns integer
+		if(s==null or s=="")then
+			return 0
+		endif
+		if(StringLength(s)>1)then
+			return -1
+		endif
+		return LoadInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(s))
+	endmethod
+
+	private static method chr takes integer i returns string
+		return LoadStr(hash_hlogic,HASH_KEY_CHAR,i)
+	endmethod
+
+	public static method getChinaQty takes string s returns integer 
+		local integer chinaQty = LoadInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s))
+		local integer i = 0   
+		local integer l = 0
+		local string ss = null
+		local string Echar = null
+		if(chinaQty<=0)then
+		    set chinaQty = 0
+			set ss = LoadStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s))
+			if(ss == null)then
+				set l = StringLength(s)
+				loop
+					exitwhen i >= l
+					set Echar = thistype.int2strByMap(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
+					set ss = ss + Echar
+					if(Echar == "E1" or Echar == "E2" or Echar == "E3" or Echar == "E4" or Echar == "E5" or Echar == "E6" or Echar == "E7" or Echar == "E8" or Echar == "E9")then
+						set chinaQty = chinaQty + 1
+					endif
+					set i = i+1
+				endloop
+				call SaveInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s),chinaQty)
+				call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),ss)
+			endif
+		endif
+		return chinaQty
+	endmethod
+
+	public static method hex2str takes string s returns string 
+		local integer i = 0   
+		local integer l = 0
+		local string ss = LoadStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s))
+		local string Echar = null
+		local integer chinaQty = 0
+		if(ss == null)then
+			set l = StringLength(s)
+			loop
+				exitwhen i >= l
+				set Echar = thistype.int2strByMap(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
+				set ss = ss + Echar
+				if(Echar == "E1" or Echar == "E2" or Echar == "E3" or Echar == "E4" or Echar == "E5" or Echar == "E6" or Echar == "E7" or Echar == "E8" or Echar == "E9")then
+					set chinaQty = chinaQty + 1
+				endif
+				set i = i+1
+			endloop
+			call SaveInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s),chinaQty)
+			call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),ss)
+		endif
+		return ss
+	endmethod
+
+	public static method str2hex takes string s returns string
+		local integer i = 0   
+		local integer l = StringLength(s)
+		local string ss = LoadStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s))
+		if(ss == null)then
+			set l = StringLength(s)
+			loop
+				exitwhen i >= l        
+				set ss = ss + thistype.chr(thistype.str2intByMap(thistype.substr(s,i,2),hexcharmap))
+				set i = i + 2
+			endloop
+			call SaveStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s),ss)
+		endif
+		return ss
 	endmethod
 
 endstruct

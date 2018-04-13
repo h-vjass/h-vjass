@@ -440,7 +440,7 @@ struct hAttrHunt
         //*重要* hjass必须设定护甲因子为0，这里为了修正魔兽负护甲依然因子保持0.06的bug
         //当护甲x为负时，最大-20,公式2-(1-a)^abs(x)
         if(toUnitDefend<0 and toUnitDefend>=-20)then
-            set bean.damage =  bean.damage / (2-Pow(0.94,hmath.rabs(toUnitDefend)))
+            set bean.damage =  bean.damage / (2-Pow(0.94,hlogic.rabs(toUnitDefend)))
         elseif(toUnitDefend<0 and toUnitDefend<-20)then
             set bean.damage =  bean.damage / (2-Pow(0.94,20))
         endif
@@ -619,67 +619,67 @@ struct hAttrHunt
             if(fromUnitNaturalPoison < -100)then
             set fromUnitNaturalPoison = -100
         endif
-        if( hmath.strpos(bean.huntType,"fire")!=-1 and fromUnitNaturalFire!=0 )then
+        if( hlogic.strpos(bean.huntType,"fire")!=-1 and fromUnitNaturalFire!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalFire*0.01)
             set fromUnitHuntEffectFireVal = fromUnitHuntEffectFireVal * (1.0+fromUnitNaturalFire*0.01)
             //set fromUnitHuntEffectBombVal = fromUnitHuntEffectBombVal * (1.0+fromUnitNaturalFire*0.01)
             set realDamageString = realDamageString+"火"
             set realDamageStringColor = "f45454"
         endif
-        if( hmath.strpos(bean.huntType,"soil")!=-1 and fromUnitNaturalSoil!=0 )then
+        if( hlogic.strpos(bean.huntType,"soil")!=-1 and fromUnitNaturalSoil!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalSoil*0.01)
             set fromUnitHuntEffectDirtVal = fromUnitHuntEffectDirtVal * (1.0+fromUnitNaturalSoil*0.01)
             set fromUnitHuntEffectHeavyVal = fromUnitHuntEffectHeavyVal * (1.0+fromUnitNaturalSoil*0.01)
             set realDamageString = realDamageString+"土"
             set realDamageStringColor = "dbb745"
         endif
-        if( hmath.strpos(bean.huntType,"water")!=-1 and fromUnitNaturalWater!=0 )then
+        if( hlogic.strpos(bean.huntType,"water")!=-1 and fromUnitNaturalWater!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalWater*0.01)
             set fromUnitHuntEffectFreezeDuring = fromUnitHuntEffectFreezeDuring * (1.0+fromUnitNaturalWater*0.01)
             set fromUnitHuntEffectColdDuring = fromUnitHuntEffectColdDuring * (1.0+fromUnitNaturalWater*0.01)
             set realDamageString = realDamageString+"水"
             set realDamageStringColor = "85adee"
         endif
-        if( hmath.strpos(bean.huntType,"ice")!=-1 and fromUnitNaturalIce!=0 )then
+        if( hlogic.strpos(bean.huntType,"ice")!=-1 and fromUnitNaturalIce!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalIce*0.01)
             set fromUnitHuntEffectFreezeVal = fromUnitHuntEffectFreezeVal * (1.0+fromUnitNaturalIce*0.01)
             set fromUnitHuntEffectColdVal = fromUnitHuntEffectColdVal * (1.0+fromUnitNaturalIce*0.01)
             set realDamageString = realDamageString+"冰"
             set realDamageStringColor = "85f4f4"
         endif
-        if( hmath.strpos(bean.huntType,"wind")!=-1 and fromUnitNaturalWind!=0 )then
+        if( hlogic.strpos(bean.huntType,"wind")!=-1 and fromUnitNaturalWind!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalWind*0.01)
             set fromUnitHuntEffectCrackFlyVal = fromUnitHuntEffectCrackFlyVal * (1.0+fromUnitNaturalWind*0.01)
             set fromUnitHuntEffectSwimDuring = fromUnitHuntEffectSwimDuring * (1.0+fromUnitNaturalWind*0.01)
             set realDamageString = realDamageString+"风"
             set realDamageStringColor = "b6d7a8"
         endif
-        if( hmath.strpos(bean.huntType,"light")!=-1 and fromUnitNaturalLight!=0 )then
+        if( hlogic.strpos(bean.huntType,"light")!=-1 and fromUnitNaturalLight!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalLight*0.01)
             set fromUnitHuntEffectBlindDuring = fromUnitHuntEffectBlindDuring * (1.0+fromUnitNaturalLight*0.01)
             set realDamageString = realDamageString+"光"
             set realDamageStringColor = "f9f99c"
         endif
-        if( hmath.strpos(bean.huntType,"dark")!=-1 and fromUnitNaturalDark!=0 )then
+        if( hlogic.strpos(bean.huntType,"dark")!=-1 and fromUnitNaturalDark!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalDark*0.01)
             set fromUnitHuntEffectCorrosionDuring = fromUnitHuntEffectCorrosionDuring * (1.0+fromUnitNaturalDark*0.01)
             set fromUnitHuntEffectChaosDuring = fromUnitHuntEffectChaosDuring * (1.0+fromUnitNaturalDark*0.01)
             set realDamageString = realDamageString+"暗"
             set realDamageStringColor = "383434"
         endif
-        if( hmath.strpos(bean.huntType,"wood")!=-1 and fromUnitNaturalWood!=0 )then
+        if( hlogic.strpos(bean.huntType,"wood")!=-1 and fromUnitNaturalWood!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalWood*0.01)
             set fromUnitHuntEffectTwineDuring = fromUnitHuntEffectTwineDuring * (1.0+fromUnitNaturalWood*0.01)
             set realDamageString = realDamageString+"木"
             set realDamageStringColor = "7cbd60"
         endif
-        if( hmath.strpos(bean.huntType,"thunder")!=-1 and fromUnitNaturalThunder!=0 )then
+        if( hlogic.strpos(bean.huntType,"thunder")!=-1 and fromUnitNaturalThunder!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalThunder*0.01)
             set fromUnitHuntEffectLightningChainVal = fromUnitHuntEffectLightningChainVal * (1.0+fromUnitNaturalThunder*0.01)
             set realDamageString = realDamageString+"雷"
             set realDamageStringColor = "7cbd60"
         endif
-        if( hmath.strpos(bean.huntType,"poison")!=-1 and fromUnitNaturalPoison!=0 )then
+        if( hlogic.strpos(bean.huntType,"poison")!=-1 and fromUnitNaturalPoison!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalPoison*0.01)
             set fromUnitHuntEffectPoisonVal = fromUnitHuntEffectPoisonVal * (1.0+fromUnitNaturalPoison*0.01)
             set fromUnitHuntEffectWeakDuring = fromUnitHuntEffectWeakDuring * (1.0+fromUnitNaturalPoison*0.01)
@@ -688,7 +688,7 @@ struct hAttrHunt
         endif
 
         //计算物理暴击,满30000
-        if( hmath.strpos(bean.huntType,"physical")!=-1 and (fromUnitKnocking-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitMortalOppose)/30) ) then
+        if( hlogic.strpos(bean.huntType,"physical")!=-1 and (fromUnitKnocking-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitMortalOppose)/30) ) then
             set realDamage = realDamage * (1+fromUnitAttackPhysicalPercent * (fromUnitKnocking-toUnitMortalOppose)*0.0004)
             set toUnitAvoid = toUnitAvoid * 0.9//触发暴击，回避减少10%
             set isKnocking = true
@@ -715,7 +715,7 @@ struct hAttrHunt
         endif
 
         //计算魔法暴击,满20000
-        if( hmath.strpos(bean.huntType,"magic")!=-1 and (fromUnitViolence-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitMortalOppose)/20)) then
+        if( hlogic.strpos(bean.huntType,"magic")!=-1 and (fromUnitViolence-toUnitMortalOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitMortalOppose)/20)) then
             set realDamage = realDamage * (1+fromUnitAttackMagicPercent * (fromUnitViolence-toUnitMortalOppose)*0.0002)
             set toUnitAvoid = toUnitAvoid * 0.9//触发暴击，回避减少10%
             set isViolence = true
@@ -741,11 +741,11 @@ struct hAttrHunt
             call hevtBean.destroy()
         endif
             //如果遇到真实伤害，减少50%的回避效果
-        if( hmath.strpos(bean.huntType,"real")!=-1 )then
+        if( hlogic.strpos(bean.huntType,"real")!=-1 )then
             set toUnitAvoid = toUnitAvoid * 0.8
         endif
         //如果遇到绝对伤害，减少50%的回避效果
-        if( hmath.strpos(bean.huntType,"absolute")!=-1 )then
+        if( hlogic.strpos(bean.huntType,"absolute")!=-1 )then
             set toUnitAvoid = toUnitAvoid * 0.5
         endif
         //计算回避 X 命中
@@ -772,11 +772,11 @@ struct hAttrHunt
         endif
 
         //计算混合了物理的杂乱伤害，护甲效果减弱
-        if( bean.huntType!="physical" and hmath.strpos(bean.huntType,"physical")!=-1 and toUnitDefend>0 )then
+        if( bean.huntType!="physical" and hlogic.strpos(bean.huntType,"physical")!=-1 and toUnitDefend>0 )then
             set toUnitDefend = toUnitDefend * fromUnitAttackPhysicalPercent
         endif
         //计算护甲
-        if( hmath.strpos(bean.huntType,"physical")!=-1 and toUnitDefend!=0 )then
+        if( hlogic.strpos(bean.huntType,"physical")!=-1 and toUnitDefend!=0 )then
             if(toUnitDefend>0)then
                 set realDamage = realDamage * (1-toUnitDefend/(toUnitDefend+200))
             else
@@ -785,11 +785,11 @@ struct hAttrHunt
             endif
         endif
         //计算混合了魔法的杂乱伤害，魔抗效果减弱
-        if( bean.huntType!="magic" and hmath.strpos(bean.huntType,"magic")!=-1 and toUnitResistance>0 )then
+        if( bean.huntType!="magic" and hlogic.strpos(bean.huntType,"magic")!=-1 and toUnitResistance>0 )then
             set toUnitResistance = toUnitResistance * fromUnitAttackMagicPercent
         endif
         //计算魔抗
-        if( hmath.strpos(bean.huntType,"magic")!=-1 )then
+        if( hlogic.strpos(bean.huntType,"magic")!=-1 )then
             if( toUnitResistance!=0 )then
                 if(toUnitResistance>=100)then
                     set realDamage = 0
@@ -808,7 +808,7 @@ struct hAttrHunt
             endif
         endif
         //计算单位是否无敌且伤害类型不混合绝对伤害（无敌属性为百分比计算，被动触发抵挡一次）
-        if( hmath.strpos(bean.huntType,"absolute")==-1 and (his.invincible(toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
+        if( hlogic.strpos(bean.huntType,"absolute")==-1 and (his.invincible(toUnit)==true or GetRandomInt(1,100)<R2I(toUnitInvincible)  ))then
             set realDamage = 0
             return
         endif

@@ -141,6 +141,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveTriggerHandle(hash_time, timerHandleId, k, value)
     endmethod
+    public method setMultiboard takes timer t,integer k,multiboard value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveMultiboardHandle(hash_time, timerHandleId, k, value)
+    endmethod
     //GET
     public method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
@@ -205,6 +209,10 @@ struct hTime
     public method getTrigger takes timer t,integer k returns trigger
         local integer timerHandleId = GetHandleId(t)
         return LoadTriggerHandle(hash_time, timerHandleId, k)
+    endmethod
+     public method getMultiboard takes timer t,integer k returns multiboard
+        local integer timerHandleId = GetHandleId(t)
+        return LoadMultiboardHandle(hash_time, timerHandleId, k)
     endmethod
 
     /**

@@ -34,9 +34,9 @@ struct hAward
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
         //TODO 增益
-        set realGold 	= realGold + R2I( I2R(gold) * hattr.getGoldRatio(whichUnit) / 100.00 )
-        set realLumber	= realLumber + R2I( I2R(lumber) * hattr.getLumberRatio(whichUnit) / 100.00 )
-        set realExp		= realExp + R2I( I2R(exp) * hattr.getExpRatio(whichUnit) / 100.00 )
+        set realGold 	= realGold + R2I( I2R(gold) * hplayer.getGoldRatio(GetOwningPlayer( whichUnit )) / 100.00 )
+        set realLumber	= realLumber + R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
+        set realExp		= realExp + R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )
 
         if(exp > 0 and his.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )

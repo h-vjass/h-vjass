@@ -5,7 +5,6 @@
 library hJass initializer init
 
 	private function init takes nothing returns nothing
-		//*请勿在不了解的情况下轻易修改
 		//哈希表初始化
 		call FlushParentHashtable( hash_ability )
 		call FlushParentHashtable( hash_skill )
@@ -22,6 +21,8 @@ library hJass initializer init
 		call FlushParentHashtable( hash_unit )
 		call FlushParentHashtable( hash_time )
 		call FlushParentHashtable( hash_weather )
+		call FlushParentHashtable( hash_hlogic )
+		call FlushParentHashtable( hash_hmb )
 		set hash_ability = InitHashtable()
 		set hash_skill = InitHashtable()
 		set hash_attr = InitHashtable()
@@ -37,10 +38,12 @@ library hJass initializer init
 		set hash_unit = InitHashtable()
 		set hash_time = InitHashtable()
 		set hash_weather = InitHashtable()
+		set hash_hlogic = InitHashtable()
+		set hash_hmb = InitHashtable()
 		//系统初始化
 		set his = hIs.create()
 		set htime = hTime.create()
-		set hmath = hMath.create()
+		set hlogic = hLogic.create()
 		set hxy = hXY.create()
 		set hconsole = hConsole.create()
 		set hmedia = hMedia.create()

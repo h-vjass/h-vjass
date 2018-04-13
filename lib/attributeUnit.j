@@ -28,6 +28,21 @@ struct hAttrUnit
 			call hattr.setAttackHuntType(whichUnit,bean.attackHuntType,during)
 		endif
 		//COPY
+		if(bean.goldRatio>0)then
+			call hplayer.addGoldRatio(GetOwningPlayer(whichUnit),bean.goldRatio,during)
+		elseif(bean.goldRatio<0)then
+			call hplayer.subGoldRatio(GetOwningPlayer(whichUnit),bean.goldRatio,during)
+		endif
+		if(bean.lumberRatio>0)then
+			call hplayer.addLumberRatio(GetOwningPlayer(whichUnit),bean.lumberRatio,during)
+		elseif(bean.lumberRatio<0)then
+			call hplayer.subLumberRatio(GetOwningPlayer(whichUnit),bean.lumberRatio,during)
+		endif
+		if(bean.expRatio>0)then
+			call hplayer.addExpRatio(GetOwningPlayer(whichUnit),bean.expRatio,during)
+		elseif(bean.expRatio<0)then
+			call hplayer.subExpRatio(GetOwningPlayer(whichUnit),bean.expRatio,during)
+		endif
 		if(bean.life>0)then
 			call hattr.addLife(whichUnit,bean.life,during)
 		elseif(bean.life<0)then
@@ -202,21 +217,6 @@ struct hAttrUnit
 			call hattr.addSplitRange(whichUnit,bean.splitRange,during)
 		elseif(bean.splitRange<0)then
 			call hattr.subSplitRange(whichUnit,bean.splitRange,during)
-		endif
-		if(bean.goldRatio>0)then
-			call hattr.addGoldRatio(whichUnit,bean.goldRatio,during)
-		elseif(bean.goldRatio<0)then
-			call hattr.subGoldRatio(whichUnit,bean.goldRatio,during)
-		endif
-		if(bean.lumberRatio>0)then
-			call hattr.addLumberRatio(whichUnit,bean.lumberRatio,during)
-		elseif(bean.lumberRatio<0)then
-			call hattr.subLumberRatio(whichUnit,bean.lumberRatio,during)
-		endif
-		if(bean.expRatio>0)then
-			call hattr.addExpRatio(whichUnit,bean.expRatio,during)
-		elseif(bean.expRatio<0)then
-			call hattr.subExpRatio(whichUnit,bean.expRatio,during)
 		endif
 		if(bean.swimOppose>0)then
 			call hattr.addSwimOppose(whichUnit,bean.swimOppose,during)

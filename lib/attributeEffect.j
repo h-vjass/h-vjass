@@ -316,7 +316,7 @@ public static method subLifeBackVal takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_VAL , whichUnit , -value, during )
 endmethod
 public static method coverLifeBackVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_VAL , whichUnit , hmath.coverAttrEffectVal(getLifeBackVal(whichUnit),value)-getLifeBackVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_VAL , whichUnit , hlogic.coverAttrEffectVal(getLifeBackVal(whichUnit),value)-getLifeBackVal(whichUnit) , during )
 endmethod
 public static method setLifeBackVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_VAL , whichUnit , value , during )
@@ -332,7 +332,7 @@ public static method subLifeBackDuring takes unit whichUnit , real value , real 
    call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_DURING , whichUnit , -value, during )
 endmethod
 public static method coverLifeBackDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_DURING , whichUnit , hmath.coverAttrEffectVal(getLifeBackDuring(whichUnit),value)-getLifeBackDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_DURING , whichUnit , hlogic.coverAttrEffectVal(getLifeBackDuring(whichUnit),value)-getLifeBackDuring(whichUnit) , during )
 endmethod
 public static method setLifeBackDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LIFE_BACK_DURING , whichUnit , value , during )
@@ -348,7 +348,7 @@ public static method subManaBackVal takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_VAL , whichUnit , -value, during )
 endmethod
 public static method coverManaBackVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_VAL , whichUnit , hmath.coverAttrEffectVal(getManaBackVal(whichUnit),value)-getManaBackVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_VAL , whichUnit , hlogic.coverAttrEffectVal(getManaBackVal(whichUnit),value)-getManaBackVal(whichUnit) , during )
 endmethod
 public static method setManaBackVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_VAL , whichUnit , value , during )
@@ -364,7 +364,7 @@ public static method subManaBackDuring takes unit whichUnit , real value , real 
    call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_DURING , whichUnit , -value, during )
 endmethod
 public static method coverManaBackDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_DURING , whichUnit , hmath.coverAttrEffectVal(getManaBackDuring(whichUnit),value)-getManaBackDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_DURING , whichUnit , hlogic.coverAttrEffectVal(getManaBackDuring(whichUnit),value)-getManaBackDuring(whichUnit) , during )
 endmethod
 public static method setManaBackDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MANA_BACK_DURING , whichUnit , value , during )
@@ -380,7 +380,7 @@ public static method subAttackSpeedVal takes unit whichUnit , real value , real 
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_VAL , whichUnit , -value, during )
 endmethod
 public static method coverAttackSpeedVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_VAL , whichUnit , hmath.coverAttrEffectVal(getAttackSpeedVal(whichUnit),value)-getAttackSpeedVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_VAL , whichUnit , hlogic.coverAttrEffectVal(getAttackSpeedVal(whichUnit),value)-getAttackSpeedVal(whichUnit) , during )
 endmethod
 public static method setAttackSpeedVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_VAL , whichUnit , value , during )
@@ -396,7 +396,7 @@ public static method subAttackSpeedDuring takes unit whichUnit , real value , re
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_DURING , whichUnit , -value, during )
 endmethod
 public static method coverAttackSpeedDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_DURING , whichUnit , hmath.coverAttrEffectVal(getAttackSpeedDuring(whichUnit),value)-getAttackSpeedDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_DURING , whichUnit , hlogic.coverAttrEffectVal(getAttackSpeedDuring(whichUnit),value)-getAttackSpeedDuring(whichUnit) , during )
 endmethod
 public static method setAttackSpeedDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_SPEED_DURING , whichUnit , value , during )
@@ -412,7 +412,7 @@ public static method subAttackPhysicalVal takes unit whichUnit , real value , re
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_VAL , whichUnit , -value, during )
 endmethod
 public static method coverAttackPhysicalVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_VAL , whichUnit , hmath.coverAttrEffectVal(getAttackPhysicalVal(whichUnit),value)-getAttackPhysicalVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_VAL , whichUnit , hlogic.coverAttrEffectVal(getAttackPhysicalVal(whichUnit),value)-getAttackPhysicalVal(whichUnit) , during )
 endmethod
 public static method setAttackPhysicalVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_VAL , whichUnit , value , during )
@@ -428,7 +428,7 @@ public static method subAttackPhysicalDuring takes unit whichUnit , real value ,
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_DURING , whichUnit , -value, during )
 endmethod
 public static method coverAttackPhysicalDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_DURING , whichUnit , hmath.coverAttrEffectVal(getAttackPhysicalDuring(whichUnit),value)-getAttackPhysicalDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_DURING , whichUnit , hlogic.coverAttrEffectVal(getAttackPhysicalDuring(whichUnit),value)-getAttackPhysicalDuring(whichUnit) , during )
 endmethod
 public static method setAttackPhysicalDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_PHYSICAL_DURING , whichUnit , value , during )
@@ -444,7 +444,7 @@ public static method subAttackMagicVal takes unit whichUnit , real value , real 
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_VAL , whichUnit , -value, during )
 endmethod
 public static method coverAttackMagicVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_VAL , whichUnit , hmath.coverAttrEffectVal(getAttackMagicVal(whichUnit),value)-getAttackMagicVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_VAL , whichUnit , hlogic.coverAttrEffectVal(getAttackMagicVal(whichUnit),value)-getAttackMagicVal(whichUnit) , during )
 endmethod
 public static method setAttackMagicVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_VAL , whichUnit , value , during )
@@ -460,7 +460,7 @@ public static method subAttackMagicDuring takes unit whichUnit , real value , re
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_DURING , whichUnit , -value, during )
 endmethod
 public static method coverAttackMagicDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_DURING , whichUnit , hmath.coverAttrEffectVal(getAttackMagicDuring(whichUnit),value)-getAttackMagicDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_DURING , whichUnit , hlogic.coverAttrEffectVal(getAttackMagicDuring(whichUnit),value)-getAttackMagicDuring(whichUnit) , during )
 endmethod
 public static method setAttackMagicDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_MAGIC_DURING , whichUnit , value , during )
@@ -476,7 +476,7 @@ public static method subMoveVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_MOVE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverMoveVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_MOVE_VAL , whichUnit , hmath.coverAttrEffectVal(getMoveVal(whichUnit),value)-getMoveVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_MOVE_VAL , whichUnit , hlogic.coverAttrEffectVal(getMoveVal(whichUnit),value)-getMoveVal(whichUnit) , during )
 endmethod
 public static method setMoveVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MOVE_VAL , whichUnit , value , during )
@@ -492,7 +492,7 @@ public static method subMoveDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_MOVE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverMoveDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_MOVE_DURING , whichUnit , hmath.coverAttrEffectVal(getMoveDuring(whichUnit),value)-getMoveDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_MOVE_DURING , whichUnit , hlogic.coverAttrEffectVal(getMoveDuring(whichUnit),value)-getMoveDuring(whichUnit) , during )
 endmethod
 public static method setMoveDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MOVE_DURING , whichUnit , value , during )
@@ -508,7 +508,7 @@ public static method subAimVal takes unit whichUnit , real value , real during r
    call setAttr( ATTR_FLAG_EFFECT_AIM_VAL , whichUnit , -value, during )
 endmethod
 public static method coverAimVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_AIM_VAL , whichUnit , hmath.coverAttrEffectVal(getAimVal(whichUnit),value)-getAimVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_AIM_VAL , whichUnit , hlogic.coverAttrEffectVal(getAimVal(whichUnit),value)-getAimVal(whichUnit) , during )
 endmethod
 public static method setAimVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_AIM_VAL , whichUnit , value , during )
@@ -524,7 +524,7 @@ public static method subAimDuring takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_AIM_DURING , whichUnit , -value, during )
 endmethod
 public static method coverAimDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_AIM_DURING , whichUnit , hmath.coverAttrEffectVal(getAimDuring(whichUnit),value)-getAimDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_AIM_DURING , whichUnit , hlogic.coverAttrEffectVal(getAimDuring(whichUnit),value)-getAimDuring(whichUnit) , during )
 endmethod
 public static method setAimDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_AIM_DURING , whichUnit , value , during )
@@ -540,7 +540,7 @@ public static method subStrVal takes unit whichUnit , real value , real during r
    call setAttr( ATTR_FLAG_EFFECT_STR_VAL , whichUnit , -value, during )
 endmethod
 public static method coverStrVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_STR_VAL , whichUnit , hmath.coverAttrEffectVal(getStrVal(whichUnit),value)-getStrVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_STR_VAL , whichUnit , hlogic.coverAttrEffectVal(getStrVal(whichUnit),value)-getStrVal(whichUnit) , during )
 endmethod
 public static method setStrVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_STR_VAL , whichUnit , value , during )
@@ -556,7 +556,7 @@ public static method subStrDuring takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_STR_DURING , whichUnit , -value, during )
 endmethod
 public static method coverStrDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_STR_DURING , whichUnit , hmath.coverAttrEffectVal(getStrDuring(whichUnit),value)-getStrDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_STR_DURING , whichUnit , hlogic.coverAttrEffectVal(getStrDuring(whichUnit),value)-getStrDuring(whichUnit) , during )
 endmethod
 public static method setStrDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_STR_DURING , whichUnit , value , during )
@@ -572,7 +572,7 @@ public static method subAgiVal takes unit whichUnit , real value , real during r
    call setAttr( ATTR_FLAG_EFFECT_AGI_VAL , whichUnit , -value, during )
 endmethod
 public static method coverAgiVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_AGI_VAL , whichUnit , hmath.coverAttrEffectVal(getAgiVal(whichUnit),value)-getAgiVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_AGI_VAL , whichUnit , hlogic.coverAttrEffectVal(getAgiVal(whichUnit),value)-getAgiVal(whichUnit) , during )
 endmethod
 public static method setAgiVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_AGI_VAL , whichUnit , value , during )
@@ -588,7 +588,7 @@ public static method subAgiDuring takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_AGI_DURING , whichUnit , -value, during )
 endmethod
 public static method coverAgiDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_AGI_DURING , whichUnit , hmath.coverAttrEffectVal(getAgiDuring(whichUnit),value)-getAgiDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_AGI_DURING , whichUnit , hlogic.coverAttrEffectVal(getAgiDuring(whichUnit),value)-getAgiDuring(whichUnit) , during )
 endmethod
 public static method setAgiDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_AGI_DURING , whichUnit , value , during )
@@ -604,7 +604,7 @@ public static method subIntVal takes unit whichUnit , real value , real during r
    call setAttr( ATTR_FLAG_EFFECT_INT_VAL , whichUnit , -value, during )
 endmethod
 public static method coverIntVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_INT_VAL , whichUnit , hmath.coverAttrEffectVal(getIntVal(whichUnit),value)-getIntVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_INT_VAL , whichUnit , hlogic.coverAttrEffectVal(getIntVal(whichUnit),value)-getIntVal(whichUnit) , during )
 endmethod
 public static method setIntVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_INT_VAL , whichUnit , value , during )
@@ -620,7 +620,7 @@ public static method subIntDuring takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_INT_DURING , whichUnit , -value, during )
 endmethod
 public static method coverIntDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_INT_DURING , whichUnit , hmath.coverAttrEffectVal(getIntDuring(whichUnit),value)-getIntDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_INT_DURING , whichUnit , hlogic.coverAttrEffectVal(getIntDuring(whichUnit),value)-getIntDuring(whichUnit) , during )
 endmethod
 public static method setIntDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_INT_DURING , whichUnit , value , during )
@@ -636,7 +636,7 @@ public static method subKnockingVal takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_KNOCKING_VAL , whichUnit , -value, during )
 endmethod
 public static method coverKnockingVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_KNOCKING_VAL , whichUnit , hmath.coverAttrEffectVal(getKnockingVal(whichUnit),value)-getKnockingVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_KNOCKING_VAL , whichUnit , hlogic.coverAttrEffectVal(getKnockingVal(whichUnit),value)-getKnockingVal(whichUnit) , during )
 endmethod
 public static method setKnockingVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_KNOCKING_VAL , whichUnit , value , during )
@@ -652,7 +652,7 @@ public static method subKnockingDuring takes unit whichUnit , real value , real 
    call setAttr( ATTR_FLAG_EFFECT_KNOCKING_DURING , whichUnit , -value, during )
 endmethod
 public static method coverKnockingDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_KNOCKING_DURING , whichUnit , hmath.coverAttrEffectVal(getKnockingDuring(whichUnit),value)-getKnockingDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_KNOCKING_DURING , whichUnit , hlogic.coverAttrEffectVal(getKnockingDuring(whichUnit),value)-getKnockingDuring(whichUnit) , during )
 endmethod
 public static method setKnockingDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_KNOCKING_DURING , whichUnit , value , during )
@@ -668,7 +668,7 @@ public static method subViolenceVal takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverViolenceVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_VAL , whichUnit , hmath.coverAttrEffectVal(getViolenceVal(whichUnit),value)-getViolenceVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_VAL , whichUnit , hlogic.coverAttrEffectVal(getViolenceVal(whichUnit),value)-getViolenceVal(whichUnit) , during )
 endmethod
 public static method setViolenceVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_VAL , whichUnit , value , during )
@@ -684,7 +684,7 @@ public static method subViolenceDuring takes unit whichUnit , real value , real 
    call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverViolenceDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_DURING , whichUnit , hmath.coverAttrEffectVal(getViolenceDuring(whichUnit),value)-getViolenceDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_DURING , whichUnit , hlogic.coverAttrEffectVal(getViolenceDuring(whichUnit),value)-getViolenceDuring(whichUnit) , during )
 endmethod
 public static method setViolenceDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_VIOLENCE_DURING , whichUnit , value , during )
@@ -700,7 +700,7 @@ public static method subHemophagiaVal takes unit whichUnit , real value , real d
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_VAL , whichUnit , -value, during )
 endmethod
 public static method coverHemophagiaVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_VAL , whichUnit , hmath.coverAttrEffectVal(getHemophagiaVal(whichUnit),value)-getHemophagiaVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_VAL , whichUnit , hlogic.coverAttrEffectVal(getHemophagiaVal(whichUnit),value)-getHemophagiaVal(whichUnit) , during )
 endmethod
 public static method setHemophagiaVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_VAL , whichUnit , value , during )
@@ -716,7 +716,7 @@ public static method subHemophagiaDuring takes unit whichUnit , real value , rea
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_DURING , whichUnit , -value, during )
 endmethod
 public static method coverHemophagiaDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_DURING , whichUnit , hmath.coverAttrEffectVal(getHemophagiaDuring(whichUnit),value)-getHemophagiaDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_DURING , whichUnit , hlogic.coverAttrEffectVal(getHemophagiaDuring(whichUnit),value)-getHemophagiaDuring(whichUnit) , during )
 endmethod
 public static method setHemophagiaDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_DURING , whichUnit , value , during )
@@ -732,7 +732,7 @@ public static method subHemophagiaSkillVal takes unit whichUnit , real value , r
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_VAL , whichUnit , -value, during )
 endmethod
 public static method coverHemophagiaSkillVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_VAL , whichUnit , hmath.coverAttrEffectVal(getHemophagiaSkillVal(whichUnit),value)-getHemophagiaSkillVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_VAL , whichUnit , hlogic.coverAttrEffectVal(getHemophagiaSkillVal(whichUnit),value)-getHemophagiaSkillVal(whichUnit) , during )
 endmethod
 public static method setHemophagiaSkillVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_VAL , whichUnit , value , during )
@@ -748,7 +748,7 @@ public static method subHemophagiaSkillDuring takes unit whichUnit , real value 
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_DURING , whichUnit , -value, during )
 endmethod
 public static method coverHemophagiaSkillDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_DURING , whichUnit , hmath.coverAttrEffectVal(getHemophagiaSkillDuring(whichUnit),value)-getHemophagiaSkillDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_DURING , whichUnit , hlogic.coverAttrEffectVal(getHemophagiaSkillDuring(whichUnit),value)-getHemophagiaSkillDuring(whichUnit) , during )
 endmethod
 public static method setHemophagiaSkillDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_DURING , whichUnit , value , during )
@@ -764,7 +764,7 @@ public static method subSplitVal takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_SPLIT_VAL , whichUnit , -value, during )
 endmethod
 public static method coverSplitVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_SPLIT_VAL , whichUnit , hmath.coverAttrEffectVal(getSplitVal(whichUnit),value)-getSplitVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_SPLIT_VAL , whichUnit , hlogic.coverAttrEffectVal(getSplitVal(whichUnit),value)-getSplitVal(whichUnit) , during )
 endmethod
 public static method setSplitVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_SPLIT_VAL , whichUnit , value , during )
@@ -780,7 +780,7 @@ public static method subSplitDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_SPLIT_DURING , whichUnit , -value, during )
 endmethod
 public static method coverSplitDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_SPLIT_DURING , whichUnit , hmath.coverAttrEffectVal(getSplitDuring(whichUnit),value)-getSplitDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_SPLIT_DURING , whichUnit , hlogic.coverAttrEffectVal(getSplitDuring(whichUnit),value)-getSplitDuring(whichUnit) , during )
 endmethod
 public static method setSplitDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_SPLIT_DURING , whichUnit , value , during )
@@ -796,7 +796,7 @@ public static method subLuckVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_LUCK_VAL , whichUnit , -value, during )
 endmethod
 public static method coverLuckVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LUCK_VAL , whichUnit , hmath.coverAttrEffectVal(getLuckVal(whichUnit),value)-getLuckVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LUCK_VAL , whichUnit , hlogic.coverAttrEffectVal(getLuckVal(whichUnit),value)-getLuckVal(whichUnit) , during )
 endmethod
 public static method setLuckVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LUCK_VAL , whichUnit , value , during )
@@ -812,7 +812,7 @@ public static method subLuckDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_LUCK_DURING , whichUnit , -value, during )
 endmethod
 public static method coverLuckDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LUCK_DURING , whichUnit , hmath.coverAttrEffectVal(getLuckDuring(whichUnit),value)-getLuckDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LUCK_DURING , whichUnit , hlogic.coverAttrEffectVal(getLuckDuring(whichUnit),value)-getLuckDuring(whichUnit) , during )
 endmethod
 public static method setLuckDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LUCK_DURING , whichUnit , value , during )
@@ -828,7 +828,7 @@ public static method subHuntAmplitudeVal takes unit whichUnit , real value , rea
    call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverHuntAmplitudeVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_VAL , whichUnit , hmath.coverAttrEffectVal(getHuntAmplitudeVal(whichUnit),value)-getHuntAmplitudeVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_VAL , whichUnit , hlogic.coverAttrEffectVal(getHuntAmplitudeVal(whichUnit),value)-getHuntAmplitudeVal(whichUnit) , during )
 endmethod
 public static method setHuntAmplitudeVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_VAL , whichUnit , value , during )
@@ -844,7 +844,7 @@ public static method subHuntAmplitudeDuring takes unit whichUnit , real value , 
    call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverHuntAmplitudeDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_DURING , whichUnit , hmath.coverAttrEffectVal(getHuntAmplitudeDuring(whichUnit),value)-getHuntAmplitudeDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_DURING , whichUnit , hlogic.coverAttrEffectVal(getHuntAmplitudeDuring(whichUnit),value)-getHuntAmplitudeDuring(whichUnit) , during )
 endmethod
 public static method setHuntAmplitudeDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_DURING , whichUnit , value , during )
@@ -860,7 +860,7 @@ public static method subPoisonVal takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_POISON_VAL , whichUnit , -value, during )
 endmethod
 public static method coverPoisonVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_POISON_VAL , whichUnit , hmath.coverAttrEffectVal(getPoisonVal(whichUnit),value)-getPoisonVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_POISON_VAL , whichUnit , hlogic.coverAttrEffectVal(getPoisonVal(whichUnit),value)-getPoisonVal(whichUnit) , during )
 endmethod
 public static method setPoisonVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_POISON_VAL , whichUnit , value , during )
@@ -876,7 +876,7 @@ public static method subPoisonDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_POISON_DURING , whichUnit , -value, during )
 endmethod
 public static method coverPoisonDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_POISON_DURING , whichUnit , hmath.coverAttrEffectVal(getPoisonDuring(whichUnit),value)-getPoisonDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_POISON_DURING , whichUnit , hlogic.coverAttrEffectVal(getPoisonDuring(whichUnit),value)-getPoisonDuring(whichUnit) , during )
 endmethod
 public static method setPoisonDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_POISON_DURING , whichUnit , value , during )
@@ -892,7 +892,7 @@ public static method subFireVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_FIRE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverFireVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FIRE_VAL , whichUnit , hmath.coverAttrEffectVal(getFireVal(whichUnit),value)-getFireVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FIRE_VAL , whichUnit , hlogic.coverAttrEffectVal(getFireVal(whichUnit),value)-getFireVal(whichUnit) , during )
 endmethod
 public static method setFireVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FIRE_VAL , whichUnit , value , during )
@@ -908,7 +908,7 @@ public static method subFireDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_FIRE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverFireDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FIRE_DURING , whichUnit , hmath.coverAttrEffectVal(getFireDuring(whichUnit),value)-getFireDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FIRE_DURING , whichUnit , hlogic.coverAttrEffectVal(getFireDuring(whichUnit),value)-getFireDuring(whichUnit) , during )
 endmethod
 public static method setFireDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FIRE_DURING , whichUnit , value , during )
@@ -924,7 +924,7 @@ public static method subDryVal takes unit whichUnit , real value , real during r
    call setAttr( ATTR_FLAG_EFFECT_DRY_VAL , whichUnit , -value, during )
 endmethod
 public static method coverDryVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_DRY_VAL , whichUnit , hmath.coverAttrEffectVal(getDryVal(whichUnit),value)-getDryVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_DRY_VAL , whichUnit , hlogic.coverAttrEffectVal(getDryVal(whichUnit),value)-getDryVal(whichUnit) , during )
 endmethod
 public static method setDryVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_DRY_VAL , whichUnit , value , during )
@@ -940,7 +940,7 @@ public static method subDryDuring takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_DRY_DURING , whichUnit , -value, during )
 endmethod
 public static method coverDryDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_DRY_DURING , whichUnit , hmath.coverAttrEffectVal(getDryDuring(whichUnit),value)-getDryDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_DRY_DURING , whichUnit , hlogic.coverAttrEffectVal(getDryDuring(whichUnit),value)-getDryDuring(whichUnit) , during )
 endmethod
 public static method setDryDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_DRY_DURING , whichUnit , value , during )
@@ -956,7 +956,7 @@ public static method subFreezeVal takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_FREEZE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverFreezeVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FREEZE_VAL , whichUnit , hmath.coverAttrEffectVal(getFreezeVal(whichUnit),value)-getFreezeVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FREEZE_VAL , whichUnit , hlogic.coverAttrEffectVal(getFreezeVal(whichUnit),value)-getFreezeVal(whichUnit) , during )
 endmethod
 public static method setFreezeVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FREEZE_VAL , whichUnit , value , during )
@@ -972,7 +972,7 @@ public static method subFreezeDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_FREEZE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverFreezeDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FREEZE_DURING , whichUnit , hmath.coverAttrEffectVal(getFreezeDuring(whichUnit),value)-getFreezeDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FREEZE_DURING , whichUnit , hlogic.coverAttrEffectVal(getFreezeDuring(whichUnit),value)-getFreezeDuring(whichUnit) , during )
 endmethod
 public static method setFreezeDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FREEZE_DURING , whichUnit , value , during )
@@ -988,7 +988,7 @@ public static method subColdVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_COLD_VAL , whichUnit , -value, during )
 endmethod
 public static method coverColdVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_COLD_VAL , whichUnit , hmath.coverAttrEffectVal(getColdVal(whichUnit),value)-getColdVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_COLD_VAL , whichUnit , hlogic.coverAttrEffectVal(getColdVal(whichUnit),value)-getColdVal(whichUnit) , during )
 endmethod
 public static method setColdVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_COLD_VAL , whichUnit , value , during )
@@ -1004,7 +1004,7 @@ public static method subColdDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_COLD_DURING , whichUnit , -value, during )
 endmethod
 public static method coverColdDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_COLD_DURING , whichUnit , hmath.coverAttrEffectVal(getColdDuring(whichUnit),value)-getColdDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_COLD_DURING , whichUnit , hlogic.coverAttrEffectVal(getColdDuring(whichUnit),value)-getColdDuring(whichUnit) , during )
 endmethod
 public static method setColdDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_COLD_DURING , whichUnit , value , during )
@@ -1020,7 +1020,7 @@ public static method subBluntVal takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_BLUNT_VAL , whichUnit , -value, during )
 endmethod
 public static method coverBluntVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLUNT_VAL , whichUnit , hmath.coverAttrEffectVal(getBluntVal(whichUnit),value)-getBluntVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BLUNT_VAL , whichUnit , hlogic.coverAttrEffectVal(getBluntVal(whichUnit),value)-getBluntVal(whichUnit) , during )
 endmethod
 public static method setBluntVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BLUNT_VAL , whichUnit , value , during )
@@ -1036,7 +1036,7 @@ public static method subBluntDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_BLUNT_DURING , whichUnit , -value, during )
 endmethod
 public static method coverBluntDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLUNT_DURING , whichUnit , hmath.coverAttrEffectVal(getBluntDuring(whichUnit),value)-getBluntDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BLUNT_DURING , whichUnit , hlogic.coverAttrEffectVal(getBluntDuring(whichUnit),value)-getBluntDuring(whichUnit) , during )
 endmethod
 public static method setBluntDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BLUNT_DURING , whichUnit , value , during )
@@ -1052,7 +1052,7 @@ public static method subMuggleVal takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_MUGGLE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverMuggleVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_MUGGLE_VAL , whichUnit , hmath.coverAttrEffectVal(getMuggleVal(whichUnit),value)-getMuggleVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_MUGGLE_VAL , whichUnit , hlogic.coverAttrEffectVal(getMuggleVal(whichUnit),value)-getMuggleVal(whichUnit) , during )
 endmethod
 public static method setMuggleVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MUGGLE_VAL , whichUnit , value , during )
@@ -1068,7 +1068,7 @@ public static method subMuggleDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_MUGGLE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverMuggleDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_MUGGLE_DURING , whichUnit , hmath.coverAttrEffectVal(getMuggleDuring(whichUnit),value)-getMuggleDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_MUGGLE_DURING , whichUnit , hlogic.coverAttrEffectVal(getMuggleDuring(whichUnit),value)-getMuggleDuring(whichUnit) , during )
 endmethod
 public static method setMuggleDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MUGGLE_DURING , whichUnit , value , during )
@@ -1084,7 +1084,7 @@ public static method subCorrosionVal takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_CORROSION_VAL , whichUnit , -value, during )
 endmethod
 public static method coverCorrosionVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CORROSION_VAL , whichUnit , hmath.coverAttrEffectVal(getCorrosionVal(whichUnit),value)-getCorrosionVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CORROSION_VAL , whichUnit , hlogic.coverAttrEffectVal(getCorrosionVal(whichUnit),value)-getCorrosionVal(whichUnit) , during )
 endmethod
 public static method setCorrosionVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CORROSION_VAL , whichUnit , value , during )
@@ -1100,7 +1100,7 @@ public static method subCorrosionDuring takes unit whichUnit , real value , real
    call setAttr( ATTR_FLAG_EFFECT_CORROSION_DURING , whichUnit , -value, during )
 endmethod
 public static method coverCorrosionDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CORROSION_DURING , whichUnit , hmath.coverAttrEffectVal(getCorrosionDuring(whichUnit),value)-getCorrosionDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CORROSION_DURING , whichUnit , hlogic.coverAttrEffectVal(getCorrosionDuring(whichUnit),value)-getCorrosionDuring(whichUnit) , during )
 endmethod
 public static method setCorrosionDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CORROSION_DURING , whichUnit , value , during )
@@ -1116,7 +1116,7 @@ public static method subChaosVal takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_CHAOS_VAL , whichUnit , -value, during )
 endmethod
 public static method coverChaosVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CHAOS_VAL , whichUnit , hmath.coverAttrEffectVal(getChaosVal(whichUnit),value)-getChaosVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CHAOS_VAL , whichUnit , hlogic.coverAttrEffectVal(getChaosVal(whichUnit),value)-getChaosVal(whichUnit) , during )
 endmethod
 public static method setChaosVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CHAOS_VAL , whichUnit , value , during )
@@ -1132,7 +1132,7 @@ public static method subChaosDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_CHAOS_DURING , whichUnit , -value, during )
 endmethod
 public static method coverChaosDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CHAOS_DURING , whichUnit , hmath.coverAttrEffectVal(getChaosDuring(whichUnit),value)-getChaosDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CHAOS_DURING , whichUnit , hlogic.coverAttrEffectVal(getChaosDuring(whichUnit),value)-getChaosDuring(whichUnit) , during )
 endmethod
 public static method setChaosDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CHAOS_DURING , whichUnit , value , during )
@@ -1148,7 +1148,7 @@ public static method subTwineVal takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_TWINE_VAL , whichUnit , -value, during )
 endmethod
 public static method coverTwineVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_TWINE_VAL , whichUnit , hmath.coverAttrEffectVal(getTwineVal(whichUnit),value)-getTwineVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_TWINE_VAL , whichUnit , hlogic.coverAttrEffectVal(getTwineVal(whichUnit),value)-getTwineVal(whichUnit) , during )
 endmethod
 public static method setTwineVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_TWINE_VAL , whichUnit , value , during )
@@ -1164,7 +1164,7 @@ public static method subTwineDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_TWINE_DURING , whichUnit , -value, during )
 endmethod
 public static method coverTwineDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_TWINE_DURING , whichUnit , hmath.coverAttrEffectVal(getTwineDuring(whichUnit),value)-getTwineDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_TWINE_DURING , whichUnit , hlogic.coverAttrEffectVal(getTwineDuring(whichUnit),value)-getTwineDuring(whichUnit) , during )
 endmethod
 public static method setTwineDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_TWINE_DURING , whichUnit , value , during )
@@ -1180,7 +1180,7 @@ public static method subBlindVal takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , -value, during )
 endmethod
 public static method coverBlindVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , hmath.coverAttrEffectVal(getBlindVal(whichUnit),value)-getBlindVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , hlogic.coverAttrEffectVal(getBlindVal(whichUnit),value)-getBlindVal(whichUnit) , during )
 endmethod
 public static method setBlindVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , value , during )
@@ -1196,7 +1196,7 @@ public static method subBlindDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , -value, during )
 endmethod
 public static method coverBlindDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , hmath.coverAttrEffectVal(getBlindDuring(whichUnit),value)-getBlindDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , hlogic.coverAttrEffectVal(getBlindDuring(whichUnit),value)-getBlindDuring(whichUnit) , during )
 endmethod
 public static method setBlindDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , value , during )
@@ -1212,7 +1212,7 @@ public static method subTortuaVal takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_TORTUA_VAL , whichUnit , -value, during )
 endmethod
 public static method coverTortuaVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_TORTUA_VAL , whichUnit , hmath.coverAttrEffectVal(getTortuaVal(whichUnit),value)-getTortuaVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_TORTUA_VAL , whichUnit , hlogic.coverAttrEffectVal(getTortuaVal(whichUnit),value)-getTortuaVal(whichUnit) , during )
 endmethod
 public static method setTortuaVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_TORTUA_VAL , whichUnit , value , during )
@@ -1228,7 +1228,7 @@ public static method subTortuaDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_TORTUA_DURING , whichUnit , -value, during )
 endmethod
 public static method coverTortuaDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_TORTUA_DURING , whichUnit , hmath.coverAttrEffectVal(getTortuaDuring(whichUnit),value)-getTortuaDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_TORTUA_DURING , whichUnit , hlogic.coverAttrEffectVal(getTortuaDuring(whichUnit),value)-getTortuaDuring(whichUnit) , during )
 endmethod
 public static method setTortuaDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_TORTUA_DURING , whichUnit , value , during )
@@ -1244,7 +1244,7 @@ public static method subWeakVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_WEAK_VAL , whichUnit , -value, during )
 endmethod
 public static method coverWeakVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_WEAK_VAL , whichUnit , hmath.coverAttrEffectVal(getWeakVal(whichUnit),value)-getWeakVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_WEAK_VAL , whichUnit , hlogic.coverAttrEffectVal(getWeakVal(whichUnit),value)-getWeakVal(whichUnit) , during )
 endmethod
 public static method setWeakVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_WEAK_VAL , whichUnit , value , during )
@@ -1260,7 +1260,7 @@ public static method subWeakDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_WEAK_DURING , whichUnit , -value, during )
 endmethod
 public static method coverWeakDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_WEAK_DURING , whichUnit , hmath.coverAttrEffectVal(getWeakDuring(whichUnit),value)-getWeakDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_WEAK_DURING , whichUnit , hlogic.coverAttrEffectVal(getWeakDuring(whichUnit),value)-getWeakDuring(whichUnit) , during )
 endmethod
 public static method setWeakDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_WEAK_DURING , whichUnit , value , during )
@@ -1276,7 +1276,7 @@ public static method subAstrictVal takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_ASTRICT_VAL , whichUnit , -value, during )
 endmethod
 public static method coverAstrictVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ASTRICT_VAL , whichUnit , hmath.coverAttrEffectVal(getAstrictVal(whichUnit),value)-getAstrictVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ASTRICT_VAL , whichUnit , hlogic.coverAttrEffectVal(getAstrictVal(whichUnit),value)-getAstrictVal(whichUnit) , during )
 endmethod
 public static method setAstrictVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ASTRICT_VAL , whichUnit , value , during )
@@ -1292,7 +1292,7 @@ public static method subAstrictDuring takes unit whichUnit , real value , real d
    call setAttr( ATTR_FLAG_EFFECT_ASTRICT_DURING , whichUnit , -value, during )
 endmethod
 public static method coverAstrictDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_ASTRICT_DURING , whichUnit , hmath.coverAttrEffectVal(getAstrictDuring(whichUnit),value)-getAstrictDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_ASTRICT_DURING , whichUnit , hlogic.coverAttrEffectVal(getAstrictDuring(whichUnit),value)-getAstrictDuring(whichUnit) , during )
 endmethod
 public static method setAstrictDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ASTRICT_DURING , whichUnit , value , during )
@@ -1308,7 +1308,7 @@ public static method subFoolishVal takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_FOOLISH_VAL , whichUnit , -value, during )
 endmethod
 public static method coverFoolishVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FOOLISH_VAL , whichUnit , hmath.coverAttrEffectVal(getFoolishVal(whichUnit),value)-getFoolishVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FOOLISH_VAL , whichUnit , hlogic.coverAttrEffectVal(getFoolishVal(whichUnit),value)-getFoolishVal(whichUnit) , during )
 endmethod
 public static method setFoolishVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FOOLISH_VAL , whichUnit , value , during )
@@ -1324,7 +1324,7 @@ public static method subFoolishDuring takes unit whichUnit , real value , real d
    call setAttr( ATTR_FLAG_EFFECT_FOOLISH_DURING , whichUnit , -value, during )
 endmethod
 public static method coverFoolishDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FOOLISH_DURING , whichUnit , hmath.coverAttrEffectVal(getFoolishDuring(whichUnit),value)-getFoolishDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FOOLISH_DURING , whichUnit , hlogic.coverAttrEffectVal(getFoolishDuring(whichUnit),value)-getFoolishDuring(whichUnit) , during )
 endmethod
 public static method setFoolishDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FOOLISH_DURING , whichUnit , value , during )
@@ -1340,7 +1340,7 @@ public static method subDullVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_DULL_VAL , whichUnit , -value, during )
 endmethod
 public static method coverDullVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_DULL_VAL , whichUnit , hmath.coverAttrEffectVal(getDullVal(whichUnit),value)-getDullVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_DULL_VAL , whichUnit , hlogic.coverAttrEffectVal(getDullVal(whichUnit),value)-getDullVal(whichUnit) , during )
 endmethod
 public static method setDullVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_DULL_VAL , whichUnit , value , during )
@@ -1356,7 +1356,7 @@ public static method subDullDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_DULL_DURING , whichUnit , -value, during )
 endmethod
 public static method coverDullDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_DULL_DURING , whichUnit , hmath.coverAttrEffectVal(getDullDuring(whichUnit),value)-getDullDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_DULL_DURING , whichUnit , hlogic.coverAttrEffectVal(getDullDuring(whichUnit),value)-getDullDuring(whichUnit) , during )
 endmethod
 public static method setDullDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_DULL_DURING , whichUnit , value , during )
@@ -1372,7 +1372,7 @@ public static method subDirtVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_DIRT_VAL , whichUnit , -value, during )
 endmethod
 public static method coverDirtVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_DIRT_VAL , whichUnit , hmath.coverAttrEffectVal(getDirtVal(whichUnit),value)-getDirtVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_DIRT_VAL , whichUnit , hlogic.coverAttrEffectVal(getDirtVal(whichUnit),value)-getDirtVal(whichUnit) , during )
 endmethod
 public static method setDirtVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_DIRT_VAL , whichUnit , value , during )
@@ -1388,7 +1388,7 @@ public static method subDirtDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_DIRT_DURING , whichUnit , -value, during )
 endmethod
 public static method coverDirtDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_DIRT_DURING , whichUnit , hmath.coverAttrEffectVal(getDirtDuring(whichUnit),value)-getDirtDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_DIRT_DURING , whichUnit , hlogic.coverAttrEffectVal(getDirtDuring(whichUnit),value)-getDirtDuring(whichUnit) , during )
 endmethod
 public static method setDirtDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_DIRT_DURING , whichUnit , value , during )
@@ -1404,7 +1404,7 @@ public static method subSwimOdds takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_SWIM_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverSwimOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_SWIM_ODDS , whichUnit , hmath.coverAttrEffectVal(getSwimOdds(whichUnit),value)-getSwimOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_SWIM_ODDS , whichUnit , hlogic.coverAttrEffectVal(getSwimOdds(whichUnit),value)-getSwimOdds(whichUnit) , during )
 endmethod
 public static method setSwimOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_SWIM_ODDS , whichUnit , value , during )
@@ -1420,7 +1420,7 @@ public static method subSwimDuring takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_SWIM_DURING , whichUnit , -value, during )
 endmethod
 public static method coverSwimDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_SWIM_DURING , whichUnit , hmath.coverAttrEffectVal(getSwimDuring(whichUnit),value)-getSwimDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_SWIM_DURING , whichUnit , hlogic.coverAttrEffectVal(getSwimDuring(whichUnit),value)-getSwimDuring(whichUnit) , during )
 endmethod
 public static method setSwimDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_SWIM_DURING , whichUnit , value , during )
@@ -1436,7 +1436,7 @@ public static method subHeavyOdds takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_HEAVY_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverHeavyOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HEAVY_ODDS , whichUnit , hmath.coverAttrEffectVal(getHeavyOdds(whichUnit),value)-getHeavyOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HEAVY_ODDS , whichUnit , hlogic.coverAttrEffectVal(getHeavyOdds(whichUnit),value)-getHeavyOdds(whichUnit) , during )
 endmethod
 public static method setHeavyOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HEAVY_ODDS , whichUnit , value , during )
@@ -1452,7 +1452,7 @@ public static method subHeavyVal takes unit whichUnit , real value , real during
    call setAttr( ATTR_FLAG_EFFECT_HEAVY_VAL , whichUnit , -value, during )
 endmethod
 public static method coverHeavyVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_HEAVY_VAL , whichUnit , hmath.coverAttrEffectVal(getHeavyVal(whichUnit),value)-getHeavyVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_HEAVY_VAL , whichUnit , hlogic.coverAttrEffectVal(getHeavyVal(whichUnit),value)-getHeavyVal(whichUnit) , during )
 endmethod
 public static method setHeavyVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_HEAVY_VAL , whichUnit , value , during )
@@ -1468,7 +1468,7 @@ public static method subBreakOdds takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_BREAK_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverBreakOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BREAK_ODDS , whichUnit , hmath.coverAttrEffectVal(getBreakOdds(whichUnit),value)-getBreakOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BREAK_ODDS , whichUnit , hlogic.coverAttrEffectVal(getBreakOdds(whichUnit),value)-getBreakOdds(whichUnit) , during )
 endmethod
 public static method setBreakOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BREAK_ODDS , whichUnit , value , during )
@@ -1484,7 +1484,7 @@ public static method subBreakDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_BREAK_DURING , whichUnit , -value, during )
 endmethod
 public static method coverBreakDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BREAK_DURING , whichUnit , hmath.coverAttrEffectVal(getBreakDuring(whichUnit),value)-getBreakDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BREAK_DURING , whichUnit , hlogic.coverAttrEffectVal(getBreakDuring(whichUnit),value)-getBreakDuring(whichUnit) , during )
 endmethod
 public static method setBreakDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BREAK_DURING , whichUnit , value , during )
@@ -1500,7 +1500,7 @@ public static method subUnluckVal takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_UNLUCK_VAL , whichUnit , -value, during )
 endmethod
 public static method coverUnluckVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_UNLUCK_VAL , whichUnit , hmath.coverAttrEffectVal(getUnluckVal(whichUnit),value)-getUnluckVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_UNLUCK_VAL , whichUnit , hlogic.coverAttrEffectVal(getUnluckVal(whichUnit),value)-getUnluckVal(whichUnit) , during )
 endmethod
 public static method setUnluckVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_UNLUCK_VAL , whichUnit , value , during )
@@ -1516,7 +1516,7 @@ public static method subUnluckDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_UNLUCK_DURING , whichUnit , -value, during )
 endmethod
 public static method coverUnluckDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_UNLUCK_DURING , whichUnit , hmath.coverAttrEffectVal(getUnluckDuring(whichUnit),value)-getUnluckDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_UNLUCK_DURING , whichUnit , hlogic.coverAttrEffectVal(getUnluckDuring(whichUnit),value)-getUnluckDuring(whichUnit) , during )
 endmethod
 public static method setUnluckDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_UNLUCK_DURING , whichUnit , value , during )
@@ -1532,7 +1532,7 @@ public static method subSilentOdds takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_SILENT_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverSilentOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_SILENT_ODDS , whichUnit , hmath.coverAttrEffectVal(getSilentOdds(whichUnit),value)-getSilentOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_SILENT_ODDS , whichUnit , hlogic.coverAttrEffectVal(getSilentOdds(whichUnit),value)-getSilentOdds(whichUnit) , during )
 endmethod
 public static method setSilentOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_SILENT_ODDS , whichUnit , value , during )
@@ -1548,7 +1548,7 @@ public static method subSilentDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_SILENT_DURING , whichUnit , -value, during )
 endmethod
 public static method coverSilentDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_SILENT_DURING , whichUnit , hmath.coverAttrEffectVal(getSilentDuring(whichUnit),value)-getSilentDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_SILENT_DURING , whichUnit , hlogic.coverAttrEffectVal(getSilentDuring(whichUnit),value)-getSilentDuring(whichUnit) , during )
 endmethod
 public static method setSilentDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_SILENT_DURING , whichUnit , value , during )
@@ -1564,7 +1564,7 @@ public static method subUnarmOdds takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_UNARM_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverUnarmOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_UNARM_ODDS , whichUnit , hmath.coverAttrEffectVal(getUnarmOdds(whichUnit),value)-getUnarmOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_UNARM_ODDS , whichUnit , hlogic.coverAttrEffectVal(getUnarmOdds(whichUnit),value)-getUnarmOdds(whichUnit) , during )
 endmethod
 public static method setUnarmOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_UNARM_ODDS , whichUnit , value , during )
@@ -1580,7 +1580,7 @@ public static method subUnarmDuring takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_UNARM_DURING , whichUnit , -value, during )
 endmethod
 public static method coverUnarmDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_UNARM_DURING , whichUnit , hmath.coverAttrEffectVal(getUnarmDuring(whichUnit),value)-getUnarmDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_UNARM_DURING , whichUnit , hlogic.coverAttrEffectVal(getUnarmDuring(whichUnit),value)-getUnarmDuring(whichUnit) , during )
 endmethod
 public static method setUnarmDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_UNARM_DURING , whichUnit , value , during )
@@ -1596,7 +1596,7 @@ public static method subFetterOdds takes unit whichUnit , real value , real duri
    call setAttr( ATTR_FLAG_EFFECT_FETTER_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverFetterOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FETTER_ODDS , whichUnit , hmath.coverAttrEffectVal(getFetterOdds(whichUnit),value)-getFetterOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FETTER_ODDS , whichUnit , hlogic.coverAttrEffectVal(getFetterOdds(whichUnit),value)-getFetterOdds(whichUnit) , during )
 endmethod
 public static method setFetterOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FETTER_ODDS , whichUnit , value , during )
@@ -1612,7 +1612,7 @@ public static method subFetterDuring takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_FETTER_DURING , whichUnit , -value, during )
 endmethod
 public static method coverFetterDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_FETTER_DURING , whichUnit , hmath.coverAttrEffectVal(getFetterDuring(whichUnit),value)-getFetterDuring(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_FETTER_DURING , whichUnit , hlogic.coverAttrEffectVal(getFetterDuring(whichUnit),value)-getFetterDuring(whichUnit) , during )
 endmethod
 public static method setFetterDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_FETTER_DURING , whichUnit , value , during )
@@ -1628,7 +1628,7 @@ public static method subBombVal takes unit whichUnit , real value , real during 
    call setAttr( ATTR_FLAG_EFFECT_BOMB_VAL , whichUnit , -value, during )
 endmethod
 public static method coverBombVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BOMB_VAL , whichUnit , hmath.coverAttrEffectVal(getBombVal(whichUnit),value)-getBombVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BOMB_VAL , whichUnit , hlogic.coverAttrEffectVal(getBombVal(whichUnit),value)-getBombVal(whichUnit) , during )
 endmethod
 public static method setBombVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BOMB_VAL , whichUnit , value , during )
@@ -1644,7 +1644,7 @@ public static method subBombRange takes unit whichUnit , real value , real durin
    call setAttr( ATTR_FLAG_EFFECT_BOMB_RANGE , whichUnit , -value, during )
 endmethod
 public static method coverBombRange takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BOMB_RANGE , whichUnit , hmath.coverAttrEffectVal(getBombRange(whichUnit),value)-getBombRange(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_BOMB_RANGE , whichUnit , hlogic.coverAttrEffectVal(getBombRange(whichUnit),value)-getBombRange(whichUnit) , during )
 endmethod
 public static method setBombRange takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BOMB_RANGE , whichUnit , value , during )
@@ -1667,7 +1667,7 @@ public static method subLightningChainVal takes unit whichUnit , real value , re
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL , whichUnit , -value, during )
 endmethod
 public static method coverLightningChainVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL , whichUnit , hmath.coverAttrEffectVal(getLightningChainVal(whichUnit),value)-getLightningChainVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL , whichUnit , hlogic.coverAttrEffectVal(getLightningChainVal(whichUnit),value)-getLightningChainVal(whichUnit) , during )
 endmethod
 public static method setLightningChainVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL , whichUnit , value , during )
@@ -1683,7 +1683,7 @@ public static method subLightningChainOdds takes unit whichUnit , real value , r
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverLightningChainOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS , whichUnit , hmath.coverAttrEffectVal(getLightningChainOdds(whichUnit),value)-getLightningChainOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS , whichUnit , hlogic.coverAttrEffectVal(getLightningChainOdds(whichUnit),value)-getLightningChainOdds(whichUnit) , during )
 endmethod
 public static method setLightningChainOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS , whichUnit , value , during )
@@ -1699,7 +1699,7 @@ public static method subLightningChainQty takes unit whichUnit , real value , re
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY , whichUnit , -value, during )
 endmethod
 public static method coverLightningChainQty takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY , whichUnit , hmath.coverAttrEffectVal(getLightningChainQty(whichUnit),value)-getLightningChainQty(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY , whichUnit , hlogic.coverAttrEffectVal(getLightningChainQty(whichUnit),value)-getLightningChainQty(whichUnit) , during )
 endmethod
 public static method setLightningChainQty takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY , whichUnit , value , during )
@@ -1715,7 +1715,7 @@ public static method subLightningChainReduce takes unit whichUnit , real value ,
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_REDUCE , whichUnit , -value, during )
 endmethod
 public static method coverLightningChainReduce takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_REDUCE , whichUnit , hmath.coverAttrEffectVal(getLightningChainReduce(whichUnit),value)-getLightningChainReduce(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_REDUCE , whichUnit , hlogic.coverAttrEffectVal(getLightningChainReduce(whichUnit),value)-getLightningChainReduce(whichUnit) , during )
 endmethod
 public static method setLightningChainReduce takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_REDUCE , whichUnit , value , during )
@@ -1738,7 +1738,7 @@ public static method subCrackFlyVal takes unit whichUnit , real value , real dur
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_VAL , whichUnit , -value, during )
 endmethod
 public static method coverCrackFlyVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_VAL , whichUnit , hmath.coverAttrEffectVal(getCrackFlyVal(whichUnit),value)-getCrackFlyVal(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_VAL , whichUnit , hlogic.coverAttrEffectVal(getCrackFlyVal(whichUnit),value)-getCrackFlyVal(whichUnit) , during )
 endmethod
 public static method setCrackFlyVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_VAL , whichUnit , value , during )
@@ -1754,7 +1754,7 @@ public static method subCrackFlyOdds takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_ODDS , whichUnit , -value, during )
 endmethod
 public static method coverCrackFlyOdds takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_ODDS , whichUnit , hmath.coverAttrEffectVal(getCrackFlyOdds(whichUnit),value)-getCrackFlyOdds(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_ODDS , whichUnit , hlogic.coverAttrEffectVal(getCrackFlyOdds(whichUnit),value)-getCrackFlyOdds(whichUnit) , during )
 endmethod
 public static method setCrackFlyOdds takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_ODDS , whichUnit , value , during )
@@ -1770,7 +1770,7 @@ public static method subCrackFlyDistance takes unit whichUnit , real value , rea
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_DISTANCE , whichUnit , -value, during )
 endmethod
 public static method coverCrackFlyDistance takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_DISTANCE , whichUnit , hmath.coverAttrEffectVal(getCrackFlyDistance(whichUnit),value)-getCrackFlyDistance(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_DISTANCE , whichUnit , hlogic.coverAttrEffectVal(getCrackFlyDistance(whichUnit),value)-getCrackFlyDistance(whichUnit) , during )
 endmethod
 public static method setCrackFlyDistance takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_DISTANCE , whichUnit , value , during )
@@ -1786,7 +1786,7 @@ public static method subCrackFlyHigh takes unit whichUnit , real value , real du
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_HIGH , whichUnit , -value, during )
 endmethod
 public static method coverCrackFlyHigh takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_HIGH , whichUnit , hmath.coverAttrEffectVal(getCrackFlyHigh(whichUnit),value)-getCrackFlyHigh(whichUnit) , during )
+   call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_HIGH , whichUnit , hlogic.coverAttrEffectVal(getCrackFlyHigh(whichUnit),value)-getCrackFlyHigh(whichUnit) , during )
 endmethod
 public static method setCrackFlyHigh takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_CRACK_FLY_HIGH , whichUnit , value , during )

@@ -546,17 +546,14 @@ struct hAttr
 	private static integer ATTR_FLAG_UP_HEMOPHAGIA_SKILL = 1020
 	private static integer ATTR_FLAG_UP_SPLIT = 1021
 	private static integer ATTR_FLAG_UP_SPLIT_RANGE = 1022
-	private static integer ATTR_FLAG_UP_GOLD_RATIO = 1023
-	private static integer ATTR_FLAG_UP_LUMBER_RATIO = 1024
-	private static integer ATTR_FLAG_UP_EXP_RATIO = 1025
-	private static integer ATTR_FLAG_UP_SWIM_OPPOSE = 1026
-	private static integer ATTR_FLAG_UP_LUCK = 1027
-	private static integer ATTR_FLAG_UP_INVINCIBLE = 1028
-	private static integer ATTR_FLAG_UP_WEIGHT = 1029
-	private static integer ATTR_FLAG_UP_WEIGHT_CURRENT = 1030
-	private static integer ATTR_FLAG_UP_HUNT_AMPLITUDE = 1031
-	private static integer ATTR_FLAG_UP_HUNT_REBOUND = 1032
-	private static integer ATTR_FLAG_UP_CURE = 1033
+	private static integer ATTR_FLAG_UP_SWIM_OPPOSE = 1023
+	private static integer ATTR_FLAG_UP_LUCK = 1024
+	private static integer ATTR_FLAG_UP_INVINCIBLE = 1025
+	private static integer ATTR_FLAG_UP_WEIGHT = 1026
+	private static integer ATTR_FLAG_UP_WEIGHT_CURRENT = 1027
+	private static integer ATTR_FLAG_UP_HUNT_AMPLITUDE = 1028
+	private static integer ATTR_FLAG_UP_HUNT_REBOUND = 1029
+	private static integer ATTR_FLAG_UP_CURE = 1030
 
 	static method create takes nothing returns hAttr
         local hAttr x = 0
@@ -1652,9 +1649,6 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HEMOPHAGIA_SKILL , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SPLIT , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SPLIT_RANGE , 0 )
-			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_GOLD_RATIO , 0 )
-			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_LUMBER_RATIO , 0 )
-			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_EXP_RATIO , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SWIM_OPPOSE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_LUCK , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_INVINCIBLE , 0 )
@@ -1856,13 +1850,13 @@ struct hAttr
         local string value = htime.getString(t,2)
         local integer hid = GetHandleId(whichUnit)
         local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
-        local integer valueIndex = hmath.strpos(old,value)
+        local integer valueIndex = hlogic.strpos(old,value)
         call htime.delTimer(t)
 		call initAttr(whichUnit)
         if(valueIndex==-1 or value==null or value=="")then
             return
         else
-            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hmath.substr(old,0,valueIndex)+hmath.substr(old,valueIndex+StringLength(value),StringLength(old)))
+            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
         endif
     endmethod
     private static method setAttackHuntTypeCall takes nothing returns nothing
@@ -1892,13 +1886,13 @@ struct hAttr
     public static method subAttackHuntType takes unit whichUnit , string value , real during returns nothing
         local integer hid = GetHandleId(whichUnit)
         local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
-        local integer valueIndex = hmath.strpos(old,value)
+        local integer valueIndex = hlogic.strpos(old,value)
         local timer t = null
 		call initAttr(whichUnit)
         if(valueIndex==-1 or value==null or value=="")then
             return
         else
-            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hmath.substr(old,0,valueIndex)+hmath.substr(old,valueIndex+StringLength(value),StringLength(old)))
+            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
             if(during > 0)then
                 set t = htime.setTimeout(during,function thistype.addAttackHuntTypeCall)
                 call htime.setUnit(t,1,whichUnit)
@@ -2415,45 +2409,6 @@ public static method subSplitRange takes unit whichUnit , real value , real duri
 endmethod
 public static method setSplitRange takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_RANGE , whichUnit , value - getSplitRange(whichUnit) , during )
-endmethod
-// 高级属性[gold_ratio]
-public static method getGoldRatio takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_UP_GOLD_RATIO , whichUnit )
-endmethod
-public static method addGoldRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_GOLD_RATIO , whichUnit , value , during )
-endmethod
-public static method subGoldRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_GOLD_RATIO , whichUnit , -value , during )
-endmethod
-public static method setGoldRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_GOLD_RATIO , whichUnit , value - getGoldRatio(whichUnit) , during )
-endmethod
-// 高级属性[lumber_ratio]
-public static method getLumberRatio takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_UP_LUMBER_RATIO , whichUnit )
-endmethod
-public static method addLumberRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_LUMBER_RATIO , whichUnit , value , during )
-endmethod
-public static method subLumberRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_LUMBER_RATIO , whichUnit , -value , during )
-endmethod
-public static method setLumberRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_LUMBER_RATIO , whichUnit , value - getLumberRatio(whichUnit) , during )
-endmethod
-// 高级属性[exp_ratio]
-public static method getExpRatio takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_UP_EXP_RATIO , whichUnit )
-endmethod
-public static method addExpRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_EXP_RATIO , whichUnit , value , during )
-endmethod
-public static method subExpRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_EXP_RATIO , whichUnit , -value , during )
-endmethod
-public static method setExpRatio takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_EXP_RATIO , whichUnit , value - getExpRatio(whichUnit) , during )
 endmethod
 // 高级属性[swim_oppose]
 public static method getSwimOppose takes unit whichUnit returns real

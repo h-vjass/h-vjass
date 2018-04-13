@@ -173,7 +173,7 @@ struct hTest
 		set hattrbean = hAttrBean.create()
 		set hattrbean.attackPhysical = 1000
 		call hconsole.error("name"+GetUnitName(u))
-		call hskill.shapeshift(u,5.0,'A00D','A00E',"",hattrbean)
+		call hskill.shapeshift(u,30.0,'A00D','A00E',"",hattrbean)
 		call hconsole.error("name"+GetUnitName(u))
 		call hattrbean.destroy()
 

@@ -16,6 +16,9 @@ globals
 	integer hp_gold_cost = 10010
 	integer hp_lumber = 10011
 	integer hp_lumber_cost = 10012
+	integer hp_gold_ratio = 10013
+	integer hp_lumber_ratio = 10014
+	integer hp_exp_ratio = 10015
 
 	integer player_max_qty = 12
 	integer player_current_qty = 0
@@ -63,49 +66,6 @@ struct hPlayer
 	endmethod
 	private static method triggerDeSelectionUnitActions takes nothing returns nothing
 		call setSelection(GetTriggerPlayer(),null)
-	endmethod
-
-	public static method create takes nothing returns hPlayer
-		local hRect x = 0
-		local integer i = 1
-		local integer pid = 0
-		local trigger triggerApm = CreateTrigger()
-		local trigger triggerApmUnit = CreateTrigger()
-		local trigger triggerSelection = CreateTrigger()
-		local trigger triggerDeSelection = CreateTrigger()
-        set x = hPlayer.allocate()
-		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
-		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
-		call TriggerAddAction(triggerSelection , function thistype.triggerSelectionUnitActions)
-		call TriggerAddAction(triggerDeSelection , function thistype.triggerDeSelectionUnitActions)
-		loop
-			exitwhen i>player_max_qty
-				set players[i] = Player(i-1)
-				set pid = GetHandleId(players[i])
-				call SetPlayerHandicapXP( players[i] , 0 )
-				call setApm(players[i],0)
-				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
-					set player_current_qty = player_current_qty + 1
-					call SaveBoolean(hash_player, pid, hp_isComputer, false)
-					call SaveStr(hash_player, pid, hp_battle_status, default_status_gaming)
-	                call TriggerRegisterPlayerSelectionEventBJ( triggerApm , players[i] , true )
-		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_LEFT )
-		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
-		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
-		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
-		            call TriggerRegisterPlayerUnitEvent(triggerSelection, players[i], EVENT_PLAYER_UNIT_SELECTED, null)
-		            call TriggerRegisterPlayerUnitEvent(triggerDeSelection, players[i], EVENT_PLAYER_UNIT_DESELECTED, null)
-	            else
-	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
-	            	call SaveStr(hash_player, pid, hp_battle_status, default_status_nil)
-	            endif
-			set i = i + 1
-		endloop
-	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
-	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
-	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
-	    call TriggerAddAction( triggerApmUnit, function hPlayer.triggerApmUnitActions )
-	    return x
 	endmethod
 
 	//设置玩家状态
@@ -189,6 +149,122 @@ struct hPlayer
 	public static method addTotalGoldCost takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
 	endmethod
+
+
+	//黄金比率
+	private static method diffGoldRatioCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local integer pid = htime.getInteger(t,1)
+		local real diff = htime.getReal(t,1)
+		local real old = LoadReal(hash_player, pid, hp_gold_ratio)
+		call htime.delTimer(t)
+		if(diff!=0)then
+			call SaveReal(hash_player, pid, hp_gold_ratio, old+diff)
+		endif
+	endmethod
+	private static method diffGoldRatio takes player whichPlayer,real diff,real during returns nothing
+		local integer pid = GetHandleId(whichPlayer)
+		local real old = LoadReal(hash_player, pid, hp_gold_ratio)
+		local timer t = null
+		if(diff!=0)then
+			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_gold_ratio, old+diff)
+			if(during>0)then
+				set t = htime.setTimeout(during,function thistype.diffGoldRatioCall)
+				call htime.setInteger(t,1,pid)
+				call htime.setReal(t,1,diff)
+			endif
+		endif
+	endmethod
+	public static method getGoldRatio takes player whichPlayer returns real
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_gold_ratio)
+	endmethod
+	public static method setGoldRatio takes player whichPlayer,real val,real during returns nothing
+		call diffGoldRatio(whichPlayer,val-getGoldRatio(whichPlayer),during)
+	endmethod
+	public static method addGoldRatio takes player whichPlayer,real val,real during returns nothing
+		call diffGoldRatio(whichPlayer,val,during)
+	endmethod
+	public static method subGoldRatio takes player whichPlayer,real val,real during returns nothing
+		call diffGoldRatio(whichPlayer,-val,during)
+	endmethod
+
+	//木头比率
+	private static method diffLumberRatioCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local integer pid = htime.getInteger(t,1)
+		local real diff = htime.getReal(t,1)
+		local real old = LoadReal(hash_player, pid, hp_lumber_ratio)
+		call htime.delTimer(t)
+		if(diff!=0)then
+			call SaveReal(hash_player, pid, hp_lumber_ratio, old+diff)
+		endif
+	endmethod
+	private static method diffLumberRatio takes player whichPlayer,real diff,real during returns nothing
+		local integer pid = GetHandleId(whichPlayer)
+		local real old = LoadReal(hash_player, pid, hp_lumber_ratio)
+		local timer t = null
+		if(diff!=0)then
+			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_lumber_ratio, old+diff)
+			if(during>0)then
+				set t = htime.setTimeout(during,function thistype.diffLumberRatioCall)
+				call htime.setInteger(t,1,pid)
+				call htime.setReal(t,1,diff)
+			endif
+		endif
+	endmethod
+	public static method getLumberRatio takes player whichPlayer returns real
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_lumber_ratio)
+	endmethod
+	public static method setLumberRatio takes player whichPlayer,real val,real during returns nothing
+		call diffLumberRatio(whichPlayer,val-getLumberRatio(whichPlayer),during)
+	endmethod
+	public static method addLumberRatio takes player whichPlayer,real val,real during returns nothing
+		call diffLumberRatio(whichPlayer,val,during)
+	endmethod
+	public static method subLumberRatio takes player whichPlayer,real val,real during returns nothing
+		call diffLumberRatio(whichPlayer,-val,during)
+	endmethod
+
+
+	//经验比率
+	private static method diffExpRatioCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local integer pid = htime.getInteger(t,1)
+		local real diff = htime.getReal(t,1)
+		local real old = LoadReal(hash_player, pid, hp_exp_ratio)
+		call htime.delTimer(t)
+		if(diff!=0)then
+			call SaveReal(hash_player, pid, hp_exp_ratio, old+diff)
+		endif
+	endmethod
+	private static method diffExpRatio takes player whichPlayer,real diff,real during returns nothing
+		local integer pid = GetHandleId(whichPlayer)
+		local real old = LoadReal(hash_player, pid, hp_exp_ratio)
+		local timer t = null
+		if(diff!=0)then
+			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_exp_ratio, old+diff)
+			if(during>0)then
+				set t = htime.setTimeout(during,function thistype.diffExpRatioCall)
+				call htime.setInteger(t,1,pid)
+				call htime.setReal(t,1,diff)
+			endif
+		endif
+	endmethod
+	public static method getExpRatio takes player whichPlayer returns real
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_exp_ratio)
+	endmethod
+	public static method setExpRatio takes player whichPlayer,real val,real during returns nothing
+		call diffExpRatio(whichPlayer,val-getExpRatio(whichPlayer),during)
+	endmethod
+	public static method addExpRatio takes player whichPlayer,real val,real during returns nothing
+		call diffExpRatio(whichPlayer,val,during)
+	endmethod
+	public static method subExpRatio takes player whichPlayer,real val,real during returns nothing
+		call diffExpRatio(whichPlayer,-val,during)
+	endmethod
+
+
+
 	//获取玩家金钱
 	public static method getGold takes player whichPlayer returns integer
 	    return GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_GOLD)
@@ -271,5 +347,53 @@ struct hPlayer
 	    	call addTotalLumberCost(whichPlayer,lumber)
 	    endif
 	endmethod
+
+
+	public static method create takes nothing returns hPlayer
+		local hRect x = 0
+		local integer i = 1
+		local integer pid = 0
+		local trigger triggerApm = CreateTrigger()
+		local trigger triggerApmUnit = CreateTrigger()
+		local trigger triggerSelection = CreateTrigger()
+		local trigger triggerDeSelection = CreateTrigger()
+        set x = hPlayer.allocate()
+		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
+		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
+		call TriggerAddAction(triggerSelection , function thistype.triggerSelectionUnitActions)
+		call TriggerAddAction(triggerDeSelection , function thistype.triggerDeSelectionUnitActions)
+		loop
+			exitwhen i>player_max_qty
+				set players[i] = Player(i-1)
+				set pid = GetHandleId(players[i])
+				call SetPlayerHandicapXP( players[i] , 0 )
+				call setGoldRatio( players[i],100,0)
+				call setLumberRatio( players[i],100,0)
+				call setExpRatio( players[i],100,0)
+				call setApm(players[i],0)
+				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
+					set player_current_qty = player_current_qty + 1
+					call SaveBoolean(hash_player, pid, hp_isComputer, false)
+					call SaveStr(hash_player, pid, hp_battle_status, default_status_gaming)
+	                call TriggerRegisterPlayerSelectionEventBJ( triggerApm , players[i] , true )
+		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_LEFT )
+		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
+		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
+		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
+		            call TriggerRegisterPlayerUnitEvent(triggerSelection, players[i], EVENT_PLAYER_UNIT_SELECTED, null)
+		            call TriggerRegisterPlayerUnitEvent(triggerDeSelection, players[i], EVENT_PLAYER_UNIT_DESELECTED, null)
+	            else
+	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
+	            	call SaveStr(hash_player, pid, hp_battle_status, default_status_nil)
+	            endif
+			set i = i + 1
+		endloop
+	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
+	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
+	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
+	    call TriggerAddAction( triggerApmUnit, function thistype.triggerApmUnitActions )
+	    return x
+	endmethod
+
 
 endstruct
