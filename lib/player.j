@@ -31,6 +31,12 @@ struct hPlayer
 	static string default_status_nil = "无参与"
 	static string default_status_leave = "已离开"
 
+	public static method create takes nothing returns hPlayer
+		local hRect x = 0
+        set x = hPlayer.allocate()
+	    return x
+	endmethod
+
 	//apm
 	private static method setApm takes player whichPlayer , integer apm returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_apm, apm)
@@ -53,19 +59,24 @@ struct hPlayer
 	endmethod
 
 	//selection
+	private static method triggerSelectionUnitActions takes nothing returns nothing
+		call setSelection(hevt.getTriggerPlayer(),hevt.getTriggerUnit())
+	endmethod
+	private static method triggerDeSelectionUnitActions takes nothing returns nothing
+		call setSelection(GetTriggerPlayer(),null)
+	endmethod
 	private static method setSelection takes player whichPlayer,unit whichUnit returns nothing
 		if(whichPlayer!=null)then
 			call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection, whichUnit)
 		endif
 	endmethod
 	public static method getSelection takes player whichPlayer returns unit
-		return LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection)
-	endmethod
-	private static method triggerSelectionUnitActions takes nothing returns nothing
-		call setSelection(GetTriggerPlayer(),GetTriggerUnit())
-	endmethod
-	private static method triggerDeSelectionUnitActions takes nothing returns nothing
-		call setSelection(GetTriggerPlayer(),null)
+		local unit u = LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection)
+		if(his.death(u))then
+			set u = null
+			call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection, null)
+		endif
+		return u
 	endmethod
 
 	//设置玩家状态
@@ -348,19 +359,15 @@ struct hPlayer
 	    endif
 	endmethod
 
-
-	public static method create takes nothing returns hPlayer
-		local hRect x = 0
+	//初始化
+	public static method initSet takes nothing returns nothing
 		local integer i = 1
 		local integer pid = 0
 		local trigger triggerApm = CreateTrigger()
 		local trigger triggerApmUnit = CreateTrigger()
-		local trigger triggerSelection = CreateTrigger()
 		local trigger triggerDeSelection = CreateTrigger()
-        set x = hPlayer.allocate()
 		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
 		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
-		call TriggerAddAction(triggerSelection , function thistype.triggerSelectionUnitActions)
 		call TriggerAddAction(triggerDeSelection , function thistype.triggerDeSelectionUnitActions)
 		loop
 			exitwhen i>player_max_qty
@@ -380,7 +387,6 @@ struct hPlayer
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
-		            call TriggerRegisterPlayerUnitEvent(triggerSelection, players[i], EVENT_PLAYER_UNIT_SELECTED, null)
 		            call TriggerRegisterPlayerUnitEvent(triggerDeSelection, players[i], EVENT_PLAYER_UNIT_DESELECTED, null)
 	            else
 	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
@@ -392,7 +398,7 @@ struct hPlayer
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
 	    call TriggerAddAction( triggerApmUnit, function thistype.triggerApmUnitActions )
-	    return x
+		call hevt.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
 	endmethod
 
 

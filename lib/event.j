@@ -5,6 +5,8 @@ globals
     hashtable hash_trigger_register = null
     hashtable hash_trigger = null
     
+    trigger event_trigger_attackDetect = null
+    trigger event_trigger_attackGetTarget = null
     trigger event_trigger_attackReady = null
     trigger event_trigger_beAttackReady = null
     trigger event_trigger_skillStudy = null
@@ -28,6 +30,8 @@ globals
     trigger event_trigger_chatLike = null
     trigger event_trigger_esc = null
     trigger event_trigger_selection = null
+    trigger event_trigger_selectionDouble = null
+    trigger event_trigger_selectionTriple = null
     trigger event_trigger_unSelection = null
     trigger event_trigger_upgradeStart = null
     trigger event_trigger_upgradeCancel = null
@@ -130,131 +134,137 @@ struct hEvt
 
     private static integer trigger_limit = 9999
 
-    private static integer hashkey_last_damage = 9991999
+    public static integer hashkey_onAttackDetect_inc = 5001
+    public static integer hashkey_onAttackGetTarget_inc = 5002
+    public static integer hashkey_onAttackReady_inc = 5003
+    public static integer hashkey_onBeAttackReady_inc = 5004
+    public static integer hashkey_onSkillStudy_inc = 5005
+    public static integer hashkey_onSkillReady_inc = 5006
+    public static integer hashkey_onSkillStart_inc = 5007
+    public static integer hashkey_onSkillHappen_inc = 5008
+    public static integer hashkey_onSkillStop_inc = 5009
+    public static integer hashkey_onSkillOver_inc = 5010
+    public static integer hashkey_onItemUsed_inc = 5011
+    public static integer hashkey_onItemSell_inc = 5012
+    public static integer hashkey_onItemDrop_inc = 5013
+    public static integer hashkey_onItemGet_inc = 5014
+    public static integer hashkey_onItemPawn_inc = 5015
+    public static integer hashkey_onItemDestroy_inc = 5016
+    public static integer hashkey_onDamage_inc = 5017
+    public static integer hashkey_onBeDamage_inc = 5018
+    public static integer hashkey_onDamageEffect_inc = 5019
+    public static integer hashkey_onBeDamageEffect_inc = 5020
+    public static integer hashkey_onAvoid_inc = 5021
+    public static integer hashkey_onBeAvoid_inc = 5022
+    public static integer hashkey_onBreakDefend_inc = 5023
+    public static integer hashkey_onBeBreakDefend_inc = 5024
+    public static integer hashkey_onBreakResistance_inc = 5025
+    public static integer hashkey_onBeBreakResistance_inc = 5026
+    public static integer hashkey_onBreakDefendAndResistance_inc = 5027
+    public static integer hashkey_onBeBreakDefendAndResistance_inc = 5028
+    public static integer hashkey_onSwim_inc = 5029
+    public static integer hashkey_onBeSwim_inc = 5030
+    public static integer hashkey_onRebound_inc = 5031
+    public static integer hashkey_onNoAvoid_inc = 5032
+    public static integer hashkey_onBeNoAvoid_inc = 5033
+    public static integer hashkey_onKnocking_inc = 5034
+    public static integer hashkey_onBeKnocking_inc = 5035
+    public static integer hashkey_onViolence_inc = 5036
+    public static integer hashkey_onBeViolence_inc = 5037
+    public static integer hashkey_onSpilt_inc = 5038
+    public static integer hashkey_onBeSpilt_inc = 5039
+    public static integer hashkey_onHemophagia_inc = 5040
+    public static integer hashkey_onBeHemophagia_inc = 5041
+    public static integer hashkey_onSkillHemophagia_inc = 5042
+    public static integer hashkey_onBeSkillHemophagia_inc = 5043
+    public static integer hashkey_onPunish_inc = 5044
+    public static integer hashkey_onDead_inc = 5045
+    public static integer hashkey_onKill_inc = 5046
+    public static integer hashkey_onReborn_inc = 5047
+    public static integer hashkey_onLevelUp_inc = 5048
+    public static integer hashkey_onSummon_inc = 5049
+    public static integer hashkey_onEnterUnitRange_inc = 5050
+    public static integer hashkey_onEnterRect_inc = 5051
+    public static integer hashkey_onLeaveRect_inc = 5052
+    public static integer hashkey_onChat_inc = 5053
+    public static integer hashkey_onChatLike_inc = 5054
+    public static integer hashkey_onEsc_inc = 5055
+    public static integer hashkey_onSelection_inc = 5056
+    public static integer hashkey_onSelectionDouble_inc = 5057
+    public static integer hashkey_onSelectionTriple_inc = 5058
+    public static integer hashkey_onUnSelection_inc = 5059
+    public static integer hashkey_onUpgradeStart_inc = 5060
+    public static integer hashkey_onUpgradeCancel_inc = 5061
+    public static integer hashkey_onUpgradeFinish_inc = 5062
+    public static integer hashkey_onConstructStart_inc = 5063
+    public static integer hashkey_onConstructCancel_inc = 5064
+    public static integer hashkey_onConstructFinish_inc = 5065
 
-    public static integer hashkey_onAttackReady_inc = 5001
-    public static integer hashkey_onBeAttackReady_inc = 5002
-    public static integer hashkey_onSkillStudy_inc = 5003
-    public static integer hashkey_onSkillReady_inc = 5004
-    public static integer hashkey_onSkillStart_inc = 5005
-    public static integer hashkey_onSkillHappen_inc = 5006
-    public static integer hashkey_onSkillStop_inc = 5007
-    public static integer hashkey_onSkillOver_inc = 5008
-    public static integer hashkey_onItemUsed_inc = 5009
-    public static integer hashkey_onItemSell_inc = 5010
-    public static integer hashkey_onItemDrop_inc = 5011
-    public static integer hashkey_onItemGet_inc = 5012
-    public static integer hashkey_onItemPawn_inc = 5013
-    public static integer hashkey_onItemDestroy_inc = 5014
-    public static integer hashkey_onDamage_inc = 5015
-    public static integer hashkey_onBeDamage_inc = 5016
-    public static integer hashkey_onDamageEffect_inc = 5017
-    public static integer hashkey_onBeDamageEffect_inc = 5018
-    public static integer hashkey_onAvoid_inc = 5019
-    public static integer hashkey_onBeAvoid_inc = 5020
-    public static integer hashkey_onBreakDefend_inc = 5021
-    public static integer hashkey_onBeBreakDefend_inc = 5022
-    public static integer hashkey_onBreakResistance_inc = 5023
-    public static integer hashkey_onBeBreakResistance_inc = 5024
-    public static integer hashkey_onBreakDefendAndResistance_inc = 5025
-    public static integer hashkey_onBeBreakDefendAndResistance_inc = 5026
-    public static integer hashkey_onSwim_inc = 5027
-    public static integer hashkey_onBeSwim_inc = 5028
-    public static integer hashkey_onRebound_inc = 5029
-    public static integer hashkey_onNoAvoid_inc = 5030
-    public static integer hashkey_onBeNoAvoid_inc = 5031
-    public static integer hashkey_onKnocking_inc = 5032
-    public static integer hashkey_onBeKnocking_inc = 5033
-    public static integer hashkey_onViolence_inc = 5034
-    public static integer hashkey_onBeViolence_inc = 5035
-    public static integer hashkey_onSpilt_inc = 5036
-    public static integer hashkey_onBeSpilt_inc = 5037
-    public static integer hashkey_onHemophagia_inc = 5038
-    public static integer hashkey_onBeHemophagia_inc = 5039
-    public static integer hashkey_onSkillHemophagia_inc = 5040
-    public static integer hashkey_onBeSkillHemophagia_inc = 5041
-    public static integer hashkey_onPunish_inc = 5042
-    public static integer hashkey_onDead_inc = 5043
-    public static integer hashkey_onKill_inc = 5044
-    public static integer hashkey_onReborn_inc = 5045
-    public static integer hashkey_onLevelUp_inc = 5046
-    public static integer hashkey_onSummon_inc = 5047
-    public static integer hashkey_onEnterUnitRange_inc = 5048
-    public static integer hashkey_onEnterRect_inc = 5049
-    public static integer hashkey_onLeaveRect_inc = 5050
-    public static integer hashkey_onChat_inc = 5051
-    public static integer hashkey_onChatLike_inc = 5052
-    public static integer hashkey_onEsc_inc = 5053
-    public static integer hashkey_onSelection_inc = 5054
-    public static integer hashkey_onUnSelection_inc = 5055
-    public static integer hashkey_onUpgradeStart_inc = 5056
-    public static integer hashkey_onUpgradeCancel_inc = 5057
-    public static integer hashkey_onUpgradeFinish_inc = 5058
-    public static integer hashkey_onConstructStart_inc = 5059
-    public static integer hashkey_onConstructCancel_inc = 5060
-    public static integer hashkey_onConstructFinish_inc = 5061
-
-    private static integer hashkey_trigger_onAttackReady = 10000
-    private static integer hashkey_trigger_onBeAttackReady = 20000
-    private static integer hashkey_trigger_onSkillStudy = 30000
-    private static integer hashkey_trigger_onSkillReady = 40000
-    private static integer hashkey_trigger_onSkillStart = 50000
-    private static integer hashkey_trigger_onSkillHappen = 60000
-    private static integer hashkey_trigger_onSkillStop = 70000
-    private static integer hashkey_trigger_onSkillOver = 80000
-    private static integer hashkey_trigger_onItemUsed = 90000
-    private static integer hashkey_trigger_onItemSell = 100000
-    private static integer hashkey_trigger_onItemDrop = 110000
-    private static integer hashkey_trigger_onItemGet = 120000
-    private static integer hashkey_trigger_onItemPawn = 130000
-    private static integer hashkey_trigger_onItemDestroy = 140000
-    private static integer hashkey_trigger_onDamage = 150000
-    private static integer hashkey_trigger_onBeDamage = 160000
-    private static integer hashkey_trigger_onDamageEffect = 170000
-    private static integer hashkey_trigger_onBeDamageEffect = 180000
-    private static integer hashkey_trigger_onAvoid = 190000
-    private static integer hashkey_trigger_onBeAvoid = 200000
-    private static integer hashkey_trigger_onBreakDefend = 210000
-    private static integer hashkey_trigger_onBeBreakDefend = 220000
-    private static integer hashkey_trigger_onBreakResistance = 230000
-    private static integer hashkey_trigger_onBeBreakResistance = 240000
-    private static integer hashkey_trigger_onBreakDefendAndResistance = 250000
-    private static integer hashkey_trigger_onBeBreakDefendAndResistance = 260000
-    private static integer hashkey_trigger_onSwim = 270000
-    private static integer hashkey_trigger_onBeSwim = 280000
-    private static integer hashkey_trigger_onRebound = 290000
-    private static integer hashkey_trigger_onNoAvoid = 300000
-    private static integer hashkey_trigger_onBeNoAvoid = 310000
-    private static integer hashkey_trigger_onKnocking = 320000
-    private static integer hashkey_trigger_onBeKnocking = 330000
-    private static integer hashkey_trigger_onViolence = 340000
-    private static integer hashkey_trigger_onBeViolence = 350000
-    private static integer hashkey_trigger_onSpilt = 360000
-    private static integer hashkey_trigger_onBeSpilt = 370000
-    private static integer hashkey_trigger_onHemophagia = 380000
-    private static integer hashkey_trigger_onBeHemophagia = 390000
-    private static integer hashkey_trigger_onSkillHemophagia = 400000
-    private static integer hashkey_trigger_onBeSkillHemophagia = 410000
-    private static integer hashkey_trigger_onPunish = 420000
-    private static integer hashkey_trigger_onDead = 430000
-    private static integer hashkey_trigger_onKill = 440000
-    private static integer hashkey_trigger_onReborn = 450000
-    private static integer hashkey_trigger_onLevelUp = 460000
-    private static integer hashkey_trigger_onSummon = 470000
-    private static integer hashkey_trigger_onEnterUnitRange = 480000
-    private static integer hashkey_trigger_onEnterRect = 490000
-    private static integer hashkey_trigger_onLeaveRect = 500000
-    private static integer hashkey_trigger_onChat = 510000
-    private static integer hashkey_trigger_onChatLike = 520000
-    private static integer hashkey_trigger_onEsc = 530000
-    private static integer hashkey_trigger_onSelection = 540000
-    private static integer hashkey_trigger_onUnSelection = 550000
-    private static integer hashkey_trigger_onUpgradeStart = 560000
-    private static integer hashkey_trigger_onUpgradeCancel = 570000
-    private static integer hashkey_trigger_onUpgradeFinish = 580000
-    private static integer hashkey_trigger_onConstructStart = 590000
-    private static integer hashkey_trigger_onConstructCancel = 600000
-    private static integer hashkey_trigger_onConstructFinish = 610000
+    private static integer hashkey_trigger_onAttackDetect = 10000
+    private static integer hashkey_trigger_onAttackGetTarget = 20000
+    private static integer hashkey_trigger_onAttackReady = 30000
+    private static integer hashkey_trigger_onBeAttackReady = 40000
+    private static integer hashkey_trigger_onSkillStudy = 50000
+    private static integer hashkey_trigger_onSkillReady = 60000
+    private static integer hashkey_trigger_onSkillStart = 70000
+    private static integer hashkey_trigger_onSkillHappen = 80000
+    private static integer hashkey_trigger_onSkillStop = 90000
+    private static integer hashkey_trigger_onSkillOver = 100000
+    private static integer hashkey_trigger_onItemUsed = 110000
+    private static integer hashkey_trigger_onItemSell = 120000
+    private static integer hashkey_trigger_onItemDrop = 130000
+    private static integer hashkey_trigger_onItemGet = 140000
+    private static integer hashkey_trigger_onItemPawn = 150000
+    private static integer hashkey_trigger_onItemDestroy = 160000
+    private static integer hashkey_trigger_onDamage = 170000
+    private static integer hashkey_trigger_onBeDamage = 180000
+    private static integer hashkey_trigger_onDamageEffect = 190000
+    private static integer hashkey_trigger_onBeDamageEffect = 200000
+    private static integer hashkey_trigger_onAvoid = 210000
+    private static integer hashkey_trigger_onBeAvoid = 220000
+    private static integer hashkey_trigger_onBreakDefend = 230000
+    private static integer hashkey_trigger_onBeBreakDefend = 240000
+    private static integer hashkey_trigger_onBreakResistance = 250000
+    private static integer hashkey_trigger_onBeBreakResistance = 260000
+    private static integer hashkey_trigger_onBreakDefendAndResistance = 270000
+    private static integer hashkey_trigger_onBeBreakDefendAndResistance = 280000
+    private static integer hashkey_trigger_onSwim = 290000
+    private static integer hashkey_trigger_onBeSwim = 300000
+    private static integer hashkey_trigger_onRebound = 310000
+    private static integer hashkey_trigger_onNoAvoid = 320000
+    private static integer hashkey_trigger_onBeNoAvoid = 330000
+    private static integer hashkey_trigger_onKnocking = 340000
+    private static integer hashkey_trigger_onBeKnocking = 350000
+    private static integer hashkey_trigger_onViolence = 360000
+    private static integer hashkey_trigger_onBeViolence = 370000
+    private static integer hashkey_trigger_onSpilt = 380000
+    private static integer hashkey_trigger_onBeSpilt = 390000
+    private static integer hashkey_trigger_onHemophagia = 400000
+    private static integer hashkey_trigger_onBeHemophagia = 410000
+    private static integer hashkey_trigger_onSkillHemophagia = 420000
+    private static integer hashkey_trigger_onBeSkillHemophagia = 430000
+    private static integer hashkey_trigger_onPunish = 440000
+    private static integer hashkey_trigger_onDead = 450000
+    private static integer hashkey_trigger_onKill = 460000
+    private static integer hashkey_trigger_onReborn = 470000
+    private static integer hashkey_trigger_onLevelUp = 480000
+    private static integer hashkey_trigger_onSummon = 490000
+    private static integer hashkey_trigger_onEnterUnitRange = 500000
+    private static integer hashkey_trigger_onEnterRect = 510000
+    private static integer hashkey_trigger_onLeaveRect = 520000
+    private static integer hashkey_trigger_onChat = 530000
+    private static integer hashkey_trigger_onChatLike = 540000
+    private static integer hashkey_trigger_onEsc = 550000
+    private static integer hashkey_trigger_onSelection = 560000
+    private static integer hashkey_trigger_onSelectionDouble = 570000
+    private static integer hashkey_trigger_onSelectionTriple = 580000
+    private static integer hashkey_trigger_onUnSelection = 590000
+    private static integer hashkey_trigger_onUpgradeStart = 600000
+    private static integer hashkey_trigger_onUpgradeCancel = 610000
+    private static integer hashkey_trigger_onUpgradeFinish = 620000
+    private static integer hashkey_trigger_onConstructStart = 630000
+    private static integer hashkey_trigger_onConstructCancel = 640000
+    private static integer hashkey_trigger_onConstructFinish = 650000
 
     private static integer hashkey_type_TriggerHandle = 1
     private static integer hashkey_type_TriggerUnit = 2
@@ -282,6 +292,14 @@ struct hEvt
     private static integer hashkey_type_BreakType = 24
     private static integer hashkey_type_IsNoAvoid = 25
 
+    private static integer hashkey_last_damage = 99980211
+    private static integer hashkey_unit_range = 10000
+    private static integer hashkey_rect_enter = 20003
+    private static integer hashkey_rect_leave = 21003
+    private static integer hashkey_esc = 22003
+    private static integer hashkey_selection = 23003
+    private static integer hashkey_selection_timer = 23103
+
     private static method getTriggerKeyByString takes string str returns integer
         local integer inc = -1
         //! textmacro getTriggerKeyByStringInc takes N1,N2
@@ -290,6 +308,8 @@ struct hEvt
         endif
         //! endtextmacro
 
+        //! runtextmacro getTriggerKeyByStringInc("attackDetect","AttackDetect")
+        //! runtextmacro getTriggerKeyByStringInc("attackGetTarget","AttackGetTarget")
         //! runtextmacro getTriggerKeyByStringInc("attackReady","AttackReady")
         //! runtextmacro getTriggerKeyByStringInc("beAttackReady","BeAttackReady")
         //! runtextmacro getTriggerKeyByStringInc("skillStudy","SkillStudy")
@@ -306,6 +326,8 @@ struct hEvt
         //! runtextmacro getTriggerKeyByStringInc("itemDestroy","ItemDestroy")
         //! runtextmacro getTriggerKeyByStringInc("damage","Damage")
         //! runtextmacro getTriggerKeyByStringInc("beDamage","BeDamage")
+        //! runtextmacro getTriggerKeyByStringInc("damageEffect","DamageEffect")
+        //! runtextmacro getTriggerKeyByStringInc("beDamageEffect","BeDamageEffect")
         //! runtextmacro getTriggerKeyByStringInc("avoid","Avoid")
         //! runtextmacro getTriggerKeyByStringInc("beAvoid","BeAvoid")
         //! runtextmacro getTriggerKeyByStringInc("breakDefend","BreakDefend")
@@ -342,6 +364,8 @@ struct hEvt
         //! runtextmacro getTriggerKeyByStringInc("chatLike","ChatLike")
         //! runtextmacro getTriggerKeyByStringInc("esc","Esc")
         //! runtextmacro getTriggerKeyByStringInc("selection","Selection")
+        //! runtextmacro getTriggerKeyByStringInc("selectionDouble","SelectionDouble")
+        //! runtextmacro getTriggerKeyByStringInc("selectionTriple","SelectionTriple")
         //! runtextmacro getTriggerKeyByStringInc("unSelection","UnSelection")
         //! runtextmacro getTriggerKeyByStringInc("upgradeStart","UpgradeStart")
         //! runtextmacro getTriggerKeyByStringInc("upgradeCancel","UpgradeCancel")
@@ -726,6 +750,46 @@ struct hEvt
         call TriggerAddAction(tg,action)
         call SaveTriggerHandle(hash_trigger, hid, k+inc , tg )
         return tg
+    endmethod
+
+    //on - 注意到攻击目标
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取被注意/目标单位
+    private static method onAttackDetectAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "attackDetect"
+        set bean.triggerUnit = GetTriggerUnit()
+        set bean.targetUnit = GetEventTargetUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onAttackDetect takes unit whichUnit,code action returns trigger
+        if(event_trigger_attackDetect==null)then
+            set event_trigger_attackDetect = CreateTrigger()
+            call TriggerAddAction(event_trigger_attackReady, function thistype.onAttackDetectAction)
+        endif
+        call TriggerRegisterUnitEvent( event_trigger_attackDetect, whichUnit, EVENT_UNIT_ACQUIRED_TARGET )
+        return onEventByHandle("attackDetect",whichUnit,action)
+    endmethod
+
+    //on - 获取攻击目标
+    //@getTriggerUnit 获取触发单位
+    //@getTargetUnit 获取被获取/目标单位
+    private static method onAttackGetTargetAction takes nothing returns nothing
+        local hEvtBean bean = hEvtBean.create()
+        set bean.triggerKey = "attackGetTarget"
+        set bean.triggerUnit = GetTriggerUnit()
+        set bean.targetUnit = GetEventTargetUnit()
+        call triggerEvent(bean)
+        call bean.destroy()
+    endmethod
+    public static method onAttackGetTarget takes unit whichUnit,code action returns trigger
+        if(event_trigger_attackGetTarget==null)then
+            set event_trigger_attackGetTarget = CreateTrigger()
+            call TriggerAddAction(event_trigger_attackGetTarget, function thistype.onAttackGetTargetAction)
+        endif
+        call TriggerRegisterUnitEvent( event_trigger_attackGetTarget, whichUnit, EVENT_UNIT_TARGET_IN_RANGE )
+        return onEventByHandle("attackGetTarget",whichUnit,action)
     endmethod
 
     //on - 准备攻击
@@ -1324,11 +1388,15 @@ struct hEvt
         call bean.destroy()
     endmethod
     public static method onEnterUnitRange takes unit whichUnit,real range,code action returns trigger
-        local trigger tgr = CreateTrigger()
-        call TriggerRegisterUnitInRangeSimple( tgr,range, whichUnit )
-        call TriggerAddAction(tgr, function thistype.onEnterUnitRangeAction)
-        call setTriggerUnit(tgr,whichUnit)
-        call setRange(tgr,range)
+        local boolean isInit = LoadBoolean(hash_trigger,GetHandleId(whichUnit),hashkey_unit_range+R2I(range))
+        local trigger tgr = null
+        if(isInit != true)then
+            call SaveBoolean(hash_trigger,GetHandleId(whichUnit),hashkey_unit_range+R2I(range),true)
+            call TriggerRegisterUnitInRangeSimple( tgr,range, whichUnit )
+            call TriggerAddAction(tgr, function thistype.onEnterUnitRangeAction)
+            call setTriggerUnit(tgr,whichUnit)
+            call setRange(tgr,range)
+        endif
         return onEventByHandle("enterUnitRange",whichUnit,action)
     endmethod
 
@@ -1344,10 +1412,15 @@ struct hEvt
         call bean.destroy()
     endmethod
     public static method onEnterRect takes rect whichRect,code action returns trigger
-        local trigger tgr = CreateTrigger()
-        call TriggerRegisterEnterRectSimple( tgr, whichRect )
-        call TriggerAddAction(tgr, function thistype.onEnterRectAction)
-        call setTriggerRect(tgr,whichRect)
+        local boolean isInit = LoadBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_enter)
+        local trigger tgr = null
+        if(isInit != true)then
+            call SaveBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_enter,true)
+            set tgr = CreateTrigger()
+            call TriggerRegisterEnterRectSimple( tgr, whichRect )
+            call TriggerAddAction(tgr, function thistype.onEnterRectAction)
+            call setTriggerRect(tgr,whichRect)
+        endif
         return onEventByHandle("enterRect",whichRect,action)
     endmethod
 
@@ -1363,10 +1436,15 @@ struct hEvt
         call bean.destroy()
     endmethod
     public static method onLeaveRect takes rect whichRect,code action returns trigger
-        local trigger tgr = CreateTrigger()
-        call TriggerRegisterLeaveRectSimple( tgr, whichRect )
-        call TriggerAddAction(tgr, function thistype.onLeaveRectAction)
-        call setTriggerRect(tgr,whichRect)
+        local boolean isInit = LoadBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_leave)
+        local trigger tgr = null
+        if(isInit != true)then
+            call SaveBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_leave,true)
+            set tgr = CreateTrigger()
+            call TriggerRegisterLeaveRectSimple( tgr, whichRect )
+            call TriggerAddAction(tgr, function thistype.onLeaveRectAction)
+            call setTriggerRect(tgr,whichRect)
+        endif
         return onEventByHandle("leaveRect",whichRect,action)
     endmethod
 
@@ -1383,7 +1461,7 @@ struct hEvt
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
-    public static method onChat takes player whichPlayer,string chatStr,code action returns trigger
+    public static method onChat takes player whichPlayer,string chatStr,code action returns nothing
         local trigger tgr = CreateTrigger()
         local integer i = 0
         if(whichPlayer==null)then
@@ -1391,13 +1469,15 @@ struct hEvt
             loop
                 exitwhen i<=0
                 call TriggerRegisterPlayerChatEvent( tgr,players[i],chatStr,true)
+                call TriggerAddAction(tgr, function thistype.onChatAction)
+                call onEventByHandle("chat",players[i],action)
                 set i=i-1
             endloop
         else
             call TriggerRegisterPlayerChatEvent( tgr,whichPlayer,chatStr,true)
+            call TriggerAddAction(tgr, function thistype.onChatAction)
+            call onEventByHandle("chat",whichPlayer,action)
         endif
-        call TriggerAddAction(tgr, function thistype.onChatAction)
-        return onEventByHandle("chat",whichPlayer,action)
     endmethod
 
     //on - 聊天时（like匹配）
@@ -1413,7 +1493,7 @@ struct hEvt
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
-    public static method onChatLike takes player whichPlayer,string chatStr,code action returns trigger
+    public static method onChatLike takes player whichPlayer,string chatStr,code action returns nothing
         local trigger tgr = CreateTrigger()
         local integer i = 0
         if(whichPlayer==null)then
@@ -1421,13 +1501,15 @@ struct hEvt
             loop
                 exitwhen i<=0
                 call TriggerRegisterPlayerChatEvent( tgr,players[i],chatStr,false)
+                call TriggerAddAction(tgr, function thistype.onChatAction)
+                call onEventByHandle("chatLike",players[i],action)
                 set i=i-1
             endloop
         else
             call TriggerRegisterPlayerChatEvent( tgr,whichPlayer,chatStr,false)
+            call TriggerAddAction(tgr, function thistype.onChatAction)
+            call onEventByHandle("chatLike",whichPlayer,action)
         endif
-        call TriggerAddAction(tgr, function thistype.onChatAction)
-        return onEventByHandle("chatLike",whichPlayer,action)
     endmethod
 
     //on - 按ESC
@@ -1439,50 +1521,133 @@ struct hEvt
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
-    public static method onEsc takes player whichPlayer,code action returns trigger
-        local trigger tgr = CreateTrigger()
+    public static method onEsc takes player whichPlayer,code action returns nothing
+        local boolean isInit = false
+        local trigger tgr = null
         local integer i = 0
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
                 exitwhen i<=0
-                call TriggerRegisterPlayerEventEndCinematic( tgr, players[i] )
+                    set isInit = LoadBoolean(hash_trigger,GetHandleId(players[i]),hashkey_esc)
+                    if(isInit != true)then
+                        call SaveBoolean(hash_trigger,GetHandleId(players[i]),hashkey_esc,true)
+                        set tgr = CreateTrigger()
+                        call TriggerRegisterPlayerEventEndCinematic( tgr, players[i] )
+                        call TriggerAddAction(tgr, function thistype.onEscAction)
+                        call onEventByHandle("esc",players[i],action)
+                    endif
                 set i=i-1
             endloop
         else
-            call TriggerRegisterPlayerEventEndCinematic( tgr, whichPlayer )
+            set isInit = LoadBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_esc)
+            if(isInit != true)then
+                call SaveBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_esc,true)
+                set tgr = CreateTrigger()
+                call TriggerRegisterPlayerEventEndCinematic( tgr, whichPlayer )
+                call TriggerAddAction(tgr, function thistype.onEscAction)
+                call onEventByHandle("esc",whichPlayer,action)
+            endif
         endif
-        call TriggerAddAction(tgr, function thistype.onEscAction)
-        return onEventByHandle("esc",whichPlayer,action)
     endmethod
 
-    //on - 玩家选择单位
-    //getTriggerPlayer 获取触发玩家
-    //getTriggerUnit 获取触发单位
-    private static method onSelectionAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
-        set bean.triggerKey = "selection"
-        set bean.triggerPlayer = GetTriggerPlayer()
-        set bean.triggerUnit = GetTriggerUnit()
-        call triggerEvent(bean)
-        call bean.destroy()
+    //TODO 选择单位
+    private static method onSelectionActionExpire takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local integer pid = htime.getInteger(t,1)
+        local integer uid = htime.getInteger(t,2)
+        call SaveInteger(hash_trigger,pid,uid,0)
     endmethod
-    public static method onSelection takes player whichPlayer,code action returns trigger
-        local trigger tgr = CreateTrigger()
+    private static method onSelectionAction takes nothing returns nothing
+        local player triggerPlayer = GetTriggerPlayer()
+        local unit triggerUnit = GetTriggerUnit()
+        local integer qty = 1+LoadInteger(hash_trigger,GetHandleId(triggerPlayer),GetHandleId(triggerUnit))
+        local hEvtBean bean
+        local timer t = LoadTimerHandle(hash_trigger,GetHandleId(triggerPlayer),hashkey_selection_timer)
+        if(t != null)then
+            call htime.delTimer(t)
+        endif
+        if(qty<1)then
+            set qty = 1
+        endif
+        call SaveInteger(hash_trigger,GetHandleId(triggerPlayer),GetHandleId(triggerUnit),qty)
+        if(qty == 1)then
+            set bean = hEvtBean.create()
+            set bean.triggerKey = "selection"
+            set bean.triggerPlayer = triggerPlayer
+            set bean.triggerUnit = triggerUnit
+            call triggerEvent(bean)
+            call bean.destroy()
+        endif
+        if(qty == 2)then
+            set bean = hEvtBean.create()
+            set bean.triggerKey = "selectionDouble"
+            set bean.triggerPlayer = triggerPlayer
+            set bean.triggerUnit = triggerUnit
+            call triggerEvent(bean)
+            call bean.destroy()
+        endif
+        if(qty == 3)then
+            set bean = hEvtBean.create()
+            set bean.triggerKey = "selectionTriple"
+            set bean.triggerPlayer = triggerPlayer
+            set bean.triggerUnit = triggerUnit
+            call triggerEvent(bean)
+            call bean.destroy()
+        endif
+        set t = htime.setTimeout(0.3,function thistype.onSelectionActionExpire)
+        call htime.setInteger(t,1,GetHandleId(triggerPlayer))
+        call htime.setInteger(t,2,GetHandleId(triggerUnit))
+        call SaveTimerHandle(hash_trigger,GetHandleId(triggerPlayer),hashkey_selection_timer,t)
+    endmethod
+    private static method onSelectionBind takes player whichPlayer,code action,string evt returns nothing
+        local boolean isInit = false
+        local trigger tgr = null
         local integer i = 0
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
                 exitwhen i<=0
-                call TriggerRegisterPlayerSelectionEventBJ( tgr, players[i], true )
+                    set isInit = LoadBoolean(hash_trigger,GetHandleId(players[i]),hashkey_selection)
+                    if(isInit != true)then
+                        call SaveBoolean(hash_trigger,GetHandleId(players[i]),hashkey_selection,true)
+                        set tgr = CreateTrigger()
+                        call TriggerRegisterPlayerSelectionEventBJ( tgr, players[i], true )
+                        call TriggerAddAction(tgr, function thistype.onSelectionAction)
+                        call onEventByHandle(evt,players[i],action)
+                    endif
                 set i=i-1
             endloop
         else
-            call TriggerRegisterPlayerSelectionEventBJ( tgr, whichPlayer, true )
+            set isInit = LoadBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_selection)
+            if(isInit != true)then
+                call SaveBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_selection,true)
+                set tgr = CreateTrigger()
+                call TriggerRegisterPlayerSelectionEventBJ( tgr, whichPlayer, true )
+                call TriggerAddAction(tgr, function thistype.onSelectionAction)
+                call onEventByHandle(evt,whichPlayer,action)
+            endif
         endif
-        call TriggerAddAction(tgr, function thistype.onSelectionAction)
-        return onEventByHandle("selection",whichPlayer,action)
     endmethod
+    //on - 玩家单击选择单位
+    //getTriggerPlayer 获取触发玩家
+    //getTriggerUnit 获取触发单位
+    public static method onSelection takes player whichPlayer,code action returns nothing
+        call onSelectionBind(whichPlayer,action,"selection")
+    endmethod
+    //on - 玩家双击选择单位
+    //getTriggerPlayer 获取触发玩家
+    //getTriggerUnit 获取触发单位
+    public static method onSelectionDouble takes player whichPlayer,code action returns nothing
+        call onSelectionBind(whichPlayer,action,"selectionDouble")
+    endmethod
+    //on - 玩家三击选择单位
+    //getTriggerPlayer 获取触发玩家
+    //getTriggerUnit 获取触发单位
+    public static method onSelectionTriple takes player whichPlayer,code action returns nothing
+        call onSelectionBind(whichPlayer,action,"selectionTriple")
+    endmethod
+
 
     //on - 玩家取消选择单位
     //getTriggerPlayer 获取触发玩家

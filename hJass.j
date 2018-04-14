@@ -68,6 +68,7 @@ library hJass initializer init
 		set hskill = hSkill.create()
 		set hitem = hItem.create()
 		//initset
+		call hplayer.initSet()
 		call hattrUnit.initSet()
 		call hmb.initSet()
     endfunction
