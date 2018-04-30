@@ -21,15 +21,27 @@ struct hMsg
 
 
     //在屏幕(x.y)处打印信息给某玩家
-    public static method echoTo takes player whichPlayer,string msg,real x,real y,real duration returns nothing
+    public static method echoToXY takes player whichPlayer,string msg,real x,real y,real duration returns nothing
         if(duration<5)then
             call DisplayTextToPlayer( whichPlayer, x, y, msg)
         else
             call DisplayTimedTextToPlayer( whichPlayer, x, y, duration, msg)
         endif
     endmethod
-    public static method printTo takes player whichPlayer,string msg,real x,real y,real duration returns nothing
-        call echoTo( whichPlayer, msg , x, y, duration)
+    public static method printToXY takes player whichPlayer,string msg,real x,real y,real duration returns nothing
+        call echoToXY( whichPlayer, msg , x, y, duration)
+    endmethod
+
+    //在屏幕(x.y)处打印信息给某玩家
+    public static method echoTo takes player whichPlayer,string msg,real duration returns nothing
+        if(duration<5)then
+            call DisplayTextToPlayer( whichPlayer, 0, 0, msg)
+        else
+            call DisplayTimedTextToPlayer( whichPlayer, 0, 0, duration, msg)
+        endif
+    endmethod
+    public static method printTo takes player whichPlayer,string msg,real duration returns nothing
+        call echoTo( whichPlayer, msg, duration)
     endmethod
 
 
@@ -121,14 +133,15 @@ struct hMsg
         local real tnow = htime.getReal(t,2)
         local real tend1 = htime.getReal(t,3)
         local real tend2 = htime.getReal(t,4)
-        if(tnow>=tend1+tend2+0.2)then
+        local real during = 0.7
+        if(tnow>=tend1+tend2+during)then
             call htime.delTimer(t)
         endif
         set tnow = tnow + TimerGetTimeout(t)
         if(tnow<=tend1)then
             call SetTextTagTextBJ(ttg, msg, size*(1+tnow/tend1))
-        elseif(tnow>tend1+0.2)then
-            call SetTextTagTextBJ(ttg, msg, size*2-(3*(tnow-tend1-0.2)/tend2))
+        elseif(tnow>tend1+during)then
+            call SetTextTagTextBJ(ttg, msg, size*2-(5*(tnow-tend1-during)/tend2))
         endif
         call htime.setReal(t,2,tnow)
     endmethod
@@ -149,7 +162,7 @@ struct hMsg
             set t = htime.setInterval(0.03,function thistype.ttgshowToggle)
             call htime.setTexttag(t,1,ttg)
             call htime.setReal(t,2,0)
-            call htime.setReal(t,3,0.3)
+            call htime.setReal(t,3,0.2)
             call htime.setReal(t,4,0.2)
         endif
     endmethod

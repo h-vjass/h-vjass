@@ -1085,6 +1085,10 @@ struct hAttrUnit
 	        endif
 	        call punishTtg(u)
 	        call SaveBoolean( hash_attr_unit , uhid , 1 , true )
+			//拥有物品栏的单位绑定物品处理
+			if( his.hasSlot(u) )then
+				call hitem.initUnit(u)
+			endif
 		endif
         set u = null
 	endmethod

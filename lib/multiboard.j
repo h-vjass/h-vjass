@@ -7,6 +7,7 @@
     multiboard array hmb_selection_attr
     multiboard array hmb_selection_effect
     multiboard array hmb_selection_natural
+    multiboard array hmb_selection_item
     string array hmb_current_type
 endglobals
 
@@ -117,7 +118,7 @@ struct hMultiboard
         local real len = LoadReal(hash_hmb,StringHash(content),6789)
         local integer chinaQty = 0
         if(len <= 0)then
-            set chinaQty = hlogic.getChinaQty(content)
+            set chinaQty = hlogic.getChinaQty.evaluate(content)
             set len = (I2R(StringLength(content))-I2R(chinaQty)*1.65)*0.40
             call SaveReal(hash_hmb,StringHash(content),6789,len)
         endif
@@ -279,33 +280,37 @@ struct hMultiboard
                 call setTitle(mbid, "属性( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
 
                 call setContent( mbid, 2, 1, R2S(hunit.getLife(hplayer.getSelection(players[i])))+" / "+R2S(hunit.getMaxLife(hplayer.getSelection(players[i]))) )
-                call setContent( mbid, 2, 2, R2S(hunit.getMana(hplayer.getSelection(players[i])))+" / "+R2S(hunit.getMaxMana(hplayer.getSelection(players[i]))) )
-                call setContent( mbid, 2, 3, R2S(hattr.getPunishCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getPunish(hplayer.getSelection(players[i]))) )
-                call setContent( mbid, 2, 4, I2S(R2I(hattr.getMove(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2, 5, R2S(hattr.getLifeBack(hplayer.getSelection(players[i]))) )
-                call setContent( mbid, 2, 6, R2S(hattr.getManaBack(hplayer.getSelection(players[i]))) )
-                call setContent( mbid, 2, 7, I2S(R2I(hattr.getAttackPhysical(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2, 8, I2S(R2I(hattr.getAttackMagic(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2, 9, I2S(R2I(hattr.getAttackSpeed(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,10, I2S(R2I(hattr.getDefend(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2,11, R2S(hattr.getResistance(hplayer.getSelection(players[i])))+"%" )
-                call setContent( mbid, 2,12, R2S(hattr.getAvoid(hplayer.getSelection(players[i])))+"%" )
-                call setContent( mbid, 2,13, R2S(hattr.getAim(hplayer.getSelection(players[i])))+"%" )
-                call setContent( mbid, 2,14, R2S(hattr.getToughness(hplayer.getSelection(players[i]))) )
-                call setContent( mbid, 2,15, I2S(R2I(hattr.getKnocking(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2,16, I2S(R2I(hattr.getViolence(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2,17, I2S(R2I(hattr.getMortalOppose(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,18, I2S(R2I(hattr.getSplit(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,19, I2S(R2I(hattr.getHemophagia(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,20, I2S(R2I(hattr.getHemophagiaSkill(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,21, R2S(hattr.getSwimOppose(hplayer.getSelection(players[i])))+"%" )
-                call setContent( mbid, 2,22, R2S(hattr.getPunishOppose(hplayer.getSelection(players[i])))+"%" )
-                call setContent( mbid, 2,23, I2S(R2I(hattr.getLuck(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,24, I2S(R2I(hattr.getInvincible(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,25, I2S(R2I(hattr.getHuntAmplitude(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,26, I2S(R2I(hattr.getHuntRebound(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,27, I2S(R2I(hattr.getCure(hplayer.getSelection(players[i]))))+"%" )
-                call setContent( mbid, 2,28, I2S(R2I(hattr.getHelp(hplayer.getHero(players[i])))) )
+                call setContent( mbid, 2, 2, R2S(hattr.getLifeBack(hplayer.getSelection(players[i])))+" 每秒" )
+                call setContent( mbid, 2, 3, R2S(hattr.getLifeSourceCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getLifeSource(hplayer.getSelection(players[i]))) )
+                call setContent( mbid, 2, 4, R2S(hattr.getPunishCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getPunish(hplayer.getSelection(players[i]))) )
+                call setContent( mbid, 2, 5, I2S(R2I(hattr.getAttackPhysical(hplayer.getSelection(players[i])))) )
+                call setContent( mbid, 2, 6, I2S(R2I(hattr.getMove(hplayer.getSelection(players[i])))) )
+                call setContent( mbid, 2, 7, I2S(R2I(hattr.getAttackSpeed(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 2, 8, I2S(R2I(hattr.getDefend(hplayer.getSelection(players[i])))) )
+                call setContent( mbid, 2, 9, R2S(hattr.getAvoid(hplayer.getSelection(players[i])))+"%" )
+                call setContent( mbid, 2,10, I2S(R2I(hattr.getKnocking(hplayer.getSelection(players[i])))) )
+                call setContent( mbid, 2,11, I2S(R2I(hattr.getMortalOppose(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 2,12, I2S(R2I(hattr.getHemophagia(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 2,13, R2S(hattr.getSwimOppose(hplayer.getSelection(players[i])))+"%" )
+                call setContent( mbid, 2,14, I2S(R2I(hattr.getInvincible(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 2,15, I2S(R2I(hattr.getHuntAmplitude(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 2,16, R2S(hattr.getWeightCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getWeight(hplayer.getSelection(players[i]))) )
+
+                call setContent( mbid, 4, 1, R2S(hunit.getMana(hplayer.getSelection(players[i])))+" / "+R2S(hunit.getMaxMana(hplayer.getSelection(players[i]))) )
+                call setContent( mbid, 4, 2, R2S(hattr.getManaBack(hplayer.getSelection(players[i])))+" 每秒" )
+                call setContent( mbid, 4, 3, R2S(hattr.getManaSourceCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getManaSource(hplayer.getSelection(players[i]))) )
+                call setContent( mbid, 4, 4, R2S(hattr.getPunishOppose(hplayer.getSelection(players[i])))+"%" )
+                call setContent( mbid, 4, 5, I2S(R2I(hattr.getAttackMagic(hplayer.getSelection(players[i])))) )
+                call setContent( mbid, 4, 6, I2S(R2I(hattr.getHelp(hplayer.getHero(players[i])))) )
+                call setContent( mbid, 4, 7, R2S(hattr.getToughness(hplayer.getSelection(players[i]))) )
+                call setContent( mbid, 4, 8, R2S(hattr.getResistance(hplayer.getSelection(players[i])))+"%" )
+                call setContent( mbid, 4, 9, R2S(hattr.getAim(hplayer.getSelection(players[i])))+"%" )
+                call setContent( mbid, 4,10, I2S(R2I(hattr.getViolence(hplayer.getSelection(players[i])))) )
+                call setContent( mbid, 4,11, I2S(R2I(hattr.getSplit(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 4,12, I2S(R2I(hattr.getHemophagiaSkill(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 4,13, I2S(R2I(hattr.getLuck(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 4,14, I2S(R2I(hattr.getCure(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 4,15, I2S(R2I(hattr.getHuntRebound(hplayer.getSelection(players[i]))))+"%" )
 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_attr[i])
@@ -439,6 +444,78 @@ struct hMultiboard
     endmethod
 
 
+    private static method hJassDefault_selection_item takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local integer i = htime.getInteger(t,1)
+        local integer j = 0
+        local integer mbid = 0
+        local item it = null
+        local integer charges = 0
+        local integer combatEffectiveness = 0
+        local integer totalCombatEffectiveness = 0
+        local integer gold = 0
+        local integer totalGold = 0
+        local integer lumber = 0
+        local integer totalLumber = 0
+        local real weight = 0
+        local real totalWeight = 0
+        if(players[i]==null or his.playing(players[i])==false)then
+            call htime.delTimer(t)
+            return
+        endif
+        if(hmb_selection_item[i]!=null and hmb_current_type[i] == "mbsi")then
+            if(hplayer.getSelection(players[i])!=null)then
+                set mbid = GetHandleId(hmb_selection_item[i])
+                call setTitle(mbid, "物品栏( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
+                set j = 1
+                loop
+                    exitwhen j>6
+                        set it = UnitItemInSlot(hplayer.getSelection(players[i]),j-1)
+                        if(it!=null)then
+                            set charges = GetItemCharges(it)
+                            set combatEffectiveness = hitem.getCombatEffectiveness(GetItemTypeId(it))*charges
+                            set totalCombatEffectiveness = totalCombatEffectiveness+combatEffectiveness
+                            set gold = hitem.getGold(GetItemTypeId(it))*charges
+                            set totalGold = totalGold+gold
+                            set lumber = hitem.getLumber(GetItemTypeId(it))*charges
+                            set totalLumber = totalLumber+lumber
+                            set weight = hitem.getWeight(GetItemTypeId(it))*charges
+                            set totalWeight = totalWeight+weight
+                            call setContent(mbid, 1, j+1, GetItemName(it))
+                            call setContent(mbid, 2, j+1, I2S(charges)+" 件")
+                            call setContent(mbid, 3, j+1, I2S(gold))
+                            call setContent(mbid, 4, j+1, I2S(lumber))
+                            call setContent(mbid, 5, j+1, R2S(weight)+" Kg")
+                            call setContent(mbid, 6, j+1, I2S(combatEffectiveness))
+                        else
+                            call setContent(mbid, 1, j+1, " - ")
+                            call setContent(mbid, 2, j+1, " - ")
+                            call setContent(mbid, 3, j+1, " - ")
+                            call setContent(mbid, 4, j+1, " - ")
+                            call setContent(mbid, 5, j+1, " - ")
+                            call setContent(mbid, 6, j+1, " - ")
+                        endif
+                    set j = j+1
+                endloop
+                call setContent(mbid, 1, j+1, "售卖比率:"+R2S(hplayer.getSellRatio(players[i]))+"%")
+                call setContent(mbid, 3, j+1, I2S(totalGold))
+                call setContent(mbid, 4, j+1, I2S(totalLumber))
+                call setContent(mbid, 5, j+1, R2S(totalWeight)+" Kg")
+                call setContent(mbid, 6, j+1, I2S(totalCombatEffectiveness))
+                set t = htime.setTimeout(0.3,function thistype.build)
+                call htime.setMultiboard(t,1,hmb_selection_item[i])
+            else
+                call MultiboardSetTitleText(hmb_selection_item[i], "单位物品状态(未锁定单位)")
+                call MultiboardSetItemValueBJ( hmb_selection_item[i], 1, 1, "- 请“双击”锁定选择单位查看物品 -" )
+                call MultiboardSetRowCount(hmb_selection_item[i], 1)
+                call MultiboardSetColumnCount(hmb_selection_item[i], 1)
+                call MultiboardSetItemWidthBJ( hmb_selection_item[i], 0, 0, 15.00 )
+                call MultiboardSetItemStyleBJ( hmb_selection_item[i], 0, 0, true, false )
+            endif
+        endif
+    endmethod
+
+
     private static method start takes nothing returns nothing
         local integer i = 0
         local integer mbid = 0
@@ -499,33 +576,38 @@ struct hMultiboard
                     set hmb_selection_attr[i] = CreateMultiboard()
                     set mbid = GetHandleId(hmb_selection_attr[i])
                     call setContentIcon( mbid, 1, 1, "生命", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
-                    call setContentIcon( mbid, 1, 2, "魔法", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
-                    call setContentIcon( mbid, 1, 3, "硬直", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
-                    call setContentIcon( mbid, 1, 4, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
-                    call setContentIcon( mbid, 1, 5, "生命恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionGreenSmall.blp" )
-                    call setContentIcon( mbid, 1, 6, "魔法恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionOfClarity.blp" )
-                    call setContentIcon( mbid, 1, 7, "物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
-                    call setContentIcon( mbid, 1, 8, "魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
-                    call setContentIcon( mbid, 1, 9, "攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
-                    call setContentIcon( mbid, 1,10, "护甲", "ReplaceableTextures\\CommandButtons\\BTNHumanArmorUpOne.blp" )
-                    call setContentIcon( mbid, 1,11, "魔抗", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-                    call setContentIcon( mbid, 1,12, "回避", "ReplaceableTextures\\CommandButtons\\BTNInvisibility.blp" )
-                    call setContentIcon( mbid, 1,13, "命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
-                    call setContentIcon( mbid, 1,14, "韧性", "ReplaceableTextures\\CommandButtons\\BTNLeatherUpgradeTwo.blp" )
-                    call setContentIcon( mbid, 1,15, "物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-                    call setContentIcon( mbid, 1,16, "魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
-                    call setContentIcon( mbid, 1,17, "致命抵抗", "ReplaceableTextures\\CommandButtons\\BTNPillage.blp" )
-                    call setContentIcon( mbid, 1,18, "分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
-                    call setContentIcon( mbid, 1,19, "吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
-                    call setContentIcon( mbid, 1,20, "技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
-                    call setContentIcon( mbid, 1,21, "眩晕抵抗", "ReplaceableTextures\\CommandButtons\\BTNNeutralManaShield.blp" )
-                    call setContentIcon( mbid, 1,22, "硬直抵抗", "ReplaceableTextures\\CommandButtons\\BTNSirenMaster.blp" )
-                    call setContentIcon( mbid, 1,23, "运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
-                    call setContentIcon( mbid, 1,24, "无敌", "ReplaceableTextures\\CommandButtons\\BTNDivineIntervention.blp" )
-                    call setContentIcon( mbid, 1,25, "伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
-                    call setContentIcon( mbid, 1,26, "伤害反射", "ReplaceableTextures\\CommandButtons\\BTNThornShield.blp" )
-                    call setContentIcon( mbid, 1,27, "治疗", "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp" )
-                    call setContentIcon( mbid, 1,28, "救助力", "ReplaceableTextures\\CommandButtons\\BTNAnkh.blp" )
+                    call setContentIcon( mbid, 1, 2, "生命恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionGreenSmall.blp" )
+                    call setContentIcon( mbid, 1, 3, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
+                    call setContentIcon( mbid, 1, 4, "硬直", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
+                    call setContentIcon( mbid, 1, 5, "物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
+                    call setContentIcon( mbid, 1, 6, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
+                    call setContentIcon( mbid, 1, 7, "攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
+                    call setContentIcon( mbid, 1, 8, "护甲", "ReplaceableTextures\\CommandButtons\\BTNHumanArmorUpOne.blp" )
+                    call setContentIcon( mbid, 1, 9, "回避", "ReplaceableTextures\\CommandButtons\\BTNInvisibility.blp" )
+                    call setContentIcon( mbid, 1,10, "物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+                    call setContentIcon( mbid, 1,11, "致命抵抗", "ReplaceableTextures\\CommandButtons\\BTNPillage.blp" )
+                    call setContentIcon( mbid, 1,12, "吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
+                    call setContentIcon( mbid, 1,13, "眩晕抵抗", "ReplaceableTextures\\CommandButtons\\BTNNeutralManaShield.blp" )
+                    call setContentIcon( mbid, 1,14, "无敌", "ReplaceableTextures\\CommandButtons\\BTNDivineIntervention.blp" )
+                    call setContentIcon( mbid, 1,15, "伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
+                    call setContentIcon( mbid, 1,16, "负重", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
+
+                    call setContentIcon( mbid, 3, 1, "魔法", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
+                    call setContentIcon( mbid, 3, 2, "魔法恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionOfClarity.blp" )
+                    call setContentIcon( mbid, 3, 3, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
+                    call setContentIcon( mbid, 3, 4, "硬直抵抗", "ReplaceableTextures\\CommandButtons\\BTNSirenMaster.blp" )
+                    call setContentIcon( mbid, 3, 5, "魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
+                    call setContentIcon( mbid, 3, 6, "救助力", "ReplaceableTextures\\CommandButtons\\BTNAnkh.blp" )
+                    call setContentIcon( mbid, 3, 7, "韧性", "ReplaceableTextures\\CommandButtons\\BTNLeatherUpgradeTwo.blp" )
+                    call setContentIcon( mbid, 3, 8, "魔抗", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
+                    call setContentIcon( mbid, 3, 9, "命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
+                    call setContentIcon( mbid, 3,10, "魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
+                    call setContentIcon( mbid, 3,11, "分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
+                    call setContentIcon( mbid, 3,12, "技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
+                    call setContentIcon( mbid, 3,13, "运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
+                    call setContentIcon( mbid, 3,14, "治疗", "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp" )
+                    call setContentIcon( mbid, 3,15, "伤害反射", "ReplaceableTextures\\CommandButtons\\BTNThornShield.blp" )
+
                     set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_attr)
                     call htime.setInteger(t,1,i)
                 endif
@@ -605,6 +687,18 @@ struct hMultiboard
                     set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_natural)
                     call htime.setInteger(t,1,i)
                 endif
+                if(hmb_selection_item[i] == null) then
+                    set hmb_selection_item[i] = CreateMultiboard()
+                    set mbid = GetHandleId(hmb_selection_item[i])
+                    call setContent(mbid, 1, 1, "物品")
+                    call setContent(mbid, 2, 1, "数量")
+                    call setContentIcon(mbid, 3, 1, "黄金", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
+                    call setContentIcon(mbid, 4, 1, "木头", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp")
+                    call setContentIcon(mbid, 5, 1, "重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp")
+                    call setContentIcon(mbid, 6, 1, "战力", "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp")
+                    set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_item)
+                    call htime.setInteger(t,1,i)
+                endif
             endif
         endloop
     endmethod
@@ -644,6 +738,13 @@ struct hMultiboard
             call MultiboardDisplay(hmb_selection_natural[i], true)
         endif
     endmethod
+    private static method mbsi takes nothing returns nothing
+        local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        set hmb_current_type[i] = "mbsi"
+        if(GetLocalPlayer()==players[i])then
+            call MultiboardDisplay(hmb_selection_item[i], true)
+        endif
+    endmethod
 
     public static method initSet takes nothing returns nothing
         local integer i = 0
@@ -653,6 +754,7 @@ struct hMultiboard
         local trigger mbsaTrigger = null
         local trigger mbseTrigger = null
         local trigger mbsnTrigger = null
+        local trigger mbsiTrigger = null
 
         set startTrigger = CreateTrigger()
         call TriggerRegisterTimerEventSingle( startTrigger, 0.5 )
@@ -663,6 +765,7 @@ struct hMultiboard
         set mbsaTrigger = CreateTrigger()
         set mbseTrigger = CreateTrigger()
         set mbsnTrigger = CreateTrigger()
+        set mbsiTrigger = CreateTrigger()
 
         set i = 1
         loop
@@ -677,10 +780,10 @@ struct hMultiboard
                 call TriggerAddAction(mbseTrigger, function thistype.mbse)
                 call TriggerRegisterPlayerChatEvent( mbsnTrigger, players[i], "-mbsn", true )
                 call TriggerAddAction(mbsnTrigger, function thistype.mbsn)
+                call TriggerRegisterPlayerChatEvent( mbsiTrigger, players[i], "-mbsi", true )
+                call TriggerAddAction(mbsiTrigger, function thistype.mbsi)
             set i = i + 1
         endloop
-
-        call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "面板信息指令", "-mbap 查看所有玩家统计|n-mbme 查看你的个人实时状态|n-mbsa 查看三击锁定单位的基本属性|n-mbse 查看三击锁定单位的特效属性|n-mbse 查看三击锁定单位的自然属性", "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 
     endmethod
 

@@ -740,7 +740,7 @@ struct hAttrHunt
             call hevt.triggerEvent(hevtBean)
             call hevtBean.destroy()
         endif
-            //如果遇到真实伤害，减少50%的回避效果
+        //如果遇到真实伤害，减少50%的回避效果
         if( hlogic.strpos(bean.huntType,"real")!=-1 )then
             set toUnitAvoid = toUnitAvoid * 0.8
         endif
@@ -829,7 +829,7 @@ struct hAttrHunt
                 set realDamageStringColor = "15bcef"
             endif
             //文本显示
-            call hmsg.style(  hmsg.ttg2Unit(toUnit,realDamageString+I2S(R2I(realDamage)),6.00,realDamageStringColor,10,1.1,11.00)  ,"toggle",0,0.25)
+            call hmsg.style(  hmsg.ttg2Unit(toUnit,realDamageString+I2S(R2I(realDamage)),6.00,realDamageStringColor,10,1.1,11.00)  ,"toggle",-0.05,0)
 
             call hevt.setLastDamageUnit(toUnit,fromUnit)
             call hplayer.addDamage(GetOwningPlayer(fromUnit),realDamage)
@@ -998,7 +998,7 @@ struct hAttrHunt
                         set punishEffect = 1.00
                     endif
                     call hattr.subMove( toUnit , punishEffect , 5.00 )
-                    call hmsg.style(hmsg.ttg2Unit(toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0.05)
+                    call hmsg.style(hmsg.ttg2Unit(toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0)
 
                     //@触发硬直事件
                     set hevtBean = hEvtBean.create()
@@ -1015,7 +1015,7 @@ struct hAttrHunt
             //反射
             if( toUnitHuntRebound >0 )then
                 call hunit.subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
-                call hmsg.style(hmsg.ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",0,0.2)
+                call hmsg.style(hmsg.ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",-0.05,0)
                 //@触发反伤事件
                 set hevtBean = hEvtBean.create()
                 set hevtBean.triggerKey = "rebound"
@@ -1030,7 +1030,7 @@ struct hAttrHunt
                 call hunit.addLife(toUnit,realDamage * toUnitCure * 0.01)
                 call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",toUnit,"origin",1.00)
                 set loc = GetUnitLoc( toUnit )
-                call hmsg.style(hmsg.ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",0,0.2)
+                call hmsg.style(hmsg.ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",-0.05,0)
                 call RemoveLocation( loc )
             endif
         endif

@@ -61,6 +61,13 @@ struct hIs
     endmethod
 
     /**
+     * 是否拥有物品栏
+     */
+    public static method hasSlot takes unit whichUnit returns boolean
+        return GetUnitAbilityLevel(whichUnit,ITEM_ABILITY)>=1
+    endmethod
+
+    /**
      * 是否某个特定单位
      */
     public static method unit takes unit whichUnit,unit otherUnit returns boolean

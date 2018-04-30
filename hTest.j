@@ -52,10 +52,52 @@ struct hTest
 		local integer j=0
 		local integer rand=0
 		local hAttrBean hattrbean
+		local hItemBean hitembean
 
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
 		call hplayer.setHero(players[1],u,"")
+
+		call hattr.addAttackPhysical(u,10000,0)
+
+		set hitembean = hItemBean.create()
+		set hitembean.item_id = 'I001'
+		set hitembean.item_overlay = 5
+		set hitembean.item_gold = 100
+		set hitembean.item_lumber = 1
+		set hitembean.item_weight = 3.35
+		set hitembean.attackPhysical = 100
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+		set hitembean = hItemBean.create()
+		set hitembean.item_id = 'I002'
+		set hitembean.item_overlay = 5
+		set hitembean.item_gold = 200
+		set hitembean.item_lumber = 2
+		set hitembean.item_weight = 0.05
+		set hitembean.attackSpeed = 100
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+		set hitembean = hItemBean.create()
+		set hitembean.item_id = 'I000'
+		set hitembean.item_overlay = 5
+		set hitembean.item_gold = 500
+		set hitembean.item_lumber = 3
+		set hitembean.item_weight = 0.05
+		set hitembean.attackPhysical = 100
+		set hitembean.attackSpeed = 100
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+
+		call hitemMix.newFormula('I000',1)
+		call hitemMix.addFlag('I000','I001',3)
+		call hitemMix.addFlag('I000','I002',3)
+		call hitemMix.newFormula('I000',1)
+		call hitemMix.addFlag('I000','I001',5)
+
+		call hconsole.info("itemQty="+I2S(hitem.getTotalQty()))
+		call hconsole.info("itemMixQty="+I2S(hitemMix.getTotalQty()))
+
 		//测试吸血
 		//call hattr.addHemophagia(u,25,0)
 		//测试眩晕
@@ -92,8 +134,8 @@ struct hTest
 
 		call hattrEffect.setCrackFlyOdds(u,50.00,0)
 		call hattrEffect.setCrackFlyVal(u,300.00,0)
-		call hattrEffect.setCrackFlyDistance(u,500,0)
-		call hattrEffect.setCrackFlyHigh(u,50,0)
+		call hattrEffect.setCrackFlyDistance(u,100,0)
+		call hattrEffect.setCrackFlyHigh(u,300,0)
 
 		//call hattrEffect.setFetterOdds(u,50,0)
 		//call hattrEffect.setFetterDuring(u,10.00,0)
@@ -176,7 +218,6 @@ struct hTest
 		call hskill.shapeshift(u,30.0,'A00D','A00E',"",hattrbean)
 		call hconsole.error("name"+GetUnitName(u))
 		call hattrbean.destroy()
-
 	endmethod
 
 endstruct

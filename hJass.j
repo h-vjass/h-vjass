@@ -5,6 +5,7 @@
 library hJass initializer init
 
 	private function init takes nothing returns nothing
+		local string txt = ""
 		//哈希表初始化
 		call FlushParentHashtable( hash_ability )
 		call FlushParentHashtable( hash_skill )
@@ -15,6 +16,7 @@ library hJass initializer init
 		call FlushParentHashtable( hash_trigger_register )
 		call FlushParentHashtable( hash_trigger )
 		call FlushParentHashtable( hash_item )
+		call FlushParentHashtable( hash_item_mix )
 		call FlushParentHashtable( hash_hmsg )
 		call FlushParentHashtable( hash_player )
 		call FlushParentHashtable( hash_hrect )
@@ -32,6 +34,7 @@ library hJass initializer init
 		set hash_trigger_register = InitHashtable()
 		set hash_trigger = InitHashtable()
 		set hash_item = InitHashtable()
+		set hash_item_mix = InitHashtable()
 		set hash_hmsg = InitHashtable()
 		set hash_player = InitHashtable()
 		set hash_hrect = InitHashtable()
@@ -67,10 +70,31 @@ library hJass initializer init
 		set hability = hAbility.create()
 		set hskill = hSkill.create()
 		set hitem = hItem.create()
+		set hitemMix = hItemMix.create()
 		//initset
 		call hplayer.initSet()
 		call hattrUnit.initSet()
 		call hmb.initSet()
+		call hitem.initSet()
+
+		//hJass 系统提醒（F9任务）
+		set txt = ""
+		set txt = txt + "hJass完全独立，不依赖任何游戏平台（如JAPI）"
+		set txt = txt + "|n包含多样丰富的属性系统，可以轻松做出平时难以甚至不能做出的地图效果"
+		set txt = txt + "|n内置多达几十种以上的自定义事件，轻松实现神奇的主动和被动效果"
+		set txt = txt + "|n自带物品合成，免去自行编写的困惑。丰富的自定义技能模板"
+		set txt = txt + "|n镜头、单位组、过滤器、背景音乐、天气等也应有尽有"
+		set txt = txt + "|n想要了解更多，官方QQ群 325338043"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "hJass",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		set txt = ""
+		set txt = txt + "-mbap 查看所有玩家统计"
+		set txt = txt + "|n-mbme 查看你的个人实时状态"
+		set txt = txt + "|n-mbsa 查看三击锁定单位的基本属性"
+		set txt = txt + "|n-mbse 查看三击锁定单位的特效属性"
+		set txt = txt + "|n-mbsn 查看三击锁定单位的自然属性"
+		set txt = txt + "|n-mbsi 查看三击锁定单位的物品"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+
     endfunction
 
 endlibrary

@@ -34,9 +34,9 @@ struct hAward
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
         //TODO 增益
-        set realGold 	= realGold + R2I( I2R(gold) * hplayer.getGoldRatio(GetOwningPlayer( whichUnit )) / 100.00 )
-        set realLumber	= realLumber + R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
-        set realExp		= realExp + R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )
+        set realGold 	= R2I( I2R(gold) * hplayer.getGoldRatio(GetOwningPlayer( whichUnit )) / 100.00 )
+        set realLumber	= R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
+        set realExp		= R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )
 
         if(exp > 0 and his.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )
@@ -56,6 +56,25 @@ struct hAward
         set ttg = hmsg.ttg2Unit(whichUnit,floatStr,11,"",0,2.00,50.00)
         call SetTextTagPos( ttg , GetUnitX(whichUnit)-I2R(StringLength(floatStr)-ttgColorLen)*11*0.5 , GetUnitY(whichUnit) , 50 )
         call hmsg.style(ttg,"shrink",0,0.15)
+    endmethod
+
+    /**
+     * 奖励单位黄金
+     */
+    public method forUnitGold takes unit whichUnit,integer gold returns nothing
+        call forUnit(whichUnit,0,gold,0)
+    endmethod
+    /**
+     * 奖励单位木头
+     */
+    public method forUnitLumber takes unit whichUnit,integer lumber returns nothing
+        call forUnit(whichUnit,0,0,lumber)
+    endmethod
+    /**
+     * 奖励单位经验
+     */
+    public method forUnitExp takes unit whichUnit,integer exp returns nothing
+        call forUnit(whichUnit,exp,0,0)
     endmethod
 
     /**
@@ -95,6 +114,25 @@ struct hAward
         call GroupClear(g)
         call DestroyGroup(g)
         set g = null
+    endmethod
+
+    /**
+     * 平分奖励英雄组黄金
+     */
+    public method forGroupGold takes unit whichUnit,integer gold returns nothing
+        call forGroup(whichUnit,0,gold,0)
+    endmethod
+    /**
+     * 平分奖励英雄组木头
+     */
+    public method forGroupLumber takes unit whichUnit,integer lumber returns nothing
+        call forGroup(whichUnit,0,0,lumber)
+    endmethod
+    /**
+     * 平分奖励英雄组经验
+     */
+    public method forGroupExp takes unit whichUnit,integer exp returns nothing
+        call forGroup(whichUnit,exp,0,0)
     endmethod
 
 endstruct

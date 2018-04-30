@@ -98,6 +98,45 @@ struct hLogic
 		return s
 	endmethod
 
+	/**
+     *  获取两个单位间距离，如果其中一个单位为空 返回0
+     */
+    public static method getDistanceBetweenUnit takes unit u1,unit u2 returns real
+        local location loc1 = null
+        local location loc2 = null
+        local real distance = 0
+        if( u1 == null or u2 == null ) then
+            return 0
+        endif
+        set loc1 = GetUnitLoc(u1)
+        set loc2 = GetUnitLoc(u2)
+        set distance = DistanceBetweenPoints(loc1, loc2)
+        call RemoveLocation( loc1 )
+        call RemoveLocation( loc2 )
+        set loc1 = null
+        set loc2 = null
+        return distance
+    endmethod
+
+	/**
+     *  获取两个坐标距离
+     */
+    public static method getDistanceBetweenXY takes real x1,real y1,real x2,real y2 returns real
+        local real dx = x2 - x1
+		local real dy = y2 - y1
+		return SquareRoot(dx * dx + dy * dy)
+    endmethod
+
+	/**
+     *  获取两个点距离，如果其中一个点为空 返回0
+     */
+    public static method getDistanceBetweenLoc takes location loc1,location loc2 returns real
+        if( loc1 == null or loc2 == null ) then
+            return 0
+        endif
+        return DistanceBetweenPoints(loc1, loc2)
+    endmethod
+
 	//字符串截取
 	public static method substr takes string haystack,integer start,integer len returns string
 		local integer haystackLen = StringLength(haystack)
@@ -142,7 +181,7 @@ struct hLogic
 		local integer f = -1
 		loop
 			exitwhen i == 0
-			set f = thistype.strpos(map, SubString(s, i - 1, i)) * R2I(Pow(n, I2R(StringLength(s) - i)))
+			set f = thistype.strpos.evaluate(map, SubString(s, i - 1, i)) * R2I(Pow(n, I2R(StringLength(s) - i)))
 			if f == -1 then
 				return m
 			endif
@@ -159,7 +198,7 @@ struct hLogic
 		local integer n = StringLength(map)
 		loop
 			exitwhen i == 0
-			set s = thistype.substr(map, ModuloInteger(i, n), 1) + s
+			set s = thistype.substr.evaluate(map, ModuloInteger(i, n), 1) + s
 			set i = i / n
 		endloop
 		return s
@@ -192,7 +231,7 @@ struct hLogic
 				set l = StringLength(s)
 				loop
 					exitwhen i >= l
-					set Echar = thistype.int2strByMap(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
+					set Echar = thistype.int2strByMap.evaluate(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
 					set ss = ss + Echar
 					if(Echar == "E1" or Echar == "E2" or Echar == "E3" or Echar == "E4" or Echar == "E5" or Echar == "E6" or Echar == "E7" or Echar == "E8" or Echar == "E9")then
 						set chinaQty = chinaQty + 1

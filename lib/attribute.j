@@ -7,7 +7,6 @@ globals
 	real MAX_MOVE_SPEED = 522
 	//默认攻速计算
 	real DEFAULT_ATTACK_SPEED = 150
-    integer ITEM_ABILITY = 'AInv'
 endglobals
 
 globals
@@ -636,7 +635,6 @@ struct hAttr
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_1000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_10000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_100000000 )
-
 		//白字攻击
         if(GetUnitAbilityLevel(whichUnit,ITEM_ABILITY)<1)then
             call UnitAddAbility(whichUnit, ITEM_ABILITY)
@@ -908,6 +906,11 @@ struct hAttr
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000000,     1 )
 
+		if(his.hero(whichUnit)==true)then
+			call UnitAddAbility( whichUnit , ITEM_ABILITY_SEPARATE)
+			call UnitMakeAbilityPermanent( whichUnit , true, ITEM_ABILITY_SEPARATE)
+        	call SetUnitAbilityLevel( whichUnit , ITEM_ABILITY_SEPARATE, 1 )
+		endif
 	endmethod
 
 	/**
@@ -1746,7 +1749,7 @@ struct hAttr
 		local timer t = null
 		call initAttr( whichUnit )
 		call setAttrDo( flag , whichUnit , diff )
-		if( during>0 ) then
+		if( during>0.01 ) then
 			set t = htime.setTimeout( during , function thistype.setAttrDuring )
 			call htime.setInteger(t,1,flag)
 			call htime.setUnit(t,2,whichUnit)

@@ -19,6 +19,7 @@ globals
 	integer hp_gold_ratio = 10013
 	integer hp_lumber_ratio = 10014
 	integer hp_exp_ratio = 10015
+	integer hp_sell_ratio = 10016
 
 	integer player_max_qty = 12
 	integer player_current_qty = 0
@@ -144,22 +145,6 @@ struct hPlayer
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
 	endmethod
 
-	//获取玩家总获金量
-	public static method getTotalGold takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold)
-	endmethod
-	//增加玩家总获金量
-	public static method addTotalGold takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold, getTotalGold(whichPlayer)+val)
-	endmethod
-	//获取玩家总耗金量
-	public static method getTotalGoldCost takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost)
-	endmethod
-	//增加玩家总耗金量
-	public static method addTotalGoldCost takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
-	endmethod
 
 
 	//黄金比率
@@ -275,6 +260,46 @@ struct hPlayer
 	endmethod
 
 
+	//物品售卖比率
+	private static method diffSellRatioCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local integer pid = htime.getInteger(t,1)
+		local real diff = htime.getReal(t,1)
+		local real old = LoadReal(hash_player, pid, hp_sell_ratio)
+		call htime.delTimer(t)
+		if(diff!=0)then
+			call SaveReal(hash_player, pid, hp_sell_ratio, old+diff)
+		endif
+	endmethod
+	private static method diffSellRatio takes player whichPlayer,real diff,real during returns nothing
+		local integer pid = GetHandleId(whichPlayer)
+		local real old = LoadReal(hash_player, pid, hp_sell_ratio)
+		local timer t = null
+		if(diff!=0)then
+			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_sell_ratio, old+diff)
+			if(during>0)then
+				set t = htime.setTimeout(during,function thistype.diffSellRatioCall)
+				call htime.setInteger(t,1,pid)
+				call htime.setReal(t,1,diff)
+			endif
+		endif
+	endmethod
+	public static method getSellRatio takes player whichPlayer returns real
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_sell_ratio)
+	endmethod
+	public static method setSellRatio takes player whichPlayer,real val,real during returns nothing
+		call diffSellRatio(whichPlayer,val-getSellRatio(whichPlayer),during)
+	endmethod
+	public static method addSellRatio takes player whichPlayer,real val,real during returns nothing
+		call diffSellRatio(whichPlayer,val,during)
+	endmethod
+	public static method subSellRatio takes player whichPlayer,real val,real during returns nothing
+		call diffSellRatio(whichPlayer,-val,during)
+	endmethod
+
+
+
+
 
 	//获取玩家金钱
 	public static method getGold takes player whichPlayer returns integer
@@ -309,23 +334,27 @@ struct hPlayer
 	    endif
 	endmethod
 
+	//获取玩家总获金量
+	public static method getTotalGold takes player whichPlayer returns integer
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold)
+	endmethod
+	//增加玩家总获金量
+	public static method addTotalGold takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold, getTotalGold(whichPlayer)+val)
+	endmethod
+	//获取玩家总耗金量
+	public static method getTotalGoldCost takes player whichPlayer returns integer
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost)
+	endmethod
+	//增加玩家总耗金量
+	public static method addTotalGoldCost takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
+	endmethod
 
-	//获取玩家总获木量
-	public static method getTotalLumber takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber)
-	endmethod
-	//增加玩家总获木量
-	public static method addTotalLumber takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber, getTotalLumber(whichPlayer)+val)
-	endmethod
-	//获取玩家总耗木量
-	public static method getTotalLumberCost takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost)
-	endmethod
-	//增加玩家总耗木量
-	public static method addTotalLumberCost takes player whichPlayer,integer val returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost, getTotalLumberCost(whichPlayer)+val)
-	endmethod
+
+
+
+
 	//获取玩家木材
 	public static method getLumber takes player whichPlayer returns integer
 	    return GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_LUMBER)
@@ -359,6 +388,26 @@ struct hPlayer
 	    endif
 	endmethod
 
+	//获取玩家总获木量
+	public static method getTotalLumber takes player whichPlayer returns integer
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber)
+	endmethod
+	//增加玩家总获木量
+	public static method addTotalLumber takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber, getTotalLumber(whichPlayer)+val)
+	endmethod
+	//获取玩家总耗木量
+	public static method getTotalLumberCost takes player whichPlayer returns integer
+		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost)
+	endmethod
+	//增加玩家总耗木量
+	public static method addTotalLumberCost takes player whichPlayer,integer val returns nothing
+		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost, getTotalLumberCost(whichPlayer)+val)
+	endmethod
+
+
+
+
 	//初始化
 	public static method initSet takes nothing returns nothing
 		local integer i = 1
@@ -377,6 +426,7 @@ struct hPlayer
 				call setGoldRatio( players[i],100,0)
 				call setLumberRatio( players[i],100,0)
 				call setExpRatio( players[i],100,0)
+				call setSellRatio( players[i],50,0)
 				call setApm(players[i],0)
 				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
 					set player_current_qty = player_current_qty + 1

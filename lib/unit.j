@@ -145,26 +145,6 @@ struct hUnit
     endmethod
 
     /**
-     *  获取两个单位间距离，如果其中一个单位为空 返回0
-     */
-    public static method getDistanceBetween takes unit u1,unit u2 returns real
-        local location loc1 = null
-        local location loc2 = null
-        local real distance = 0
-        if( u1 == null or u2 == null ) then
-            return 0
-        endif
-        set loc1 = GetUnitLoc(u1)
-        set loc2 = GetUnitLoc(u2)
-        set distance = DistanceBetweenPoints(loc1, loc2)
-        call RemoveLocation( loc1 )
-        call RemoveLocation( loc2 )
-        set loc1 = null
-        set loc2 = null
-        return distance
-    endmethod
-
-    /**
      * 获取单位面向角度
      */
     public static method getFacing takes unit u returns real
