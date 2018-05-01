@@ -84,7 +84,7 @@ library hJass initializer init
 		set txt = txt + "|n内置多达几十种以上的自定义事件，轻松实现神奇的主动和被动效果"
 		set txt = txt + "|n自带物品合成，免去自行编写的困惑。丰富的自定义技能模板"
 		set txt = txt + "|n镜头、单位组、过滤器、背景音乐、天气等也应有尽有"
-		set txt = txt + "|n想要了解更多，官方QQ群 325338043"
+		set txt = txt + "|n想要了解更多，官方QQ群 325338043 官网教程 hjass.hunzsig.org"
 		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "hJass",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 		set txt = ""
 		set txt = txt + "-mbap 查看所有玩家统计"
