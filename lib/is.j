@@ -66,26 +66,6 @@ struct hIs
     public static method hasSlot takes unit whichUnit returns boolean
         return GetUnitAbilityLevel(whichUnit,ITEM_ABILITY)>=1
     endmethod
-
-    /**
-     * 是否某个特定单位
-     */
-    public static method unit takes unit whichUnit,unit otherUnit returns boolean
-        return whichUnit == otherUnit
-    endmethod
-
-    /**
-     * 是否敌人
-     */
-    public static method enemy takes unit whichUnit,unit otherUnit returns boolean
-        return IsUnitEnemy(whichUnit, GetOwningPlayer(otherUnit))
-    endmethod
-    /**
-     * 是否友军
-     */
-    public static method ally takes unit whichUnit,unit otherUnit returns boolean
-        return IsUnitAlly(whichUnit, GetOwningPlayer(otherUnit))
-    endmethod
     /**
      * 是否死亡
      */
@@ -197,7 +177,7 @@ struct hIs
         return status
     endmethod
     /**
-     * 判断是否地面
+     * 判断是否处于地面
      */
     public static method floor takes unit whichUnit returns boolean
         local location loc = GetUnitLoc(whichUnit)
@@ -205,6 +185,26 @@ struct hIs
         call RemoveLocation(loc)
         set loc = null
         return status
+    endmethod
+
+    /**
+     * 是否某个特定单位
+     */
+    public static method unit takes unit whichUnit,unit otherUnit returns boolean
+        return whichUnit == otherUnit
+    endmethod
+
+    /**
+     * 是否敌人
+     */
+    public static method enemy takes unit whichUnit,unit otherUnit returns boolean
+        return IsUnitEnemy(whichUnit, GetOwningPlayer(otherUnit))
+    endmethod
+    /**
+     * 是否友军
+     */
+    public static method ally takes unit whichUnit,unit otherUnit returns boolean
+        return IsUnitAlly(whichUnit, GetOwningPlayer(otherUnit))
     endmethod
 
     /**

@@ -285,7 +285,7 @@ struct hMultiboard
                 call setContent( mbid, 2, 4, R2S(hattr.getPunishCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getPunish(hplayer.getSelection(players[i]))) )
                 call setContent( mbid, 2, 5, I2S(R2I(hattr.getAttackPhysical(hplayer.getSelection(players[i])))) )
                 call setContent( mbid, 2, 6, I2S(R2I(hattr.getMove(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2, 7, I2S(R2I(hattr.getAttackSpeed(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 2, 7, I2S(R2I(hattr.getAttackSpeed(hplayer.getSelection(players[i]))))+"%"+" "+R2S(hattr.getAttackSpeedSpace(hplayer.getSelection(players[i])))+"击/秒" )
                 call setContent( mbid, 2, 8, I2S(R2I(hattr.getDefend(hplayer.getSelection(players[i])))) )
                 call setContent( mbid, 2, 9, R2S(hattr.getAvoid(hplayer.getSelection(players[i])))+"%" )
                 call setContent( mbid, 2,10, I2S(R2I(hattr.getKnocking(hplayer.getSelection(players[i])))) )

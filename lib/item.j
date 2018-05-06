@@ -30,12 +30,16 @@ globals
 	trigger ITEM_TRIGGER_DROP = null
 	trigger ITEM_TRIGGER_PAWN = null
 	trigger ITEM_TRIGGER_SEPARATE = null
+	string HITEM_TYPE_FOREVER = "forever"
+	string HITEM_TYPE_CONSUME = "consume"
+	string HITEM_TYPE_MOMENT = "moment"
 endglobals
 
 struct hItemBean
 
     //物品设定
     public static integer item_id = 0            //物品id
+    public static string item_type = ""       	 //物品类型
     public static integer item_overlay = 1       //最大叠加,默认1
     public static integer item_level = 1         //等级，默认1级
     public static integer item_gold = 0          //价值黄金
@@ -207,6 +211,7 @@ struct hItemBean
         local hItemBean x = 0
         set x = hItemBean.allocate()
         set x.item_id = 0
+        set x.item_type = ""
         set x.item_overlay = 10
         set x.item_level = 1
         set x.item_gold = 0
@@ -378,6 +383,7 @@ struct hItemBean
     endmethod
     method destroy takes nothing returns nothing
         set item_id = 0
+        set item_type = ""
         set item_overlay = 10
         set item_level = 1
         set item_gold = 0
@@ -802,6 +808,7 @@ struct hItem
     private static method formatEval takes hItemBean bean returns nothing
 		local item it = null
 		local integer score = 0
+		local string tp = HITEM_TYPE_FOREVER
         if(bean.item_id!=0)then
 			call setTotalQty(1+getTotalQty())
 			set it = CreateItem(bean.item_id,0,0)
@@ -812,7 +819,11 @@ struct hItem
 			endif
 			call RemoveItem(it)
 			set it = null
+			if(bean.item_type==HITEM_TYPE_CONSUME or bean.item_type==HITEM_TYPE_CONSUME)then
+				set tp = bean.item_type
+			endif
             call SaveBoolean(hash_item, bean.item_id, hk_item_init, true)
+            call SaveStr(hash_item, bean.item_id, hk_item_type, tp)
             call SaveInteger(hash_item, bean.item_id, hk_item_overlay, bean.item_overlay)
             call SaveInteger(hash_item, bean.item_id, hk_item_level, bean.item_level)
             call SaveInteger(hash_item, bean.item_id, hk_item_gold, bean.item_gold)
@@ -2732,6 +2743,11 @@ struct hItem
 	//获取物品图标（需要在format时设定路径）
 	public static method getIcon takes integer itid returns string
 		return LoadStr(hash_item, itid, hk_item_icon)
+	endmethod
+
+	//获取物品类型
+	public static method getType takes integer itid returns string
+		return LoadStr(hash_item, itid, hk_item_type)
 	endmethod
 
 	//获取物品ID是否自动使用

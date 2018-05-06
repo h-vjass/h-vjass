@@ -127,7 +127,7 @@ struct hPlayer
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_damage, getDamage(whichPlayer)+val)
 	endmethod
 
-	//获取玩家是受到的总伤害
+	//获取玩家受到的总伤害
 	public static method getBeDamage takes player whichPlayer returns real
 		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_bedamage)
 	endmethod
@@ -448,7 +448,7 @@ struct hPlayer
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
 	    call TriggerAddAction( triggerApmUnit, function thistype.triggerApmUnitActions )
-		call hevt.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
+		call hevt.onSelectionTriple(null,function thistype.triggerSelectionUnitActions)
 	endmethod
 
 

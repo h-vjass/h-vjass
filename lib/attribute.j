@@ -6,7 +6,7 @@ globals
 	//系统最大移动速度
 	real MAX_MOVE_SPEED = 522
 	//默认攻速计算
-	real DEFAULT_ATTACK_SPEED = 150
+	real DEFAULT_ATTACK_SPEED_SPACE = 1.50
 endglobals
 
 globals
@@ -513,15 +513,17 @@ struct hAttr
     private static integer ATTR_FLAG_MOVE = 9
     private static integer ATTR_FLAG_DEFEND = 10
     private static integer ATTR_FLAG_ATTACK_SPEED = 12
-    private static integer ATTR_FLAG_ATTACK_HUNT_TYPE = 13
-    private static integer ATTR_FLAG_ATTACK_PHYSICAL = 14
-    private static integer ATTR_FLAG_ATTACK_MAGIC = 15
-    private static integer ATTR_FLAG_STR = 16
-    private static integer ATTR_FLAG_AGI = 17
-    private static integer ATTR_FLAG_INT = 18
-    private static integer ATTR_FLAG_STR_WHITE = 19
-    private static integer ATTR_FLAG_AGI_WHITE = 20
-    private static integer ATTR_FLAG_INT_WHITE = 21
+	private static integer ATTR_FLAG_ATTACK_SPEED_BASE_SPACE = 13
+	private static integer ATTR_FLAG_ATTACK_SPEED_SPACE = 14
+    private static integer ATTR_FLAG_ATTACK_HUNT_TYPE = 15
+    private static integer ATTR_FLAG_ATTACK_PHYSICAL = 16
+    private static integer ATTR_FLAG_ATTACK_MAGIC = 17
+    private static integer ATTR_FLAG_STR = 18
+    private static integer ATTR_FLAG_AGI = 19
+    private static integer ATTR_FLAG_INT = 20
+    private static integer ATTR_FLAG_STR_WHITE = 21
+    private static integer ATTR_FLAG_AGI_WHITE = 22
+    private static integer ATTR_FLAG_INT_WHITE = 23
 
 	private static integer ATTR_FLAG_UP_LIFE_BACK = 1001
 	private static integer ATTR_FLAG_UP_LIFE_SOURCE = 1002
@@ -1222,6 +1224,8 @@ struct hAttr
 		            set tempInt = tempInt - (tempInt/10)*10
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1, tempInt+1 )
 		        endif
+				//修改攻速间隔
+				call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , LoadReal(hash_attr,uhid,ATTR_FLAG_ATTACK_SPEED_BASE_SPACE)/(1+futureVal*0.01) )
 			elseif( flag == ATTR_FLAG_ATTACK_PHYSICAL ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
@@ -1597,6 +1601,8 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
             call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
+            call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_BASE_SPACE , DEFAULT_ATTACK_SPEED_SPACE )
+            call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , DEFAULT_ATTACK_SPEED_SPACE )
 			call SaveStr( hash_attr , uhid , ATTR_FLAG_ATTACK_HUNT_TYPE , "physicalmagic" )//攻击类型默认物理+魔法(攻击类型不能为空)
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
@@ -1727,6 +1733,7 @@ struct hAttr
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
+		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , LoadReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_BASE_SPACE ) )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_STR , 0 )
@@ -1831,6 +1838,17 @@ struct hAttr
 	endmethod
 	public static method setAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , value - getAttackSpeed(whichUnit) , during )
+	endmethod
+
+	// 攻击速度间隔 ------------------------------------------------------------ 
+	public static method getAttackSpeedBaseSpace takes unit whichUnit returns real
+		return getAttr( ATTR_FLAG_ATTACK_SPEED_BASE_SPACE , whichUnit )
+	endmethod
+	public static method setAttackSpeedBaseSpace takes unit whichUnit , real value returns nothing
+		call setAttr( ATTR_FLAG_ATTACK_SPEED_BASE_SPACE , whichUnit , value , 0 )
+	endmethod
+	public static method getAttackSpeedSpace takes unit whichUnit returns real
+		return getAttr( ATTR_FLAG_ATTACK_SPEED_SPACE , whichUnit )
 	endmethod
 
     // 攻击伤害类型 ------------------------------------------------------------ 
