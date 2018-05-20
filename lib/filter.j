@@ -2,6 +2,11 @@
 struct hFilter
 
 	private static unit thisUnit = null
+	private static player array emptyArray
+	private static player array thisPlayer
+	private static player array thisNotPlayer
+	private static integer thisPlayerQty = 0
+	private static integer thisNotPlayerQty = 0
 	private static integer ownItemId = 0
 	private static unit isWhichUnit = null
 
@@ -27,7 +32,11 @@ struct hFilter
 	static method create takes nothing returns hFilter
 		local hFilter s = 0
 		set s = hFilter.allocate()
-		
+		set s.thisUnit = null
+		set s.thisPlayerQty = 0
+		set s.thisNotPlayerQty = 0
+		set s.ownItemId = 0
+		set s.isWhichUnit = null
 		set s.is_enemy = 0
 		set s.is_ally = 0
 		set s.is_death = 0
@@ -51,6 +60,8 @@ struct hFilter
 	endmethod
 	method destroy takes nothing returns nothing
 		set thisUnit = null
+		set thisPlayerQty = 0
+		set thisNotPlayerQty = 0
 		set ownItemId = 0
 		set isWhichUnit = null
 		set is_enemy = 0
@@ -76,6 +87,16 @@ struct hFilter
 	//
 	public method setUnit takes unit u returns nothing
 		set thisUnit = u
+	endmethod
+	//
+	public method isPlayer takes player p returns nothing
+		set thisPlayerQty = thisPlayerQty+1
+		set thisPlayer[thisPlayerQty] = p
+	endmethod
+	//
+	public method isNotPlayer takes player p returns nothing
+		set thisNotPlayerQty = thisNotPlayerQty+1
+		set thisNotPlayer[thisNotPlayerQty] = p
 	endmethod
 	//
 	public method setOwnItemId takes integer itemId returns nothing
@@ -213,11 +234,32 @@ struct hFilter
 	public static method get takes nothing returns boolean
 		local unit filterUnit = GetFilterUnit()
 		local boolean status = true
+		local integer i = 0
 		if(is_ownItem == 1 and ownItemId!=0 and his.ownItem(filterUnit,ownItemId)==false)then
 			set status = false
 		endif
 		if(is_ownItem == -1 and ownItemId!=0 and his.ownItem(filterUnit,ownItemId)==true)then
 			set status = false
+		endif
+		if(thisPlayerQty > 0 and status==true )then
+			set i = thisPlayerQty
+			loop
+				exitwhen i<=0 or status==false
+					if(GetOwningPlayer(filterUnit)!=thisPlayer[i])then
+						set status = false
+					endif
+				set i = i-1
+			endloop
+		endif
+		if(thisNotPlayerQty > 0 and status==true )then
+			set i = thisNotPlayerQty
+			loop
+				exitwhen i<=0 or status==false
+					if(GetOwningPlayer(filterUnit)==thisNotPlayer[i])then
+						set status = false
+					endif
+				set i = i-1
+			endloop
 		endif
 		if(is_enemy == 1 and his.enemy(filterUnit,thisUnit)==false)then
 			set status = false

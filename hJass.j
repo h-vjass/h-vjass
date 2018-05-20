@@ -25,6 +25,7 @@ library hJass initializer init
 		call FlushParentHashtable( hash_weather )
 		call FlushParentHashtable( hash_hlogic )
 		call FlushParentHashtable( hash_hmb )
+		call FlushParentHashtable( hash_hero )
 		set hash_ability = InitHashtable()
 		set hash_skill = InitHashtable()
 		set hash_attr = InitHashtable()
@@ -43,6 +44,7 @@ library hJass initializer init
 		set hash_weather = InitHashtable()
 		set hash_hlogic = InitHashtable()
 		set hash_hmb = InitHashtable()
+		set hash_hero = InitHashtable()
 		//系统初始化
 		set his = hIs.create()
 		set htime = hTime.create()
@@ -71,6 +73,7 @@ library hJass initializer init
 		set hskill = hSkill.create()
 		set hitem = hItem.create()
 		set hitemMix = hItemMix.create()
+		set hhero = hHero.create()
 		//initset
 		call hplayer.initSet()
 		call hattrUnit.initSet()
@@ -94,6 +97,10 @@ library hJass initializer init
 		set txt = txt + "|n-mbsn 查看三击锁定单位的自然属性"
 		set txt = txt + "|n-mbsi 查看三击锁定单位的物品"
 		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		set txt = ""
+		set txt = txt + "-random 随机选择"
+		set txt = txt + "|n-repick 重新选择"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "选择英雄指令",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 
     endfunction
 

@@ -948,6 +948,7 @@ struct hAttr
     	loop
 	    	exitwhen i > qty
 		    	set it = CreateItem( itemId , 0, 0)
+				call hitem.setIsHjass(it,true)
 		    	call UnitAddItem( u , it )
 		    	call RemoveItem(it)
 	    	set i = i+1

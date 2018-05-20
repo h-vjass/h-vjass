@@ -1,10 +1,9 @@
 //物品系统
 /*
-物品分为
-1、永久型物品 permanent
+物品分为（item_type）
+1、永久型物品 forever
 2、消耗型物品 consume
-3、永久/消耗混合型物品 mixed
-4、瞬逝型 moment
+3、瞬逝型 moment
 
 每个英雄最大支持使用6件物品
 支持满背包合成
@@ -26,10 +25,12 @@ globals
     integer ITEM_ABILITY = 'AInv' //默认物品栏技能（英雄6格那个）hjass默认全部认定这个技能为物品栏，如有需要自行更改
 	integer ITEM_ABILITY_SEPARATE = 'A039'
 	trigger ITEM_TRIGGER_PICKUP = null
+	trigger ITEM_TRIGGER_PICKUP_DEFAULT = null
 	trigger ITEM_TRIGGER_PICKUP_FALSE = null
 	trigger ITEM_TRIGGER_DROP = null
 	trigger ITEM_TRIGGER_PAWN = null
 	trigger ITEM_TRIGGER_SEPARATE = null
+	trigger ITEM_TRIGGER_USE = null
 	string HITEM_TYPE_FOREVER = "forever"
 	string HITEM_TYPE_CONSUME = "consume"
 	string HITEM_TYPE_MOMENT = "moment"
@@ -39,7 +40,7 @@ struct hItemBean
 
     //物品设定
     public static integer item_id = 0            //物品id
-    public static string item_type = ""       	 //物品类型
+    public static string item_type = "forever" 	 //物品类型
     public static integer item_overlay = 1       //最大叠加,默认1
     public static integer item_level = 1         //等级，默认1级
     public static integer item_gold = 0          //价值黄金
@@ -556,6 +557,7 @@ endstruct
 
 struct hItem
 
+	private static integer hk_item_is_hjass = 9
     private static integer hk_item_init = 10
     private static integer hk_item_id = 11
     private static integer hk_item_type = 12
@@ -567,6 +569,8 @@ struct hItem
     private static integer hk_item_icon = 18
     private static integer hk_item_is_powerup = 19
 	private static integer hk_item_combat_effectiveness = 20
+	private static integer hk_item_onuse_trigger = 21
+	private static integer hk_item_onmoment_trigger = 22
     //
     private static integer hk_life = 1000
     private static integer hk_mana = 1001
@@ -769,6 +773,17 @@ struct hItem
         call SaveInteger(hash_item,0,StringHash("_TOTAL_QTY_"), qty)
     endmethod
 
+
+    //获取物品是否hjass内部函数创建
+    public static method isHjass takes item it returns boolean
+        return LoadBoolean(hash_item,GetHandleId(it),hk_item_is_hjass)
+    endmethod
+	//设定物品是否hjass内部函数创建
+    public static method setIsHjass takes item it,boolean b returns nothing
+        call SaveBoolean(hash_item,GetHandleId(it),hk_item_is_hjass, b)
+    endmethod
+
+
 	//获取某单位身上空格物品栏数量
     public static method getEmptySlot takes unit u returns integer
         local integer i
@@ -804,6 +819,63 @@ struct hItem
         return charges
     endmethod
 
+	//绑定使用操作
+	public static method onUse takes integer itemid,code func returns nothing
+		local trigger tg = null
+		if(itemid>0 and func!=null)then
+			set tg = CreateTrigger()
+			call TriggerAddAction(tg,func)
+			call SaveTriggerHandle(hash_item,itemid,hk_item_onuse_trigger,tg)
+		endif
+	endmethod 
+
+	//使用
+	private static method use takes integer itemid returns nothing
+		local trigger tg = null
+		if(itemid==0)then
+			return
+		endif
+		set tg = LoadTriggerHandle(hash_item,itemid,hk_item_onuse_trigger)
+		if(tg==null)then
+			return
+		endif
+		call TriggerExecute(tg)
+		set tg = null
+	endmethod
+
+	//触发物品的瞬逝
+	private static method triggerMoment takes nothing returns nothing
+		local unit it = hevt.getTriggerUnit()
+		local unit triggerUnit = hevt.getTriggerEnterUnit()
+		local trigger tg = null
+		local integer charges = 0
+		if(it!=null and triggerUnit!=null and his.hasSlot(triggerUnit) and his.alive(triggerUnit))then
+			set charges = GetUnitUserData(it)
+			if(charges<=0)then
+				call hunit.del(triggerUnit,0)
+				return
+			endif
+			set tg = LoadTriggerHandle(hash_item,GetUnitTypeId(it),hk_item_onmoment_trigger)
+			if(tg!=null)then
+				call hevt.setTriggerUnit(tg,triggerUnit)
+				call hevt.setValue(tg,charges)
+				call TriggerExecute(tg)
+			endif
+			call SetUnitUserData(it,0)
+			call hunit.del(it,0)
+		endif
+	endmethod
+
+	//绑定物品的瞬逝
+	public static method onMoment takes integer itid,code func returns nothing
+		local trigger tg = null
+		if(itid>0)then
+			set tg = CreateTrigger()
+			call TriggerAddAction(tg,func)
+			call SaveTriggerHandle(hash_item,itid,hk_item_onmoment_trigger,tg)
+		endif
+	endmethod
+
 	//绑定物品到系统截断调用
     private static method formatEval takes hItemBean bean returns nothing
 		local item it = null
@@ -819,7 +891,7 @@ struct hItem
 			endif
 			call RemoveItem(it)
 			set it = null
-			if(bean.item_type==HITEM_TYPE_CONSUME or bean.item_type==HITEM_TYPE_CONSUME)then
+			if(StringLength(bean.item_type)>0)then
 				set tp = bean.item_type
 			endif
             call SaveBoolean(hash_item, bean.item_id, hk_item_init, true)
@@ -830,6 +902,8 @@ struct hItem
             call SaveInteger(hash_item, bean.item_id, hk_item_lumber, bean.item_lumber)
             call SaveReal(hash_item, bean.item_id, hk_item_weight, bean.item_weight)
             call SaveStr(hash_item, bean.item_id, hk_item_icon, bean.item_icon)
+			//
+			call SaveStr(hash_item, bean.item_id, hk_attackHuntType, bean.attackHuntType)
             //
             call SaveReal(hash_item, bean.item_id, hk_goldRatio, bean.goldRatio)
             call SaveReal(hash_item, bean.item_id, hk_lumberRatio, bean.lumberRatio)
@@ -990,6 +1064,10 @@ struct hItem
             call SaveReal(hash_item, bean.item_id, hk_crackFlyOdds, bean.crackFlyOdds)
             call SaveReal(hash_item, bean.item_id, hk_crackFlyDistance, bean.crackFlyDistance)
             call SaveReal(hash_item, bean.item_id, hk_crackFlyHigh, bean.crackFlyHigh)
+			//-------
+			if(bean.attackHuntType!="")then
+				set score = score + 500
+			endif
 			//-------
 			if(bean.life!=0)then
 				set score = score + R2I(bean.life)*3
@@ -1622,6 +1700,12 @@ struct hItem
 		local real crackFlyOdds = LoadReal(hash_item, item_id, hk_crackFlyOdds)*charges
 		local real crackFlyDistance = LoadReal(hash_item, item_id, hk_crackFlyDistance)*charges
 		local real crackFlyHigh = LoadReal(hash_item, item_id, hk_crackFlyHigh)*charges
+		//
+		local string attackHuntType = LoadStr(hash_item, item_id, hk_attackHuntType)
+		if(attackHuntType!="")then
+			call hattr.addAttackHuntType(whichUnit,attackHuntType,0)
+		endif
+		//
 		if(goldRatio!=0)then
 			call hplayer.addGoldRatio(GetOwningPlayer(whichUnit),goldRatio,0)
 		endif
@@ -2262,6 +2346,12 @@ struct hItem
 		local real crackFlyOdds = LoadReal(hash_item, item_id, hk_crackFlyOdds)*charges
 		local real crackFlyDistance = LoadReal(hash_item, item_id, hk_crackFlyDistance)*charges
 		local real crackFlyHigh = LoadReal(hash_item, item_id, hk_crackFlyHigh)*charges
+		//
+		local string attackHuntType = LoadStr(hash_item, item_id, hk_attackHuntType)
+		if(attackHuntType!="")then
+			call hattr.subAttackHuntType(whichUnit,attackHuntType,0)
+		endif
+		//
 		if(goldRatio!=0)then
 			call hplayer.subGoldRatio(GetOwningPlayer(whichUnit),goldRatio,0)
 		endif
@@ -2801,9 +2891,21 @@ struct hItem
 		local real weight = 0
 		local integer canGetQty = 0
 		local integer notGetQty = 0
+		local trigger tg = null
+		//检测物品类型,是否瞬逝型
+		if(getType(itemid)==HITEM_TYPE_MOMENT)then
+			set tg = LoadTriggerHandle(hash_item,itemid,hk_item_onmoment_trigger)
+			if(tg!=null)then
+				call hevt.setTriggerUnit(tg,whichUnit)
+				call hevt.setValue(tg,charges)
+				call TriggerExecute(tg)
+			endif
+			return
+		endif
 		//判断物品是否自动使用，自动使用的物品不会检测叠加和合成，而是直接执行属性分析
 		if(getIsPowerup(itemid) == true)then
 			call addAttr(itemid,charges,whichUnit)
+			call use(itemid)
 			return
 		endif
 		//检测重量,没空间就丢在地上
@@ -2873,6 +2975,7 @@ struct hItem
 			endif
 			if(getEmptySlot(whichUnit)>=1)then
 				//有格子则扔到单位上，并分析属性
+				call setIsHjass(it,true)
 				call UnitAddItem(whichUnit,it)
 				call addAttr(itemid,remainCharges,whichUnit)
 				//@触发 获得物品 事件
@@ -2905,6 +3008,50 @@ struct hItem
 	public static method toUnitMix takes integer itemid,integer charges,unit whichUnit returns nothing
 		call toUnitPrivate(itemid,charges,whichUnit,true)
 	endmethod
+
+	/*
+	 * 创建非合成物品到XY坐标
+	 * itemid 物品ID
+	 * charges 使用次数
+	 * x y 坐标
+	 */
+	public static method toXY takes integer itemid,integer charges,real x,real y,real during returns nothing
+		local string ittype = getType(itemid)
+		local real range = 0
+		local item it = null
+		local unit itMoment = null
+		if(ittype == HITEM_TYPE_MOMENT)then
+			set itMoment = hunit.createUnitXY(Player(PLAYER_NEUTRAL_PASSIVE),itemid,x,y)
+			call SetUnitUserData(itMoment,charges)
+			if(hcamera.model=="zoomin")then
+				set range = 15
+			else
+				set range = 30
+			endif
+			call hevt.onEnterUnitRange(itMoment,range,function thistype.triggerMoment)
+			if(during > 0)then
+				call hunit.del(itMoment,during)
+			endif
+		else
+			set it = CreateItem(itemid, x, y)
+			call SetItemCharges(it,charges)
+			if(during > 0)then
+				call hitem.del(it,during)
+			endif
+		endif
+	endmethod
+
+	/*
+	 * 创建非合成物品给单位
+	 * itemid 物品ID
+	 * charges 使用次数
+	 * whichLoc 哪个点
+	 */
+	public static method toLoc takes integer itemid,integer charges,location whichLoc,real during returns nothing
+		call toXY(itemid,charges,GetLocationX(whichLoc),GetLocationY(whichLoc),during)
+	endmethod
+
+
 
 	//捡起物品(检测)
 	private static method itemPickupCheck takes nothing returns nothing
@@ -2979,6 +3126,21 @@ struct hItem
 			call RemoveItem(it)
 			set it = null
 			call toUnit(itid,charges,u)
+		endif
+	endmethod
+
+	//单位获得物品（默认模式）
+	//例如商店售卖的物品就是不由 htem.toUnit 得到的，这时要把它纳入到系统中来
+	public static method itemPickupDefault takes nothing returns nothing
+		local item it = GetManipulatedItem()
+		local integer itid = 0
+		local integer charges = 0
+		if(isHjass(it) == false)then
+			set itid = GetItemTypeId(it)
+			set charges = GetItemCharges(it)
+			call RemoveItem(it)
+			set it = null
+			call toUnit(itid,charges,GetTriggerUnit())
 		endif
 	endmethod
 
@@ -3216,28 +3378,63 @@ struct hItem
 		set it = null
 	endmethod
 
+	//单位使用物品
+	public static method itemUse takes nothing returns nothing
+		local unit u = GetTriggerUnit()
+		local item it = GetManipulatedItem()
+		local integer itid = GetItemTypeId(it)
+		local integer charges = GetItemCharges(it)
+		local string ittype = getType(itid)
+		if(ittype == HITEM_TYPE_FOREVER)then			//永久型物品
+			set charges = charges+1
+			call SetItemCharges(it,charges)
+		elseif(ittype == HITEM_TYPE_CONSUME)then		//消耗型物品
+			call subAttr(itid,1,u)
+			if(charges<=0)then
+				call RemoveItem(it)
+			endif
+		elseif(ittype == HITEM_TYPE_MOMENT)then		//瞬逝型
+		endif
+		call use(itid)
+		//@触发 使用物品 事件
+		set hevtBean = hEvtBean.create()
+		set hevtBean.triggerKey = "itemUsed"
+		set hevtBean.triggerUnit = u
+		set hevtBean.triggerItem = it
+		call hevt.triggerEvent(hevtBean)
+		call hevtBean.destroy()
+		set u = null
+		set it = null
+	endmethod
+
 	//初始化单位，绑定事件等
 	public static method initUnit takes unit whichUnit returns nothing
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP,whichUnit,EVENT_UNIT_ISSUED_TARGET_ORDER )
+		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_DEFAULT,whichUnit,EVENT_UNIT_PICKUP_ITEM )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_ORDER )
     	call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_POINT_ORDER )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_DROP, whichUnit, EVENT_UNIT_DROP_ITEM )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PAWN, whichUnit, EVENT_UNIT_PAWN_ITEM )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SEPARATE, whichUnit, EVENT_UNIT_SPELL_EFFECT )
+		call TriggerRegisterUnitEvent( ITEM_TRIGGER_USE, whichUnit, EVENT_UNIT_USE_ITEM )
 	endmethod
 
 	//初始化
 	public static method initSet takes nothing returns nothing
 		set ITEM_TRIGGER_PICKUP = CreateTrigger()
+		set ITEM_TRIGGER_PICKUP_DEFAULT = CreateTrigger()
 		set ITEM_TRIGGER_PICKUP_FALSE = CreateTrigger()
 		set ITEM_TRIGGER_DROP = CreateTrigger()
 		set ITEM_TRIGGER_PAWN = CreateTrigger()
 		set ITEM_TRIGGER_SEPARATE = CreateTrigger()
+		set ITEM_TRIGGER_USE = CreateTrigger()
 		call TriggerAddAction(ITEM_TRIGGER_PICKUP, function thistype.itemPickup)
+		call TriggerAddAction(ITEM_TRIGGER_PICKUP_DEFAULT, function thistype.itemPickupDefault)
 		call TriggerAddAction(ITEM_TRIGGER_PICKUP_FALSE, function thistype.itemPickupFalse)
 		call TriggerAddAction(ITEM_TRIGGER_DROP, function thistype.itemDrop)
 		call TriggerAddAction(ITEM_TRIGGER_PAWN, function thistype.itemPawn)
 		call TriggerAddAction(ITEM_TRIGGER_SEPARATE, function thistype.itemSeparate)
+		call TriggerAddAction(ITEM_TRIGGER_USE, function thistype.itemUse)
 	endmethod
 
 endstruct

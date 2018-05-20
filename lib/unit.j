@@ -223,6 +223,14 @@ struct hUnit
     endmethod
 
     /**
+     * 创建1单位XY
+     * @return 最后创建单位
+     */
+    public static method createUnitXY takes player whichPlayer, integer unitid, real x,real y returns unit
+        return CreateUnit(whichPlayer, unitid, x, y, bj_UNIT_FACING)
+    endmethod
+
+    /**
      * 创建1单位面向点
      * @return 最后创建单位
      */

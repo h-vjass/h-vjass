@@ -1069,7 +1069,7 @@ struct hAttrUnit
 		local integer uhid = GetHandleId(u)
 		local boolean isBind = false
 		//排除单位类型
-		if(utid==ABILITY_TOKEN or utid==ABILITY_BREAK or utid==ABILITY_SWIM)then
+		if(utid==ABILITY_TOKEN or utid==ABILITY_BREAK or utid==ABILITY_SWIM or utid==HERO_SELECTION_TOKEN)then
 			return
 		endif
 		//注册事件

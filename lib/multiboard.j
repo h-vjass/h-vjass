@@ -316,7 +316,7 @@ struct hMultiboard
                 call htime.setMultiboard(t,1,hmb_selection_attr[i])
             else
                 call MultiboardSetTitleText(hmb_selection_attr[i], "单位状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_attr[i], 1, 1, "- 请“双击”锁定选择单位查看常规属性 -" )
+                call MultiboardSetItemValueBJ( hmb_selection_attr[i], 1, 1, "- 请“三击”锁定选择单位查看常规属性 -" )
                 call MultiboardSetRowCount(hmb_selection_attr[i], 1)
                 call MultiboardSetColumnCount(hmb_selection_attr[i], 1)
                 call MultiboardSetItemWidthBJ( hmb_selection_attr[i], 0, 0, 15.00 )
@@ -387,7 +387,7 @@ struct hMultiboard
                 call htime.setMultiboard(t,1,hmb_selection_effect[i])
             else
                 call MultiboardSetTitleText(hmb_selection_effect[i], "单位状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_effect[i], 1, 1, "- 请“双击”锁定选择单位查看攻击/伤害特效属性 -" )
+                call MultiboardSetItemValueBJ( hmb_selection_effect[i], 1, 1, "- 请“三击”锁定选择单位查看攻击/伤害特效属性 -" )
                 call MultiboardSetRowCount(hmb_selection_effect[i], 1)
                 call MultiboardSetColumnCount(hmb_selection_effect[i], 1)
                 call MultiboardSetItemWidthBJ( hmb_selection_effect[i], 0, 0, 15.00 )
@@ -434,7 +434,7 @@ struct hMultiboard
                 call htime.setMultiboard(t,1,hmb_selection_natural[i])
             else
                 call MultiboardSetTitleText(hmb_selection_natural[i], "单位状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_natural[i], 1, 1, "- 请“双击”锁定选择单位查看自然属性 -" )
+                call MultiboardSetItemValueBJ( hmb_selection_natural[i], 1, 1, "- 请“三击”锁定选择单位查看自然属性 -" )
                 call MultiboardSetRowCount(hmb_selection_natural[i], 1)
                 call MultiboardSetColumnCount(hmb_selection_natural[i], 1)
                 call MultiboardSetItemWidthBJ( hmb_selection_natural[i], 0, 0, 15.00 )
@@ -506,7 +506,7 @@ struct hMultiboard
                 call htime.setMultiboard(t,1,hmb_selection_item[i])
             else
                 call MultiboardSetTitleText(hmb_selection_item[i], "单位物品状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_item[i], 1, 1, "- 请“双击”锁定选择单位查看物品 -" )
+                call MultiboardSetItemValueBJ( hmb_selection_item[i], 1, 1, "- 请“三击”锁定选择单位查看物品 -" )
                 call MultiboardSetRowCount(hmb_selection_item[i], 1)
                 call MultiboardSetColumnCount(hmb_selection_item[i], 1)
                 call MultiboardSetItemWidthBJ( hmb_selection_item[i], 0, 0, 15.00 )

@@ -39,6 +39,13 @@ struct hTest
 		call hmsg.echo(GetUnitName(eu)+"进去了！")
 		call hmsg.echo("range=="+R2S(range))
 	endmethod
+	private static method momentTest takes nothing returns nothing
+		local unit u = hevt.getTriggerUnit()
+		local integer charges = R2I(hevt.getValue())
+		call hconsole.log(GetUnitName(u))
+		call hconsole.log("charges"+I2S(charges))
+		call haward.forUnitGold(u,100*charges)
+	endmethod
 
 	public static method run takes nothing returns nothing
 
@@ -54,12 +61,17 @@ struct hTest
 		local hAttrBean hattrbean
 		local hItemBean hitembean
 
+		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_GOLD, 999999 )
+		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_LUMBER, 999999 )
+		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_FOOD_CAP, 99 )
+
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
 		call hplayer.setHero(players[1],u,"")
 
 		call hattr.addAttackPhysical(u,10000,0)
 
+		//测试物品
 		set hitembean = hItemBean.create()
 		set hitembean.item_id = 'I001'
 		set hitembean.item_overlay = 5
@@ -70,6 +82,7 @@ struct hTest
 		call hitem.format(hitembean)
 		call hitembean.destroy()
 		set hitembean = hItemBean.create()
+		set hitembean.item_type = "consume"
 		set hitembean.item_id = 'I002'
 		set hitembean.item_overlay = 5
 		set hitembean.item_gold = 200
@@ -88,15 +101,49 @@ struct hTest
 		set hitembean.attackSpeed = 100
 		call hitem.format(hitembean)
 		call hitembean.destroy()
-
+		//测试合成
 		call hitemMix.newFormula('I000',1)
 		call hitemMix.addFlag('I000','I001',3)
 		call hitemMix.addFlag('I000','I002',3)
 		call hitemMix.newFormula('I000',1)
 		call hitemMix.addFlag('I000','I001',5)
+		//测试瞬逝型
+		set hitembean = hItemBean.create()
+		set hitembean.item_id = 'o000'
+		set hitembean.item_type = HITEM_TYPE_MOMENT
+		call hitem.format(hitembean)
+		call hitembean.destroy()
+		call hitem.onMoment('o000',function thistype.momentTest)
 
-		call hconsole.info("itemQty="+I2S(hitem.getTotalQty()))
-		call hconsole.info("itemMixQty="+I2S(hitemMix.getTotalQty()))
+		call hitem.toXY('o000',1,45,-222,0)
+		call hitem.toXY('o000',2,60,-222,0)
+		call hitem.toXY('o000',3,75,-222,0)
+		call hitem.toXY('o000',4,90,-222,0)
+
+		//酒馆
+		call hhero.push('H00B')
+		call hhero.push('hpea')
+		call hhero.push('hfoo')
+		call hhero.push('hkni')
+		call hhero.push('hrif')
+		call hhero.push('hmtm')
+		call hhero.push('hgyr')
+		call hhero.push('hgry')
+		call hhero.push('hmpr')
+		call hhero.push('hsor')
+		call hhero.push('hmtt')
+		call hhero.push('hspt')
+
+		call hhero.push('hdhw')
+		call hhero.push('opeo')
+		call hhero.push('Hpal')
+		call hhero.setPlayerAllowQty(5)
+		call hhero.setDrunkeryAllowQty(1)
+		call hhero.setDrunkeryPerRow(3)
+		call hhero.setBuildXY(154,-646)
+		call hhero.setBornXY(-24,34)
+
+		call hhero.buildDoubleClick(100.00)
 
 		//测试吸血
 		//call hattr.addHemophagia(u,25,0)
@@ -147,7 +194,7 @@ struct hTest
 
 		call hevt.onAttackReady(u,function thistype.onattackready)
 		call hevt.onDamage(u,function thistype.ondamage)
-
+		/*
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
@@ -157,12 +204,13 @@ struct hTest
 		call hattr.addLife(u2,50000,0)
 		call hattr.addAvoid(u2,30,0)
 		call hattr.addDefend(u2,-19,0)
+		*/
 		//call hattrEffect.setSilentOdds(u2,5,0)
 		//call hattrEffect.setSilentDuring(u2,5.00,0)
 		//call hattrEffect.setUnarmOdds(u2,5,0)
 		//call hattrEffect.setUnarmDuring(u2,10.00,0)
 
-		call hevt.onEnterUnitRange(u2,300,function thistype.enteru)
+		//call hevt.onEnterUnitRange(u2,300,function thistype.enteru)
 
 		//rect
 		set i=0
@@ -212,12 +260,12 @@ struct hTest
 		endloop
 		call wbean.destroy()
 
-		set hattrbean = hAttrBean.create()
-		set hattrbean.attackPhysical = 1000
-		call hconsole.error("name"+GetUnitName(u))
-		call hskill.shapeshift(u,30.0,'A00D','A00E',"",hattrbean)
-		call hconsole.error("name"+GetUnitName(u))
-		call hattrbean.destroy()
+		//set hattrbean = hAttrBean.create()
+		//set hattrbean.attackPhysical = 1000
+		//call hconsole.error("name"+GetUnitName(u))
+		//call hskill.shapeshift(u,30.0,'A00D','A00E',"",hattrbean)
+		//call hconsole.error("name"+GetUnitName(u))
+		//call hattrbean.destroy()
 	endmethod
 
 endstruct

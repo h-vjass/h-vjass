@@ -24,6 +24,8 @@ globals
 	integer player_max_qty = 12
 	integer player_current_qty = 0
 	player array players
+	player player_passive = Player(PLAYER_NEUTRAL_PASSIVE)			//中立友好
+	player player_aggressive = Player(PLAYER_NEUTRAL_AGGRESSIVE)	//中立敌对
 endglobals
 
 struct hPlayer
@@ -90,8 +92,28 @@ struct hPlayer
 	endmethod
 
 	//设置失败
-	public static method defeat takes player whichPlayer returns nothing
-		call CustomDefeatBJ( whichPlayer, "失败" )
+	public static method defeat takes player whichPlayer,string tips returns nothing
+		local hFilter filter
+		local group g = null
+		local unit u = null
+		set filter = hFilter.create()
+		call filter.isPlayer(whichPlayer)
+		set g = hgroup.createByRect(GetEntireMapRect(),function hFilter.get)
+		call filter.destroy()
+		loop
+			exitwhen(IsUnitGroupEmptyBJ(g) == true)
+	            set u = FirstOfGroup(g)
+	            call GroupRemoveUnit( g , u )
+	            call RemoveUnit(u)
+		endloop
+		call GroupClear(g)
+		call DestroyGroup(g)
+		set g = null
+		set u = null
+		if(tips == "" or tips == null)then
+			set tips = "失败"
+		endif
+		call CustomDefeatBJ( whichPlayer, tips )
 	endmethod
 
 	//设置胜利

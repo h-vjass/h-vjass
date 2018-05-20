@@ -15,11 +15,7 @@ globals
     trigger event_trigger_skillHappen = null
     trigger event_trigger_skillStop = null
     trigger event_trigger_skillOver = null
-    trigger event_trigger_itemUsed = null
     trigger event_trigger_itemSell = null
-    trigger event_trigger_itemDrop = null
-    trigger event_trigger_itemGet = null
-    trigger event_trigger_itemPawn = null
     trigger event_trigger_itemDestroy = null
     trigger event_trigger_levelUp = null
     trigger event_trigger_summon = null
@@ -430,107 +426,107 @@ struct hEvt
 
     //-- TODO SET GET DATA --
     //设置 triggerUnit 单位
-    private static method setTriggerUnit takes trigger tgr,unit which returns nothing
+    public static method setTriggerUnit takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerUnit , which )
     endmethod
     //设置 triggerEnterUnit 单位
-    private static method setTriggerEnterUnit takes trigger tgr,unit which returns nothing
+    public static method setTriggerEnterUnit takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerEnterUnit , which )
     endmethod
     //设置 triggerRect 区域
-    private static method setTriggerRect takes trigger tgr,rect which returns nothing
+    public static method setTriggerRect takes trigger tgr,rect which returns nothing
         call SaveRectHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerRect , which )
     endmethod
     //设置 triggerItem 物品
-    private static method setTriggerItem takes trigger tgr,item which returns nothing
+    public static method setTriggerItem takes trigger tgr,item which returns nothing
         call SaveItemHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerItem , which )
     endmethod
     //设置 triggerPlayer 玩家
-    private static method setTriggerPlayer takes trigger tgr,player which returns nothing
+    public static method setTriggerPlayer takes trigger tgr,player which returns nothing
         call SavePlayerHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerPlayer , which )
     endmethod
     //设置 triggerString 字符串
-    private static method setTriggerString takes trigger tgr,string which returns nothing
+    public static method setTriggerString takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerString , which )
     endmethod
     //设置 triggerStringMatched 字符串
-    private static method setTriggerStringMatched takes trigger tgr,string which returns nothing
+    public static method setTriggerStringMatched takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerStringMatched , which )
     endmethod
     //设置 triggerSkill 整型
-    private static method setTriggerSkill takes trigger tgr,integer which returns nothing
+    public static method setTriggerSkill takes trigger tgr,integer which returns nothing
         call SaveInteger(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerSkill , which )
     endmethod
     //设置 sourceUnit 单位
-    private static method setSourceUnit takes trigger tgr,unit which returns nothing
+    public static method setSourceUnit takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_SourceUnit , which )
     endmethod
     //设置 targetUnit 单位
-    private static method setTargetUnit takes trigger tgr,unit which returns nothing
+    public static method setTargetUnit takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TargetUnit , which )
     endmethod
     //设置 targetLoc 点
-    private static method setTargetLoc takes trigger tgr,location which returns nothing
+    public static method setTargetLoc takes trigger tgr,location which returns nothing
         call SaveLocationHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TargetLoc , which )
     endmethod
     //设置 attacker 单位
-    private static method setAttacker takes trigger tgr,unit which returns nothing
+    public static method setAttacker takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_Attacker , which )
     endmethod
     //设置 killer 单位
-    private static method setKiller takes trigger tgr,unit which returns nothing
+    public static method setKiller takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_Killer , which )
     endmethod
     //设置 damage 实数
-    private static method setDamage takes trigger tgr,real which returns nothing
+    public static method setDamage takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_Damage , which )
     endmethod
     //设置 realDamage 实数
-    private static method setRealDamage takes trigger tgr,real which returns nothing
+    public static method setRealDamage takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_RealDamage , which )
     endmethod
     //设置 id 整型
-    private static method setId takes trigger tgr,integer which returns nothing
+    public static method setId takes trigger tgr,integer which returns nothing
         call SaveInteger(hash_trigger, GetHandleId(tgr), hashkey_type_Id , which )
     endmethod
     //设置 range 实数
-    private static method setRange takes trigger tgr,real which returns nothing
+    public static method setRange takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_Range , which )
     endmethod
     //设置 value 实数
-    private static method setValue takes trigger tgr,real which returns nothing
+    public static method setValue takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_Value , which )
     endmethod
     //设置 value2 实数
-    private static method setValue2 takes trigger tgr,real which returns nothing
+    public static method setValue2 takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_Value2 , which )
     endmethod
     //设置 value3 实数
-    private static method setValue3 takes trigger tgr,real which returns nothing
+    public static method setValue3 takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_Value3 , which )
     endmethod
     //设置 during 实数
-    private static method setDuring takes trigger tgr,real which returns nothing
+    public static method setDuring takes trigger tgr,real which returns nothing
         call SaveReal(hash_trigger, GetHandleId(tgr), hashkey_type_During , which )
     endmethod
     //设置 damageKind 字符串
-    private static method setDamageKind takes trigger tgr,string which returns nothing
+    public static method setDamageKind takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_DamageKind , which )
     endmethod
     //设置 damageType 字符串
-    private static method setDamageType takes trigger tgr,string which returns nothing
+    public static method setDamageType takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_DamageType , which )
     endmethod
     //设置 breakType 字符串
-    private static method setBreakType takes trigger tgr,string which returns nothing
+    public static method setBreakType takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_BreakType , which )
     endmethod
     //设置 type 字符串
-    private static method setType takes trigger tgr,string which returns nothing
+    public static method setType takes trigger tgr,string which returns nothing
         call SaveStr(hash_trigger, GetHandleId(tgr), hashkey_type_Type , which )
     endmethod
     //设置 isNoAvoid 布尔值
-    private static method setIsNoAvoid takes trigger tgr,boolean which returns nothing
+    public static method setIsNoAvoid takes trigger tgr,boolean which returns nothing
         call SaveBoolean(hash_trigger, GetHandleId(tgr), hashkey_type_IsNoAvoid , which )
     endmethod
 
@@ -661,12 +657,6 @@ struct hEvt
         endif
         if(bean.triggerHandle==null and bean.triggerRect!=null)then
             set bean.triggerHandle = bean.triggerRect
-        endif
-        if(bean.triggerHandle==null and bean.triggerItem!=null)then
-            set bean.triggerHandle = bean.triggerItem
-        endif
-        if(bean.triggerHandle==null and bean.triggerEnterUnit!=null)then
-            set bean.triggerHandle = bean.triggerEnterUnit
         endif
         if(bean.triggerHandle==null and bean.triggerUnit!=null)then
             set bean.triggerHandle = bean.triggerUnit
@@ -1006,23 +996,10 @@ struct hEvt
         return onEventByHandle("skillOver",whichUnit,action)
     endmethod
 
-    //on - 使用物品
+    //on - 单位使用物品
     //@getTriggerUnit 获取触发单位
     //@getTriggerItem 获取触发物品
-    private static method onItemUsedAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
-        set bean.triggerKey = "itemUsed"
-        set bean.triggerUnit = GetTriggerUnit()
-        set bean.triggerItem = GetManipulatedItem()
-        call triggerEvent(bean)
-        call bean.destroy()
-    endmethod
     public static method onItemUsed takes unit whichUnit,code action returns trigger
-        if(event_trigger_itemUsed==null)then
-            set event_trigger_itemUsed = CreateTrigger()
-            call TriggerRegisterAnyUnitEventBJ( event_trigger_itemUsed, EVENT_PLAYER_UNIT_USE_ITEM )
-            call TriggerAddAction(event_trigger_itemUsed, function thistype.onItemUsedAction)
-        endif
         return onEventByHandle("itemUsed",whichUnit,action)
     endmethod
 
@@ -1073,17 +1050,17 @@ struct hEvt
     private static method onItemDestroyAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "itemDestroy"
-        set bean.triggerUnit = GetKillingUnit()
         set bean.triggerItem = GetManipulatedItem()
+        set bean.triggerUnit = GetKillingUnit()
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
     public static method onItemDestroy takes item whichItem,code action returns trigger
         if(event_trigger_itemDestroy==null)then
             set event_trigger_itemDestroy = CreateTrigger()
-            call TriggerRegisterDeathEvent( event_trigger_itemDestroy, whichItem )
             call TriggerAddAction(event_trigger_itemDestroy, function thistype.onItemDestroyAction)
         endif
+        call TriggerRegisterDeathEvent( event_trigger_itemDestroy, whichItem )
         return onEventByHandle("itemDestroy",whichItem,action)
     endmethod
 
@@ -1408,6 +1385,7 @@ struct hEvt
         local trigger tgr = null
         if(isInit != true)then
             call SaveBoolean(hash_trigger,GetHandleId(whichUnit),hashkey_unit_range+R2I(range),true)
+            set tgr = CreateTrigger()
             call TriggerRegisterUnitInRangeSimple( tgr,range, whichUnit )
             call TriggerAddAction(tgr, function thistype.onEnterUnitRangeAction)
             call setTriggerUnit(tgr,whichUnit)
@@ -1422,8 +1400,8 @@ struct hEvt
     private static method onEnterRectAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "enterRect"
-        set bean.triggerUnit = GetTriggerUnit()
         set bean.triggerRect = getTriggerRect()
+        set bean.triggerUnit = GetTriggerUnit()
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
@@ -1446,8 +1424,8 @@ struct hEvt
     private static method onLeaveRectAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "leaveRect"
-        set bean.triggerUnit = GetTriggerUnit()
         set bean.triggerRect = getTriggerRect()
+        set bean.triggerUnit = GetTriggerUnit()
         call triggerEvent(bean)
         call bean.destroy()
     endmethod

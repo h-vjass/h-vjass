@@ -38,20 +38,22 @@ struct hAward
         set realLumber	= R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realExp		= R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )
 
-        if(exp > 0 and his.hero(whichUnit)) then
+        if(realExp > 0 and his.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )
             set floatStr = floatStr + "|cffc4c4ff" + I2S(realExp)+"Exp" + "|r"
             set ttgColorLen = ttgColorLen + 12
         endif
-        if(gold > 0) then
+        if(realGold > 0) then
             call hplayer.addGold( GetOwningPlayer( whichUnit ) , realGold )
             set floatStr = floatStr + " |cffffcc00" + I2S(realGold)+"G" + "|r"
             set ttgColorLen = ttgColorLen + 13
+            call hmedia.soundPlay2Unit(gg_snd_ReceiveGold,whichUnit)
         endif
-        if(lumber > 0) then
+        if(realLumber > 0) then
             call hplayer.addLumber( GetOwningPlayer( whichUnit ) , realLumber )
             set floatStr = floatStr + " |cff80ff80" + I2S(realLumber)+"L" + "|r"
             set ttgColorLen = ttgColorLen + 13
+            call hmedia.soundPlay2Unit(gg_snd_BundleOfLumber,whichUnit)
         endif
         set ttg = hmsg.ttg2Unit(whichUnit,floatStr,11,"",0,2.00,50.00)
         call SetTextTagPos( ttg , GetUnitX(whichUnit)-I2R(StringLength(floatStr)-ttgColorLen)*11*0.5 , GetUnitY(whichUnit) , 50 )
@@ -62,6 +64,7 @@ struct hAward
      * 奖励单位黄金
      */
     public method forUnitGold takes unit whichUnit,integer gold returns nothing
+        call hconsole.warning("gold="+I2S(gold))
         call forUnit(whichUnit,0,gold,0)
     endmethod
     /**

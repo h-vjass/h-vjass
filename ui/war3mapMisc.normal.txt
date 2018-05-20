@@ -45,9 +45,6 @@ DropItemRange=100.0
 GiveItemRange=150.0
 PawnItemRange=300.0
 
-[HERO]
-DependencyOr=H00B
-
 [FontHeights]
 ToolTipName=0.0100
 ToolTipCost=0.0100
