@@ -31,7 +31,7 @@ struct hRect
 	/**
 	 * 设定中心点（X,Y）创建一个长width宽height的矩形区域
 	 */
-	public method createInLoc takes real locX , real locY , real width , real height returns rect
+	public static method createInLoc takes real locX , real locY , real width , real height returns rect
 		local real startX = locX-(width * 0.5)
 		local real startY = locY-(height * 0.5)
 		local real endX = locX+(width * 0.5)
@@ -44,7 +44,7 @@ struct hRect
 	endmethod
 
 	//删除区域
-	public method del takes rect area returns nothing
+	public static method del takes rect area returns nothing
 		call RemoveRect(area)
 	endmethod
 
@@ -202,7 +202,7 @@ struct hRect
 	//area 区域
 	//ty 类型有：[square|circle][矩形|圆形]
 	//during 持续时间 0 则直到调用delLockByRect
-	public method lockByRect takes rect area,string ty,real during returns nothing
+	public static method lockByRect takes rect area,string ty,real during returns nothing
 		local timer t = null
 		local integer recthid = 0
 		if(area==null)then
@@ -229,7 +229,7 @@ struct hRect
 	//width 矩形则为长度，圆形取小的为半径
 	//height 矩形则为宽度，圆形取小的为半径
 	//during 持续时间 0 则直到调用delLockByLoc
-	public method lockByLoc takes location loc,string ty,real width,real height,real during returns nothing
+	public static method lockByLoc takes location loc,string ty,real width,real height,real during returns nothing
 		local timer t = null
 		local integer locid = 0
 		if(loc==null)then
@@ -258,7 +258,7 @@ struct hRect
 	//width 矩形则为长度，圆形取小的为半径
 	//height 矩形则为宽度，圆形取小的为半径
 	//during 持续时间 0 则直到调用delLockByLoc
-	public method lockByUnit takes unit u,string ty,real width,real height,real during returns nothing
+	public static method lockByUnit takes unit u,string ty,real width,real height,real during returns nothing
 		local timer t = null
 		local integer hid = 0
 		if(u==null)then
@@ -282,7 +282,7 @@ struct hRect
 	endmethod
 
 	//删除锁定区域
-	public method delLockByRect takes rect area returns nothing
+	public static method delLockByRect takes rect area returns nothing
 		local integer hid = GetHandleId(area)
 		local timer t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t != null)then
@@ -291,7 +291,7 @@ struct hRect
     	endif
 	endmethod
 	//删除锁定点
-	public method delLockByLoc takes location loc returns nothing
+	public static method delLockByLoc takes location loc returns nothing
 		local integer hid = GetHandleId(loc)
 		local timer t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t != null)then
@@ -300,7 +300,7 @@ struct hRect
     	endif
 	endmethod
 	//删除锁定单位
-	public method delLockByUnit takes unit u returns nothing
+	public static method delLockByUnit takes unit u returns nothing
 		local integer hid = GetHandleId(u)
 		local timer t = LoadTimerHandle(hash_hrect, hid, HASH_TIMER)
 		if(t != null)then
@@ -310,12 +310,12 @@ struct hRect
 	endmethod
 
 	//设置区域名称
-	public method setName takes rect whichRect,string name returns nothing
+	public static method setName takes rect whichRect,string name returns nothing
 		call SaveStr(hash_hrect, GetHandleId(whichRect),HASH_NAME,name)
 	endmethod
 
 	//获取区域名称
-	public method getName takes rect whichRect returns string
+	public static method getName takes rect whichRect returns string
 		return LoadStr(hash_hrect, GetHandleId(whichRect),HASH_NAME)
 	endmethod
 

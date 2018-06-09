@@ -23,6 +23,13 @@ struct hTime
                 set clock_m = 0
             endif
         endif
+        if(hconsole.status==true)then
+            call FogEnable( false )
+            call FogMaskEnable( false )
+        else
+            call FogEnable( true )
+            call FogMaskEnable( true )
+        endif
     endmethod
 
     static method create takes nothing returns thistype
@@ -156,6 +163,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveMultiboardHandle(hash_time, timerHandleId, k, value)
     endmethod
+    public static method setDestructable takes timer t,integer k,destructable value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveDestructableHandle(hash_time, timerHandleId, k, value)
+    endmethod
     //GET
     public static method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
@@ -224,6 +235,10 @@ struct hTime
      public static method getMultiboard takes timer t,integer k returns multiboard
         local integer timerHandleId = GetHandleId(t)
         return LoadMultiboardHandle(hash_time, timerHandleId, k)
+    endmethod
+    public static method getDestructable takes timer t,integer k returns destructable
+        local integer timerHandleId = GetHandleId(t)
+        return LoadDestructableHandle(hash_time, timerHandleId, k)
     endmethod
 
     /**

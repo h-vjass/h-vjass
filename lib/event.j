@@ -135,6 +135,7 @@ endstruct
 
 struct hEvt
 
+    private static unit trigger_default_handle = null
     private static integer trigger_limit = 9999
 
     public static integer hashkey_onAttackDetect_inc = 5001
@@ -204,6 +205,8 @@ struct hEvt
     public static integer hashkey_onConstructStart_inc = 5065
     public static integer hashkey_onConstructCancel_inc = 5066
     public static integer hashkey_onConstructFinish_inc = 5067
+    public static integer hashkey_onRegister_inc = 5068
+    public static integer hashkey_onPickHero_inc = 5069
 
     private static integer hashkey_trigger_onAttackDetect = 10000
     private static integer hashkey_trigger_onAttackGetTarget = 20000
@@ -272,6 +275,8 @@ struct hEvt
     private static integer hashkey_trigger_onConstructStart = 650000
     private static integer hashkey_trigger_onConstructCancel = 660000
     private static integer hashkey_trigger_onConstructFinish = 670000
+    private static integer hashkey_trigger_onRegister = 680000
+    private static integer hashkey_trigger_onPickHero = 690000
 
     private static integer hashkey_type_TriggerHandle = 1
     private static integer hashkey_type_TriggerUnit = 2
@@ -384,6 +389,8 @@ struct hEvt
         //! runtextmacro getTriggerKeyByStringInc("constructStart","ConstructStart")
         //! runtextmacro getTriggerKeyByStringInc("constructCancel","ConstructCancel")
         //! runtextmacro getTriggerKeyByStringInc("constructFinish","ConstructFinish")
+        //! runtextmacro getTriggerKeyByStringInc("register","Register")
+        //! runtextmacro getTriggerKeyByStringInc("pickHero","PickHero")
         return inc
     endmethod
 
@@ -397,6 +404,14 @@ struct hEvt
     //获取handle事件触发
     private static method getHandleTrigger takes handle which,integer k,integer inc returns trigger
         return LoadTriggerHandle(hash_trigger, GetHandleId(which), k+inc )
+    endmethod
+
+    //获取默认handle
+    public static method getDefaultHandle takes nothing returns handle
+        if(trigger_default_handle == null)then
+            set trigger_default_handle = CreateUnit(Player(PLAYER_NEUTRAL_PASSIVE),'h00J', 0, 0, 0)
+        endif
+        return trigger_default_handle
     endmethod
 
     //触发计数器
@@ -1748,6 +1763,16 @@ struct hEvt
         return tg
     endmethod
 
-   
+    //on - 任意单位注册进hjass系统时(注意则是全局事件)
+    //@getTriggerUnit 获取触发单位
+    public static method onRegister takes code action returns trigger
+        return onEventByHandle("register",getDefaultHandle(),action)
+    endmethod
+
+    //on - 任意单位经过hero方法被玩家所挑选为英雄时
+    //@getTriggerUnit 获取触发单位
+    public static method onPickHero takes code action returns trigger
+        return onEventByHandle("pickHero",getDefaultHandle(),action)
+    endmethod
 
 endstruct

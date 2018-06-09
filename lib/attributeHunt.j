@@ -146,7 +146,7 @@ struct hAttrHunt
         local real fromUnitNaturalThunder = 0.0
     	local real fromUnitNaturalPoison = 0.0
         //获取攻击/伤害特效
-		local real fromUnitHuntEffectLifeBackVal = 0.0
+        local real fromUnitHuntEffectLifeBackVal = 0.0
         local real fromUnitHuntEffectLifeBackDuring = 0.0
         local real fromUnitHuntEffectManaBackVal = 0.0
         local real fromUnitHuntEffectManaBackDuring = 0.0
@@ -156,6 +156,8 @@ struct hAttrHunt
         local real fromUnitHuntEffectAttackPhysicalDuring = 0.0
         local real fromUnitHuntEffectAttackMagicVal = 0.0
         local real fromUnitHuntEffectAttackMagicDuring = 0.0
+        local real fromUnitHuntEffectAttackRangeVal = 0.0
+        local real fromUnitHuntEffectAttackRangeDuring = 0.0
         local real fromUnitHuntEffectMoveVal = 0.0
         local real fromUnitHuntEffectMoveDuring = 0.0
         local real fromUnitHuntEffectAimVal = 0.0
@@ -194,6 +196,8 @@ struct hAttrHunt
         local real fromUnitHuntEffectBluntDuring = 0.0
         local real fromUnitHuntEffectMuggleVal = 0.0
         local real fromUnitHuntEffectMuggleDuring = 0.0
+        local real fromUnitHuntEffectMyopiaVal = 0.0
+        local real fromUnitHuntEffectMyopiaDuring = 0.0
         local real fromUnitHuntEffectCorrosionVal = 0.0
         local real fromUnitHuntEffectCorrosionDuring = 0.0
         local real fromUnitHuntEffectChaosVal = 0.0
@@ -311,100 +315,104 @@ struct hAttrHunt
         set fromUnitNaturalThunder = hattrNatural.getThunder(fromUnit)
     	set fromUnitNaturalPoison = hattrNatural.getPoison(fromUnit)
         //获取攻击/伤害特效
-		set fromUnitHuntEffectLifeBackVal = hAttrEffect.getLifeBackVal(fromUnit)
-        set fromUnitHuntEffectLifeBackDuring = hAttrEffect.getLifeBackDuring(fromUnit)
-        set fromUnitHuntEffectManaBackVal = hAttrEffect.getManaBackVal(fromUnit)
-        set fromUnitHuntEffectManaBackDuring = hAttrEffect.getManaBackDuring(fromUnit)
-        set fromUnitHuntEffectAttackSpeedVal = hAttrEffect.getAttackSpeedVal(fromUnit)
-        set fromUnitHuntEffectAttackSpeedDuring = hAttrEffect.getAttackSpeedDuring(fromUnit)
-        set fromUnitHuntEffectAttackPhysicalVal = hAttrEffect.getAttackPhysicalVal(fromUnit)
-        set fromUnitHuntEffectAttackPhysicalDuring = hAttrEffect.getAttackPhysicalDuring(fromUnit)
-        set fromUnitHuntEffectAttackMagicVal = hAttrEffect.getAttackMagicVal(fromUnit)
-        set fromUnitHuntEffectAttackMagicDuring = hAttrEffect.getAttackMagicDuring(fromUnit)
-        set fromUnitHuntEffectMoveVal = hAttrEffect.getMoveVal(fromUnit)
-        set fromUnitHuntEffectMoveDuring = hAttrEffect.getMoveDuring(fromUnit)
-        set fromUnitHuntEffectAimVal = hAttrEffect.getAimVal(fromUnit)
-        set fromUnitHuntEffectAimDuring = hAttrEffect.getAimDuring(fromUnit)
-        set fromUnitHuntEffectStrVal = hAttrEffect.getStrVal(fromUnit)
-        set fromUnitHuntEffectStrDuring = hAttrEffect.getStrDuring(fromUnit)
-        set fromUnitHuntEffectAgiVal = hAttrEffect.getAgiVal(fromUnit)
-        set fromUnitHuntEffectAgiDuring = hAttrEffect.getAgiDuring(fromUnit)
-        set fromUnitHuntEffectIntVal = hAttrEffect.getIntVal(fromUnit)
-        set fromUnitHuntEffectIntDuring = hAttrEffect.getIntDuring(fromUnit)
-        set fromUnitHuntEffectKnockingVal = hAttrEffect.getKnockingVal(fromUnit)
-        set fromUnitHuntEffectKnockingDuring = hAttrEffect.getKnockingDuring(fromUnit)
-        set fromUnitHuntEffectViolenceVal = hAttrEffect.getViolenceVal(fromUnit)
-        set fromUnitHuntEffectViolenceDuring = hAttrEffect.getViolenceDuring(fromUnit)
-        set fromUnitHuntEffectHemophagiaVal = hAttrEffect.getHemophagiaVal(fromUnit)
-        set fromUnitHuntEffectHemophagiaDuring = hAttrEffect.getHemophagiaDuring(fromUnit)
-        set fromUnitHuntEffectHemophagiaSkillVal = hAttrEffect.getHemophagiaSkillVal(fromUnit)
-        set fromUnitHuntEffectHemophagiaSkillDuring = hAttrEffect.getHemophagiaSkillDuring(fromUnit)
-        set fromUnitHuntEffectSplitVal = hAttrEffect.getSplitVal(fromUnit)
-        set fromUnitHuntEffectSplitDuring = hAttrEffect.getSplitDuring(fromUnit)
-        set fromUnitHuntEffectLuckVal = hAttrEffect.getLuckVal(fromUnit)
-        set fromUnitHuntEffectLuckDuring = hAttrEffect.getLuckDuring(fromUnit)
-        set fromUnitHuntEffectHuntAmplitudeVal = hAttrEffect.getHuntAmplitudeVal(fromUnit)
-        set fromUnitHuntEffectHuntAmplitudeDuring = hAttrEffect.getHuntAmplitudeDuring(fromUnit)
-        set fromUnitHuntEffectPoisonVal = hAttrEffect.getPoisonVal(fromUnit)
-        set fromUnitHuntEffectPoisonDuring = hAttrEffect.getPoisonDuring(fromUnit)
-        set fromUnitHuntEffectFireVal = hAttrEffect.getFireVal(fromUnit)
-        set fromUnitHuntEffectFireDuring = hAttrEffect.getFireDuring(fromUnit)
-        set fromUnitHuntEffectDryVal = hAttrEffect.getDryVal(fromUnit)
-        set fromUnitHuntEffectDryDuring = hAttrEffect.getDryDuring(fromUnit)
-        set fromUnitHuntEffectFreezeVal = hAttrEffect.getFreezeVal(fromUnit)
-        set fromUnitHuntEffectFreezeDuring = hAttrEffect.getFreezeDuring(fromUnit)
-        set fromUnitHuntEffectColdVal = hAttrEffect.getColdVal(fromUnit)
-        set fromUnitHuntEffectColdDuring = hAttrEffect.getColdDuring(fromUnit)
-        set fromUnitHuntEffectBluntVal = hAttrEffect.getBluntVal(fromUnit)
-        set fromUnitHuntEffectBluntDuring = hAttrEffect.getBluntDuring(fromUnit)
-        set fromUnitHuntEffectMuggleVal = hAttrEffect.getMuggleVal(fromUnit)
-        set fromUnitHuntEffectMuggleDuring = hAttrEffect.getMuggleDuring(fromUnit)
-        set fromUnitHuntEffectCorrosionVal = hAttrEffect.getCorrosionVal(fromUnit)
-        set fromUnitHuntEffectCorrosionDuring = hAttrEffect.getCorrosionDuring(fromUnit)
-        set fromUnitHuntEffectChaosVal = hAttrEffect.getChaosVal(fromUnit)
-        set fromUnitHuntEffectChaosDuring = hAttrEffect.getChaosDuring(fromUnit)
-        set fromUnitHuntEffectTwineVal = hAttrEffect.getTwineVal(fromUnit)
-        set fromUnitHuntEffectTwineDuring = hAttrEffect.getTwineDuring(fromUnit)
-        set fromUnitHuntEffectBlindVal = hAttrEffect.getBlindVal(fromUnit)
-        set fromUnitHuntEffectBlindDuring = hAttrEffect.getBlindDuring(fromUnit)
-        set fromUnitHuntEffectTortuaVal = hAttrEffect.getTortuaVal(fromUnit)
-        set fromUnitHuntEffectTortuaDuring = hAttrEffect.getTortuaDuring(fromUnit)
-        set fromUnitHuntEffectWeakVal = hAttrEffect.getWeakVal(fromUnit)
-        set fromUnitHuntEffectWeakDuring = hAttrEffect.getWeakDuring(fromUnit)
-        set fromUnitHuntEffectAstrictVal = hAttrEffect.getAstrictVal(fromUnit)
-        set fromUnitHuntEffectAstrictDuring = hAttrEffect.getAstrictDuring(fromUnit)
-        set fromUnitHuntEffectFoolishVal = hAttrEffect.getFoolishVal(fromUnit)
-        set fromUnitHuntEffectFoolishDuring = hAttrEffect.getFoolishDuring(fromUnit)
-        set fromUnitHuntEffectDullVal = hAttrEffect.getDullVal(fromUnit)
-        set fromUnitHuntEffectDullDuring = hAttrEffect.getDullDuring(fromUnit)
-        set fromUnitHuntEffectDirtVal = hAttrEffect.getDirtVal(fromUnit)
-        set fromUnitHuntEffectDirtDuring = hAttrEffect.getDirtDuring(fromUnit)
-        set fromUnitHuntEffectSwimOdds = hAttrEffect.getSwimOdds(fromUnit)
-        set fromUnitHuntEffectSwimDuring = hAttrEffect.getSwimDuring(fromUnit)
-        set fromUnitHuntEffectHeavyOdds = hAttrEffect.getHeavyOdds(fromUnit)
-        set fromUnitHuntEffectHeavyVal = hAttrEffect.getHeavyVal(fromUnit)
-        set fromUnitHuntEffectBreakOdds = hAttrEffect.getBreakOdds(fromUnit)
-        set fromUnitHuntEffectBreakDuring = hAttrEffect.getBreakDuring(fromUnit)
-        set fromUnitHuntEffectUnluckVal = hAttrEffect.getUnluckVal(fromUnit)
-        set fromUnitHuntEffectUnluckDuring = hAttrEffect.getUnluckDuring(fromUnit)
-        set fromUnitHuntEffectSilentOdds = hAttrEffect.getSilentOdds(fromUnit)
-        set fromUnitHuntEffectSilentDuring = hAttrEffect.getSilentDuring(fromUnit)
-        set fromUnitHuntEffectUnarmOdds = hAttrEffect.getUnarmOdds(fromUnit)
-        set fromUnitHuntEffectUnarmDuring = hAttrEffect.getUnarmDuring(fromUnit)
-        set fromUnitHuntEffectFetterOdds = hAttrEffect.getFetterOdds(fromUnit)
-        set fromUnitHuntEffectFetterDuring = hAttrEffect.getFetterDuring(fromUnit)
-        set fromUnitHuntEffectBombVal = hAttrEffect.getBombVal(fromUnit)
-        set fromUnitHuntEffectBombRange = hAttrEffect.getBombRange(fromUnit)
-        set fromUnitHuntEffectBombModel = hAttrEffect.getBombModel(fromUnit)
-        set fromUnitHuntEffectLightningChainVal = hAttrEffect.getLightningChainVal(fromUnit)
-        set fromUnitHuntEffectLightningChainOdds = hAttrEffect.getLightningChainOdds(fromUnit)
-        set fromUnitHuntEffectLightningChainQty = hAttrEffect.getLightningChainQty(fromUnit)
-        set fromUnitHuntEffectLightningChainReduce = hAttrEffect.getLightningChainReduce(fromUnit)
-        set fromUnitHuntEffectLightningChainModel = hAttrEffect.getLightningChainModel(fromUnit)
-        set fromUnitHuntEffectCrackFlyVal = hAttrEffect.getCrackFlyVal(fromUnit)
-        set fromUnitHuntEffectCrackFlyOdds = hAttrEffect.getCrackFlyOdds(fromUnit)
-        set fromUnitHuntEffectCrackFlyDistance = hAttrEffect.getCrackFlyDistance(fromUnit)
-        set fromUnitHuntEffectCrackFlyHigh = hAttrEffect.getCrackFlyHigh(fromUnit)
+		set fromUnitHuntEffectLifeBackVal = hAttrEffect.getLifeBackVal(bean.fromUnit)
+        set fromUnitHuntEffectLifeBackDuring = hAttrEffect.getLifeBackDuring(bean.fromUnit)
+        set fromUnitHuntEffectManaBackVal = hAttrEffect.getManaBackVal(bean.fromUnit)
+        set fromUnitHuntEffectManaBackDuring = hAttrEffect.getManaBackDuring(bean.fromUnit)
+        set fromUnitHuntEffectAttackSpeedVal = hAttrEffect.getAttackSpeedVal(bean.fromUnit)
+        set fromUnitHuntEffectAttackSpeedDuring = hAttrEffect.getAttackSpeedDuring(bean.fromUnit)
+        set fromUnitHuntEffectAttackPhysicalVal = hAttrEffect.getAttackPhysicalVal(bean.fromUnit)
+        set fromUnitHuntEffectAttackPhysicalDuring = hAttrEffect.getAttackPhysicalDuring(bean.fromUnit)
+        set fromUnitHuntEffectAttackMagicVal = hAttrEffect.getAttackMagicVal(bean.fromUnit)
+        set fromUnitHuntEffectAttackMagicDuring = hAttrEffect.getAttackMagicDuring(bean.fromUnit)
+        set fromUnitHuntEffectAttackRangeVal = hAttrEffect.getAttackRangeVal(bean.fromUnit)
+        set fromUnitHuntEffectAttackRangeDuring = hAttrEffect.getAttackRangeDuring(bean.fromUnit)
+        set fromUnitHuntEffectMoveVal = hAttrEffect.getMoveVal(bean.fromUnit)
+        set fromUnitHuntEffectMoveDuring = hAttrEffect.getMoveDuring(bean.fromUnit)
+        set fromUnitHuntEffectAimVal = hAttrEffect.getAimVal(bean.fromUnit)
+        set fromUnitHuntEffectAimDuring = hAttrEffect.getAimDuring(bean.fromUnit)
+        set fromUnitHuntEffectStrVal = hAttrEffect.getStrVal(bean.fromUnit)
+        set fromUnitHuntEffectStrDuring = hAttrEffect.getStrDuring(bean.fromUnit)
+        set fromUnitHuntEffectAgiVal = hAttrEffect.getAgiVal(bean.fromUnit)
+        set fromUnitHuntEffectAgiDuring = hAttrEffect.getAgiDuring(bean.fromUnit)
+        set fromUnitHuntEffectIntVal = hAttrEffect.getIntVal(bean.fromUnit)
+        set fromUnitHuntEffectIntDuring = hAttrEffect.getIntDuring(bean.fromUnit)
+        set fromUnitHuntEffectKnockingVal = hAttrEffect.getKnockingVal(bean.fromUnit)
+        set fromUnitHuntEffectKnockingDuring = hAttrEffect.getKnockingDuring(bean.fromUnit)
+        set fromUnitHuntEffectViolenceVal = hAttrEffect.getViolenceVal(bean.fromUnit)
+        set fromUnitHuntEffectViolenceDuring = hAttrEffect.getViolenceDuring(bean.fromUnit)
+        set fromUnitHuntEffectHemophagiaVal = hAttrEffect.getHemophagiaVal(bean.fromUnit)
+        set fromUnitHuntEffectHemophagiaDuring = hAttrEffect.getHemophagiaDuring(bean.fromUnit)
+        set fromUnitHuntEffectHemophagiaSkillVal = hAttrEffect.getHemophagiaSkillVal(bean.fromUnit)
+        set fromUnitHuntEffectHemophagiaSkillDuring = hAttrEffect.getHemophagiaSkillDuring(bean.fromUnit)
+        set fromUnitHuntEffectSplitVal = hAttrEffect.getSplitVal(bean.fromUnit)
+        set fromUnitHuntEffectSplitDuring = hAttrEffect.getSplitDuring(bean.fromUnit)
+        set fromUnitHuntEffectLuckVal = hAttrEffect.getLuckVal(bean.fromUnit)
+        set fromUnitHuntEffectLuckDuring = hAttrEffect.getLuckDuring(bean.fromUnit)
+        set fromUnitHuntEffectHuntAmplitudeVal = hAttrEffect.getHuntAmplitudeVal(bean.fromUnit)
+        set fromUnitHuntEffectHuntAmplitudeDuring = hAttrEffect.getHuntAmplitudeDuring(bean.fromUnit)
+        set fromUnitHuntEffectPoisonVal = hAttrEffect.getPoisonVal(bean.fromUnit)
+        set fromUnitHuntEffectPoisonDuring = hAttrEffect.getPoisonDuring(bean.fromUnit)
+        set fromUnitHuntEffectFireVal = hAttrEffect.getFireVal(bean.fromUnit)
+        set fromUnitHuntEffectFireDuring = hAttrEffect.getFireDuring(bean.fromUnit)
+        set fromUnitHuntEffectDryVal = hAttrEffect.getDryVal(bean.fromUnit)
+        set fromUnitHuntEffectDryDuring = hAttrEffect.getDryDuring(bean.fromUnit)
+        set fromUnitHuntEffectFreezeVal = hAttrEffect.getFreezeVal(bean.fromUnit)
+        set fromUnitHuntEffectFreezeDuring = hAttrEffect.getFreezeDuring(bean.fromUnit)
+        set fromUnitHuntEffectColdVal = hAttrEffect.getColdVal(bean.fromUnit)
+        set fromUnitHuntEffectColdDuring = hAttrEffect.getColdDuring(bean.fromUnit)
+        set fromUnitHuntEffectBluntVal = hAttrEffect.getBluntVal(bean.fromUnit)
+        set fromUnitHuntEffectBluntDuring = hAttrEffect.getBluntDuring(bean.fromUnit)
+        set fromUnitHuntEffectMuggleVal = hAttrEffect.getMuggleVal(bean.fromUnit)
+        set fromUnitHuntEffectMuggleDuring = hAttrEffect.getMuggleDuring(bean.fromUnit)
+        set fromUnitHuntEffectMyopiaVal = hAttrEffect.getMyopiaVal(bean.fromUnit)
+        set fromUnitHuntEffectMyopiaDuring = hAttrEffect.getMyopiaDuring(bean.fromUnit)
+        set fromUnitHuntEffectCorrosionVal = hAttrEffect.getCorrosionVal(bean.fromUnit)
+        set fromUnitHuntEffectCorrosionDuring = hAttrEffect.getCorrosionDuring(bean.fromUnit)
+        set fromUnitHuntEffectChaosVal = hAttrEffect.getChaosVal(bean.fromUnit)
+        set fromUnitHuntEffectChaosDuring = hAttrEffect.getChaosDuring(bean.fromUnit)
+        set fromUnitHuntEffectTwineVal = hAttrEffect.getTwineVal(bean.fromUnit)
+        set fromUnitHuntEffectTwineDuring = hAttrEffect.getTwineDuring(bean.fromUnit)
+        set fromUnitHuntEffectBlindVal = hAttrEffect.getBlindVal(bean.fromUnit)
+        set fromUnitHuntEffectBlindDuring = hAttrEffect.getBlindDuring(bean.fromUnit)
+        set fromUnitHuntEffectTortuaVal = hAttrEffect.getTortuaVal(bean.fromUnit)
+        set fromUnitHuntEffectTortuaDuring = hAttrEffect.getTortuaDuring(bean.fromUnit)
+        set fromUnitHuntEffectWeakVal = hAttrEffect.getWeakVal(bean.fromUnit)
+        set fromUnitHuntEffectWeakDuring = hAttrEffect.getWeakDuring(bean.fromUnit)
+        set fromUnitHuntEffectAstrictVal = hAttrEffect.getAstrictVal(bean.fromUnit)
+        set fromUnitHuntEffectAstrictDuring = hAttrEffect.getAstrictDuring(bean.fromUnit)
+        set fromUnitHuntEffectFoolishVal = hAttrEffect.getFoolishVal(bean.fromUnit)
+        set fromUnitHuntEffectFoolishDuring = hAttrEffect.getFoolishDuring(bean.fromUnit)
+        set fromUnitHuntEffectDullVal = hAttrEffect.getDullVal(bean.fromUnit)
+        set fromUnitHuntEffectDullDuring = hAttrEffect.getDullDuring(bean.fromUnit)
+        set fromUnitHuntEffectDirtVal = hAttrEffect.getDirtVal(bean.fromUnit)
+        set fromUnitHuntEffectDirtDuring = hAttrEffect.getDirtDuring(bean.fromUnit)
+        set fromUnitHuntEffectSwimOdds = hAttrEffect.getSwimOdds(bean.fromUnit)
+        set fromUnitHuntEffectSwimDuring = hAttrEffect.getSwimDuring(bean.fromUnit)
+        set fromUnitHuntEffectHeavyOdds = hAttrEffect.getHeavyOdds(bean.fromUnit)
+        set fromUnitHuntEffectHeavyVal = hAttrEffect.getHeavyVal(bean.fromUnit)
+        set fromUnitHuntEffectBreakOdds = hAttrEffect.getBreakOdds(bean.fromUnit)
+        set fromUnitHuntEffectBreakDuring = hAttrEffect.getBreakDuring(bean.fromUnit)
+        set fromUnitHuntEffectUnluckVal = hAttrEffect.getUnluckVal(bean.fromUnit)
+        set fromUnitHuntEffectUnluckDuring = hAttrEffect.getUnluckDuring(bean.fromUnit)
+        set fromUnitHuntEffectSilentOdds = hAttrEffect.getSilentOdds(bean.fromUnit)
+        set fromUnitHuntEffectSilentDuring = hAttrEffect.getSilentDuring(bean.fromUnit)
+        set fromUnitHuntEffectUnarmOdds = hAttrEffect.getUnarmOdds(bean.fromUnit)
+        set fromUnitHuntEffectUnarmDuring = hAttrEffect.getUnarmDuring(bean.fromUnit)
+        set fromUnitHuntEffectFetterOdds = hAttrEffect.getFetterOdds(bean.fromUnit)
+        set fromUnitHuntEffectFetterDuring = hAttrEffect.getFetterDuring(bean.fromUnit)
+        set fromUnitHuntEffectBombVal = hAttrEffect.getBombVal(bean.fromUnit)
+        set fromUnitHuntEffectBombRange = hAttrEffect.getBombRange(bean.fromUnit)
+        set fromUnitHuntEffectBombModel = hAttrEffect.getBombModel(bean.fromUnit)
+        set fromUnitHuntEffectLightningChainVal = hAttrEffect.getLightningChainVal(bean.fromUnit)
+        set fromUnitHuntEffectLightningChainOdds = hAttrEffect.getLightningChainOdds(bean.fromUnit)
+        set fromUnitHuntEffectLightningChainQty = hAttrEffect.getLightningChainQty(bean.fromUnit)
+        set fromUnitHuntEffectLightningChainReduce = hAttrEffect.getLightningChainReduce(bean.fromUnit)
+        set fromUnitHuntEffectLightningChainModel = hAttrEffect.getLightningChainModel(bean.fromUnit)
+        set fromUnitHuntEffectCrackFlyVal = hAttrEffect.getCrackFlyVal(bean.fromUnit)
+        set fromUnitHuntEffectCrackFlyOdds = hAttrEffect.getCrackFlyOdds(bean.fromUnit)
+        set fromUnitHuntEffectCrackFlyDistance = hAttrEffect.getCrackFlyDistance(bean.fromUnit)
+        set fromUnitHuntEffectCrackFlyHigh = hAttrEffect.getCrackFlyHigh(bean.fromUnit)
         //获取受伤单位抵抗属性
     	set toUnitDefend = hattr.getDefend(toUnit)
     	set toUnitResistance = hattr.getResistance(toUnit)
@@ -817,19 +825,21 @@ struct hAttrHunt
         //call console.info("realDamage:"+R2S(realDamage))
         if( realDamage > 0 ) then
 
-            //暴击文本加持
-            if(isKnocking and isViolence)then
-                set realDamageString = realDamageString+"双暴击"
-                    set realDamageStringColor = "b054ee"
-            elseif(isKnocking)then
-                set realDamageString = realDamageString+"暴击"
-                set realDamageStringColor = "ef3215"
-            elseif(isViolence)then
-                set realDamageString = realDamageString+"暴击"
-                set realDamageStringColor = "15bcef"
+            if( realDamage >= 1 ) then
+                //暴击文本加持
+                if(isKnocking and isViolence)then
+                    set realDamageString = realDamageString+"双暴击"
+                        set realDamageStringColor = "b054ee"
+                elseif(isKnocking)then
+                    set realDamageString = realDamageString+"暴击"
+                    set realDamageStringColor = "ef3215"
+                elseif(isViolence)then
+                    set realDamageString = realDamageString+"暴击"
+                    set realDamageStringColor = "15bcef"
+                endif
+                //文本显示
+                call hmsg.style(  hmsg.ttg2Unit(toUnit,realDamageString+I2S(R2I(realDamage)),6.00,realDamageStringColor,10,1.1,11.00)  ,"toggle",-0.05,0)
             endif
-            //文本显示
-            call hmsg.style(  hmsg.ttg2Unit(toUnit,realDamageString+I2S(R2I(realDamage)),6.00,realDamageStringColor,10,1.1,11.00)  ,"toggle",-0.05,0)
 
             call hevt.setLastDamageUnit(toUnit,fromUnit)
             call hplayer.addDamage(GetOwningPlayer(fromUnit),realDamage)
@@ -1038,123 +1048,130 @@ struct hAttrHunt
         //特殊效果,需要非无敌并处于效果启动状态下
         if( isEffect == true )then
 
-if( fromUnitHuntEffectLifeBackVal>0 and fromUnitHuntEffectLifeBackDuring>0 ) then
+if( fromUnitHuntEffectLifeBackVal!=0 and fromUnitHuntEffectLifeBackDuring>0 ) then
     call hattr.addLifeBack(fromUnit,fromUnitHuntEffectLifeBackVal,fromUnitHuntEffectLifeBackDuring)
 endif
-if( fromUnitHuntEffectManaBackVal>0 and fromUnitHuntEffectManaBackDuring>0 ) then
+if( fromUnitHuntEffectManaBackVal!=0 and fromUnitHuntEffectManaBackDuring>0 ) then
     call hattr.addManaBack(fromUnit,fromUnitHuntEffectManaBackVal,fromUnitHuntEffectManaBackDuring)
 endif
-if( fromUnitHuntEffectAttackSpeedVal>0 and fromUnitHuntEffectAttackSpeedDuring>0 ) then
+if( fromUnitHuntEffectAttackSpeedVal!=0 and fromUnitHuntEffectAttackSpeedDuring>0 ) then
     call hattr.addAttackSpeed(fromUnit,fromUnitHuntEffectAttackSpeedVal,fromUnitHuntEffectAttackSpeedDuring)
 endif
-if( fromUnitHuntEffectAttackPhysicalVal>0 and fromUnitHuntEffectAttackPhysicalDuring>0 ) then
+if( fromUnitHuntEffectAttackPhysicalVal!=0 and fromUnitHuntEffectAttackPhysicalDuring>0 ) then
     call hattr.addAttackPhysical(fromUnit,fromUnitHuntEffectAttackPhysicalVal,fromUnitHuntEffectAttackPhysicalDuring)
 endif
-if( fromUnitHuntEffectAttackMagicVal>0 and fromUnitHuntEffectAttackMagicDuring>0 ) then
+if( fromUnitHuntEffectAttackMagicVal!=0 and fromUnitHuntEffectAttackMagicDuring>0 ) then
     call hattr.addAttackMagic(fromUnit,fromUnitHuntEffectAttackMagicVal,fromUnitHuntEffectAttackMagicDuring)
 endif
-if( fromUnitHuntEffectMoveVal>0 and fromUnitHuntEffectMoveDuring>0 ) then
+if( fromUnitHuntEffectAttackRangeVal!=0 and fromUnitHuntEffectAttackRangeDuring>0 ) then
+    call hattr.addAttackRange(bean.fromUnit,fromUnitHuntEffectAttackRangeVal,fromUnitHuntEffectAttackRangeDuring)
+endif
+if( fromUnitHuntEffectMoveVal!=0 and fromUnitHuntEffectMoveDuring>0 ) then
     call hattr.addMove(fromUnit,fromUnitHuntEffectMoveVal,fromUnitHuntEffectMoveDuring)
 endif
-if( fromUnitHuntEffectAimVal>0 and fromUnitHuntEffectAimDuring>0 ) then
+if( fromUnitHuntEffectAimVal!=0 and fromUnitHuntEffectAimDuring>0 ) then
     call hattr.addAim(fromUnit,fromUnitHuntEffectAimVal,fromUnitHuntEffectAimDuring)
 endif
-if( fromUnitHuntEffectStrVal>0 and fromUnitHuntEffectStrDuring>0 ) then
+if( fromUnitHuntEffectStrVal!=0 and fromUnitHuntEffectStrDuring>0 ) then
     call hattr.addStr(fromUnit,fromUnitHuntEffectStrVal,fromUnitHuntEffectStrDuring)
 endif
-if( fromUnitHuntEffectAgiVal>0 and fromUnitHuntEffectAgiDuring>0 ) then
+if( fromUnitHuntEffectAgiVal!=0 and fromUnitHuntEffectAgiDuring>0 ) then
     call hattr.addAgi(fromUnit,fromUnitHuntEffectAgiVal,fromUnitHuntEffectAgiDuring)
 endif
-if( fromUnitHuntEffectIntVal>0 and fromUnitHuntEffectIntDuring>0 ) then
+if( fromUnitHuntEffectIntVal!=0 and fromUnitHuntEffectIntDuring>0 ) then
     call hattr.addInt(fromUnit,fromUnitHuntEffectIntVal,fromUnitHuntEffectIntDuring)
 endif
-if( fromUnitHuntEffectKnockingVal>0 and fromUnitHuntEffectKnockingDuring>0 ) then
+if( fromUnitHuntEffectKnockingVal!=0 and fromUnitHuntEffectKnockingDuring>0 ) then
     call hattr.addKnocking(fromUnit,fromUnitHuntEffectKnockingVal,fromUnitHuntEffectKnockingDuring)
 endif
-if( fromUnitHuntEffectViolenceVal>0 and fromUnitHuntEffectViolenceDuring>0 ) then
+if( fromUnitHuntEffectViolenceVal!=0 and fromUnitHuntEffectViolenceDuring>0 ) then
     call hattr.addViolence(fromUnit,fromUnitHuntEffectViolenceVal,fromUnitHuntEffectViolenceDuring)
 endif
-if( fromUnitHuntEffectHemophagiaVal>0 and fromUnitHuntEffectHemophagiaDuring>0 ) then
+if( fromUnitHuntEffectHemophagiaVal!=0 and fromUnitHuntEffectHemophagiaDuring>0 ) then
     call hattr.addHemophagia(fromUnit,fromUnitHuntEffectHemophagiaVal,fromUnitHuntEffectHemophagiaDuring)
 endif
-if( fromUnitHuntEffectHemophagiaSkillVal>0 and fromUnitHuntEffectHemophagiaSkillDuring>0 ) then
+if( fromUnitHuntEffectHemophagiaSkillVal!=0 and fromUnitHuntEffectHemophagiaSkillDuring>0 ) then
     call hattr.addHemophagiaSkill(fromUnit,fromUnitHuntEffectHemophagiaSkillVal,fromUnitHuntEffectHemophagiaSkillDuring)
 endif
-if( fromUnitHuntEffectSplitVal>0 and fromUnitHuntEffectSplitDuring>0 ) then
+if( fromUnitHuntEffectSplitVal!=0 and fromUnitHuntEffectSplitDuring>0 ) then
     call hattr.addSplit(fromUnit,fromUnitHuntEffectSplitVal,fromUnitHuntEffectSplitDuring)
 endif
-if( fromUnitHuntEffectLuckVal>0 and fromUnitHuntEffectLuckDuring>0 ) then
+if( fromUnitHuntEffectLuckVal!=0 and fromUnitHuntEffectLuckDuring>0 ) then
     call hattr.addLuck(fromUnit,fromUnitHuntEffectLuckVal,fromUnitHuntEffectLuckDuring)
 endif
-if( fromUnitHuntEffectHuntAmplitudeVal>0 and fromUnitHuntEffectHuntAmplitudeDuring>0 ) then
+if( fromUnitHuntEffectHuntAmplitudeVal!=0 and fromUnitHuntEffectHuntAmplitudeDuring>0 ) then
     call hattr.addHuntAmplitude(fromUnit,fromUnitHuntEffectHuntAmplitudeVal,fromUnitHuntEffectHuntAmplitudeDuring)
 endif
 
-            if( fromUnitHuntEffectPoisonVal>0 and fromUnitHuntEffectPoisonDuring>0 ) then
+            if( fromUnitHuntEffectPoisonVal!=0 and fromUnitHuntEffectPoisonDuring>0 ) then
                 call hattr.subLifeBack(toUnit,fromUnitHuntEffectPoisonVal,fromUnitHuntEffectPoisonDuring)
                 call heffect.toUnit("Abilities\\Spells\\Other\\AcidBomb\\BottleImpact.mdl",toUnit,"origin",fromUnitHuntEffectPoisonDuring)
             endif
-            if( fromUnitHuntEffectFireVal>0 and fromUnitHuntEffectFireDuring>0 ) then
+            if( fromUnitHuntEffectFireVal!=0 and fromUnitHuntEffectFireDuring>0 ) then
                 call hattr.subLifeBack(toUnit,fromUnitHuntEffectFireVal,fromUnitHuntEffectFireDuring)
                 call heffect.toUnit("Abilities\\Spells\\Other\\ImmolationRed\\ImmolationRedDamage.mdl",toUnit,"origin",fromUnitHuntEffectFireDuring)
             endif
-            if( fromUnitHuntEffectDryVal>0 and fromUnitHuntEffectDryDuring>0 ) then
+            if( fromUnitHuntEffectDryVal!=0 and fromUnitHuntEffectDryDuring>0 ) then
                 call hattr.subManaBack(toUnit,fromUnitHuntEffectDryVal,fromUnitHuntEffectDryDuring)
-                call heffect.toUnit("Abilities\\Spells\\Other\\Drain\\ManaDrainCaster.mdl",toUnit,"foot",fromUnitHuntEffectDryDuring)
+                call heffect.toUnit("Abilities\\Spells\\Other\\GeneralAuraTarget\\GeneralAuraTarget.mdl",toUnit,"origin",fromUnitHuntEffectDryDuring)
             endif
-            if( fromUnitHuntEffectFreezeVal>0 and fromUnitHuntEffectFreezeDuring>0 ) then
+            if( fromUnitHuntEffectFreezeVal!=0 and fromUnitHuntEffectFreezeDuring>0 ) then
                 call hattr.subAttackSpeed(toUnit,fromUnitHuntEffectFreezeVal,fromUnitHuntEffectFreezeDuring)
                 call heffect.toUnit("Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl",toUnit,"foot",fromUnitHuntEffectFreezeDuring)
             endif
-            if( fromUnitHuntEffectColdVal>0 and fromUnitHuntEffectColdDuring>0 ) then
+            if( fromUnitHuntEffectColdVal!=0 and fromUnitHuntEffectColdDuring>0 ) then
                 call hattr.subMove(toUnit,fromUnitHuntEffectColdVal,fromUnitHuntEffectColdDuring)
                 call heffect.toUnit("Abilities\\Spells\\Other\\FrostDamage\\FrostDamage.mdl",toUnit,"origin",fromUnitHuntEffectColdDuring)
             endif
-            if( fromUnitHuntEffectBluntVal>0 and fromUnitHuntEffectBluntDuring>0 ) then
+            if( fromUnitHuntEffectBluntVal!=0 and fromUnitHuntEffectBluntDuring>0 ) then
                 call hattr.subAttackPhysical(toUnit,fromUnitHuntEffectBluntVal,fromUnitHuntEffectBluntDuring)
                 call heffect.toUnit("Abilities\\Spells\\NightElf\\Barkskin\\BarkSkinTarget.mdl",toUnit,"origin",fromUnitHuntEffectBluntDuring)
             endif
-            if( fromUnitHuntEffectMuggleVal>0 and fromUnitHuntEffectMuggleDuring>0 ) then
+            if( fromUnitHuntEffectMuggleVal!=0 and fromUnitHuntEffectMuggleDuring>0 ) then
                 call hattr.subAttackMagic(toUnit,fromUnitHuntEffectMuggleVal,fromUnitHuntEffectMuggleDuring)
                 call heffect.toUnit("Abilities\\Spells\\Undead\\Cripple\\CrippleTarget.mdl",toUnit,"origin",fromUnitHuntEffectMuggleDuring)
             endif
-            if( fromUnitHuntEffectCorrosionVal>0 and fromUnitHuntEffectCorrosionDuring>0 ) then
+            if( fromUnitHuntEffectMyopiaVal!=0 and fromUnitHuntEffectMyopiaDuring>0 ) then
+                call hattr.subAttackRange(toUnit,fromUnitHuntEffectMyopiaVal,fromUnitHuntEffectMyopiaDuring)
+                call heffect.toUnit("Abilities\\Spells\\Orc\\SpiritLink\\SpiritLinkTarget.mdl",toUnit,"weapon",fromUnitHuntEffectFetterDuring)
+            endif
+            if( fromUnitHuntEffectCorrosionVal!=0 and fromUnitHuntEffectCorrosionDuring>0 ) then
                 call hattr.subDefend(toUnit,fromUnitHuntEffectCorrosionVal,fromUnitHuntEffectCorrosionDuring)
                 call heffect.toUnit("Abilities\\Spells\\Undead\\DeathandDecay\\DeathandDecayTarget.mdl",toUnit,"origin",fromUnitHuntEffectCorrosionDuring)
             endif
-            if( fromUnitHuntEffectChaosVal>0 and fromUnitHuntEffectChaosDuring>0 ) then
+            if( fromUnitHuntEffectChaosVal!=0 and fromUnitHuntEffectChaosDuring>0 ) then
                 call hattr.subResistance(toUnit,fromUnitHuntEffectChaosVal,fromUnitHuntEffectChaosDuring)
                 call heffect.toUnit("Abilities\\Spells\\Other\\AcidBomb\\BottleImpact.mdl",toUnit,"origin",fromUnitHuntEffectChaosDuring)
             endif
-            if( fromUnitHuntEffectTwineVal>0 and fromUnitHuntEffectTwineDuring>0 ) then
+            if( fromUnitHuntEffectTwineVal!=0 and fromUnitHuntEffectTwineDuring>0 ) then
                 call hattr.subAvoid(toUnit,fromUnitHuntEffectTwineVal,fromUnitHuntEffectTwineDuring)
                 call heffect.toUnit("Abilities\\Spells\\NightElf\\EntanglingRoots\\EntanglingRootsTarget.mdl",toUnit,"origin",fromUnitHuntEffectTwineDuring)
             endif
-            if( fromUnitHuntEffectBlindVal>0 and fromUnitHuntEffectBlindDuring>0 ) then
+            if( fromUnitHuntEffectBlindVal!=0 and fromUnitHuntEffectBlindDuring>0 ) then
                 call hattr.subAim(toUnit,fromUnitHuntEffectBlindVal,fromUnitHuntEffectBlindDuring)
                 call heffect.toUnit("Abilities\\Spells\\Human\\ManaFlare\\ManaFlareBoltImpact.mdl",toUnit,"origin",fromUnitHuntEffectBlindDuring)
             endif
-            if( fromUnitHuntEffectTortuaVal>0 and fromUnitHuntEffectTortuaDuring>0 ) then
+            if( fromUnitHuntEffectTortuaVal!=0 and fromUnitHuntEffectTortuaDuring>0 ) then
                 call hattr.subToughness(toUnit,fromUnitHuntEffectTortuaVal,fromUnitHuntEffectTortuaDuring)
                 call heffect.toUnit("Abilities\\Spells\\Other\\Incinerate\\IncinerateBuff.mdl",toUnit,"origin",fromUnitHuntEffectTortuaDuring)
             endif
-            if( fromUnitHuntEffectWeakVal>0 and fromUnitHuntEffectWeakDuring>0 ) then
+            if( fromUnitHuntEffectWeakVal!=0 and fromUnitHuntEffectWeakDuring>0 ) then
                 call hattr.subStr(toUnit,fromUnitHuntEffectWeakVal,fromUnitHuntEffectWeakDuring)
                 call heffect.toUnit("Units\\Undead\\PlagueCloud\\PlagueCloudtarget.mdl",toUnit,"head",fromUnitHuntEffectWeakDuring)
             endif
-            if( fromUnitHuntEffectAstrictVal>0 and fromUnitHuntEffectAstrictDuring>0 ) then
+            if( fromUnitHuntEffectAstrictVal!=0 and fromUnitHuntEffectAstrictDuring>0 ) then
                 call hattr.subAgi(toUnit,fromUnitHuntEffectAstrictVal,fromUnitHuntEffectAstrictDuring)
                 call heffect.toUnit("Abilities\\Spells\\Undead\\Sleep\\SleepSpecialArt.mdl",toUnit,"origin",fromUnitHuntEffectAstrictDuring)
             endif
-            if( fromUnitHuntEffectFoolishVal>0 and fromUnitHuntEffectFoolishDuring>0 ) then
+            if( fromUnitHuntEffectFoolishVal!=0 and fromUnitHuntEffectFoolishDuring>0 ) then
                 call hattr.subInt(toUnit,fromUnitHuntEffectFoolishVal,fromUnitHuntEffectFoolishDuring)
                 call heffect.toUnit("Abilities\\Spells\\Undead\\Sleep\\SleepTarget.mdl",toUnit,"head",fromUnitHuntEffectFoolishDuring)
             endif
-            if( fromUnitHuntEffectDullVal>0 and fromUnitHuntEffectDullDuring>0 ) then
+            if( fromUnitHuntEffectDullVal!=0 and fromUnitHuntEffectDullDuring>0 ) then
                 call hattr.subKnocking(toUnit,fromUnitHuntEffectDullVal,fromUnitHuntEffectDullDuring)
                 call heffect.toUnit("Abilities\\Spells\\NightElf\\Barkskin\\BarkSkinTarget.mdl",toUnit,"weapon",fromUnitHuntEffectDullDuring)
             endif
-            if( fromUnitHuntEffectDirtVal>0 and fromUnitHuntEffectDirtDuring>0 ) then
+            if( fromUnitHuntEffectDirtVal!=0 and fromUnitHuntEffectDirtDuring>0 ) then
                 call hattr.subViolence(toUnit,fromUnitHuntEffectDirtVal,fromUnitHuntEffectDirtDuring)
                 call heffect.toUnit("Abilities\\Spells\\Items\\OrbCorruption\\OrbCorruptionSpecialArt.mdl",toUnit,"weapon",fromUnitHuntEffectDirtDuring)
             endif
@@ -1208,7 +1225,7 @@ endif
                 call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
             endif
-            if( fromUnitHuntEffectUnluckVal>0 and fromUnitHuntEffectUnluckDuring>0 ) then
+            if( fromUnitHuntEffectUnluckVal!=0 and fromUnitHuntEffectUnluckDuring>0 ) then
                 call hattr.subLuck(toUnit,fromUnitHuntEffectUnluckVal,fromUnitHuntEffectUnluckDuring)
             endif
             if( GetRandomReal(1,100)<=fromUnitHuntEffectSilentOdds and fromUnitHuntEffectSilentDuring>0 ) then
@@ -1221,7 +1238,7 @@ endif
                 call hattr.subMove(toUnit,1000,fromUnitHuntEffectFetterDuring)
                 call heffect.toUnit("Abilities\\Spells\\Orc\\SpiritLink\\SpiritLinkTarget.mdl",toUnit,"origin",fromUnitHuntEffectFetterDuring)
             endif
-            if( fromUnitHuntEffectBombVal>0 and fromUnitHuntEffectBombRange>0 ) then
+            if( fromUnitHuntEffectBombVal!=0 and fromUnitHuntEffectBombRange>0 ) then
                 if(fromUnitHuntEffectBombModel=="")then
                     set fromUnitHuntEffectBombModel = "Abilities\\Spells\\Other\\Incinerate\\FireLordDeathExplode.mdl"
                 endif
@@ -1252,7 +1269,7 @@ endif
                 set g = null
                 set u = null
             endif
-            if( GetRandomReal(1,100)<=fromUnitHuntEffectLightningChainOdds and fromUnitHuntEffectLightningChainVal>0 and fromUnitHuntEffectLightningChainQty>0 ) then
+            if( GetRandomReal(1,100)<=fromUnitHuntEffectLightningChainOdds and fromUnitHuntEffectLightningChainVal!=0 and fromUnitHuntEffectLightningChainQty>0 ) then
                 if(fromUnitHuntEffectLightningChainModel=="")then
                     set fromUnitHuntEffectLightningChainModel = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
                 endif
@@ -1266,7 +1283,7 @@ endif
                 call hskill.lightningChain(lightningCode_shandianlian_ci,R2I(fromUnitHuntEffectLightningChainQty),fromUnitHuntEffectLightningChainReduce,false,huntBean)
                 call huntBean.destroy()
             endif
-            if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal>0 ) then
+            if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal!=0 ) then
                 set huntBean = hAttrHuntBean.create()
                 set huntBean.fromUnit = fromUnit
                 set huntBean.toUnit = toUnit

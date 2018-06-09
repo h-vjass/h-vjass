@@ -21,6 +21,18 @@ struct hCamera
 		endif
 	endmethod
 
+	//移动到XY
+	public static method toXY takes real x,real y,player whichPlayer,real during returns nothing
+		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
+			call PanCameraToTimed(x, y, during)
+		endif
+	endmethod
+
+	//移动到点
+	public static method toLoc takes location loc,player whichPlayer,real during returns nothing
+		call toXY(GetLocationX(loc),GetLocationY(loc),whichPlayer,during)
+	endmethod
+
 	//锁定镜头
 	public static method lock takes player whichPlayer,unit whichUnit returns nothing
 		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
@@ -113,16 +125,24 @@ struct hCamera
 	//镜头模式集
 	private static method modelLock takes nothing returns nothing
 		local integer i = 1
-		local unit whichUnit = null
+		local integer j = 0
+		local integer jmax = 0
+		local unit firstHero = null
 		loop
 			exitwhen i>player_max_qty
-				set whichUnit = hplayer.getHero(players[i])
-				if(whichUnit!=null and his.alive(whichUnit)==true and GetLocalPlayer()==players[i])then
-					call lock(players[i],whichUnit)
+				set j = 1
+				set jmax = hhero.getPlayerUnitQty(players[i])
+				loop
+					exitwhen j>jmax or firstHero!=null
+						set firstHero = hhero.getPlayerUnit(players[i],j)
+					set j=j+1
+				endloop
+				if(firstHero!=null and his.alive(firstHero)==true and GetLocalPlayer()==players[i])then
+					call lock(players[i],firstHero)
 				else
 					call reset(players[i],0)
 				endif
-				set whichUnit = null
+				set firstHero = null
 			set i=i+1
 		endloop
 	endmethod

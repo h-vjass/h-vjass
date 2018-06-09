@@ -44,6 +44,10 @@ PickupItemRange=150.0
 DropItemRange=100.0
 GiveItemRange=150.0
 PawnItemRange=300.0
+SpellCaseRangeBuffer=300
+ItemShadowSize=120,120
+ItemShadowOffset=50,50
+MaxCollisionRaduis=200
 
 [FontHeights]
 ToolTipName=0.0100

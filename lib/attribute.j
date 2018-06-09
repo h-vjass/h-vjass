@@ -19,10 +19,11 @@ struct hAttrBean
 	public static real mana = 0.0
 	public static real move = 0.0
 	public static real defend  = 0.0
-	public static real attackSpeed  = 0.0
+	public static real attackSpeed = 0.0
 	public static string attackHuntType = ""
 	public static real attackPhysical = 0.0
 	public static real attackMagic = 0.0
+	public static real attackRange = 0.0
 	public static real str = 0.0
 	public static real agi = 0.0
 	public static real int = 0.0
@@ -92,6 +93,8 @@ struct hAttrBean
 	public static real attackPhysicalDuring = 0.0
 	public static real attackMagicVal = 0.0
 	public static real attackMagicDuring = 0.0
+	public static real attackRangeVal = 0.0
+	public static real attackRangeDuring = 0.0
 	public static real moveVal = 0.0
 	public static real moveDuring = 0.0
 	public static real aimVal = 0.0
@@ -130,6 +133,8 @@ struct hAttrBean
 	public static real bluntDuring = 0.0
 	public static real muggleVal = 0.0
 	public static real muggleDuring = 0.0
+	public static real myopiaVal = 0.0
+	public static real myopiaDuring = 0.0
 	public static real corrosionVal = 0.0
 	public static real corrosionDuring = 0.0
 	public static real chaosVal = 0.0
@@ -186,6 +191,7 @@ struct hAttrBean
 		set x.attackHuntType = ""
 		set x.attackPhysical = 0
 		set x.attackMagic = 0
+		set x.attackRange = 0
 		set x.str = 0
 		set x.agi = 0
 		set x.int = 0
@@ -293,6 +299,8 @@ struct hAttrBean
 		set x.bluntDuring = 0.0
 		set x.muggleVal = 0.0
 		set x.muggleDuring = 0.0
+		set x.myopiaVal = 0.0
+		set x.myopiaDuring = 0.0
 		set x.corrosionVal = 0.0
 		set x.corrosionDuring = 0.0
 		set x.chaosVal = 0.0
@@ -349,6 +357,7 @@ struct hAttrBean
 		set attackHuntType = ""
 		set attackPhysical = 0
 		set attackMagic = 0
+		set attackRange = 0
 		set str = 0
 		set agi = 0
 		set int = 0
@@ -456,6 +465,8 @@ struct hAttrBean
 		set bluntDuring = 0.0
 		set muggleVal = 0.0
 		set muggleDuring = 0.0
+		set myopiaVal = 0.0
+		set myopiaDuring = 0.0
 		set corrosionVal = 0.0
 		set corrosionDuring = 0.0
 		set chaosVal = 0.0
@@ -513,11 +524,11 @@ struct hAttr
     private static integer ATTR_FLAG_MOVE = 9
     private static integer ATTR_FLAG_DEFEND = 10
     private static integer ATTR_FLAG_ATTACK_SPEED = 12
-	private static integer ATTR_FLAG_ATTACK_SPEED_BASE_SPACE = 13
-	private static integer ATTR_FLAG_ATTACK_SPEED_SPACE = 14
-    private static integer ATTR_FLAG_ATTACK_HUNT_TYPE = 15
-    private static integer ATTR_FLAG_ATTACK_PHYSICAL = 16
-    private static integer ATTR_FLAG_ATTACK_MAGIC = 17
+	private static integer ATTR_FLAG_ATTACK_SPEED_SPACE = 13
+    private static integer ATTR_FLAG_ATTACK_HUNT_TYPE = 14
+    private static integer ATTR_FLAG_ATTACK_PHYSICAL = 15
+    private static integer ATTR_FLAG_ATTACK_MAGIC = 16
+    private static integer ATTR_FLAG_ATTACK_RANGE = 17
     private static integer ATTR_FLAG_STR = 18
     private static integer ATTR_FLAG_AGI = 19
     private static integer ATTR_FLAG_INT = 20
@@ -962,6 +973,7 @@ struct hAttr
 	//白字攻击	-999999999 ～ 999999999
 	//绿字攻击	-999999999 ～ 999999999
 	//攻速 		-9999% ～ 9999%<*实际上为-80% ～ 400%>
+	//射程 		0 ～ 
     //力敏智		～
     //力敏智(绿)	-99999999 ～ 99999999
     //护甲		-999999 ～ 999999
@@ -1226,7 +1238,7 @@ struct hAttr
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_FU_1, tempInt+1 )
 		        endif
 				//修改攻速间隔
-				call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , LoadReal(hash_attr,uhid,ATTR_FLAG_ATTACK_SPEED_BASE_SPACE)/(1+futureVal*0.01) )
+				call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , hunit.getAttackSpeedBaseSpace(GetUnitTypeId(whichUnit))/(1+futureVal*0.01) )
 			elseif( flag == ATTR_FLAG_ATTACK_PHYSICAL ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
@@ -1359,6 +1371,16 @@ struct hAttr
 		            set tempInt = tempInt - (tempInt/10)*10
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1, tempInt+1 )
 				endif
+			elseif( flag == ATTR_FLAG_ATTACK_RANGE ) then
+				set futureVal = LoadReal( hash_attr , uhid , flag ) + diff
+				call SaveReal( hash_attr , uhid , flag , futureVal )
+				if(futureVal < 550)then
+					set futureVal = 550
+				endif
+				if(hcamera.model=="zoomin")then
+					set futureVal = futureVal * 0.5
+				endif
+				call SetUnitAcquireRange( whichUnit, futureVal*1.1 )
 			elseif( flag == ATTR_FLAG_STR ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
@@ -1572,6 +1594,20 @@ struct hAttr
                     set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH )
                 endif
                 call SaveReal( hash_attr , uhid , flag , futureVal )
+			elseif( flag == ATTR_FLAG_UP_LIFE_SOURCE_CURRENT ) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+                set futureVal = currentVal + diff
+                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE ) ) then
+                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE )
+                endif
+                call SaveReal( hash_attr , uhid , flag , futureVal )
+			elseif( flag == ATTR_FLAG_UP_MANA_SOURCE_CURRENT ) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+                set futureVal = currentVal + diff
+                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE ) ) then
+                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE )
+                endif
+                call SaveReal( hash_attr , uhid , flag , futureVal )
             else
                 call SaveReal( hash_attr , uhid , flag , LoadReal( hash_attr , uhid , flag ) + diff )
             endif
@@ -1602,7 +1638,6 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
             call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
-            call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_BASE_SPACE , DEFAULT_ATTACK_SPEED_SPACE )
             call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , DEFAULT_ATTACK_SPEED_SPACE )
 			call SaveStr( hash_attr , uhid , ATTR_FLAG_ATTACK_HUNT_TYPE , "physicalmagic" )//攻击类型默认物理+魔法(攻击类型不能为空)
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
@@ -1686,10 +1721,8 @@ struct hAttr
                 //负重
                 call setAttrDo( ATTR_FLAG_UP_WEIGHT , whichUnit , 10.00 + 0.25 * I2R(GetHeroLevel(whichUnit)-1) )
                 //源
-                call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , 500 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
-                call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE_CURRENT , whichUnit , 500 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
-                call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , 300 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
-                call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE_CURRENT , whichUnit , 300 + 10 * I2R(GetHeroLevel(whichUnit)-1) )
+                call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
+                call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
             endif
             call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
             call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
@@ -1697,6 +1730,12 @@ struct hAttr
 			return true
 		endif
 		return false
+	endmethod
+
+	// 检查单位是否已经init
+	public static method isInit takes unit whichUnit returns boolean
+		local integer uhid = GetHandleId(whichUnit)
+		return LoadInteger( hash_attr , uhid , ATTR_FLAG_UNIT ) == uhid
 	endmethod
 
 	public static method resetSkill takes unit whichUnit returns nothing
@@ -1734,7 +1773,6 @@ struct hAttr
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
-		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , LoadReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_BASE_SPACE ) )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
 		call SaveReal( hash_attr , uhid , ATTR_FLAG_STR , 0 )
@@ -1842,12 +1880,6 @@ struct hAttr
 	endmethod
 
 	// 攻击速度间隔 ------------------------------------------------------------ 
-	public static method getAttackSpeedBaseSpace takes unit whichUnit returns real
-		return getAttr( ATTR_FLAG_ATTACK_SPEED_BASE_SPACE , whichUnit )
-	endmethod
-	public static method setAttackSpeedBaseSpace takes unit whichUnit , real value returns nothing
-		call setAttr( ATTR_FLAG_ATTACK_SPEED_BASE_SPACE , whichUnit , value , 0 )
-	endmethod
 	public static method getAttackSpeedSpace takes unit whichUnit returns real
 		return getAttr( ATTR_FLAG_ATTACK_SPEED_SPACE , whichUnit )
 	endmethod
@@ -1966,6 +1998,20 @@ struct hAttr
 	endmethod
 	public static method setAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , value - getAttackMagic(whichUnit) , during )
+	endmethod
+
+	// 攻击距离 ------------------------------------------------------------ 
+	public static method getAttackRange takes unit whichUnit returns real
+		return getAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit )
+	endmethod
+	public static method addAttackRange takes unit whichUnit , real value , real during returns nothing
+		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , value , during )
+	endmethod
+	public static method subAttackRange takes unit whichUnit , real value , real during returns nothing
+		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , -value , during )
+	endmethod
+	public static method setAttackRange takes unit whichUnit , real value , real during returns nothing
+		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , value - getAttackRange(whichUnit) , during )
 	endmethod
 
 	// 力量 ------------------------------------------------------------ 

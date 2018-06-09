@@ -88,7 +88,7 @@ struct hIs
      * 是否英雄
      */
     public static method hero takes unit whichUnit returns boolean
-        return IsUnitType( whichUnit , UNIT_TYPE_HERO)
+        return IsUnitType( whichUnit , UNIT_TYPE_HERO) or IsUnitInGroup(whichUnit,isHeroGroup)
     endmethod
     /**
      * 是否建筑

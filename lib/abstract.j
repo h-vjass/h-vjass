@@ -27,3 +27,4 @@
 #include "item.j"
 #include "itemMix.j"
 #include "hero.j"
+#include "empty.j"

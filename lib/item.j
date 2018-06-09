@@ -56,6 +56,7 @@ struct hItemBean
 	public static string attackHuntType = ""
 	public static real attackPhysical = 0.0
 	public static real attackMagic = 0.0
+	public static real attackRange = 0.0
 	public static real str = 0.0
 	public static real agi = 0.0
 	public static real int = 0.0
@@ -125,6 +126,8 @@ struct hItemBean
 	public static real attackPhysicalDuring = 0.0
 	public static real attackMagicVal = 0.0
 	public static real attackMagicDuring = 0.0
+	public static real attackRangeVal = 0.0
+	public static real attackRangeDuring = 0.0
 	public static real moveVal = 0.0
 	public static real moveDuring = 0.0
 	public static real aimVal = 0.0
@@ -163,6 +166,8 @@ struct hItemBean
 	public static real bluntDuring = 0.0
 	public static real muggleVal = 0.0
 	public static real muggleDuring = 0.0
+	public static real myopiaVal = 0.0
+	public static real myopiaDuring = 0.0
 	public static real corrosionVal = 0.0
 	public static real corrosionDuring = 0.0
 	public static real chaosVal = 0.0
@@ -228,6 +233,7 @@ struct hItemBean
 		set x.attackHuntType = ""
 		set x.attackPhysical = 0
 		set x.attackMagic = 0
+		set x.attackRange = 0
 		set x.str = 0
 		set x.agi = 0
 		set x.int = 0
@@ -335,6 +341,8 @@ struct hItemBean
 		set x.bluntDuring = 0.0
 		set x.muggleVal = 0.0
 		set x.muggleDuring = 0.0
+		set x.myopiaVal = 0.0
+		set x.myopiaDuring = 0.0
 		set x.corrosionVal = 0.0
 		set x.corrosionDuring = 0.0
 		set x.chaosVal = 0.0
@@ -400,6 +408,7 @@ struct hItemBean
 		set attackHuntType = ""
 		set attackPhysical = 0
 		set attackMagic = 0
+		set attackRange = 0
 		set str = 0
 		set agi = 0
 		set int = 0
@@ -469,6 +478,8 @@ struct hItemBean
 		set attackPhysicalDuring = 0.0
 		set attackMagicVal = 0.0
 		set attackMagicDuring = 0.0
+		set attackRangeVal = 0.0
+		set attackRangeDuring = 0.0
 		set moveVal = 0.0
 		set moveDuring = 0.0
 		set aimVal = 0.0
@@ -507,6 +518,8 @@ struct hItemBean
 		set bluntDuring = 0.0
 		set muggleVal = 0.0
 		set muggleDuring = 0.0
+		set myopiaVal = 0.0
+		set myopiaDuring = 0.0
 		set corrosionVal = 0.0
 		set corrosionDuring = 0.0
 		set chaosVal = 0.0
@@ -573,166 +586,169 @@ struct hItem
 	private static integer hk_item_onmoment_trigger = 22
     //
     private static integer hk_life = 1000
-    private static integer hk_mana = 1001
-    private static integer hk_move = 1002
-    private static integer hk_defend  = 1003
-    private static integer hk_attackSpeed = 1004
-    private static integer hk_attackHuntType = 1005
-    private static integer hk_attackPhysical = 1006
-    private static integer hk_attackMagic = 1007
-    private static integer hk_str = 1008
-    private static integer hk_agi = 1009
-    private static integer hk_int = 1010
-    private static integer hk_strWhite = 1011
-    private static integer hk_agiWhite = 1012
-    private static integer hk_intWhite = 1013
-    private static integer hk_lifeBack = 1014
-    private static integer hk_lifeSource = 1015
-    private static integer hk_lifeSourceCurrent = 1016
-    private static integer hk_manaBack = 1017
-    private static integer hk_manaSource = 1018
-    private static integer hk_manaSourceCurrent = 1019
-    private static integer hk_resistance = 1020
-    private static integer hk_toughness = 1021
-    private static integer hk_avoid = 1022
-    private static integer hk_aim = 1023
-    private static integer hk_knocking = 1024
-    private static integer hk_violence = 1025
-    private static integer hk_mortalOppose = 1026
-    private static integer hk_punish = 1027
-    private static integer hk_punishCurrent = 1028
-    private static integer hk_punishOppose = 1029
-    private static integer hk_meditative = 1030
-    private static integer hk_help = 1031
-    private static integer hk_hemophagia = 1032
-    private static integer hk_hemophagiaSkill = 1033
-    private static integer hk_split = 1034
-    private static integer hk_splitRange = 1035
-    private static integer hk_goldRatio = 1036
-    private static integer hk_lumberRatio = 1037
-    private static integer hk_expRatio = 1038
-    private static integer hk_swimOppose = 1039
-    private static integer hk_luck = 1040
-    private static integer hk_invincible = 1041
-    private static integer hk_weight = 1042
-    private static integer hk_weightCurrent = 1043
-    private static integer hk_huntAmplitude = 1044
-    private static integer hk_huntRebound = 1045
-    private static integer hk_cure = 1046
-    private static integer hk_fire = 1047
-    private static integer hk_soil = 1048
-    private static integer hk_water = 1049
-    private static integer hk_ice = 1050
-    private static integer hk_wind = 1051
-    private static integer hk_light = 1052
-    private static integer hk_dark = 1053
-    private static integer hk_wood = 1054
-    private static integer hk_thunder = 1055
-    private static integer hk_poison = 1056
-    private static integer hk_fireOppose = 1057
-    private static integer hk_soilOppose = 1058
-    private static integer hk_waterOppose = 1059
-    private static integer hk_iceOppose = 1060
-    private static integer hk_windOppose = 1061
-    private static integer hk_lightOppose = 1062
-    private static integer hk_darkOppose = 1063
-    private static integer hk_woodOppose = 1064
-    private static integer hk_thunderOppose = 1065
-    private static integer hk_poisonOppose = 1066
-    private static integer hk_lifeBackVal = 10000
-    private static integer hk_lifeBackDuring = 10001
-    private static integer hk_manaBackVal = 10100
-    private static integer hk_manaBackDuring = 10101
-    private static integer hk_attackSpeedVal = 10200
-    private static integer hk_attackSpeedDuring = 10201
-    private static integer hk_attackPhysicalVal = 10300
-    private static integer hk_attackPhysicalDuring = 10301
-    private static integer hk_attackMagicVal = 10400
-    private static integer hk_attackMagicDuring = 10401
-    private static integer hk_moveVal = 10500
-    private static integer hk_moveDuring = 10501
-    private static integer hk_aimVal = 10600
-    private static integer hk_aimDuring = 10601
-    private static integer hk_strVal = 10700
-    private static integer hk_strDuring = 10701
-    private static integer hk_agiVal = 10800
-    private static integer hk_agiDuring = 10801
-    private static integer hk_intVal = 10900
-    private static integer hk_intDuring = 10901
-    private static integer hk_knockingVal = 11000
-    private static integer hk_knockingDuring = 11001
-    private static integer hk_violenceVal = 11100
-    private static integer hk_violenceDuring = 11101
-    private static integer hk_hemophagiaVal = 11200
-    private static integer hk_hemophagiaDuring = 11201
-    private static integer hk_hemophagiaSkillVal = 11300
-    private static integer hk_hemophagiaSkillDuring = 11301
-    private static integer hk_splitVal = 11400
-    private static integer hk_splitDuring = 11401
-    private static integer hk_luckVal = 11500
-    private static integer hk_luckDuring = 11501
-    private static integer hk_huntAmplitudeVal = 11600
-    private static integer hk_huntAmplitudeDuring = 11601
-    private static integer hk_poisonVal = 11700
-    private static integer hk_poisonDuring = 11701
-    private static integer hk_fireVal = 11800
-    private static integer hk_fireDuring = 11801
-    private static integer hk_dryVal = 11900
-    private static integer hk_dryDuring = 11901
-    private static integer hk_freezeVal = 12000
-    private static integer hk_freezeDuring = 12001
-    private static integer hk_coldVal = 12100
-    private static integer hk_coldDuring = 12101
-    private static integer hk_bluntVal = 12200
-    private static integer hk_bluntDuring = 12201
-    private static integer hk_muggleVal = 12300
-    private static integer hk_muggleDuring = 12301
-    private static integer hk_corrosionVal = 12400
-    private static integer hk_corrosionDuring = 12401
-    private static integer hk_chaosVal = 12500
-    private static integer hk_chaosDuring = 12501
-    private static integer hk_twineVal = 12600
-    private static integer hk_twineDuring = 12601
-    private static integer hk_blindVal = 12700
-    private static integer hk_blindDuring = 12701
-    private static integer hk_tortuaVal = 12800
-    private static integer hk_tortuaDuring = 12801
-    private static integer hk_weakVal = 12900
-    private static integer hk_weakDuring = 12901
-    private static integer hk_astrictVal = 13000
-    private static integer hk_astrictDuring = 13001
-    private static integer hk_foolishVal = 13100
-    private static integer hk_foolishDuring = 13101
-    private static integer hk_dullVal = 13200
-    private static integer hk_dullDuring = 13201
-    private static integer hk_dirtVal = 13300
-    private static integer hk_dirtDuring = 13301
-    private static integer hk_swimOdds = 13400
-    private static integer hk_swimDuring = 13401
-    private static integer hk_heavyOdds = 13500
-    private static integer hk_heavyVal = 13501
-    private static integer hk_breakOdds = 13600
-    private static integer hk_breakDuring = 13601
-    private static integer hk_unluckVal = 13700
-    private static integer hk_unluckDuring = 13701
-    private static integer hk_silentOdds = 13800
-    private static integer hk_silentDuring = 13801
-    private static integer hk_unarmOdds = 13900
-    private static integer hk_unarmDuring = 13901
-    private static integer hk_fetterOdds = 14000
-    private static integer hk_fetterDuring = 14001
-    private static integer hk_bombVal = 14100
-    private static integer hk_bombRange = 14101
-    private static integer hk_bombModel = 14102
-    private static integer hk_lightningChainVal = 14200
-    private static integer hk_lightningChainOdds = 14201
-    private static integer hk_lightningChainQty = 14202
-    private static integer hk_lightningChainReduce = 14203
-    private static integer hk_lightningChainModel = 14204
-    private static integer hk_crackFlyVal = 14300
-    private static integer hk_crackFlyOdds = 14301
-    private static integer hk_crackFlyDistance = 14302
-    private static integer hk_crackFlyHigh = 14303
+	private static integer hk_mana = 1001
+	private static integer hk_move = 1002
+	private static integer hk_defend  = 1003
+	private static integer hk_attackSpeed = 1004
+	private static integer hk_attackHuntType = 1005
+	private static integer hk_attackPhysical = 1006
+	private static integer hk_attackMagic = 1007
+	private static integer hk_attackRange = 1008
+	private static integer hk_str = 1009
+	private static integer hk_agi = 1010
+	private static integer hk_int = 1011
+	private static integer hk_strWhite = 1012
+	private static integer hk_agiWhite = 1013
+	private static integer hk_intWhite = 1014
+	private static integer hk_lifeBack = 1015
+	private static integer hk_lifeSource = 1016
+	private static integer hk_lifeSourceCurrent = 1017
+	private static integer hk_manaBack = 1018
+	private static integer hk_manaSource = 1019
+	private static integer hk_manaSourceCurrent = 1020
+	private static integer hk_resistance = 1021
+	private static integer hk_toughness = 1022
+	private static integer hk_avoid = 1023
+	private static integer hk_aim = 1024
+	private static integer hk_knocking = 1025
+	private static integer hk_violence = 1026
+	private static integer hk_mortalOppose = 1027
+	private static integer hk_punish = 1028
+	private static integer hk_punishCurrent = 1029
+	private static integer hk_punishOppose = 1030
+	private static integer hk_meditative = 1031
+	private static integer hk_help = 1032
+	private static integer hk_hemophagia = 1033
+	private static integer hk_hemophagiaSkill = 1034
+	private static integer hk_split = 1035
+	private static integer hk_splitRange = 1036
+	private static integer hk_goldRatio = 1037
+	private static integer hk_lumberRatio = 1038
+	private static integer hk_expRatio = 1039
+	private static integer hk_swimOppose = 1040
+	private static integer hk_luck = 1041
+	private static integer hk_invincible = 1042
+	private static integer hk_weight = 1043
+	private static integer hk_weightCurrent = 1044
+	private static integer hk_huntAmplitude = 1045
+	private static integer hk_huntRebound = 1046
+	private static integer hk_cure = 1047
+	private static integer hk_fire = 1048
+	private static integer hk_soil = 1049
+	private static integer hk_water = 1050
+	private static integer hk_ice = 1051
+	private static integer hk_wind = 1052
+	private static integer hk_light = 1053
+	private static integer hk_dark = 1054
+	private static integer hk_wood = 1055
+	private static integer hk_thunder = 1056
+	private static integer hk_poison = 1057
+	private static integer hk_fireOppose = 1058
+	private static integer hk_soilOppose = 1059
+	private static integer hk_waterOppose = 1060
+	private static integer hk_iceOppose = 1061
+	private static integer hk_windOppose = 1062
+	private static integer hk_lightOppose = 1063
+	private static integer hk_darkOppose = 1064
+	private static integer hk_woodOppose = 1065
+	private static integer hk_thunderOppose = 1066
+	private static integer hk_poisonOppose = 1067
+	private static integer hk_lifeBackVal = 10000
+	private static integer hk_lifeBackDuring = 10001
+	private static integer hk_manaBackVal = 10100
+	private static integer hk_manaBackDuring = 10101
+	private static integer hk_attackSpeedVal = 10200
+	private static integer hk_attackSpeedDuring = 10201
+	private static integer hk_attackPhysicalVal = 10300
+	private static integer hk_attackPhysicalDuring = 10301
+	private static integer hk_attackMagicVal = 10400
+	private static integer hk_attackMagicDuring = 10401
+	private static integer hk_moveVal = 10500
+	private static integer hk_moveDuring = 10501
+	private static integer hk_aimVal = 10600
+	private static integer hk_aimDuring = 10601
+	private static integer hk_strVal = 10700
+	private static integer hk_strDuring = 10701
+	private static integer hk_agiVal = 10800
+	private static integer hk_agiDuring = 10801
+	private static integer hk_intVal = 10900
+	private static integer hk_intDuring = 10901
+	private static integer hk_knockingVal = 11000
+	private static integer hk_knockingDuring = 11001
+	private static integer hk_violenceVal = 11100
+	private static integer hk_violenceDuring = 11101
+	private static integer hk_hemophagiaVal = 11200
+	private static integer hk_hemophagiaDuring = 11201
+	private static integer hk_hemophagiaSkillVal = 11300
+	private static integer hk_hemophagiaSkillDuring = 11301
+	private static integer hk_splitVal = 11400
+	private static integer hk_splitDuring = 11401
+	private static integer hk_luckVal = 11500
+	private static integer hk_luckDuring = 11501
+	private static integer hk_huntAmplitudeVal = 11600
+	private static integer hk_huntAmplitudeDuring = 11601
+	private static integer hk_poisonVal = 11700
+	private static integer hk_poisonDuring = 11701
+	private static integer hk_fireVal = 11800
+	private static integer hk_fireDuring = 11801
+	private static integer hk_dryVal = 11900
+	private static integer hk_dryDuring = 11901
+	private static integer hk_freezeVal = 12000
+	private static integer hk_freezeDuring = 12001
+	private static integer hk_coldVal = 12100
+	private static integer hk_coldDuring = 12101
+	private static integer hk_bluntVal = 12200
+	private static integer hk_bluntDuring = 12201
+	private static integer hk_muggleVal = 12300
+	private static integer hk_muggleDuring = 12301
+	private static integer hk_myopiaVal = 12400
+	private static integer hk_myopiaDuring = 12401
+	private static integer hk_corrosionVal = 12500
+	private static integer hk_corrosionDuring = 12501
+	private static integer hk_chaosVal = 12600
+	private static integer hk_chaosDuring = 12601
+	private static integer hk_twineVal = 12700
+	private static integer hk_twineDuring = 12701
+	private static integer hk_blindVal = 12800
+	private static integer hk_blindDuring = 12801
+	private static integer hk_tortuaVal = 12900
+	private static integer hk_tortuaDuring = 12901
+	private static integer hk_weakVal = 13000
+	private static integer hk_weakDuring = 13001
+	private static integer hk_astrictVal = 13100
+	private static integer hk_astrictDuring = 13101
+	private static integer hk_foolishVal = 13200
+	private static integer hk_foolishDuring = 13201
+	private static integer hk_dullVal = 13300
+	private static integer hk_dullDuring = 13301
+	private static integer hk_dirtVal = 13400
+	private static integer hk_dirtDuring = 13401
+	private static integer hk_swimOdds = 13500
+	private static integer hk_swimDuring = 13501
+	private static integer hk_heavyOdds = 13600
+	private static integer hk_heavyVal = 13601
+	private static integer hk_breakOdds = 13700
+	private static integer hk_breakDuring = 13701
+	private static integer hk_unluckVal = 13800
+	private static integer hk_unluckDuring = 13801
+	private static integer hk_silentOdds = 13900
+	private static integer hk_silentDuring = 13901
+	private static integer hk_unarmOdds = 14000
+	private static integer hk_unarmDuring = 14001
+	private static integer hk_fetterOdds = 14100
+	private static integer hk_fetterDuring = 14101
+	private static integer hk_bombVal = 14200
+	private static integer hk_bombRange = 14201
+	private static integer hk_bombModel = 14202
+	private static integer hk_lightningChainVal = 14300
+	private static integer hk_lightningChainOdds = 14301
+	private static integer hk_lightningChainQty = 14302
+	private static integer hk_lightningChainReduce = 14303
+	private static integer hk_lightningChainModel = 14304
+	private static integer hk_crackFlyVal = 14400
+	private static integer hk_crackFlyOdds = 14401
+	private static integer hk_crackFlyDistance = 14402
+	private static integer hk_crackFlyHigh = 14403
 
 	/**
      * 删除物品回调
@@ -904,166 +920,169 @@ struct hItem
             call SaveStr(hash_item, bean.item_id, hk_item_icon, bean.item_icon)
 			//
 			call SaveStr(hash_item, bean.item_id, hk_attackHuntType, bean.attackHuntType)
-            //
+            //COPY
             call SaveReal(hash_item, bean.item_id, hk_goldRatio, bean.goldRatio)
-            call SaveReal(hash_item, bean.item_id, hk_lumberRatio, bean.lumberRatio)
-            call SaveReal(hash_item, bean.item_id, hk_expRatio, bean.expRatio)
-            call SaveReal(hash_item, bean.item_id, hk_life, bean.life)
-            call SaveReal(hash_item, bean.item_id, hk_mana, bean.mana)
-            call SaveReal(hash_item, bean.item_id, hk_move, bean.move)
-            call SaveReal(hash_item, bean.item_id, hk_defend , bean.defend )
-            call SaveReal(hash_item, bean.item_id, hk_attackSpeed, bean.attackSpeed)
-            call SaveReal(hash_item, bean.item_id, hk_attackPhysical, bean.attackPhysical)
-            call SaveReal(hash_item, bean.item_id, hk_attackMagic, bean.attackMagic)
-            call SaveReal(hash_item, bean.item_id, hk_str, bean.str)
-            call SaveReal(hash_item, bean.item_id, hk_agi, bean.agi)
-            call SaveReal(hash_item, bean.item_id, hk_int, bean.int)
-            call SaveReal(hash_item, bean.item_id, hk_strWhite, bean.strWhite)
-            call SaveReal(hash_item, bean.item_id, hk_agiWhite, bean.agiWhite)
-            call SaveReal(hash_item, bean.item_id, hk_intWhite, bean.intWhite)
-            call SaveReal(hash_item, bean.item_id, hk_lifeBack, bean.lifeBack)
-            call SaveReal(hash_item, bean.item_id, hk_lifeSource, bean.lifeSource)
-            call SaveReal(hash_item, bean.item_id, hk_lifeSourceCurrent, bean.lifeSourceCurrent)
-            call SaveReal(hash_item, bean.item_id, hk_manaBack, bean.manaBack)
-            call SaveReal(hash_item, bean.item_id, hk_manaSource, bean.manaSource)
-            call SaveReal(hash_item, bean.item_id, hk_manaSourceCurrent, bean.manaSourceCurrent)
-            call SaveReal(hash_item, bean.item_id, hk_resistance, bean.resistance)
-            call SaveReal(hash_item, bean.item_id, hk_toughness, bean.toughness)
-            call SaveReal(hash_item, bean.item_id, hk_avoid, bean.avoid)
-            call SaveReal(hash_item, bean.item_id, hk_aim, bean.aim)
-            call SaveReal(hash_item, bean.item_id, hk_knocking, bean.knocking)
-            call SaveReal(hash_item, bean.item_id, hk_violence, bean.violence)
-            call SaveReal(hash_item, bean.item_id, hk_mortalOppose, bean.mortalOppose)
-            call SaveReal(hash_item, bean.item_id, hk_punish, bean.punish)
-            call SaveReal(hash_item, bean.item_id, hk_punishCurrent, bean.punishCurrent)
-            call SaveReal(hash_item, bean.item_id, hk_punishOppose, bean.punishOppose)
-            call SaveReal(hash_item, bean.item_id, hk_meditative, bean.meditative)
-            call SaveReal(hash_item, bean.item_id, hk_help, bean.help)
-            call SaveReal(hash_item, bean.item_id, hk_hemophagia, bean.hemophagia)
-            call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkill, bean.hemophagiaSkill)
-            call SaveReal(hash_item, bean.item_id, hk_split, bean.split)
-            call SaveReal(hash_item, bean.item_id, hk_splitRange, bean.splitRange)
-            call SaveReal(hash_item, bean.item_id, hk_swimOppose, bean.swimOppose)
-            call SaveReal(hash_item, bean.item_id, hk_luck, bean.luck)
-            call SaveReal(hash_item, bean.item_id, hk_invincible, bean.invincible)
-            call SaveReal(hash_item, bean.item_id, hk_weight, bean.weight)
-            call SaveReal(hash_item, bean.item_id, hk_weightCurrent, bean.weightCurrent)
-            call SaveReal(hash_item, bean.item_id, hk_huntAmplitude, bean.huntAmplitude)
-            call SaveReal(hash_item, bean.item_id, hk_huntRebound, bean.huntRebound)
-            call SaveReal(hash_item, bean.item_id, hk_cure, bean.cure)
-            call SaveReal(hash_item, bean.item_id, hk_fire, bean.fire)
-            call SaveReal(hash_item, bean.item_id, hk_soil, bean.soil)
-            call SaveReal(hash_item, bean.item_id, hk_water, bean.water)
-            call SaveReal(hash_item, bean.item_id, hk_ice, bean.ice)
-            call SaveReal(hash_item, bean.item_id, hk_wind, bean.wind)
-            call SaveReal(hash_item, bean.item_id, hk_light, bean.light)
-            call SaveReal(hash_item, bean.item_id, hk_dark, bean.dark)
-            call SaveReal(hash_item, bean.item_id, hk_wood, bean.wood)
-            call SaveReal(hash_item, bean.item_id, hk_thunder, bean.thunder)
-            call SaveReal(hash_item, bean.item_id, hk_poison, bean.poison)
-            call SaveReal(hash_item, bean.item_id, hk_fireOppose, bean.fireOppose)
-            call SaveReal(hash_item, bean.item_id, hk_soilOppose, bean.soilOppose)
-            call SaveReal(hash_item, bean.item_id, hk_waterOppose, bean.waterOppose)
-            call SaveReal(hash_item, bean.item_id, hk_iceOppose, bean.iceOppose)
-            call SaveReal(hash_item, bean.item_id, hk_windOppose, bean.windOppose)
-            call SaveReal(hash_item, bean.item_id, hk_lightOppose, bean.lightOppose)
-            call SaveReal(hash_item, bean.item_id, hk_darkOppose, bean.darkOppose)
-            call SaveReal(hash_item, bean.item_id, hk_woodOppose, bean.woodOppose)
-            call SaveReal(hash_item, bean.item_id, hk_thunderOppose, bean.thunderOppose)
-            call SaveReal(hash_item, bean.item_id, hk_poisonOppose, bean.poisonOppose)
-            call SaveReal(hash_item, bean.item_id, hk_lifeBackVal, bean.lifeBackVal)
-            call SaveReal(hash_item, bean.item_id, hk_lifeBackDuring, bean.lifeBackDuring)
-            call SaveReal(hash_item, bean.item_id, hk_manaBackVal, bean.manaBackVal)
-            call SaveReal(hash_item, bean.item_id, hk_manaBackDuring, bean.manaBackDuring)
-            call SaveReal(hash_item, bean.item_id, hk_attackSpeedVal, bean.attackSpeedVal)
-            call SaveReal(hash_item, bean.item_id, hk_attackSpeedDuring, bean.attackSpeedDuring)
-            call SaveReal(hash_item, bean.item_id, hk_attackPhysicalVal, bean.attackPhysicalVal)
-            call SaveReal(hash_item, bean.item_id, hk_attackPhysicalDuring, bean.attackPhysicalDuring)
-            call SaveReal(hash_item, bean.item_id, hk_attackMagicVal, bean.attackMagicVal)
-            call SaveReal(hash_item, bean.item_id, hk_attackMagicDuring, bean.attackMagicDuring)
-            call SaveReal(hash_item, bean.item_id, hk_moveVal, bean.moveVal)
-            call SaveReal(hash_item, bean.item_id, hk_moveDuring, bean.moveDuring)
-            call SaveReal(hash_item, bean.item_id, hk_aimVal, bean.aimVal)
-            call SaveReal(hash_item, bean.item_id, hk_aimDuring, bean.aimDuring)
-            call SaveReal(hash_item, bean.item_id, hk_strVal, bean.strVal)
-            call SaveReal(hash_item, bean.item_id, hk_strDuring, bean.strDuring)
-            call SaveReal(hash_item, bean.item_id, hk_agiVal, bean.agiVal)
-            call SaveReal(hash_item, bean.item_id, hk_agiDuring, bean.agiDuring)
-            call SaveReal(hash_item, bean.item_id, hk_intVal, bean.intVal)
-            call SaveReal(hash_item, bean.item_id, hk_intDuring, bean.intDuring)
-            call SaveReal(hash_item, bean.item_id, hk_knockingVal, bean.knockingVal)
-            call SaveReal(hash_item, bean.item_id, hk_knockingDuring, bean.knockingDuring)
-            call SaveReal(hash_item, bean.item_id, hk_violenceVal, bean.violenceVal)
-            call SaveReal(hash_item, bean.item_id, hk_violenceDuring, bean.violenceDuring)
-            call SaveReal(hash_item, bean.item_id, hk_hemophagiaVal, bean.hemophagiaVal)
-            call SaveReal(hash_item, bean.item_id, hk_hemophagiaDuring, bean.hemophagiaDuring)
-            call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkillVal, bean.hemophagiaSkillVal)
-            call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkillDuring, bean.hemophagiaSkillDuring)
-            call SaveReal(hash_item, bean.item_id, hk_splitVal, bean.splitVal)
-            call SaveReal(hash_item, bean.item_id, hk_splitDuring, bean.splitDuring)
-            call SaveReal(hash_item, bean.item_id, hk_luckVal, bean.luckVal)
-            call SaveReal(hash_item, bean.item_id, hk_luckDuring, bean.luckDuring)
-            call SaveReal(hash_item, bean.item_id, hk_huntAmplitudeVal, bean.huntAmplitudeVal)
-            call SaveReal(hash_item, bean.item_id, hk_huntAmplitudeDuring, bean.huntAmplitudeDuring)
-            call SaveReal(hash_item, bean.item_id, hk_poisonVal, bean.poisonVal)
-            call SaveReal(hash_item, bean.item_id, hk_poisonDuring, bean.poisonDuring)
-            call SaveReal(hash_item, bean.item_id, hk_fireVal, bean.fireVal)
-            call SaveReal(hash_item, bean.item_id, hk_fireDuring, bean.fireDuring)
-            call SaveReal(hash_item, bean.item_id, hk_dryVal, bean.dryVal)
-            call SaveReal(hash_item, bean.item_id, hk_dryDuring, bean.dryDuring)
-            call SaveReal(hash_item, bean.item_id, hk_freezeVal, bean.freezeVal)
-            call SaveReal(hash_item, bean.item_id, hk_freezeDuring, bean.freezeDuring)
-            call SaveReal(hash_item, bean.item_id, hk_coldVal, bean.coldVal)
-            call SaveReal(hash_item, bean.item_id, hk_coldDuring, bean.coldDuring)
-            call SaveReal(hash_item, bean.item_id, hk_bluntVal, bean.bluntVal)
-            call SaveReal(hash_item, bean.item_id, hk_bluntDuring, bean.bluntDuring)
-            call SaveReal(hash_item, bean.item_id, hk_muggleVal, bean.muggleVal)
-            call SaveReal(hash_item, bean.item_id, hk_muggleDuring, bean.muggleDuring)
-            call SaveReal(hash_item, bean.item_id, hk_corrosionVal, bean.corrosionVal)
-            call SaveReal(hash_item, bean.item_id, hk_corrosionDuring, bean.corrosionDuring)
-            call SaveReal(hash_item, bean.item_id, hk_chaosVal, bean.chaosVal)
-            call SaveReal(hash_item, bean.item_id, hk_chaosDuring, bean.chaosDuring)
-            call SaveReal(hash_item, bean.item_id, hk_twineVal, bean.twineVal)
-            call SaveReal(hash_item, bean.item_id, hk_twineDuring, bean.twineDuring)
-            call SaveReal(hash_item, bean.item_id, hk_blindVal, bean.blindVal)
-            call SaveReal(hash_item, bean.item_id, hk_blindDuring, bean.blindDuring)
-            call SaveReal(hash_item, bean.item_id, hk_tortuaVal, bean.tortuaVal)
-            call SaveReal(hash_item, bean.item_id, hk_tortuaDuring, bean.tortuaDuring)
-            call SaveReal(hash_item, bean.item_id, hk_weakVal, bean.weakVal)
-            call SaveReal(hash_item, bean.item_id, hk_weakDuring, bean.weakDuring)
-            call SaveReal(hash_item, bean.item_id, hk_astrictVal, bean.astrictVal)
-            call SaveReal(hash_item, bean.item_id, hk_astrictDuring, bean.astrictDuring)
-            call SaveReal(hash_item, bean.item_id, hk_foolishVal, bean.foolishVal)
-            call SaveReal(hash_item, bean.item_id, hk_foolishDuring, bean.foolishDuring)
-            call SaveReal(hash_item, bean.item_id, hk_dullVal, bean.dullVal)
-            call SaveReal(hash_item, bean.item_id, hk_dullDuring, bean.dullDuring)
-            call SaveReal(hash_item, bean.item_id, hk_dirtVal, bean.dirtVal)
-            call SaveReal(hash_item, bean.item_id, hk_dirtDuring, bean.dirtDuring)
-            call SaveReal(hash_item, bean.item_id, hk_swimOdds, bean.swimOdds)
-            call SaveReal(hash_item, bean.item_id, hk_swimDuring, bean.swimDuring)
-            call SaveReal(hash_item, bean.item_id, hk_heavyOdds, bean.heavyOdds)
-            call SaveReal(hash_item, bean.item_id, hk_heavyVal, bean.heavyVal)
-            call SaveReal(hash_item, bean.item_id, hk_breakOdds, bean.breakOdds)
-            call SaveReal(hash_item, bean.item_id, hk_breakDuring, bean.breakDuring)
-            call SaveReal(hash_item, bean.item_id, hk_unluckVal, bean.unluckVal)
-            call SaveReal(hash_item, bean.item_id, hk_unluckDuring, bean.unluckDuring)
-            call SaveReal(hash_item, bean.item_id, hk_silentOdds, bean.silentOdds)
-            call SaveReal(hash_item, bean.item_id, hk_silentDuring, bean.silentDuring)
-            call SaveReal(hash_item, bean.item_id, hk_unarmOdds, bean.unarmOdds)
-            call SaveReal(hash_item, bean.item_id, hk_unarmDuring, bean.unarmDuring)
-            call SaveReal(hash_item, bean.item_id, hk_fetterOdds, bean.fetterOdds)
-            call SaveReal(hash_item, bean.item_id, hk_fetterDuring, bean.fetterDuring)
-            call SaveReal(hash_item, bean.item_id, hk_bombVal, bean.bombVal)
-            call SaveStr(hash_item, bean.item_id, hk_bombModel, bean.bombModel)
-            call SaveReal(hash_item, bean.item_id, hk_lightningChainVal, bean.lightningChainVal)
-            call SaveReal(hash_item, bean.item_id, hk_lightningChainOdds, bean.lightningChainOdds)
-            call SaveReal(hash_item, bean.item_id, hk_lightningChainQty, bean.lightningChainQty)
-            call SaveReal(hash_item, bean.item_id, hk_lightningChainReduce, bean.lightningChainReduce)
-            call SaveStr(hash_item, bean.item_id, hk_lightningChainModel, bean.lightningChainModel)
-            call SaveReal(hash_item, bean.item_id, hk_crackFlyVal, bean.crackFlyVal)
-            call SaveReal(hash_item, bean.item_id, hk_crackFlyOdds, bean.crackFlyOdds)
-            call SaveReal(hash_item, bean.item_id, hk_crackFlyDistance, bean.crackFlyDistance)
-            call SaveReal(hash_item, bean.item_id, hk_crackFlyHigh, bean.crackFlyHigh)
+			call SaveReal(hash_item, bean.item_id, hk_lumberRatio, bean.lumberRatio)
+			call SaveReal(hash_item, bean.item_id, hk_expRatio, bean.expRatio)
+			call SaveReal(hash_item, bean.item_id, hk_life, bean.life)
+			call SaveReal(hash_item, bean.item_id, hk_mana, bean.mana)
+			call SaveReal(hash_item, bean.item_id, hk_move, bean.move)
+			call SaveReal(hash_item, bean.item_id, hk_defend , bean.defend )
+			call SaveReal(hash_item, bean.item_id, hk_attackSpeed, bean.attackSpeed)
+			call SaveReal(hash_item, bean.item_id, hk_attackPhysical, bean.attackPhysical)
+			call SaveReal(hash_item, bean.item_id, hk_attackMagic, bean.attackMagic)
+			call SaveReal(hash_item, bean.item_id, hk_attackRange, bean.attackRange)
+			call SaveReal(hash_item, bean.item_id, hk_str, bean.str)
+			call SaveReal(hash_item, bean.item_id, hk_agi, bean.agi)
+			call SaveReal(hash_item, bean.item_id, hk_int, bean.int)
+			call SaveReal(hash_item, bean.item_id, hk_strWhite, bean.strWhite)
+			call SaveReal(hash_item, bean.item_id, hk_agiWhite, bean.agiWhite)
+			call SaveReal(hash_item, bean.item_id, hk_intWhite, bean.intWhite)
+			call SaveReal(hash_item, bean.item_id, hk_lifeBack, bean.lifeBack)
+			call SaveReal(hash_item, bean.item_id, hk_lifeSource, bean.lifeSource)
+			call SaveReal(hash_item, bean.item_id, hk_lifeSourceCurrent, bean.lifeSourceCurrent)
+			call SaveReal(hash_item, bean.item_id, hk_manaBack, bean.manaBack)
+			call SaveReal(hash_item, bean.item_id, hk_manaSource, bean.manaSource)
+			call SaveReal(hash_item, bean.item_id, hk_manaSourceCurrent, bean.manaSourceCurrent)
+			call SaveReal(hash_item, bean.item_id, hk_resistance, bean.resistance)
+			call SaveReal(hash_item, bean.item_id, hk_toughness, bean.toughness)
+			call SaveReal(hash_item, bean.item_id, hk_avoid, bean.avoid)
+			call SaveReal(hash_item, bean.item_id, hk_aim, bean.aim)
+			call SaveReal(hash_item, bean.item_id, hk_knocking, bean.knocking)
+			call SaveReal(hash_item, bean.item_id, hk_violence, bean.violence)
+			call SaveReal(hash_item, bean.item_id, hk_mortalOppose, bean.mortalOppose)
+			call SaveReal(hash_item, bean.item_id, hk_punish, bean.punish)
+			call SaveReal(hash_item, bean.item_id, hk_punishCurrent, bean.punishCurrent)
+			call SaveReal(hash_item, bean.item_id, hk_punishOppose, bean.punishOppose)
+			call SaveReal(hash_item, bean.item_id, hk_meditative, bean.meditative)
+			call SaveReal(hash_item, bean.item_id, hk_help, bean.help)
+			call SaveReal(hash_item, bean.item_id, hk_hemophagia, bean.hemophagia)
+			call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkill, bean.hemophagiaSkill)
+			call SaveReal(hash_item, bean.item_id, hk_split, bean.split)
+			call SaveReal(hash_item, bean.item_id, hk_splitRange, bean.splitRange)
+			call SaveReal(hash_item, bean.item_id, hk_swimOppose, bean.swimOppose)
+			call SaveReal(hash_item, bean.item_id, hk_luck, bean.luck)
+			call SaveReal(hash_item, bean.item_id, hk_invincible, bean.invincible)
+			call SaveReal(hash_item, bean.item_id, hk_weight, bean.weight)
+			call SaveReal(hash_item, bean.item_id, hk_weightCurrent, bean.weightCurrent)
+			call SaveReal(hash_item, bean.item_id, hk_huntAmplitude, bean.huntAmplitude)
+			call SaveReal(hash_item, bean.item_id, hk_huntRebound, bean.huntRebound)
+			call SaveReal(hash_item, bean.item_id, hk_cure, bean.cure)
+			call SaveReal(hash_item, bean.item_id, hk_fire, bean.fire)
+			call SaveReal(hash_item, bean.item_id, hk_soil, bean.soil)
+			call SaveReal(hash_item, bean.item_id, hk_water, bean.water)
+			call SaveReal(hash_item, bean.item_id, hk_ice, bean.ice)
+			call SaveReal(hash_item, bean.item_id, hk_wind, bean.wind)
+			call SaveReal(hash_item, bean.item_id, hk_light, bean.light)
+			call SaveReal(hash_item, bean.item_id, hk_dark, bean.dark)
+			call SaveReal(hash_item, bean.item_id, hk_wood, bean.wood)
+			call SaveReal(hash_item, bean.item_id, hk_thunder, bean.thunder)
+			call SaveReal(hash_item, bean.item_id, hk_poison, bean.poison)
+			call SaveReal(hash_item, bean.item_id, hk_fireOppose, bean.fireOppose)
+			call SaveReal(hash_item, bean.item_id, hk_soilOppose, bean.soilOppose)
+			call SaveReal(hash_item, bean.item_id, hk_waterOppose, bean.waterOppose)
+			call SaveReal(hash_item, bean.item_id, hk_iceOppose, bean.iceOppose)
+			call SaveReal(hash_item, bean.item_id, hk_windOppose, bean.windOppose)
+			call SaveReal(hash_item, bean.item_id, hk_lightOppose, bean.lightOppose)
+			call SaveReal(hash_item, bean.item_id, hk_darkOppose, bean.darkOppose)
+			call SaveReal(hash_item, bean.item_id, hk_woodOppose, bean.woodOppose)
+			call SaveReal(hash_item, bean.item_id, hk_thunderOppose, bean.thunderOppose)
+			call SaveReal(hash_item, bean.item_id, hk_poisonOppose, bean.poisonOppose)
+			call SaveReal(hash_item, bean.item_id, hk_lifeBackVal, bean.lifeBackVal)
+			call SaveReal(hash_item, bean.item_id, hk_lifeBackDuring, bean.lifeBackDuring)
+			call SaveReal(hash_item, bean.item_id, hk_manaBackVal, bean.manaBackVal)
+			call SaveReal(hash_item, bean.item_id, hk_manaBackDuring, bean.manaBackDuring)
+			call SaveReal(hash_item, bean.item_id, hk_attackSpeedVal, bean.attackSpeedVal)
+			call SaveReal(hash_item, bean.item_id, hk_attackSpeedDuring, bean.attackSpeedDuring)
+			call SaveReal(hash_item, bean.item_id, hk_attackPhysicalVal, bean.attackPhysicalVal)
+			call SaveReal(hash_item, bean.item_id, hk_attackPhysicalDuring, bean.attackPhysicalDuring)
+			call SaveReal(hash_item, bean.item_id, hk_attackMagicVal, bean.attackMagicVal)
+			call SaveReal(hash_item, bean.item_id, hk_attackMagicDuring, bean.attackMagicDuring)
+			call SaveReal(hash_item, bean.item_id, hk_moveVal, bean.moveVal)
+			call SaveReal(hash_item, bean.item_id, hk_moveDuring, bean.moveDuring)
+			call SaveReal(hash_item, bean.item_id, hk_aimVal, bean.aimVal)
+			call SaveReal(hash_item, bean.item_id, hk_aimDuring, bean.aimDuring)
+			call SaveReal(hash_item, bean.item_id, hk_strVal, bean.strVal)
+			call SaveReal(hash_item, bean.item_id, hk_strDuring, bean.strDuring)
+			call SaveReal(hash_item, bean.item_id, hk_agiVal, bean.agiVal)
+			call SaveReal(hash_item, bean.item_id, hk_agiDuring, bean.agiDuring)
+			call SaveReal(hash_item, bean.item_id, hk_intVal, bean.intVal)
+			call SaveReal(hash_item, bean.item_id, hk_intDuring, bean.intDuring)
+			call SaveReal(hash_item, bean.item_id, hk_knockingVal, bean.knockingVal)
+			call SaveReal(hash_item, bean.item_id, hk_knockingDuring, bean.knockingDuring)
+			call SaveReal(hash_item, bean.item_id, hk_violenceVal, bean.violenceVal)
+			call SaveReal(hash_item, bean.item_id, hk_violenceDuring, bean.violenceDuring)
+			call SaveReal(hash_item, bean.item_id, hk_hemophagiaVal, bean.hemophagiaVal)
+			call SaveReal(hash_item, bean.item_id, hk_hemophagiaDuring, bean.hemophagiaDuring)
+			call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkillVal, bean.hemophagiaSkillVal)
+			call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkillDuring, bean.hemophagiaSkillDuring)
+			call SaveReal(hash_item, bean.item_id, hk_splitVal, bean.splitVal)
+			call SaveReal(hash_item, bean.item_id, hk_splitDuring, bean.splitDuring)
+			call SaveReal(hash_item, bean.item_id, hk_luckVal, bean.luckVal)
+			call SaveReal(hash_item, bean.item_id, hk_luckDuring, bean.luckDuring)
+			call SaveReal(hash_item, bean.item_id, hk_huntAmplitudeVal, bean.huntAmplitudeVal)
+			call SaveReal(hash_item, bean.item_id, hk_huntAmplitudeDuring, bean.huntAmplitudeDuring)
+			call SaveReal(hash_item, bean.item_id, hk_poisonVal, bean.poisonVal)
+			call SaveReal(hash_item, bean.item_id, hk_poisonDuring, bean.poisonDuring)
+			call SaveReal(hash_item, bean.item_id, hk_fireVal, bean.fireVal)
+			call SaveReal(hash_item, bean.item_id, hk_fireDuring, bean.fireDuring)
+			call SaveReal(hash_item, bean.item_id, hk_dryVal, bean.dryVal)
+			call SaveReal(hash_item, bean.item_id, hk_dryDuring, bean.dryDuring)
+			call SaveReal(hash_item, bean.item_id, hk_freezeVal, bean.freezeVal)
+			call SaveReal(hash_item, bean.item_id, hk_freezeDuring, bean.freezeDuring)
+			call SaveReal(hash_item, bean.item_id, hk_coldVal, bean.coldVal)
+			call SaveReal(hash_item, bean.item_id, hk_coldDuring, bean.coldDuring)
+			call SaveReal(hash_item, bean.item_id, hk_bluntVal, bean.bluntVal)
+			call SaveReal(hash_item, bean.item_id, hk_bluntDuring, bean.bluntDuring)
+			call SaveReal(hash_item, bean.item_id, hk_muggleVal, bean.muggleVal)
+			call SaveReal(hash_item, bean.item_id, hk_muggleDuring, bean.muggleDuring)
+			call SaveReal(hash_item, bean.item_id, hk_myopiaVal, bean.myopiaVal)
+			call SaveReal(hash_item, bean.item_id, hk_myopiaDuring, bean.myopiaDuring)
+			call SaveReal(hash_item, bean.item_id, hk_corrosionVal, bean.corrosionVal)
+			call SaveReal(hash_item, bean.item_id, hk_corrosionDuring, bean.corrosionDuring)
+			call SaveReal(hash_item, bean.item_id, hk_chaosVal, bean.chaosVal)
+			call SaveReal(hash_item, bean.item_id, hk_chaosDuring, bean.chaosDuring)
+			call SaveReal(hash_item, bean.item_id, hk_twineVal, bean.twineVal)
+			call SaveReal(hash_item, bean.item_id, hk_twineDuring, bean.twineDuring)
+			call SaveReal(hash_item, bean.item_id, hk_blindVal, bean.blindVal)
+			call SaveReal(hash_item, bean.item_id, hk_blindDuring, bean.blindDuring)
+			call SaveReal(hash_item, bean.item_id, hk_tortuaVal, bean.tortuaVal)
+			call SaveReal(hash_item, bean.item_id, hk_tortuaDuring, bean.tortuaDuring)
+			call SaveReal(hash_item, bean.item_id, hk_weakVal, bean.weakVal)
+			call SaveReal(hash_item, bean.item_id, hk_weakDuring, bean.weakDuring)
+			call SaveReal(hash_item, bean.item_id, hk_astrictVal, bean.astrictVal)
+			call SaveReal(hash_item, bean.item_id, hk_astrictDuring, bean.astrictDuring)
+			call SaveReal(hash_item, bean.item_id, hk_foolishVal, bean.foolishVal)
+			call SaveReal(hash_item, bean.item_id, hk_foolishDuring, bean.foolishDuring)
+			call SaveReal(hash_item, bean.item_id, hk_dullVal, bean.dullVal)
+			call SaveReal(hash_item, bean.item_id, hk_dullDuring, bean.dullDuring)
+			call SaveReal(hash_item, bean.item_id, hk_dirtVal, bean.dirtVal)
+			call SaveReal(hash_item, bean.item_id, hk_dirtDuring, bean.dirtDuring)
+			call SaveReal(hash_item, bean.item_id, hk_swimOdds, bean.swimOdds)
+			call SaveReal(hash_item, bean.item_id, hk_swimDuring, bean.swimDuring)
+			call SaveReal(hash_item, bean.item_id, hk_heavyOdds, bean.heavyOdds)
+			call SaveReal(hash_item, bean.item_id, hk_heavyVal, bean.heavyVal)
+			call SaveReal(hash_item, bean.item_id, hk_breakOdds, bean.breakOdds)
+			call SaveReal(hash_item, bean.item_id, hk_breakDuring, bean.breakDuring)
+			call SaveReal(hash_item, bean.item_id, hk_unluckVal, bean.unluckVal)
+			call SaveReal(hash_item, bean.item_id, hk_unluckDuring, bean.unluckDuring)
+			call SaveReal(hash_item, bean.item_id, hk_silentOdds, bean.silentOdds)
+			call SaveReal(hash_item, bean.item_id, hk_silentDuring, bean.silentDuring)
+			call SaveReal(hash_item, bean.item_id, hk_unarmOdds, bean.unarmOdds)
+			call SaveReal(hash_item, bean.item_id, hk_unarmDuring, bean.unarmDuring)
+			call SaveReal(hash_item, bean.item_id, hk_fetterOdds, bean.fetterOdds)
+			call SaveReal(hash_item, bean.item_id, hk_fetterDuring, bean.fetterDuring)
+			call SaveReal(hash_item, bean.item_id, hk_bombVal, bean.bombVal)
+			call SaveStr(hash_item, bean.item_id, hk_bombModel, bean.bombModel)
+			call SaveReal(hash_item, bean.item_id, hk_lightningChainVal, bean.lightningChainVal)
+			call SaveReal(hash_item, bean.item_id, hk_lightningChainOdds, bean.lightningChainOdds)
+			call SaveReal(hash_item, bean.item_id, hk_lightningChainQty, bean.lightningChainQty)
+			call SaveReal(hash_item, bean.item_id, hk_lightningChainReduce, bean.lightningChainReduce)
+			call SaveStr(hash_item, bean.item_id, hk_lightningChainModel, bean.lightningChainModel)
+			call SaveReal(hash_item, bean.item_id, hk_crackFlyVal, bean.crackFlyVal)
+			call SaveReal(hash_item, bean.item_id, hk_crackFlyOdds, bean.crackFlyOdds)
+			call SaveReal(hash_item, bean.item_id, hk_crackFlyDistance, bean.crackFlyDistance)
+			call SaveReal(hash_item, bean.item_id, hk_crackFlyHigh, bean.crackFlyHigh)
 			//-------
 			if(bean.attackHuntType!="")then
 				set score = score + 500
@@ -1089,6 +1108,9 @@ struct hItem
 			endif
 			if(bean.attackMagic!=0)then
 				set score = score + R2I(bean.attackMagic)*4
+			endif
+			if(bean.attackRange!=0)then
+				set score = score + R2I(bean.attackRange)*3
 			endif
 			if(bean.str!=0)then
 				set score = score + R2I(bean.str)*3
@@ -1282,6 +1304,12 @@ struct hItem
 			if(bean.attackMagicDuring!=0)then
 				set score = score + R2I(bean.attackMagicDuring)*3
 			endif
+			if(bean.attackRangeVal!=0)then
+				set score = score + R2I(bean.attackRangeVal)*3
+			endif
+			if(bean.attackRangeDuring!=0)then
+				set score = score + R2I(bean.attackRangeDuring)*3
+			endif
 			if(bean.moveVal!=0)then
 				set score = score + R2I(bean.moveVal)*3
 			endif
@@ -1395,6 +1423,12 @@ struct hItem
 			endif
 			if(bean.muggleDuring!=0)then
 				set score = score + R2I(bean.muggleDuring)*3
+			endif
+			if(bean.myopiaVal!=0)then
+				set score = score + R2I(bean.myopiaVal)*3
+			endif
+			if(bean.myopiaDuring!=0)then
+				set score = score + R2I(bean.myopiaDuring)*3
 			endif
 			if(bean.corrosionVal!=0)then
 				set score = score + R2I(bean.corrosionVal)*3
@@ -1551,6 +1585,7 @@ struct hItem
 		local real attackSpeed = LoadReal(hash_item, item_id, hk_attackSpeed)*charges
 		local real attackPhysical = LoadReal(hash_item, item_id, hk_attackPhysical)*charges
 		local real attackMagic = LoadReal(hash_item, item_id, hk_attackMagic)*charges
+		local real attackRange = LoadReal(hash_item, item_id, hk_attackRange)*charges
 		local real str = LoadReal(hash_item, item_id, hk_str)*charges
 		local real agi = LoadReal(hash_item, item_id, hk_agi)*charges
 		local real int = LoadReal(hash_item, item_id, hk_int)*charges
@@ -1655,6 +1690,8 @@ struct hItem
 		local real bluntDuring = LoadReal(hash_item, item_id, hk_bluntDuring)*charges
 		local real muggleVal = LoadReal(hash_item, item_id, hk_muggleVal)*charges
 		local real muggleDuring = LoadReal(hash_item, item_id, hk_muggleDuring)*charges
+		local real myopiaVal = LoadReal(hash_item, item_id, hk_myopiaVal)*charges
+		local real myopiaDuring = LoadReal(hash_item, item_id, hk_myopiaDuring)*charges
 		local real corrosionVal = LoadReal(hash_item, item_id, hk_corrosionVal)*charges
 		local real corrosionDuring = LoadReal(hash_item, item_id, hk_corrosionDuring)*charges
 		local real chaosVal = LoadReal(hash_item, item_id, hk_chaosVal)*charges
@@ -1735,6 +1772,9 @@ struct hItem
 		endif
 		if(attackMagic!=0)then
 			call hattr.addAttackMagic(whichUnit,attackMagic,0)
+		endif
+		if(attackRange!=0)then
+			call hattr.addAttackRange(whichUnit,attackRange,0)
 		endif
 		if(str!=0)then
 			call hattr.addStr(whichUnit,str,0)
@@ -2048,6 +2088,12 @@ struct hItem
 		if(muggleDuring!=0)then
 			call hattrEffect.addMuggleDuring(whichUnit,muggleDuring,0)
 		endif
+		if(myopiaVal!=0)then
+			call hattrEffect.addMyopiaVal(whichUnit,myopiaVal,0)
+		endif
+		if(myopiaDuring!=0)then
+			call hattrEffect.addMyopiaDuring(whichUnit,myopiaDuring,0)
+		endif
 		if(corrosionVal!=0)then
 			call hattrEffect.addCorrosionVal(whichUnit,corrosionVal,0)
 		endif
@@ -2197,6 +2243,7 @@ struct hItem
 		local real attackSpeed = LoadReal(hash_item, item_id, hk_attackSpeed)*charges
 		local real attackPhysical = LoadReal(hash_item, item_id, hk_attackPhysical)*charges
 		local real attackMagic = LoadReal(hash_item, item_id, hk_attackMagic)*charges
+		local real attackRange = LoadReal(hash_item, item_id, hk_attackRange)*charges
 		local real str = LoadReal(hash_item, item_id, hk_str)*charges
 		local real agi = LoadReal(hash_item, item_id, hk_agi)*charges
 		local real int = LoadReal(hash_item, item_id, hk_int)*charges
@@ -2301,6 +2348,8 @@ struct hItem
 		local real bluntDuring = LoadReal(hash_item, item_id, hk_bluntDuring)*charges
 		local real muggleVal = LoadReal(hash_item, item_id, hk_muggleVal)*charges
 		local real muggleDuring = LoadReal(hash_item, item_id, hk_muggleDuring)*charges
+		local real myopiaVal = LoadReal(hash_item, item_id, hk_myopiaVal)*charges
+		local real myopiaDuring = LoadReal(hash_item, item_id, hk_myopiaDuring)*charges
 		local real corrosionVal = LoadReal(hash_item, item_id, hk_corrosionVal)*charges
 		local real corrosionDuring = LoadReal(hash_item, item_id, hk_corrosionDuring)*charges
 		local real chaosVal = LoadReal(hash_item, item_id, hk_chaosVal)*charges
@@ -2381,6 +2430,9 @@ struct hItem
 		endif
 		if(attackMagic!=0)then
 			call hattr.subAttackMagic(whichUnit,attackMagic,0)
+		endif
+		if(attackRange!=0)then
+			call hattr.subAttackRange(whichUnit,attackRange,0)
 		endif
 		if(str!=0)then
 			call hattr.subStr(whichUnit,str,0)
@@ -2693,6 +2745,12 @@ struct hItem
 		endif
 		if(muggleDuring!=0)then
 			call hattrEffect.subMuggleDuring(whichUnit,muggleDuring,0)
+		endif
+		if(myopiaVal!=0)then
+			call hattrEffect.subMyopiaVal(whichUnit,myopiaVal,0)
+		endif
+		if(myopiaDuring!=0)then
+			call hattrEffect.subMyopiaDuring(whichUnit,myopiaDuring,0)
 		endif
 		if(corrosionVal!=0)then
 			call hattrEffect.subCorrosionVal(whichUnit,corrosionVal,0)
@@ -3136,6 +3194,7 @@ struct hItem
 		local integer itid = 0
 		local integer charges = 0
 		if(isHjass(it) == false)then
+			call hconsole.error(GetItemName(it))
 			set itid = GetItemTypeId(it)
 			set charges = GetItemCharges(it)
 			call RemoveItem(it)

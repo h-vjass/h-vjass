@@ -67,7 +67,12 @@ struct hTest
 
 		//TODO TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
-		call hplayer.setHero(players[1],u,"")
+		call hhero.itIs(u)
+		call hattr.setAttackRange( u, 100, 0 )
+		call hattr.addAttackRange( u, 100, 10 )
+		call hattr.addAttackRange( u, 100, 20 )
+		call hattr.addAttackRange( u, 100, 30 )
+		call hattr.addAttackRange( u, 100, 40 )
 
 		call hattr.addAttackPhysical(u,10000,0)
 
@@ -121,6 +126,7 @@ struct hTest
 		call hitem.toXY('o000',4,90,-222,0)
 
 		//酒馆
+		/*
 		call hhero.push('H00B')
 		call hhero.push('hpea')
 		call hhero.push('hfoo')
@@ -144,6 +150,7 @@ struct hTest
 		call hhero.setBornXY(-24,34)
 
 		call hhero.buildDoubleClick(100.00)
+		*/
 
 		//测试吸血
 		//call hattr.addHemophagia(u,25,0)
@@ -194,17 +201,20 @@ struct hTest
 
 		call hevt.onAttackReady(u,function thistype.onattackready)
 		call hevt.onDamage(u,function thistype.ondamage)
+		
 		/*
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
-		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
+		*/
+		set u2 = hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(100,100))
+		call UnitAddType( u2, UNIT_TYPE_PEON )
 		call SetUnitVertexColor( u2, 100, 45, 50, 255 )
 		call hattr.addLife(u2,50000,0)
 		call hattr.addAvoid(u2,30,0)
 		call hattr.addDefend(u2,-19,0)
-		*/
+		
 		//call hattrEffect.setSilentOdds(u2,5,0)
 		//call hattrEffect.setSilentDuring(u2,5.00,0)
 		//call hattrEffect.setUnarmOdds(u2,5,0)

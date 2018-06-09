@@ -6,8 +6,6 @@ globals
 	integer hp_isComputer = 10001
 	integer hp_apm = 10002
 	integer hp_battle_status = 10003
-	integer hp_hero = 10004
-	integer hp_hero_avater = 100041
 	integer hp_damage = 10005
 	integer hp_bedamage = 10006
 	integer hp_kill = 10007
@@ -20,6 +18,8 @@ globals
 	integer hp_lumber_ratio = 10014
 	integer hp_exp_ratio = 10015
 	integer hp_sell_ratio = 10016
+	integer hp_life_source_ratio = 10017
+	integer hp_mana_source_ratio = 10017
 
 	integer player_max_qty = 12
 	integer player_current_qty = 0
@@ -38,6 +38,11 @@ struct hPlayer
 		local hRect x = 0
         set x = hPlayer.allocate()
 	    return x
+	endmethod
+
+	//index
+	public static method index takes player whichPlayer returns integer
+		return GetConvertedPlayerId(whichPlayer) 
 	endmethod
 
 	//apm
@@ -121,25 +126,6 @@ struct hPlayer
 		call CustomVictoryBJ( whichPlayer, true, true )
 	endmethod
 
-	//设置玩家英雄
-	public static method setHero takes player whichPlayer,unit hero,string avater returns nothing
-		call hconsole.log("playerhero="+GetUnitName(hero))
-		call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_hero, hero)
-		call SaveStr(hash_player, GetHandleId(whichPlayer), hp_hero_avater, avater)
-	endmethod
-	//获取玩家英雄单位
-	public static method getHero takes player whichPlayer returns unit
-		return LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_hero)
-	endmethod
-	//获取玩家英雄名称
-	public static method getHeroName takes player whichPlayer returns string
-		return GetUnitName(getHero(whichPlayer))
-	endmethod
-	//获取玩家英雄头像（路径串）
-	public static method getHeroAvatar takes player whichPlayer returns string
-		return LoadStr(hash_player, GetHandleId(whichPlayer), hp_hero_avater)
-	endmethod
-
 	//获取玩家造成的总伤害
 	public static method getDamage takes player whichPlayer returns real
 		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_damage)
@@ -167,6 +153,91 @@ struct hPlayer
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
 	endmethod
 
+
+	//获取玩家生命源设定百分比
+	public static method getLifeSourceRatio takes player whichPlayer returns real
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_life_source_ratio)
+	endmethod
+	//设置玩家生命源设定百分比
+	public static method setLifeSourceRatio takes player whichPlayer,real val returns nothing
+		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_life_source_ratio, val)
+	endmethod
+	private static method triggerLSRDialog takes nothing returns nothing
+		local dialog d = GetClickedDialog()
+		local button b = GetClickedButton()
+		local player p = LoadPlayerHandle(hash_player,GetHandleId(d),666)
+		local real radio = LoadReal(hash_player,GetHandleId(b),666)
+		call hmsg.echoTo(p,"已设定生命源触发比例为：|cffffff80"+I2S(R2I(radio))+"%|r",0)
+		call setLifeSourceRatio(p,radio)
+		call DialogClear( d )
+		call DialogDestroy( d )
+		call DisableTrigger(GetTriggeringTrigger())
+		call DestroyTrigger(GetTriggeringTrigger())
+		set p = null
+		set d = null
+	endmethod
+	private static method triggerLSRActions takes nothing returns nothing
+		local player p = GetTriggerPlayer()
+		local dialog d = null
+		local button b = null
+		local integer i = 100
+		local trigger dtg = null
+		set d = DialogCreate()
+		call DialogSetMessage( d, "设定少于比例触发生命源恢复" )
+		call SavePlayerHandle(hash_player,GetHandleId(d),666,p)
+		loop
+			exitwhen i<10
+				set b = DialogAddButton(d,I2S(i)+"%",0)
+				call SaveReal(hash_player,GetHandleId(b),666,I2R(i))
+			set i = i-10
+		endloop
+		set dtg = CreateTrigger()
+		call TriggerAddAction(dtg, function thistype.triggerLSRDialog)
+		call TriggerRegisterDialogEvent( dtg , d )
+		call DialogDisplay( p,d, true )
+	endmethod
+	//获取玩家魔法源设定百分比
+	public static method getManaSourceRatio takes player whichPlayer returns real
+		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_mana_source_ratio)
+	endmethod
+	//设置玩家魔法源设定百分比
+	public static method setManaSourceRatio takes player whichPlayer,real val returns nothing
+		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_mana_source_ratio, val)
+	endmethod
+	private static method triggerMSRDialog takes nothing returns nothing
+		local dialog d = GetClickedDialog()
+		local button b = GetClickedButton()
+		local player p = LoadPlayerHandle(hash_player,GetHandleId(d),667)
+		local real radio = LoadReal(hash_player,GetHandleId(b),667)
+		call hmsg.echoTo(p,"已设定魔法源触发比例为：|cffffff80"+I2S(R2I(radio))+"%|r",0)
+		call setManaSourceRatio(p,radio)
+		call DialogClear( d )
+		call DialogDestroy( d )
+		call DisableTrigger(GetTriggeringTrigger())
+		call DestroyTrigger(GetTriggeringTrigger())
+		set p = null
+		set d = null
+	endmethod
+	private static method triggerMSRActions takes nothing returns nothing
+		local player p = GetTriggerPlayer()
+		local dialog d = null
+		local button b = null
+		local integer i = 100
+		local trigger dtg = null
+		set d = DialogCreate()
+		call DialogSetMessage( d, "设定少于比例触发魔法源恢复" )
+		call SavePlayerHandle(hash_player,GetHandleId(d),667,p)
+		loop
+			exitwhen i<10
+				set b = DialogAddButton(d,I2S(i)+"%",0)
+				call SaveReal(hash_player,GetHandleId(b),667,I2R(i))
+			set i = i-10
+		endloop
+		set dtg = CreateTrigger()
+		call TriggerAddAction(dtg, function thistype.triggerMSRDialog)
+		call TriggerRegisterDialogEvent( dtg , d )
+		call DialogDisplay( p,d, true )
+	endmethod
 
 
 	//黄金比率
@@ -437,11 +508,15 @@ struct hPlayer
 		local trigger triggerApm = CreateTrigger()
 		local trigger triggerApmUnit = CreateTrigger()
 		local trigger triggerDeSelection = CreateTrigger()
+		local trigger triggerLSR = CreateTrigger()
+		local trigger triggerMSR = CreateTrigger()
 		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
 		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
 		call TriggerAddAction(triggerDeSelection , function thistype.triggerDeSelectionUnitActions)
+		call TriggerAddAction(triggerLSR , function thistype.triggerLSRActions)
+		call TriggerAddAction(triggerMSR , function thistype.triggerMSRActions)
 		loop
-			exitwhen i>player_max_qty
+			exitwhen i > 16
 				set players[i] = Player(i-1)
 				set pid = GetHandleId(players[i])
 				call SetPlayerHandicapXP( players[i] , 0 )
@@ -449,6 +524,8 @@ struct hPlayer
 				call setLumberRatio( players[i],100,0)
 				call setExpRatio( players[i],100,0)
 				call setSellRatio( players[i],50,0)
+				call setLifeSourceRatio( players[i],50.0)
+				call setManaSourceRatio( players[i],50.0)
 				call setApm(players[i],0)
 				if((GetPlayerController(players[i]) == MAP_CONTROL_USER) and (GetPlayerSlotState(players[i]) == PLAYER_SLOT_STATE_PLAYING)) then
 					set player_current_qty = player_current_qty + 1
@@ -460,6 +537,8 @@ struct hPlayer
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_UP )
 		            call TriggerRegisterPlayerUnitEvent(triggerDeSelection, players[i], EVENT_PLAYER_UNIT_DESELECTED, null)
+					call TriggerRegisterPlayerChatEvent( triggerLSR , players[i] , "-lsr" , true)
+					call TriggerRegisterPlayerChatEvent( triggerMSR , players[i] , "-msr" , true)
 	            else
 	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
 	            	call SaveStr(hash_player, pid, hp_battle_status, default_status_nil)

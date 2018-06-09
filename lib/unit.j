@@ -8,6 +8,9 @@ hashtable hash_unit = null
 integer hashkey_unit_issilent = 76100
 integer hashkey_unit_isunarm = 76101
 integer hashkey_unit_crackfly = 76102
+integer hashkey_unit_avatar = 76103
+integer hashkey_unit_attack_speed_base_space = 76104
+integer hashkey_unit_attack_range = 76105
 endglobals
 
 struct hUnit
@@ -116,6 +119,61 @@ struct hUnit
     public static method setPeriod takes unit u,real life returns nothing
         call UnitApplyTimedLifeBJ(life, 'BTLF', u)
     endmethod
+
+    /**
+     * 获取单位类型的头像
+     */
+    public static method getAvatar takes integer uid returns string
+        local string avatar = LoadStr(hash_unit,uid,hashkey_unit_avatar)
+        if(StringLength(avatar)<=0)then
+            set avatar = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+        endif
+        return avatar
+    endmethod
+
+    /**
+     * 设置单位类型的头像
+     */
+    public static method setAvatar takes integer uid,string avatar returns nothing
+        call SaveStr(hash_unit,uid,hashkey_unit_avatar,avatar)
+    endmethod
+
+    /** 
+     * 获取单位类型整体的攻击速度间隔(默认2.00秒/击)
+     */ 
+	public static method getAttackSpeedBaseSpace takes integer uid returns real
+		local real value = LoadReal(hash_unit,uid,hashkey_unit_attack_speed_base_space)
+        if(value<=0)then
+            set value = 2.00
+        endif
+        return value
+	endmethod
+    /** 
+     * 设置单位类型整体的攻击速度间隔
+     */ 
+	public static method setAttackSpeedBaseSpace takes integer uid , real value returns nothing
+		call SaveReal(hash_unit,uid,hashkey_unit_attack_speed_base_space,value)
+	endmethod
+
+    /** 
+     * 获取单位类型整体的攻击范围
+     */ 
+	public static method getAttackRange takes integer uid returns real
+		local real value = LoadReal(hash_unit,uid,hashkey_unit_attack_range)
+        if(value<=0)then
+            set value = -1
+        endif
+        return value
+	endmethod
+
+    /** 
+     * 设置单位类型整体的攻击范围，物编的攻击距离与主动范围请调节为一致，攻击距离更改设定为最大攻击距离
+     * 例如需要修改的单位在物编将[主动攻击范围][攻击范围]设为9999，然后hjass里就可以动态最大修改攻击距离为 9999
+     * 主动攻击范围务必与攻击距离一致，hjass里修改攻击范围时，会自适应主动攻击范围
+     */ 
+	public static method setAttackRange takes integer uid , real value returns nothing
+		call SaveReal(hash_unit,uid,hashkey_unit_attack_range,value)
+	endmethod
 
     /**
      * 删除单位回调
@@ -231,6 +289,14 @@ struct hUnit
     endmethod
 
     /**
+     * 创建1单位hXY
+     * @return 最后创建单位
+     */
+    public static method createUnithXY takes player whichPlayer, integer unitid, hXY xy returns unit
+        return CreateUnit(whichPlayer, unitid, xy.x, xy.y, bj_UNIT_FACING)
+    endmethod
+
+    /**
      * 创建1单位面向点
      * @return 最后创建单位
      */
@@ -250,7 +316,7 @@ struct hUnit
      * 创建1单位面向点移动到某点
      * @return 最后创建单位
      */
-    public static method createUnitAttackToLoc takes integer unitid ,player whichPlayer, location loc, location attackLoc returns unit
+    public static method createUnitAttackToLoc takes player whichPlayer, integer unitid , location loc, location attackLoc returns unit
         local unit u = createUnitLookAt( whichPlayer , unitid , loc , attackLoc)
         call  IssuePointOrderLoc( u, "attack", attackLoc )
         return u
@@ -260,7 +326,7 @@ struct hUnit
      * 创建1单位攻击某单位
      * @return 最后创建单位
      */
-    public static method createUnitAttackToUnit takes integer unitid ,player whichPlayer, location loc, unit targetUnit returns unit
+    public static method createUnitAttackToUnit takes player whichPlayer, integer unitid, location loc, unit targetUnit returns unit
         local location lookat = GetUnitLoc(targetUnit)
         local unit u = createUnitLookAt( whichPlayer , unitid , loc , lookat)
         call IssueTargetOrder( u , "attack", targetUnit )
@@ -274,7 +340,7 @@ struct hUnit
      * 创建单位组
      * @return 最后创建单位组
      */
-    public static method createUnits takes integer qty , player whichPlayer, integer unitid, location loc returns group
+    public static method createUnits takes player whichPlayer, integer unitid, integer qty, location loc returns group
         local group g = CreateGroup()
         loop
             set qty = qty - 1
@@ -289,7 +355,7 @@ struct hUnit
      * 创建单位组面向点
      * @return 最后创建单位组
      */
-    public static method createUnitsLookAt takes integer qty , player whichPlayer, integer unitid, location loc, location lookAt returns group
+    public static method createUnitsLookAt takes player whichPlayer, integer unitid,integer qty, location loc, location lookAt returns group
         local group g = CreateGroup()
         loop
             set qty = qty - 1
@@ -304,8 +370,8 @@ struct hUnit
      * 创建单位组攻击移动到某点
      * @return 最后创建单位组
      */
-    public static method createUnitsAttackToLoc takes  integer qty, integer unitid ,player whichPlayer, location loc, location attackLoc returns group
-        local group g = createUnitsLookAt( qty , whichPlayer , unitid , loc , attackLoc )
+    public static method createUnitsAttackToLoc takes player whichPlayer, integer unitid,integer qty, location loc, location attackLoc returns group
+        local group g = createUnitsLookAt( whichPlayer , unitid , qty, loc , attackLoc )
         call GroupPointOrderLoc( g , "attack", attackLoc )
         return g
     endmethod
@@ -314,9 +380,9 @@ struct hUnit
      * 创建单位组攻击某单位
      * @return 最后创建单位组
      */
-    public static method createUnitsAttackToUnit takes  integer qty, integer unitid ,player whichPlayer, location loc, unit targetUnit returns group
+    public static method createUnitsAttackToUnit takes player whichPlayer, integer unitid,integer qty, location loc, unit targetUnit returns group
         local location lookat = GetUnitLoc(targetUnit)
-        local group g = createUnitsLookAt( qty , whichPlayer , unitid , loc , lookat )
+        local group g = createUnitsLookAt( whichPlayer , unitid , qty , loc , lookat )
         call GroupTargetOrder( g , "attack", targetUnit )
         call RemoveLocation(lookat)
         set lookat = null

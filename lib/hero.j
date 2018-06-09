@@ -4,15 +4,26 @@
 globals
 hHero hhero
 hashtable hash_hero = null
+group isHeroGroup = CreateGroup()
 integer HERO_SELECTION_TOKEN = 'o001'        //选英雄token
+string HERO_TYPE_STR = "str"
+string HERO_TYPE_AGI = "agi"
+string HERO_TYPE_INT = "int"
+string HERO_TYPE_STR_LABEL = "力量"
+string HERO_TYPE_AGI_LABEL = "敏捷"
+string HERO_TYPE_INT_LABEL = "智力"
+string HERO_TYPE_NIL_LABEL = "未知"
 endglobals
 
 struct hHero
+
+    private static trigger TRIGGER_HERO_LEVEL = null
 
     private static integer hk_drunkery = 1
     private static integer hk_drunkery_qty_now = 2
     private static integer hk_player_own_qty = 3
     private static integer hk_isout = 4
+    private static integer hk_hero_type = 5
     private static integer hk_unit_type = 10000
 
 	private static integer unit_qty = 0             //选择英雄数量
@@ -26,6 +37,37 @@ struct hHero
     private static integer drunkeryID = 'n001'      //选英雄酒馆单位ID，默认是 n001
     private static real bornX = 250                 //生成英雄初始坐标X
     private static real bornY = 250                 //生成英雄初始坐标Y
+
+    //英雄升级 - 计算白字
+	private static method triggerUnitHeroLevelAction takes nothing returns nothing
+		local unit u = GetTriggerUnit()
+
+		call hconsole.log("level="+I2S(GetHeroLevel(u)))
+		call hattr.setStrWhite( u , GetHeroStr(u,false) , 0 )
+		call hattr.setAgiWhite( u , GetHeroAgi(u,false) , 0 )
+		call hattr.setIntWhite( u , GetHeroInt(u,false) , 0 )
+		call hattr.addHelp( u , 2 , 0 )
+		call hattr.addWeight( u , 0.25 , 0 )
+		call hattr.addLifeSource( u , 10 , 0 )
+		call hattr.addManaSource( u , 10 , 0 )
+
+		//@触发升级事件
+		set hevtBean = hEvtBean.create()
+        set hevtBean.triggerKey = "levelUp"
+        set hevtBean.triggerUnit = u
+        call hevt.triggerEvent(hevtBean)
+        call hevtBean.destroy()
+
+		set u = null
+	endmethod
+    static method create takes nothing returns hHero
+        local hHero x = 0
+        set x = hHero.allocate()
+        set x.TRIGGER_HERO_LEVEL = CreateTrigger()
+        call TriggerAddAction(x.TRIGGER_HERO_LEVEL, function thistype.triggerUnitHeroLevelAction)
+        return x
+    endmethod
+    
 
     //设置单位被reset，使它可以被重新选择
     private static method unitReset takes integer unitId returns nothing
@@ -92,17 +134,26 @@ struct hHero
 	endmethod
 
     //获取玩家现有单位数量
-    private static method getPlayerUnitQty takes player whichPlayer returns integer
+    public static method getPlayerUnitQty takes player whichPlayer returns integer
 		return LoadInteger( hash_hero , GetHandleId(whichPlayer) , hk_player_own_qty )
 	endmethod
 
     //设置玩家现有单位
     private static method setPlayerUnit takes player whichPlayer,integer index,unit u returns nothing
 		call SaveUnitHandle( hash_hero , GetHandleId(whichPlayer) , StringHash("hk_player_own_unit"+I2S(index)) , u )
+        if(u!=null)then
+            //触发英雄被选择事件(全局)
+            set hevtBean = hEvtBean.create()
+            set hevtBean.triggerKey = "pickHero"
+            set hevtBean.triggerHandle = hevt.getDefaultHandle()
+            set hevtBean.triggerUnit = u
+            call hevt.triggerEvent(hevtBean)
+            call hevtBean.destroy()
+        endif
 	endmethod
 
     //获取玩家现有单位
-    private static method getPlayerUnit takes player whichPlayer,integer index returns unit
+    public static method getPlayerUnit takes player whichPlayer,integer index returns unit
 		return LoadUnitHandle( hash_hero , GetHandleId(whichPlayer) , StringHash("hk_player_own_unit"+I2S(index)) )
 	endmethod
 
@@ -153,10 +204,52 @@ struct hHero
         local integer i = player_max_qty
         loop
             exitwhen i<=0
-                call hplayer.setStatus(players[i],hplayer.default_status_nil)
-                call hplayer.defeat(players[i],"未选够游戏角色")
+                if(thistype.getPlayerUnitQty(players[i]) < getPlayerAllowQty())then
+                    call hplayer.setStatus(players[i],hplayer.default_status_nil)
+                    call hplayer.defeat(players[i],"未选够游戏角色")
+                endif
             set i = i-1
         endloop
+    endmethod
+
+    /**
+     * 设定某个单位为英雄类别
+     * 请不要乱设置[一般单位]为[英雄]，以致于力量敏捷智力等不属于一般单位的属性引起崩溃报错
+     * 设定后 his.hero 方法会认为单位为英雄，同时属性系统才会认定它为英雄，从而生效
+     */
+    public static method itIs takes unit u returns nothing
+        if(IsUnitInGroup(u,isHeroGroup)==false)then
+            call GroupAddUnit(isHeroGroup,u)
+            call TriggerRegisterUnitEvent( TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
+        endif
+    endmethod
+
+    /**
+     * 获取英雄的类型名称（力str 敏agi 智int）
+     */
+    public static method getHeroTypeLabel takes integer uid returns string
+        local string t = LoadStr(hash_hero,uid,hk_hero_type)
+        if(t == "str")then
+            return HERO_TYPE_STR_LABEL
+        elseif(t == "agi")then
+            return HERO_TYPE_AGI_LABEL
+        elseif(t == "int")then
+            return HERO_TYPE_INT_LABEL
+        else
+            return HERO_TYPE_NIL_LABEL
+        endif
+    endmethod
+    /**
+     * 获取英雄的类型（力str 敏agi 智int）
+     */
+    public static method getHeroType takes integer uid returns string
+        return LoadStr(hash_hero,uid,hk_hero_type)
+    endmethod
+    /**
+     * 设置英雄的类型（力str 敏agi 智int）
+     */
+    public static method setHeroType takes integer uid,string t returns nothing
+        call SaveStr(hash_hero,uid,hk_hero_type,t)
     endmethod
 
 
@@ -237,7 +330,7 @@ struct hHero
             return
         endif
         set qty = qty+1
-        call setPlayerUnit(p,qty,u)
+        call itIs(u)
         call setPlayerUnitQty(p,qty)
         call out2drunkery(uid)
         call unitOut(uid)
@@ -245,6 +338,7 @@ struct hHero
         call SetUnitPositionLoc(u,loc)
         call RemoveLocation(loc)
         set loc = null
+        call setPlayerUnit(p,qty,u)
         if(qty>=max)then
             call hmsg.echoTo(p,"您选择了 "+"|cffffff80"+GetUnitName(u)+"|r,已挑选完毕",0)
         else 
@@ -273,6 +367,7 @@ struct hHero
                     call out2drunkery(uid)
                     set u = hunit.createUnitXY( p,uid,bornX,bornY )
                     set uname = uname+" "+GetUnitName(u)
+                    call itIs(u)
                     call setPlayerUnit(p,i,u)
                 endif
             set i = i-1
@@ -298,11 +393,13 @@ struct hHero
                 set uid = GetUnitTypeId(u)
                 call back2drunkery(uid)
                 call unitReset(uid)
+                call GroupRemoveUnit(isHeroGroup,u)
                 call setPlayerUnit(p,i,null)
                 call hunit.del(u,0)
             set i = i-1
         endloop
         call setPlayerUnitQty(p,0)
+        call hCamera.toXY(buildX,buildY,p,0)
         call hmsg.echoTo(p,"已为您 |cffffff80repick|r 了 "+"|cffffff80"+I2S(qty)+"|r 个单位",0)
     endmethod
 
@@ -392,6 +489,8 @@ struct hHero
         call htime.setDialog(t,"选择英雄")
         call htime.setTrigger(t,1,tgr_sell)
         call htime.setTrigger(t,2,tgr_random)
+        //转移玩家镜头
+        call hCamera.toXY(buildX,buildY,null,0)
     endmethod
 	
     //todo -----------双击模式-----------
@@ -430,15 +529,16 @@ struct hHero
         call SaveInteger(hash_hero,pid,uid,clickQty)
         if(clickQty >= 2)then
             set qty = qty+1
-            call setPlayerUnit(p,qty,u)
+            call GroupRemoveUnit(isHeroGroup,u)
             call setPlayerUnitQty(p,qty)
-            call GroupRemoveUnit(buildGroup,u)
+            call itIs(u)
             call SetUnitOwner( u, p , true )
             set loc = Location(bornX,bornY)
             call SetUnitPositionLoc(u,loc)
             call RemoveLocation(loc)
             set loc = null
             call PauseUnit(u, false )
+            call setPlayerUnit(p,qty,u)
             if(qty>=max)then
                 call hmsg.echoTo(p,"您选择了 "+"|cffffff80"+GetUnitName(u)+"|r,已挑选完毕",0)
             else 
@@ -473,6 +573,7 @@ struct hHero
                     call SetUnitOwner( u, p , true )
                     call SetUnitPositionLoc(u,loc)
                     call PauseUnit(u, false )
+                    call itIs(u)
                     set uname = uname+" "+GetUnitName(u)
                     call setPlayerUnit(p,i,u)
                 endif
@@ -489,6 +590,7 @@ struct hHero
         local integer qty = getPlayerUnitQty(p)
         local integer i = 0
         local unit u = null
+        local integer uid = 0
         local location loc = null
         local real x = 0
         local real y = 0
@@ -502,17 +604,20 @@ struct hHero
                 set u = getPlayerUnit(p,i)
                 set x = LoadReal(hash_hero,GetHandleId(u),9527)
                 set y = LoadReal(hash_hero,GetHandleId(u),9528)
-                set loc = Location(x,y)
-                call SetUnitOwner( u, player_passive , true )
-                call SetUnitPositionLocFacingBJ(u,loc, bj_UNIT_FACING )
-                call RemoveLocation(loc)
-                set loc = null
+                set uid = GetUnitTypeId(u)
+                call GroupRemoveUnit(isHeroGroup,u)
+                call hunit.del(u,0)
                 call setPlayerUnit(p,i,null)
+                set u = hunit.createUnitXY(player_passive,uid,x,y)
+                call SaveReal(hash_hero,GetHandleId(u),9527,x)
+                call SaveReal(hash_hero,GetHandleId(u),9528,y)
+                call SetUnitFacing(u,bj_UNIT_FACING)
                 call GroupAddUnit(buildGroup,u)
                 call PauseUnit(u, true )
             set i = i-1
         endloop
         call setPlayerUnitQty(p,0)
+        call hCamera.toXY(buildX,buildY,p,0)
         call hmsg.echoTo(p,"已为您 |cffffff80repick|r 了 "+"|cffffff80"+I2S(qty)+"|r 个单位",0)
     endmethod
 
@@ -520,12 +625,26 @@ struct hHero
         local timer t = GetExpiredTimer()
         local trigger tgr_click = htime.getTrigger(t,1)
         local trigger tgr_random = htime.getTrigger(t,2)
+        local unit u = null
         call htime.delTimer(t)
         call DisableTrigger( tgr_click )
         call DestroyTrigger( tgr_click )
         call DisableTrigger( tgr_random )
         call DestroyTrigger( tgr_random )
         call checkPlayerChooseOver()
+        if(buildGroup!=null)then
+            loop
+                exitwhen IsUnitGroupEmptyBJ(buildGroup)
+                set u = FirstOfGroup(buildGroup)
+                call GroupRemoveUnit( buildGroup , u )
+                if(IsUnitInGroup(u,isHeroGroup)==false)then
+                    call hunit.del(u,0)
+                endif
+            endloop
+            call GroupClear(buildGroup)
+            call DestroyGroup(buildGroup)
+            set buildGroup = null
+        endif
     endmethod
 
     //开始建立单位给玩家双击
@@ -556,8 +675,15 @@ struct hHero
         call TriggerAddAction(tgr_repick, function thistype.buildDoubleClickRepickAction)
         set during=during+1
         if(buildGroup!=null)then
+            loop
+                exitwhen IsUnitGroupEmptyBJ(buildGroup)
+                set u = FirstOfGroup(buildGroup)
+                call GroupRemoveUnit( buildGroup , u )
+                call hunit.del(u,0)
+            endloop
             call GroupClear(buildGroup)
             call DestroyGroup(buildGroup)
+            set buildGroup = null
         endif
         set buildGroup = CreateGroup()
         loop
@@ -578,7 +704,6 @@ struct hHero
                     call GroupAddUnit(buildGroup,u)
                     call PauseUnit(u, true )
                     set rowNowQty = rowNowQty+1
-                    call hunit.del(u,during)
                 endif
                 set i=i-1
         endloop
@@ -604,6 +729,8 @@ struct hHero
         call htime.setDialog(t,"选择英雄")
         call htime.setTrigger(t,1,tgr_click)
         call htime.setTrigger(t,2,tgr_random)
+        //转移玩家镜头
+        call hCamera.toXY(buildX,buildY,null,0)
     endmethod
 
 

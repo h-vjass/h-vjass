@@ -51,6 +51,7 @@ struct hLogic
 	    return ( I2R(i1) / I2R(i2) )
 	endmethod
 
+	//极坐标位移
 	public method polarProjection takes hXY xy, real dist, real angle returns hXY
 		set xy.x = xy.x + dist * Cos(angle * bj_DEGTORAD)
 		set xy.y = xy.y + dist * Sin(angle * bj_DEGTORAD)

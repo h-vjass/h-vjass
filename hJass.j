@@ -74,6 +74,7 @@ library hJass initializer init
 		set hitem = hItem.create()
 		set hitemMix = hItemMix.create()
 		set hhero = hHero.create()
+		set hempty = hEmpty.create()
 		//initset
 		call hplayer.initSet()
 		call hattrUnit.initSet()
@@ -101,6 +102,13 @@ library hJass initializer init
 		set txt = txt + "-random 随机选择"
 		set txt = txt + "|n-repick 重新选择"
 		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "选择英雄指令",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		set txt = ""
+		set txt = txt + "-lsr 设定生命源"
+		set txt = txt + "-msr 设定魔法源"
+		set txt = txt + "|n生命、魔法源可在当前量少于设定比例时，在 10秒 内尽可能地恢复生命或者魔法"
+		set txt = txt + "|n输入即可选择生命、魔法源的自动恢复触发比例"
+		set txt = txt + "|n当源耗尽时，可以选择物品补充，而源力本身每隔 25秒 恢复 300点 能量"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "设定生命、魔法源自动比例",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 
     endfunction
 

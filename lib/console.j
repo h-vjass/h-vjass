@@ -5,7 +5,7 @@ endglobals
 
 struct hConsole
 	
-	private boolean status = false
+	public boolean status = false
 	private string color_log = "ffffff"
 	private string color_error = "e04240"
 	private string color_info = "98f5ff"

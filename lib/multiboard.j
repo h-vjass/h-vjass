@@ -183,6 +183,10 @@ struct hMultiboard
         local integer mbid = 0
         local integer i = 0
         local integer j = 0
+        local integer h = 0
+        local integer r = 0
+        local unit u = null
+        local integer maxHeroQty = 0
         local boolean isDo = false
         set i = 1
         loop
@@ -202,20 +206,29 @@ struct hMultiboard
                 exitwhen i > player_max_qty
                 if ( hplayer.getStatus(players[i]) != hplayer.default_status_nil ) then
                     call setContent( mbid, 1, j, GetPlayerName(players[i]) )
-                    call setContentIcon( mbid, 2, j, "Lv "+I2S(GetUnitLevel(hplayer.getHero(players[i])))+"."+hplayer.getHeroName(players[i]),hplayer.getHeroAvatar(players[i]) )
-                    call setContent( mbid , 3, j, I2S(hplayer.getGold(players[i]))+"("+R2S(hplayer.getGoldRatio(players[i]))+"%)" )
-                    call setContent( mbid , 4, j, I2S(hplayer.getLumber(players[i]))+"("+R2S(hplayer.getLumberRatio(players[i]))+"%)" )
-                    call setContent( mbid,  5, j, R2S(hplayer.getExpRatio(players[i]))+"%" )
-                    call setContent( mbid , 6, j, I2S(hplayer.getKill(players[i])) )
-                    call setContent( mbid , 7, j, I2S(GetPlayerStructureCount(players[i], false))+"/"+I2S(GetPlayerStructureCount(players[i], true) ))
-                    call setContent( mbid , 8, j, hlogic.realformat(hplayer.getDamage(players[i])) )
-                    call setContent( mbid , 9, j, hlogic.realformat(hplayer.getBeDamage(players[i])) )
-                    call setContent( mbid ,10, j, hlogic.realformat(hplayer.getTotalGold(players[i])) )
-                    call setContent( mbid ,11, j, hlogic.realformat(hplayer.getTotalLumber(players[i])) )
-                    call setContent( mbid ,12, j, hlogic.realformat(hplayer.getTotalGoldCost(players[i])) )
-                    call setContent( mbid ,13, j, hlogic.realformat(hplayer.getTotalLumberCost(players[i])) )
-                    call setContent( mbid ,14, j, hplayer.getStatus(players[i]) )
-                    call setContent( mbid ,15, j, I2S(hplayer.getApm(players[i])) )
+                    set maxHeroQty = hhero.getPlayerAllowQty()
+                    set h = 1
+                    set r = 1
+                    loop
+                        exitwhen h>maxHeroQty
+                            set r = r+1
+                            set u = hhero.getPlayerUnit(players[i],h)
+                            call setContentIcon( mbid, r, j, "Lv "+I2S(GetUnitLevel(u))+"."+GetUnitName(u),hunit.getAvatar(GetUnitTypeId(u)) )
+                        set h=h+1
+                    endloop
+                    call setContent( mbid , 1+r, j, I2S(hplayer.getGold(players[i]))+"("+R2S(hplayer.getGoldRatio(players[i]))+"%)" )
+                    call setContent( mbid , 2+r, j, I2S(hplayer.getLumber(players[i]))+"("+R2S(hplayer.getLumberRatio(players[i]))+"%)" )
+                    call setContent( mbid,  3+r, j, R2S(hplayer.getExpRatio(players[i]))+"%" )
+                    call setContent( mbid , 4+r, j, I2S(hplayer.getKill(players[i])) )
+                    call setContent( mbid , 5+r, j, I2S(GetPlayerStructureCount(players[i], false))+"/"+I2S(GetPlayerStructureCount(players[i], true) ))
+                    call setContent( mbid , 6+r, j, hlogic.realformat(hplayer.getDamage(players[i])) )
+                    call setContent( mbid , 7+r, j, hlogic.realformat(hplayer.getBeDamage(players[i])) )
+                    call setContent( mbid , 8+r, j, hlogic.realformat(hplayer.getTotalGold(players[i])) )
+                    call setContent( mbid , 9+r, j, hlogic.realformat(hplayer.getTotalLumber(players[i])) )
+                    call setContent( mbid ,10+r, j, hlogic.realformat(hplayer.getTotalGoldCost(players[i])) )
+                    call setContent( mbid ,11+r, j, hlogic.realformat(hplayer.getTotalLumberCost(players[i])) )
+                    call setContent( mbid ,12+r, j, hplayer.getStatus(players[i]) )
+                    call setContent( mbid ,13+r, j, I2S(hplayer.getApm(players[i])) )
                     set j = j + 1
                 endif
                 set i = i + 1
@@ -229,6 +242,10 @@ struct hMultiboard
         local timer t = GetExpiredTimer()
         local integer i = htime.getInteger(t,1)
         local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local unit u = null
+        local integer maxHeroQty = 0
         if(players[i]==null or his.playing(players[i])==false)then
             call htime.delTimer(t)
             return
@@ -249,17 +266,23 @@ struct hMultiboard
             call setContent( mbid, 2,10, hlogic.realformat(hplayer.getTotalLumberCost(players[i])) )
             call setContent( mbid, 2,11, hplayer.getStatus(players[i]) )
             call setContent( mbid, 2,12, I2S(hplayer.getApm(players[i])) )
-
-            call setContentIcon( mbid, 4, 1, hplayer.getHeroName(players[i]) , hplayer.getHeroAvatar(players[i]) )
-            call setContent( mbid, 4, 2, "Lv "+I2S(GetUnitLevel(hplayer.getHero(players[i]))) )
-            call setContent( mbid, 4, 3, "type" )
-            call setContent( mbid, 4, 4, R2S(hunit.getLife(hplayer.getHero(players[i])))+" / "+R2S(hunit.getMaxLife(hplayer.getHero(players[i]))) )
-            call setContent( mbid, 4, 5, R2S(hattr.getLifeSourceCurrent(hplayer.getHero(players[i])))+" / "+R2S(hattr.getLifeSource(hplayer.getHero(players[i]))) )
-            call setContent( mbid, 4, 6, R2S(hunit.getMana(hplayer.getHero(players[i])))+" / "+R2S(hunit.getMaxMana(hplayer.getHero(players[i]))) )
-            call setContent( mbid, 4, 7, R2S(hattr.getManaSourceCurrent(hplayer.getHero(players[i])))+" / "+R2S(hattr.getManaSource(hplayer.getHero(players[i]))) )
-            call setContent( mbid, 4, 8, I2S(R2I(hattr.getMove(hplayer.getHero(players[i])))) )
-            call setContent( mbid, 4, 9, R2S(hattr.getPunishCurrent(hplayer.getHero(players[i])))+" / "+R2S(hattr.getPunish(hplayer.getHero(players[i]))) )
-            call setContent( mbid, 4,10, R2S(hattr.getWeightCurrent(hplayer.getHero(players[i])))+" / "+R2S(hattr.getWeight(hplayer.getHero(players[i]))) )
+            set maxHeroQty = hhero.getPlayerAllowQty()
+            set h = 1
+            loop
+                exitwhen h>maxHeroQty
+                    set u = hhero.getPlayerUnit(players[i],h)
+                    call setContentIcon( mbid, 3+h, 2, GetUnitName(u) , hunit.getAvatar(GetUnitTypeId(u)) )
+                    call setContent( mbid, 3+h, 3, "Lv "+I2S(GetUnitLevel(u)) )
+                    call setContent( mbid, 3+h, 4, hhero.getHeroTypeLabel(GetUnitTypeId(u)) )
+                    call setContent( mbid, 3+h, 5, R2S(hunit.getLife(u))+" / "+R2S(hunit.getMaxLife(u)) )
+                    call setContent( mbid, 3+h, 6, R2S(hattr.getLifeSourceCurrent(u))+" / "+R2S(hattr.getLifeSource(u)) )
+                    call setContent( mbid, 3+h, 7, R2S(hunit.getMana(u))+" / "+R2S(hunit.getMaxMana(u)) )
+                    call setContent( mbid, 3+h, 8, R2S(hattr.getManaSourceCurrent(u))+" / "+R2S(hattr.getManaSource(u)) )
+                    call setContent( mbid, 3+h, 9, I2S(R2I(hattr.getMove(u))) )
+                    call setContent( mbid, 3+h,10, R2S(hattr.getPunishCurrent(u))+" / "+R2S(hattr.getPunish(u)) )
+                    call setContent( mbid, 3+h,11, R2S(hattr.getWeightCurrent(u))+" / "+R2S(hattr.getWeight(u)) )
+                set h=h+1
+            endloop
 
             set t = htime.setTimeout(0.3,function thistype.build)
             call htime.setMultiboard(t,1,hmb_me[i])
@@ -275,8 +298,8 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_attr[i]!=null and hmb_current_type[i] == "mbsa")then
+            set mbid = GetHandleId(hmb_selection_attr[i])
             if(hplayer.getSelection(players[i])!=null)then
-                set mbid = GetHandleId(hmb_selection_attr[i])
                 call setTitle(mbid, "属性( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
 
                 call setContent( mbid, 2, 1, R2S(hunit.getLife(hplayer.getSelection(players[i])))+" / "+R2S(hunit.getMaxLife(hplayer.getSelection(players[i]))) )
@@ -285,7 +308,7 @@ struct hMultiboard
                 call setContent( mbid, 2, 4, R2S(hattr.getPunishCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getPunish(hplayer.getSelection(players[i]))) )
                 call setContent( mbid, 2, 5, I2S(R2I(hattr.getAttackPhysical(hplayer.getSelection(players[i])))) )
                 call setContent( mbid, 2, 6, I2S(R2I(hattr.getMove(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 2, 7, I2S(R2I(hattr.getAttackSpeed(hplayer.getSelection(players[i]))))+"%"+" "+R2S(hattr.getAttackSpeedSpace(hplayer.getSelection(players[i])))+"击/秒" )
+                call setContent( mbid, 2, 7, I2S(R2I(100+hattr.getAttackSpeed(hplayer.getSelection(players[i]))))+"%"+" "+R2S(hattr.getAttackSpeedSpace(hplayer.getSelection(players[i])))+"击/秒" )
                 call setContent( mbid, 2, 8, I2S(R2I(hattr.getDefend(hplayer.getSelection(players[i])))) )
                 call setContent( mbid, 2, 9, R2S(hattr.getAvoid(hplayer.getSelection(players[i])))+"%" )
                 call setContent( mbid, 2,10, I2S(R2I(hattr.getKnocking(hplayer.getSelection(players[i])))) )
@@ -301,7 +324,7 @@ struct hMultiboard
                 call setContent( mbid, 4, 3, R2S(hattr.getManaSourceCurrent(hplayer.getSelection(players[i])))+" / "+R2S(hattr.getManaSource(hplayer.getSelection(players[i]))) )
                 call setContent( mbid, 4, 4, R2S(hattr.getPunishOppose(hplayer.getSelection(players[i])))+"%" )
                 call setContent( mbid, 4, 5, I2S(R2I(hattr.getAttackMagic(hplayer.getSelection(players[i])))) )
-                call setContent( mbid, 4, 6, I2S(R2I(hattr.getHelp(hplayer.getHero(players[i])))) )
+                call setContent( mbid, 4, 6, I2S(R2I(hattr.getAttackRange(hplayer.getSelection(players[i])))) )
                 call setContent( mbid, 4, 7, R2S(hattr.getToughness(hplayer.getSelection(players[i]))) )
                 call setContent( mbid, 4, 8, R2S(hattr.getResistance(hplayer.getSelection(players[i])))+"%" )
                 call setContent( mbid, 4, 9, R2S(hattr.getAim(hplayer.getSelection(players[i])))+"%" )
@@ -311,16 +334,12 @@ struct hMultiboard
                 call setContent( mbid, 4,13, I2S(R2I(hattr.getLuck(hplayer.getSelection(players[i]))))+"%" )
                 call setContent( mbid, 4,14, I2S(R2I(hattr.getCure(hplayer.getSelection(players[i]))))+"%" )
                 call setContent( mbid, 4,15, I2S(R2I(hattr.getHuntRebound(hplayer.getSelection(players[i]))))+"%" )
+                call setContent( mbid, 4,16, I2S(R2I(hattr.getHelp(hplayer.getSelection(players[i])))) )
 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_attr[i])
             else
-                call MultiboardSetTitleText(hmb_selection_attr[i], "单位状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_attr[i], 1, 1, "- 请“三击”锁定选择单位查看常规属性 -" )
-                call MultiboardSetRowCount(hmb_selection_attr[i], 1)
-                call MultiboardSetColumnCount(hmb_selection_attr[i], 1)
-                call MultiboardSetItemWidthBJ( hmb_selection_attr[i], 0, 0, 15.00 )
-                call MultiboardSetItemStyleBJ( hmb_selection_attr[i], 0, 0, true, false )
+                call setTitle(mbid, "无单位( “三击” 锁定单位查看常规属性)")
             endif
         endif
     endmethod
@@ -334,31 +353,32 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_effect[i]!=null and hmb_current_type[i] == "mbse")then
+            set mbid = GetHandleId(hmb_selection_effect[i])
             if(hplayer.getSelection(players[i])!=null)then
-                set mbid = GetHandleId(hmb_selection_effect[i])
                 call setTitle(mbid, "攻击/伤害特效( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
                 call setContent(mbid, 2, 1, I2S(R2I(hattrEffect.getLifeBackVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getLifeBackDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 2, 2, I2S(R2I(hattrEffect.getManaBackVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getManaBackDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 2, 3, I2S(R2I(hattrEffect.getAttackSpeedVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAttackSpeedDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 2, 4, I2S(R2I(hattrEffect.getAttackPhysicalVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAttackPhysicalDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 2, 5, I2S(R2I(hattrEffect.getAttackMagicVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAttackMagicDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 6, I2S(R2I(hattrEffect.getMoveVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getMoveDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 7, I2S(R2I(hattrEffect.getStrVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getStrDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 8, I2S(R2I(hattrEffect.getAgiVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAgiDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 9, I2S(R2I(hattrEffect.getIntVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getIntDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 10, I2S(R2I(hattrEffect.getKnockingVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getKnockingDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 11, I2S(R2I(hattrEffect.getViolenceVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getViolenceDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 12, I2S(R2I(hattrEffect.getAimVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAimDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 13, I2S(R2I(hattrEffect.getSplitVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getSplitDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 14, I2S(R2I(hattrEffect.getHemophagiaVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getHemophagiaDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 15, I2S(R2I(hattrEffect.getHemophagiaSkillVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getHemophagiaSkillDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 16, I2S(R2I(hattrEffect.getLuckVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getLuckDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 17, I2S(R2I(hattrEffect.getHuntAmplitudeVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getHuntAmplitudeDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 18, I2S(R2I(hattrEffect.getBombVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getBombRange(hplayer.getSelection(players[i])))+"PX)" )
-                call setContent(mbid, 2, 19, I2S(R2I(hattrEffect.getLightningChainOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getLightningChainVal(hplayer.getSelection(players[i])))+"伤害)("+ hlogic.realformat(hattrEffect.getLightningChainQty(hplayer.getSelection(players[i])))+"单位)" )
-                call setContent(mbid, 2, 20, I2S(R2I(hattrEffect.getCrackFlyOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getCrackFlyVal(hplayer.getSelection(players[i])))+"伤害)" )
-                call setContent(mbid, 2, 21, I2S(R2I(hattrEffect.getSilentOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getSilentDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 2, 22, I2S(R2I(hattrEffect.getUnarmOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getUnarmDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 6, I2S(R2I(hattrEffect.getAttackRangeVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAttackRangeDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 7, I2S(R2I(hattrEffect.getMoveVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getMoveDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 8, I2S(R2I(hattrEffect.getStrVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getStrDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 9, I2S(R2I(hattrEffect.getAgiVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAgiDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 10, I2S(R2I(hattrEffect.getIntVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getIntDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 11, I2S(R2I(hattrEffect.getKnockingVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getKnockingDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 12, I2S(R2I(hattrEffect.getViolenceVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getViolenceDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 13, I2S(R2I(hattrEffect.getAimVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAimDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 14, I2S(R2I(hattrEffect.getSplitVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getSplitDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 15, I2S(R2I(hattrEffect.getHemophagiaVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getHemophagiaDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 16, I2S(R2I(hattrEffect.getHemophagiaSkillVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getHemophagiaSkillDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 17, I2S(R2I(hattrEffect.getLuckVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getLuckDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 18, I2S(R2I(hattrEffect.getHuntAmplitudeVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getHuntAmplitudeDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 19, I2S(R2I(hattrEffect.getBombVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getBombRange(hplayer.getSelection(players[i])))+"PX)" )
+                call setContent(mbid, 2, 20, I2S(R2I(hattrEffect.getLightningChainOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getLightningChainVal(hplayer.getSelection(players[i])))+"伤害)("+ hlogic.realformat(hattrEffect.getLightningChainQty(hplayer.getSelection(players[i])))+"单位)" )
+                call setContent(mbid, 2, 21, I2S(R2I(hattrEffect.getCrackFlyOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getCrackFlyVal(hplayer.getSelection(players[i])))+"伤害)" )
+                call setContent(mbid, 2, 22, I2S(R2I(hattrEffect.getSilentOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getSilentDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 2, 23, I2S(R2I(hattrEffect.getUnarmOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getUnarmDuring(hplayer.getSelection(players[i])))+"秒)" )
 
                 call setContent(mbid, 4, 1, I2S(R2I(hattrEffect.getPoisonVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getPoisonDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 4, 2, I2S(R2I(hattrEffect.getFireVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getFireDuring(hplayer.getSelection(players[i])))+"秒)" )
@@ -367,31 +387,27 @@ struct hMultiboard
                 call setContent(mbid, 4, 5, I2S(R2I(hattrEffect.getColdVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getColdDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 4, 6, I2S(R2I(hattrEffect.getBluntVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getBluntDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 4, 7, I2S(R2I(hattrEffect.getMuggleVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getMuggleDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 8, I2S(R2I(hattrEffect.getCorrosionVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getCorrosionDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 9, I2S(R2I(hattrEffect.getChaosVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getChaosDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 10, I2S(R2I(hattrEffect.getTwineVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getTwineDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 11, I2S(R2I(hattrEffect.getBlindVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getBlindDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 12, I2S(R2I(hattrEffect.getTortuaVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getTortuaDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 13, I2S(R2I(hattrEffect.getWeakVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getWeakDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 14, I2S(R2I(hattrEffect.getAstrictVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAstrictDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 15, I2S(R2I(hattrEffect.getFoolishVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getFoolishDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 16, I2S(R2I(hattrEffect.getDullVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDullDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 17, I2S(R2I(hattrEffect.getDirtVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDirtDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 18, I2S(R2I(hattrEffect.getSwimOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getSwimDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 19, I2S(R2I(hattrEffect.getHeavyOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getHeavyVal(hplayer.getSelection(players[i])))+"%)" )
-                call setContent(mbid, 4, 20, I2S(R2I(hattrEffect.getBreakOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getBreakDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 21, I2S(R2I(hattrEffect.getUnluckVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getUnluckDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 22, I2S(R2I(hattrEffect.getFetterOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getFetterDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 8, I2S(R2I(hattrEffect.getMyopiaVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getMyopiaDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 9, I2S(R2I(hattrEffect.getCorrosionVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getCorrosionDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 10, I2S(R2I(hattrEffect.getChaosVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getChaosDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 11, I2S(R2I(hattrEffect.getTwineVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getTwineDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 12, I2S(R2I(hattrEffect.getBlindVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getBlindDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 13, I2S(R2I(hattrEffect.getTortuaVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getTortuaDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 14, I2S(R2I(hattrEffect.getWeakVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getWeakDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 15, I2S(R2I(hattrEffect.getAstrictVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getAstrictDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 16, I2S(R2I(hattrEffect.getFoolishVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getFoolishDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 17, I2S(R2I(hattrEffect.getDullVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDullDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 18, I2S(R2I(hattrEffect.getDirtVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDirtDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 19, I2S(R2I(hattrEffect.getSwimOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getSwimDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 20, I2S(R2I(hattrEffect.getHeavyOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getHeavyVal(hplayer.getSelection(players[i])))+"%)" )
+                call setContent(mbid, 4, 21, I2S(R2I(hattrEffect.getBreakOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getBreakDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 22, I2S(R2I(hattrEffect.getUnluckVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getUnluckDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 23, I2S(R2I(hattrEffect.getFetterOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getFetterDuring(hplayer.getSelection(players[i])))+"秒)" )
                 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_effect[i])
             else
-                call MultiboardSetTitleText(hmb_selection_effect[i], "单位状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_effect[i], 1, 1, "- 请“三击”锁定选择单位查看攻击/伤害特效属性 -" )
-                call MultiboardSetRowCount(hmb_selection_effect[i], 1)
-                call MultiboardSetColumnCount(hmb_selection_effect[i], 1)
-                call MultiboardSetItemWidthBJ( hmb_selection_effect[i], 0, 0, 15.00 )
-                call MultiboardSetItemStyleBJ( hmb_selection_effect[i], 0, 0, true, false )
+                call setTitle(mbid, "无单位( “三击” 锁定单位查看攻击/伤害特效属性)")
             endif
         endif
     endmethod
@@ -405,8 +421,8 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_natural[i]!=null and hmb_current_type[i] == "mbsn")then
+            set mbid = GetHandleId(hmb_selection_natural[i])
             if(hplayer.getSelection(players[i])!=null)then
-                set mbid = GetHandleId(hmb_selection_natural[i])
                 call setTitle(mbid, "自然( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
                 call setContent(mbid, 2, 1, I2S(R2I(hattrNatural.getFire(hplayer.getSelection(players[i])))) +"%" )
                 call setContent(mbid, 2, 2, I2S(R2I(hattrNatural.getSoil(hplayer.getSelection(players[i])))) +"%" )
@@ -433,12 +449,7 @@ struct hMultiboard
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_natural[i])
             else
-                call MultiboardSetTitleText(hmb_selection_natural[i], "单位状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_natural[i], 1, 1, "- 请“三击”锁定选择单位查看自然属性 -" )
-                call MultiboardSetRowCount(hmb_selection_natural[i], 1)
-                call MultiboardSetColumnCount(hmb_selection_natural[i], 1)
-                call MultiboardSetItemWidthBJ( hmb_selection_natural[i], 0, 0, 15.00 )
-                call MultiboardSetItemStyleBJ( hmb_selection_natural[i], 0, 0, true, false )
+                call setTitle(mbid, "无单位( “三击” 锁定单位查看自然属性)")
             endif
         endif
     endmethod
@@ -464,8 +475,8 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_item[i]!=null and hmb_current_type[i] == "mbsi")then
+            set mbid = GetHandleId(hmb_selection_item[i])
             if(hplayer.getSelection(players[i])!=null)then
-                set mbid = GetHandleId(hmb_selection_item[i])
                 call setTitle(mbid, "物品栏( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
                 set j = 1
                 loop
@@ -505,12 +516,7 @@ struct hMultiboard
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_item[i])
             else
-                call MultiboardSetTitleText(hmb_selection_item[i], "单位物品状态(未锁定单位)")
-                call MultiboardSetItemValueBJ( hmb_selection_item[i], 1, 1, "- 请“三击”锁定选择单位查看物品 -" )
-                call MultiboardSetRowCount(hmb_selection_item[i], 1)
-                call MultiboardSetColumnCount(hmb_selection_item[i], 1)
-                call MultiboardSetItemWidthBJ( hmb_selection_item[i], 0, 0, 15.00 )
-                call MultiboardSetItemStyleBJ( hmb_selection_item[i], 0, 0, true, false )
+                call setTitle(mbid, "无单位( “三击” 锁定单位查看物品)")
             endif
         endif
     endmethod
@@ -518,26 +524,36 @@ struct hMultiboard
 
     private static method start takes nothing returns nothing
         local integer i = 0
+        local integer h = 0
+        local integer r = 0
         local integer mbid = 0
         local timer t = null
+        local integer maxHeroQty = hhero.getPlayerAllowQty()
         if(hmb_all_player == null) then
             set hmb_all_player = CreateMultiboard()
             set mbid = GetHandleId(hmb_all_player)
             call setContentIcon( mbid , 1, 1, "玩家名称","ReplaceableTextures\\CommandButtons\\BTNVillagerMan1.blp" )
-            call setContentIcon( mbid , 2, 1, "英雄","ReplaceableTextures\\CommandButtons\\BTNChaosWarlord.blp" )
-            call setContentIcon( mbid , 3, 1, "黄金(率)","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid , 4, 1, "木头(率)","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid , 5, 1, "经验率","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid , 6, 1, "杀敌数","ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
-            call setContentIcon( mbid , 7, 1, "建筑数","ReplaceableTextures\\CommandButtons\\BTNHumanBuild.blp" )
-            call setContentIcon( mbid , 8, 1, "造成伤害","ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-            call setContentIcon( mbid , 9, 1, "承受伤害","ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-            call setContentIcon( mbid ,10, 1, "获金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid ,11, 1, "获木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid ,12, 1, "耗金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid ,13, 1, "耗木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid ,14, 1, "状态","ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
-            call setContentIcon( mbid ,15, 1, "APM","ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
+            set h = 1
+            set r = 1
+            loop
+                exitwhen h>maxHeroQty
+                    set r = r+1
+                    call setContent( mbid , r, 1, "英雄"+I2S(h) )
+                set h=h+1
+            endloop
+            call setContentIcon( mbid , 1+r, 1, "黄金(率)","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid , 2+r, 1, "木头(率)","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid , 3+r, 1, "经验率","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid , 4+r, 1, "杀敌数","ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
+            call setContentIcon( mbid , 5+r, 1, "建筑数","ReplaceableTextures\\CommandButtons\\BTNHumanBuild.blp" )
+            call setContentIcon( mbid , 6+r, 1, "造成伤害","ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+            call setContentIcon( mbid , 7+r, 1, "承受伤害","ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
+            call setContentIcon( mbid , 8+r, 1, "获金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid , 9+r, 1, "获木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid ,10+r, 1, "耗金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid ,11+r, 1, "耗木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid ,12+r, 1, "状态","ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
+            call setContentIcon( mbid ,13+r, 1, "APM","ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
             call htime.setInterval(2.0,function thistype.hJassDefault_allPlayer)
         endif
         set i = 1
@@ -559,16 +575,23 @@ struct hMultiboard
                     call setContentIcon( mbid, 1,10, "耗木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
                     call setContentIcon( mbid, 1,11, "状态", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
                     call setContentIcon( mbid, 1,12, "APM", "ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
-                    call setContentIcon( mbid, 3, 1, "英雄名称", "ReplaceableTextures\\CommandButtons\\BTNChaosWarlord.blp" )
-                    call setContentIcon( mbid, 3, 2, "英雄等级", "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
-                    call setContentIcon( mbid, 3, 3, "英雄类型", "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp" )
-                    call setContentIcon( mbid, 3, 4, "生命量", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
-                    call setContentIcon( mbid, 3, 5, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
-                    call setContentIcon( mbid, 3, 6, "魔法量", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
-                    call setContentIcon( mbid, 3, 7, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
-                    call setContentIcon( mbid, 3, 8, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
-                    call setContentIcon( mbid, 3, 9, "僵直度", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
-                    call setContentIcon( mbid, 3,10, "负重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
+                    call setContent( mbid, 3, 1, "#" )
+                    call setContentIcon( mbid, 3, 2, "名称", "ReplaceableTextures\\CommandButtons\\BTNChaosWarlord.blp" )
+                    call setContentIcon( mbid, 3, 3, "等级", "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+                    call setContentIcon( mbid, 3, 4, "类型", "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp" )
+                    call setContentIcon( mbid, 3, 5, "生命量", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
+                    call setContentIcon( mbid, 3, 6, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
+                    call setContentIcon( mbid, 3, 7, "魔法量", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
+                    call setContentIcon( mbid, 3, 8, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
+                    call setContentIcon( mbid, 3, 9, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
+                    call setContentIcon( mbid, 3,10, "僵直度", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
+                    call setContentIcon( mbid, 3,11, "负重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
+                    set h = 1
+                    loop
+                        exitwhen h>maxHeroQty
+                            call setContent( mbid, 3+h, 1, "英雄"+I2S(h) )
+                        set h=h+1
+                    endloop
                     set t = htime.setInterval(2.0,function thistype.hJassDefault_me)
                     call htime.setInteger(t,1,i)
                 endif
@@ -597,7 +620,7 @@ struct hMultiboard
                     call setContentIcon( mbid, 3, 3, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
                     call setContentIcon( mbid, 3, 4, "硬直抵抗", "ReplaceableTextures\\CommandButtons\\BTNSirenMaster.blp" )
                     call setContentIcon( mbid, 3, 5, "魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
-                    call setContentIcon( mbid, 3, 6, "救助力", "ReplaceableTextures\\CommandButtons\\BTNAnkh.blp" )
+                    call setContentIcon( mbid, 3, 6, "攻击距离", "ReplaceableTextures\\CommandButtons\\BTNImprovedBows.blp" )
                     call setContentIcon( mbid, 3, 7, "韧性", "ReplaceableTextures\\CommandButtons\\BTNLeatherUpgradeTwo.blp" )
                     call setContentIcon( mbid, 3, 8, "魔抗", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
                     call setContentIcon( mbid, 3, 9, "命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
@@ -607,6 +630,7 @@ struct hMultiboard
                     call setContentIcon( mbid, 3,13, "运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
                     call setContentIcon( mbid, 3,14, "治疗", "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp" )
                     call setContentIcon( mbid, 3,15, "伤害反射", "ReplaceableTextures\\CommandButtons\\BTNThornShield.blp" )
+                    call setContentIcon( mbid, 3,16, "救助力", "ReplaceableTextures\\CommandButtons\\BTNAnkh.blp" )
 
                     set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_attr)
                     call htime.setInteger(t,1,i)
@@ -619,23 +643,24 @@ struct hMultiboard
                     call setContentIcon(mbid, 1, 3, "特效:攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
                     call setContentIcon(mbid, 1, 4, "特效:物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
                     call setContentIcon(mbid, 1, 5, "特效:魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
-                    call setContentIcon(mbid, 1, 6, "特效:移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
-                    call setContentIcon(mbid, 1, 7, "特效:力量", "ReplaceableTextures\\CommandButtons\\BTNBelt.blp" )
-                    call setContentIcon(mbid, 1, 8, "特效:敏捷", "ReplaceableTextures\\CommandButtons\\BTNBoots.blp" )
-                    call setContentIcon(mbid, 1, 9, "特效:智力", "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp" )
-                    call setContentIcon(mbid, 1,10, "特效:物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-                    call setContentIcon(mbid, 1,11, "特效:魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
-                    call setContentIcon(mbid, 1,12, "特效:命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
-                    call setContentIcon(mbid, 1,13, "特效:分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
-                    call setContentIcon(mbid, 1,14, "特效:吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
-                    call setContentIcon(mbid, 1,15, "特效:技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
-                    call setContentIcon(mbid, 1,16, "特效:运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
-                    call setContentIcon(mbid, 1,17, "特效:伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
-                    call setContentIcon(mbid, 1,18, "特效:爆破", "ReplaceableTextures\\CommandButtons\\BTNVolcano.blp" )
-                    call setContentIcon(mbid, 1,19, "特效:闪电链", "ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp" )
-                    call setContentIcon(mbid, 1,20, "特效:击飞", "ReplaceableTextures\\CommandButtons\\BTNNagaUnBurrow.blp" )
-                    call setContentIcon(mbid, 1,21, "特效:沉默", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp" )
-                    call setContentIcon(mbid, 1,22, "特效:缴械", "ReplaceableTextures\\CommandButtons\\BTNPossession.blp")
+                    call setContentIcon(mbid, 1, 6, "特效:攻击距离", "ReplaceableTextures\\CommandButtons\\BTNImprovedBows.blp" )
+                    call setContentIcon(mbid, 1, 7, "特效:移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
+                    call setContentIcon(mbid, 1, 8, "特效:力量", "ReplaceableTextures\\CommandButtons\\BTNBelt.blp" )
+                    call setContentIcon(mbid, 1, 9, "特效:敏捷", "ReplaceableTextures\\CommandButtons\\BTNBoots.blp" )
+                    call setContentIcon(mbid, 1,10, "特效:智力", "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp" )
+                    call setContentIcon(mbid, 1,11, "特效:物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+                    call setContentIcon(mbid, 1,12, "特效:魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
+                    call setContentIcon(mbid, 1,13, "特效:命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
+                    call setContentIcon(mbid, 1,14, "特效:分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
+                    call setContentIcon(mbid, 1,15, "特效:吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
+                    call setContentIcon(mbid, 1,16, "特效:技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
+                    call setContentIcon(mbid, 1,17, "特效:运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
+                    call setContentIcon(mbid, 1,18, "特效:伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
+                    call setContentIcon(mbid, 1,19, "特效:爆破", "ReplaceableTextures\\CommandButtons\\BTNVolcano.blp" )
+                    call setContentIcon(mbid, 1,20, "特效:闪电链", "ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp" )
+                    call setContentIcon(mbid, 1,21, "特效:击飞", "ReplaceableTextures\\CommandButtons\\BTNNagaUnBurrow.blp" )
+                    call setContentIcon(mbid, 1,22, "特效:沉默", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp" )
+                    call setContentIcon(mbid, 1,23, "特效:缴械", "ReplaceableTextures\\CommandButtons\\BTNPossession.blp")
                     call setContentIcon(mbid, 3, 1, "特效:中毒", "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp" )
                     call setContentIcon(mbid, 3, 2, "特效:灼烧", "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp" )
                     call setContentIcon(mbid, 3, 3, "特效:枯竭", "ReplaceableTextures\\CommandButtons\\BTNDarkRitual.blp" )
@@ -643,21 +668,22 @@ struct hMultiboard
                     call setContentIcon(mbid, 3, 5, "特效:寒冷", "ReplaceableTextures\\CommandButtons\\BTNOrbOfFrost.blp" )
                     call setContentIcon(mbid, 3, 6, "特效:迟钝", "ReplaceableTextures\\CommandButtons\\BTNStasisTrap.blp" )
                     call setContentIcon(mbid, 3, 7, "特效:麻瓜", "ReplaceableTextures\\CommandButtons\\BTNAntiMagicShell.blp")
-                    call setContentIcon(mbid, 3, 8, "特效:腐蚀", "ReplaceableTextures\\CommandButtons\\BTNOrbOfCorruption.blp" )
-                    call setContentIcon(mbid, 3, 9, "特效:混乱", "ReplaceableTextures\\CommandButtons\\BTNDevourMagic.blp" )
-                    call setContentIcon(mbid, 3,10, "特效:缠绕", "ReplaceableTextures\\CommandButtons\\BTNEntanglingRoots.blp" )
-                    call setContentIcon(mbid, 3,11, "特效:致盲", "ReplaceableTextures\\CommandButtons\\BTNCharm.blp" )
-                    call setContentIcon(mbid, 3,12, "特效:剧痛", "ReplaceableTextures\\CommandButtons\\BTNFanOfKnives.blp" )
-                    call setContentIcon(mbid, 3,13, "特效:乏力", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp" )
-                    call setContentIcon(mbid, 3,14, "特效:束缚", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
-                    call setContentIcon(mbid, 3,15, "特效:愚蠢", "ReplaceableTextures\\CommandButtons\\BTNUnsummonBuilding.blp" )
-                    call setContentIcon(mbid, 3,16, "特效:粗钝", "ReplaceableTextures\\CommandButtons\\BTNEatTree.blp" )
-                    call setContentIcon(mbid, 3,17, "特效:尘迹", "ReplaceableTextures\\CommandButtons\\BTNOrbOfDarkness.blp")
-                    call setContentIcon(mbid, 3,18, "特效:眩晕", "ReplaceableTextures\\CommandButtons\\BTNStun.blp" )
-                    call setContentIcon(mbid, 3,19, "特效:沉重", "ReplaceableTextures\\CommandButtons\\BTNDevour.blp" )
-                    call setContentIcon(mbid, 3,20, "特效:打断", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp" )
-                    call setContentIcon(mbid, 3,21, "特效:倒霉", "ReplaceableTextures\\CommandButtons\\BTNBigBadVoodooSpell.blp" )
-                    call setContentIcon(mbid, 3,22, "特效:脚镣", "ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
+                    call setContentIcon(mbid, 3, 8, "特效:短视", "ReplaceableTextures\\CommandButtons\\BTNUltravision.blp")
+                    call setContentIcon(mbid, 3, 9, "特效:腐蚀", "ReplaceableTextures\\CommandButtons\\BTNOrbOfCorruption.blp" )
+                    call setContentIcon(mbid, 3,10, "特效:混乱", "ReplaceableTextures\\CommandButtons\\BTNDevourMagic.blp" )
+                    call setContentIcon(mbid, 3,11, "特效:缠绕", "ReplaceableTextures\\CommandButtons\\BTNEntanglingRoots.blp" )
+                    call setContentIcon(mbid, 3,12, "特效:致盲", "ReplaceableTextures\\CommandButtons\\BTNCharm.blp" )
+                    call setContentIcon(mbid, 3,13, "特效:剧痛", "ReplaceableTextures\\CommandButtons\\BTNFanOfKnives.blp" )
+                    call setContentIcon(mbid, 3,14, "特效:乏力", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp" )
+                    call setContentIcon(mbid, 3,15, "特效:束缚", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
+                    call setContentIcon(mbid, 3,16, "特效:愚蠢", "ReplaceableTextures\\CommandButtons\\BTNUnsummonBuilding.blp" )
+                    call setContentIcon(mbid, 3,17, "特效:粗钝", "ReplaceableTextures\\CommandButtons\\BTNEatTree.blp" )
+                    call setContentIcon(mbid, 3,18, "特效:尘迹", "ReplaceableTextures\\CommandButtons\\BTNOrbOfDarkness.blp")
+                    call setContentIcon(mbid, 3,19, "特效:眩晕", "ReplaceableTextures\\CommandButtons\\BTNStun.blp" )
+                    call setContentIcon(mbid, 3,20, "特效:沉重", "ReplaceableTextures\\CommandButtons\\BTNDevour.blp" )
+                    call setContentIcon(mbid, 3,21, "特效:打断", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp" )
+                    call setContentIcon(mbid, 3,22, "特效:倒霉", "ReplaceableTextures\\CommandButtons\\BTNBigBadVoodooSpell.blp" )
+                    call setContentIcon(mbid, 3,23, "特效:脚镣", "ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
                     set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_effect)
                     call htime.setInteger(t,1,i)
                 endif
