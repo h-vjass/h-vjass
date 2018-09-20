@@ -45,6 +45,25 @@ struct hLogic
 	public method rabs takes real value returns real
 		return RAbsBJ(value)
 	endmethod
+	//绝对值
+	public method iabs takes integer value returns integer
+		return IAbsBJ(value)
+	endmethod
+
+	//rmod
+	public method rmod takes real value1,real value2 returns real
+		if(value2 == 0)then
+			return 0
+		endif
+		return ModuloReal(value1, value2)
+	endmethod
+	//imod
+	public method imod takes integer value1,integer value2 returns integer
+		if(value2 == 0)then
+			return 0
+		endif
+		return ModuloInteger(value1, value2)
+	endmethod
 
 	//两整型相除得到real
 	public method II2R takes integer i1,integer i2 returns real

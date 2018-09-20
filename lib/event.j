@@ -1021,26 +1021,14 @@ struct hEvt
     //on - 出售物品(商店卖给玩家)
     //@getTriggerUnit 获取触发单位
     //@getTriggerItem 获取触发物品
-    private static method onItemSellAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
-        set bean.triggerKey = "itemSell"
-        set bean.triggerUnit = GetTriggerUnit()
-        set bean.triggerItem = GetSoldItem()
-        call triggerEvent(bean)
-        call bean.destroy()
-    endmethod
     public static method onItemSell takes unit whichUnit,code action returns trigger
-        if(event_trigger_itemSell==null)then
-            set event_trigger_itemSell = CreateTrigger()
-            call TriggerRegisterAnyUnitEventBJ( event_trigger_itemSell, EVENT_PLAYER_UNIT_SELL_ITEM )
-            call TriggerAddAction(event_trigger_itemSell, function thistype.onItemSellAction)
-        endif
         return onEventByHandle("itemSell",whichUnit,action)
     endmethod
 
     //on - 丢弃物品
-    //@getTriggerUnit 获取触发单位
-    //@getTriggerItem 获取触发物品
+    //@getTriggerUnit 获取触发/出售单位
+    //@targetUnit 获取购买单位
+    //@getTriggerItem 获取触发/出售物品
     public static method onItemDrop takes unit whichUnit,code action returns trigger
         return onEventByHandle("itemDrop",whichUnit,action)
     endmethod

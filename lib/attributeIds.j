@@ -15,6 +15,7 @@ globals
     integer ATTR_MAX_STR_GREEN = 99999999
     integer ATTR_MAX_AGI_GREEN = 99999999
     integer ATTR_MAX_INT_GREEN = 99999999
+    integer ATTR_MAX_SIGHT = 2050
 	
 	//护甲 1
 	integer Attr_Ability_defend_1 = 'A01J'
@@ -176,6 +177,18 @@ globals
 	integer Attr_Ability_mana_10000000 = 'A02X'
 	//魔法 100000000
 	integer Attr_Ability_mana_100000000 = 'A02Z'
+	//视野 50
+	integer Attr_Ability_sight_50 = 'A03S'
+	//视野 100
+	integer Attr_Ability_sight_100 = 'A03C'
+	//视野 200
+	integer Attr_Ability_sight_200 = 'A03F'
+	//视野 300
+	integer Attr_Ability_sight_300 = 'A03G'
+	//视野 400
+	integer Attr_Ability_sight_400 = 'A03J'
+	//视野 1000
+	integer Attr_Ability_sight_1000 = 'A03R'
 	//******************正负分割线******************//
 	//-护甲 1
 	integer Attr_Ability_defend_FU_1 = 'A01B'
@@ -337,4 +350,16 @@ globals
 	integer Attr_Ability_mana_FU_10000000 = 'A034'
 	//-魔法 100000000
 	integer Attr_Ability_mana_FU_100000000 = 'A035'
+	//-视野 50
+	integer Attr_Ability_sight_FU_50 = 'A03I'
+	//-视野 100
+	integer Attr_Ability_sight_FU_100 = 'A03H'
+	//-视野 200
+	integer Attr_Ability_sight_FU_200 = 'A03K'
+	//-视野 300
+	integer Attr_Ability_sight_FU_300 = 'A03L'
+	//-视野 400
+	integer Attr_Ability_sight_FU_400 = 'A03M'
+	//-视野 1000
+	integer Attr_Ability_sight_FU_1000 = 'A03N'
 endglobals

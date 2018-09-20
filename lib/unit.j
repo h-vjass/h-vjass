@@ -11,6 +11,8 @@ integer hashkey_unit_crackfly = 76102
 integer hashkey_unit_avatar = 76103
 integer hashkey_unit_attack_speed_base_space = 76104
 integer hashkey_unit_attack_range = 76105
+integer hashkey_unit_isOpenPunish = 76106
+integer hashkey_unit_isAutoClearAttrGroup = 76107
 endglobals
 
 struct hUnit
@@ -118,6 +120,45 @@ struct hUnit
      */
     public static method setPeriod takes unit u,real life returns nothing
         call UnitApplyTimedLifeBJ(life, 'BTLF', u)
+    endmethod
+    
+
+    /**
+     * 设置单位是否启用硬直
+     */
+    public static method setOpenPunish takes unit u,boolean isOpen returns nothing
+        if(isOpen == true)then
+            call hgroup.in(u, ATTR_GROUP_PUNISH)
+        elseif (isOpen == false) then
+            call hgroup.out(u, ATTR_GROUP_PUNISH)
+        endif
+        call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isOpenPunish,isOpen)
+    endmethod
+
+    /**
+     * 单位是否启用硬直（系统默认不启用）
+     */
+    public static method isOpenPunish takes unit u returns boolean
+        return LoadBoolean(hash_unit,GetHandleId(u),hashkey_unit_isOpenPunish)
+    endmethod
+
+    /**
+     * 设置单位是否自动清理出属性group（不清理后期会越来越卡，设置false则可以手动清理）
+     */
+    public static method setAutoClearAttrGroup takes unit u,boolean isAuto returns nothing
+        if(isAuto == true)then
+            call SaveInteger(hash_unit,GetHandleId(u),hashkey_unit_isAutoClearAttrGroup,1)
+        elseif (isAuto == false) then
+            call SaveInteger(hash_unit,GetHandleId(u),hashkey_unit_isAutoClearAttrGroup,-1)
+        endif
+    endmethod
+
+    /**
+     * 单位是否自动清理出属性group（系统默认启用）
+     */
+    public static method isAutoClearAttrGroup takes unit u returns boolean
+        local integer i = LoadInteger(hash_unit,GetHandleId(u),hashkey_unit_isAutoClearAttrGroup)
+        return i == 1
     endmethod
 
     /**
@@ -243,15 +284,37 @@ struct hUnit
      * 只有英雄能被复活
      * 只有调用此方法会触发复活事件
      */
-    public static method rebornAtXY takes unit u,real x,real y returns nothing
+    private static method rebornAtXYCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local unit u = htime.getUnit(t,1)
+        local real x = htime.getReal(t,2)
+        local real y = htime.getReal(t,3)
+        call htime.delTimer(t)
+        call ReviveHero( u,x,y,true )
+        //@触发复活事件
+        set hevtBean = hEvtBean.create()
+        set hevtBean.triggerKey = "reborn"
+        set hevtBean.triggerUnit = u
+        call hevt.triggerEvent(hevtBean)
+        call hevtBean.destroy()
+    endmethod
+    public static method rebornAtXY takes unit u,real x,real y,real delay returns nothing
+        local timer t = null
         if(his.hero(u))then
-            call ReviveHero( u,x,y,true )
-            //@触发复活事件
-            set hevtBean = hEvtBean.create()
-            set hevtBean.triggerKey = "reborn"
-            set hevtBean.triggerUnit = u
-            call hevt.triggerEvent(hevtBean)
-            call hevtBean.destroy()
+            if(delay<1)then
+                call ReviveHero( u,x,y,true )
+                //@触发复活事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "reborn"
+                set hevtBean.triggerUnit = u
+                call hevt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+            else
+                set t = htime.setTimeout(delay,function thistype.rebornAtXYCall)
+                call htime.setUnit(t,1,u)
+                call htime.setReal(t,2,x)
+                call htime.setReal(t,3,y)
+            endif
         endif
     endmethod
 
@@ -286,6 +349,14 @@ struct hUnit
      */
     public static method createUnitXY takes player whichPlayer, integer unitid, real x,real y returns unit
         return CreateUnit(whichPlayer, unitid, x, y, bj_UNIT_FACING)
+    endmethod
+
+    /**
+     * 创建1单位XY facing
+     * @return 最后创建单位
+     */
+    public static method createUnitXYFacing takes player whichPlayer, integer unitid, real x,real y, real facing returns unit
+        return CreateUnit(whichPlayer, unitid, x, y, facing)
     endmethod
 
     /**
@@ -347,6 +418,38 @@ struct hUnit
             exitwhen qty < 0
                 call CreateUnitAtLocSaveLast(whichPlayer, unitid, loc, bj_UNIT_FACING)
                 call GroupAddUnit(g, bj_lastCreatedUnit)
+        endloop
+        return g
+    endmethod
+
+    /**
+     * 创建单位组XY
+     * @return 最后创建单位组
+     */
+    public static method createUnitsXY takes player whichPlayer, integer unitid, integer qty, real x,real y returns group
+        local group g = CreateGroup()
+        local unit u = null
+        loop
+            set qty = qty - 1
+            exitwhen qty < 0
+                set u = createUnitXY(whichPlayer, unitid, x, y)
+                call GroupAddUnit(g, u)
+        endloop
+        return g
+    endmethod
+
+    /**
+     * 创建单位组XY randomFacing
+     * @return 最后创建单位组
+     */
+    public static method createUnitsXYFacing takes player whichPlayer, integer unitid, integer qty, real x,real y returns group
+        local group g = CreateGroup()
+        local unit u = null
+        loop
+            set qty = qty - 1
+            exitwhen qty < 0
+                set u = createUnitXYFacing(whichPlayer, unitid, x, y, GetRandomReal(0,360))
+                call GroupAddUnit(g, u)
         endloop
         return g
     endmethod

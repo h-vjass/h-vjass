@@ -60,6 +60,19 @@ struct hIs
         return flag
     endmethod
 
+    /*
+     * 是否在某玩家真实视野内
+     */
+    public static method detected takes unit whichUnit,player whichPlayer returns boolean
+        local boolean flag = false
+        if(whichUnit == null or whichPlayer == null) then
+            set flag = false
+        elseif(IsUnitDetected(whichUnit, whichPlayer) == true) then
+            set flag = true
+        endif
+        return flag
+    endmethod
+
     /**
      * 是否拥有物品栏
      */
@@ -143,6 +156,13 @@ struct hIs
      */
     public static method ancient takes unit whichUnit returns boolean
         return IsUnitType( whichUnit , UNIT_TYPE_ANCIENT)
+    endmethod
+
+    /*
+     * 是否被硬直
+     */
+    public static method punish takes unit whichUnit returns boolean
+        return hattr.isPunishing(whichUnit)
     endmethod
 
     /*

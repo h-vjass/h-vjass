@@ -9,7 +9,7 @@ globals
 	trigger ATTR_TRIGGER_UNIT_BEHUNT = null
 	trigger ATTR_TRIGGER_UNIT_DEATH = null
 	trigger ATTR_TRIGGER_UNIT_ATTACK_RANGE = null
-	group ATTR_GROUP = CreateGroup()
+	trigger ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = null
 endglobals
 
 struct hAttrUnit
@@ -56,15 +56,15 @@ struct hAttrUnit
 		elseif(bean.move<0)then
 			call hattr.subMove(whichUnit,bean.move,during)
 		endif
-		if(bean.defend>0)then
+		if(bean.defend >0)then
 			call hattr.addDefend (whichUnit,bean.defend ,during)
-		elseif(bean.defend<0)then
+		elseif(bean.defend <0)then
 			call hattr.subDefend (whichUnit,bean.defend ,during)
 		endif
 		if(bean.attackSpeed>0)then
-			call hattr.addAttackSpeed(whichUnit,bean.attackSpeed ,during)
+			call hattr.addAttackSpeed(whichUnit,bean.attackSpeed,during)
 		elseif(bean.attackSpeed<0)then
-			call hattr.subAttackSpeed(whichUnit,bean.attackSpeed ,during)
+			call hattr.subAttackSpeed(whichUnit,bean.attackSpeed,during)
 		endif
 		if(bean.attackPhysical>0)then
 			call hattr.addAttackPhysical(whichUnit,bean.attackPhysical,during)
@@ -80,6 +80,11 @@ struct hAttrUnit
 			call hattr.addAttackRange(whichUnit,bean.attackRange,during)
 		elseif(bean.attackRange<0)then
 			call hattr.subAttackRange(whichUnit,bean.attackRange,during)
+		endif
+		if(bean.sight>0)then
+			call hattr.addSight(whichUnit,bean.sight,during)
+		elseif(bean.sight<0)then
+			call hattr.subSight(whichUnit,bean.sight,during)
 		endif
 		if(bean.str>0)then
 			call hattr.addStr(whichUnit,bean.str,during)
@@ -421,6 +426,16 @@ struct hAttrUnit
 		elseif(bean.attackRangeDuring<0)then
 			call hattrEffect.subAttackRangeDuring(whichUnit,bean.attackRangeDuring,during)
 		endif
+		if(bean.sightVal>0)then
+			call hattrEffect.addSightVal(whichUnit,bean.sightVal,during)
+		elseif(bean.sightVal<0)then
+			call hattrEffect.subSightVal(whichUnit,bean.sightVal,during)
+		endif
+		if(bean.sightDuring>0)then
+			call hattrEffect.addSightDuring(whichUnit,bean.sightDuring,during)
+		elseif(bean.sightDuring<0)then
+			call hattrEffect.subSightDuring(whichUnit,bean.sightDuring,during)
+		endif
 		if(bean.moveVal>0)then
 			call hattrEffect.addMoveVal(whichUnit,bean.moveVal,during)
 		elseif(bean.moveVal<0)then
@@ -601,6 +616,16 @@ struct hAttrUnit
 		elseif(bean.bluntDuring<0)then
 			call hattrEffect.subBluntDuring(whichUnit,bean.bluntDuring,during)
 		endif
+		if(bean.myopiaVal>0)then
+			call hattrEffect.addMyopiaVal(whichUnit,bean.myopiaVal,during)
+		elseif(bean.myopiaVal<0)then
+			call hattrEffect.subMyopiaVal(whichUnit,bean.myopiaVal,during)
+		endif
+		if(bean.myopiaDuring>0)then
+			call hattrEffect.addMyopiaDuring(whichUnit,bean.myopiaDuring,during)
+		elseif(bean.myopiaDuring<0)then
+			call hattrEffect.subMyopiaDuring(whichUnit,bean.myopiaDuring,during)
+		endif
 		if(bean.muggleVal>0)then
 			call hattrEffect.addMuggleVal(whichUnit,bean.muggleVal,during)
 		elseif(bean.muggleVal<0)then
@@ -611,15 +636,15 @@ struct hAttrUnit
 		elseif(bean.muggleDuring<0)then
 			call hattrEffect.subMuggleDuring(whichUnit,bean.muggleDuring,during)
 		endif
-		if(bean.myopiaVal>0)then
-			call hattrEffect.addMyopiaVal(whichUnit,bean.myopiaVal,during)
-		elseif(bean.myopiaVal<0)then
-			call hattrEffect.subMyopiaVal(whichUnit,bean.myopiaVal,during)
+		if(bean.blindVal>0)then
+			call hattrEffect.addBlindVal(whichUnit,bean.blindVal,during)
+		elseif(bean.blindVal<0)then
+			call hattrEffect.subBlindVal(whichUnit,bean.blindVal,during)
 		endif
-		if(bean.myopiaDuring>0)then
-			call hattrEffect.addMyopiaDuring(whichUnit,bean.myopiaDuring,during)
-		elseif(bean.myopiaDuring<0)then
-			call hattrEffect.subMyopiaDuring(whichUnit,bean.myopiaDuring,during)
+		if(bean.blindDuring>0)then
+			call hattrEffect.addBlindDuring(whichUnit,bean.blindDuring,during)
+		elseif(bean.blindDuring<0)then
+			call hattrEffect.subBlindDuring(whichUnit,bean.blindDuring,during)
 		endif
 		if(bean.corrosionVal>0)then
 			call hattrEffect.addCorrosionVal(whichUnit,bean.corrosionVal,during)
@@ -651,15 +676,15 @@ struct hAttrUnit
 		elseif(bean.twineDuring<0)then
 			call hattrEffect.subTwineDuring(whichUnit,bean.twineDuring,during)
 		endif
-		if(bean.blindVal>0)then
-			call hattrEffect.addBlindVal(whichUnit,bean.blindVal,during)
-		elseif(bean.blindVal<0)then
-			call hattrEffect.subBlindVal(whichUnit,bean.blindVal,during)
+		if(bean.drunkVal>0)then
+			call hattrEffect.addDrunkVal(whichUnit,bean.drunkVal,during)
+		elseif(bean.drunkVal<0)then
+			call hattrEffect.subDrunkVal(whichUnit,bean.drunkVal,during)
 		endif
-		if(bean.blindDuring>0)then
-			call hattrEffect.addBlindDuring(whichUnit,bean.blindDuring,during)
-		elseif(bean.blindDuring<0)then
-			call hattrEffect.subBlindDuring(whichUnit,bean.blindDuring,during)
+		if(bean.drunkDuring>0)then
+			call hattrEffect.addDrunkDuring(whichUnit,bean.drunkDuring,during)
+		elseif(bean.drunkDuring<0)then
+			call hattrEffect.subDrunkDuring(whichUnit,bean.drunkDuring,during)
 		endif
 		if(bean.tortuaVal>0)then
 			call hattrEffect.addTortuaVal(whichUnit,bean.tortuaVal,during)
@@ -859,16 +884,9 @@ struct hAttrUnit
 	//设定硬直条高度
 	public static method punishTtgHeight takes real high returns nothing
 		if(hcamera.model=="zoomin")then
-			set PUNISH_TEXTTAG_HEIGHT = high*0.5
+			set PUNISH_TEXTTAG_HEIGHT = high * 0.5
 		else
 			set PUNISH_TEXTTAG_HEIGHT = high
-		endif
-	endmethod
-
-	//把单位赶出属性组
-	private static method groupOut takes unit whichUnit returns nothing
-		if( IsUnitInGroup( whichUnit , ATTR_GROUP ) == true ) then
-			call GroupRemoveUnit( ATTR_GROUP , whichUnit )
 		endif
 	endmethod
 
@@ -894,43 +912,104 @@ struct hAttrUnit
 		local real tempReal = 0
 		local real sourceTime = 10.00
 		local timer tmpt = null
-		if( ATTR_GROUP != null )then
+		if( hgroup.isEmpty(ATTR_GROUP_LIFE_BACK) == false )then
 			set tempGroup = CreateGroup()
-			call GroupAddGroup( ATTR_GROUP , tempGroup )
+			call GroupAddGroup( ATTR_GROUP_LIFE_BACK , tempGroup )
 			loop
-	            exitwhen(IsUnitGroupEmptyBJ(tempGroup) == true)
+	            exitwhen(hgroup.isEmpty(tempGroup) == true)
 	                set tempUnit = FirstOfGroup(tempGroup)
 	                call GroupRemoveUnit( tempGroup , tempUnit )
 	                //
-	                if( IsUnitAliveBJ(tempUnit) )then
-		                call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( hattr.getLifeBack(tempUnit) * period ) ) )
-	            		call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( hattr.getManaBack(tempUnit) * period ) ) )
+					if( IsUnitAliveBJ(tempUnit) )then
+						if(hattr.getLifeBack(tempUnit)!=0)then
+							call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( hattr.getLifeBack(tempUnit) * period ) ) )
+						endif
 	                endif
-	            	//source
-					if( LoadBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("lsc"))==false and GetUnitStateSwap(UNIT_STATE_MAX_LIFE, tempUnit)>0 and hunit.getLifePercent(tempUnit)<hplayer.getLifeSourceRatio(GetOwningPlayer(tempUnit)) )then
-						set tempReal = GetUnitStateSwap(UNIT_STATE_MAX_LIFE, tempUnit)-GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit)
-						if(tempReal<hattr.getLifeSourceCurrent(tempUnit))then
-							call SaveBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("lsc"),true)
-							call hattr.subLifeSourceCurrent(tempUnit,tempReal,0)
-							call hattr.addLifeBack(tempUnit,tempReal/sourceTime,sourceTime)
-							set tmpt = htime.setTimeout(sourceTime,function thistype.lifemanasourceCall)
-							call htime.setUnit(tmpt,1,tempUnit)
-							call htime.setInteger(tmpt,2,1)
-							call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"bce43a",10,1.00,10.00)  ,"scale",0,0.2)
+	        endloop
+	        call GroupClear( tempGroup )
+	        call DestroyGroup( tempGroup )
+	        set tempGroup = null
+		endif
+		if( hgroup.isEmpty(ATTR_GROUP_LIFE_SOURCE) == false )then
+			set tempGroup = CreateGroup()
+			call GroupAddGroup( ATTR_GROUP_LIFE_SOURCE , tempGroup )
+			loop
+	            exitwhen(hgroup.isEmpty(tempGroup) == true)
+	                set tempUnit = FirstOfGroup(tempGroup)
+	                call GroupRemoveUnit( tempGroup , tempUnit )
+	                //
+					if( IsUnitAliveBJ(tempUnit) )then
+						if( LoadBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("lsc"))==false and hunit.getLifePercent(tempUnit)<hplayer.getLifeSourceRatio(GetOwningPlayer(tempUnit)) )then
+							set tempReal = GetUnitStateSwap(UNIT_STATE_MAX_LIFE, tempUnit)-GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit)
+							if(tempReal<hattr.getLifeSourceCurrent(tempUnit))then
+								call SaveBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("lsc"),true)
+								call hattr.subLifeSourceCurrent(tempUnit,tempReal,0)
+								call hattr.addLifeBack(tempUnit,tempReal/sourceTime,sourceTime)
+								set tmpt = htime.setTimeout(sourceTime,function thistype.lifemanasourceCall)
+								call htime.setUnit(tmpt,1,tempUnit)
+								call htime.setInteger(tmpt,2,1)
+								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"bce43a",10,1.00,10.00)  ,"scale",0,0.2)
+							endif
 						endif
-					endif
-					if( LoadBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"))==false and GetUnitStateSwap(UNIT_STATE_MAX_MANA, tempUnit)>0 and hunit.getManaPercent(tempUnit)<hplayer.getManaSourceRatio(GetOwningPlayer(tempUnit)) )then
-						set tempReal = GetUnitStateSwap(UNIT_STATE_MAX_MANA, tempUnit)-GetUnitStateSwap(UNIT_STATE_MANA, tempUnit)
-						if(tempReal<hattr.getManaSourceCurrent(tempUnit))then
-							call SaveBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"),true)
-							call hattr.subManaSourceCurrent(tempUnit,tempReal,0)
-							call hattr.addManaBack(tempUnit,tempReal/sourceTime,sourceTime)
-							set tmpt = htime.setTimeout(sourceTime,function thistype.lifemanasourceCall)
-							call htime.setUnit(tmpt,1,tempUnit)
-							call htime.setInteger(tmpt,2,2)
-							call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"93d3f1",10,1.00,10.00)  ,"scale",0,0.2)
+	                endif
+	        endloop
+	        call GroupClear( tempGroup )
+	        call DestroyGroup( tempGroup )
+	        set tempGroup = null
+		endif
+		if( hgroup.isEmpty(ATTR_GROUP_MANA_BACK) == false )then
+			set tempGroup = CreateGroup()
+			call GroupAddGroup( ATTR_GROUP_MANA_BACK , tempGroup )
+			loop
+	            exitwhen(hgroup.isEmpty(tempGroup) == true)
+	                set tempUnit = FirstOfGroup(tempGroup)
+	                call GroupRemoveUnit( tempGroup , tempUnit )
+	                //
+					if( IsUnitAliveBJ(tempUnit) )then
+						if(hattr.getManaBack(tempUnit)!=0)then
+							call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( hattr.getManaBack(tempUnit) * period ) ) )
 						endif
-					endif
+						//source
+						if( LoadBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"))==false and hunit.getManaPercent(tempUnit)<hplayer.getManaSourceRatio(GetOwningPlayer(tempUnit)) )then
+							set tempReal = GetUnitStateSwap(UNIT_STATE_MAX_MANA, tempUnit)-GetUnitStateSwap(UNIT_STATE_MANA, tempUnit)
+							if(tempReal<hattr.getManaSourceCurrent(tempUnit))then
+								call SaveBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"),true)
+								call hattr.subManaSourceCurrent(tempUnit,tempReal,0)
+								call hattr.addManaBack(tempUnit,tempReal/sourceTime,sourceTime)
+								set tmpt = htime.setTimeout(sourceTime,function thistype.lifemanasourceCall)
+								call htime.setUnit(tmpt,1,tempUnit)
+								call htime.setInteger(tmpt,2,2)
+								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"93d3f1",10,1.00,10.00)  ,"scale",0,0.2)
+							endif
+						endif
+	                endif
+	        endloop
+	        call GroupClear( tempGroup )
+	        call DestroyGroup( tempGroup )
+	        set tempGroup = null
+		endif
+		if( hgroup.isEmpty(ATTR_GROUP_MANA_SOURCE) == false )then
+			set tempGroup = CreateGroup()
+			call GroupAddGroup( ATTR_GROUP_MANA_SOURCE , tempGroup )
+			loop
+	            exitwhen(hgroup.isEmpty(tempGroup) == true)
+	                set tempUnit = FirstOfGroup(tempGroup)
+	                call GroupRemoveUnit( tempGroup , tempUnit )
+	                //
+					if( IsUnitAliveBJ(tempUnit) )then
+						if( LoadBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"))==false and hunit.getManaPercent(tempUnit)<hplayer.getManaSourceRatio(GetOwningPlayer(tempUnit)) )then
+							set tempReal = GetUnitStateSwap(UNIT_STATE_MAX_MANA, tempUnit)-GetUnitStateSwap(UNIT_STATE_MANA, tempUnit)
+							if(tempReal<hattr.getManaSourceCurrent(tempUnit))then
+								call SaveBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"),true)
+								call hattr.subManaSourceCurrent(tempUnit,tempReal,0)
+								call hattr.addManaBack(tempUnit,tempReal/sourceTime,sourceTime)
+								set tmpt = htime.setTimeout(sourceTime,function thistype.lifemanasourceCall)
+								call htime.setUnit(tmpt,1,tempUnit)
+								call htime.setInteger(tmpt,2,2)
+								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"93d3f1",10,1.00,10.00)  ,"scale",0,0.2)
+							endif
+						endif
+	                endif
 	        endloop
 	        call GroupClear( tempGroup )
 	        call DestroyGroup( tempGroup )
@@ -1018,9 +1097,9 @@ struct hAttrUnit
 	    local integer addPunish = 0
 	    local group tempGroup = null
 		local unit tempUnit = null
-		if( ATTR_GROUP != null )then
+		if( hgroup.isEmpty(ATTR_GROUP_PUNISH) == false )then
 			set tempGroup = CreateGroup()
-			call GroupAddGroup( ATTR_GROUP , tempGroup )
+			call GroupAddGroup( ATTR_GROUP_PUNISH , tempGroup )
 			loop
 	            exitwhen(IsUnitGroupEmptyBJ(tempGroup) == true)
 	                set tempUnit = FirstOfGroup(tempGroup)
@@ -1034,21 +1113,37 @@ struct hAttrUnit
 		endif
 	endmethod
 
-	//源恢复器(+300/25s)
+	//源恢复器(L +300/25s | M +200/25s)
 	private static method sourceback takes nothing returns nothing
 	    local integer i
 	    local integer addPunish = 0
 	    local group tempGroup = null
 		local unit tempUnit = null
-		if( ATTR_GROUP != null )then
+		if( hgroup.isEmpty(ATTR_GROUP_LIFE_SOURCE) == false )then
 			set tempGroup = CreateGroup()
-			call GroupAddGroup( ATTR_GROUP , tempGroup )
+			call GroupAddGroup( ATTR_GROUP_LIFE_SOURCE , tempGroup )
 			loop
 	            exitwhen(IsUnitGroupEmptyBJ(tempGroup) == true)
 	                set tempUnit = FirstOfGroup(tempGroup)
 	                call GroupRemoveUnit( tempGroup , tempUnit )
 					if( hattr.getLifeSourceCurrent(tempUnit)<hattr.getLifeSource(tempUnit) )then
 						call hattr.addLifeSourceCurrent( tempUnit , 300 , 0 )
+					endif
+					set tempUnit = null
+	        endloop
+	        call GroupClear( tempGroup )
+	        call DestroyGroup( tempGroup )
+	        set tempGroup = null
+		endif
+		if( hgroup.isEmpty(ATTR_GROUP_MANA_SOURCE) == false )then
+			set tempGroup = CreateGroup()
+			call GroupAddGroup( ATTR_GROUP_MANA_SOURCE , tempGroup )
+			loop
+	            exitwhen(IsUnitGroupEmptyBJ(tempGroup) == true)
+	                set tempUnit = FirstOfGroup(tempGroup)
+	                call GroupRemoveUnit( tempGroup , tempUnit )
+					if( hattr.getManaSourceCurrent(tempUnit)<hattr.getManaSource(tempUnit) )then
+						call hattr.addManaSourceCurrent( tempUnit , 200 , 0 )
 					endif
 					set tempUnit = null
 	        endloop
@@ -1104,10 +1199,15 @@ struct hAttrUnit
 	private static method triggerUnitDeathAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local unit killer = hevt.getLastDamageUnit(u)
-		if( his.hero(u)==false and IsUnitInGroup(u, ATTR_GROUP) ) then
-			call groupOut(u)
+		//自动清理group
+		if(hunit.isAutoClearAttrGroup(u) == true) then
+			call hgroup.out(u,ATTR_GROUP_LIFE_BACK)
+			call hgroup.out(u,ATTR_GROUP_MANA_BACK)
+			call hgroup.out(u,ATTR_GROUP_LIFE_SOURCE)
+			call hgroup.out(u,ATTR_GROUP_MANA_SOURCE)
+			call hgroup.out(u,ATTR_GROUP_PUNISH)
 		endif
-		if( PUNISH_SWITCH == true )then
+		if(PUNISH_SWITCH == true)then
 			call SaveTextTagHandle(hash_attr_unit, GetHandleId(u), 7896 , null)
 		endif
 		//@触发死亡事件
@@ -1179,7 +1279,6 @@ struct hAttrUnit
 		if(hcamera.model=="zoomin")then
 			set distance = distance * 2
 		endif
-		call hconsole.warning("distance===="+R2S(distance))
 		if(hattr.getAttackRange(u) >= distance)then
 			call IssueTargetOrder( u, "attack", target )
 			call htime.delTimer( t )
@@ -1290,6 +1389,14 @@ struct hAttrUnit
 		local destructable targetDestructable = GetOrderTargetDestructable()
 		call thistype.triggerUnitAttackRangeDo(u,targetUnit,targetDestructable,GetIssuedOrderId())
 	endmethod
+	private static method triggerUnitAttackRangeAttack takes nothing returns nothing
+		local unit u = GetAttacker()
+		local unit targetUnit = GetTriggerUnit()
+		local real distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetUnitX(targetUnit),GetUnitY(targetUnit)) - 80
+		if(hattr.getAttackRange(u) < distance)then
+			call thistype.triggerUnitAttackRangeDo(u,targetUnit,null,-1)
+		endif
+	endmethod
 
 	//注册单位
 	private static method triggerInAction takes nothing returns nothing
@@ -1304,36 +1411,30 @@ struct hAttrUnit
 		//注册事件
 		set isBind = LoadBoolean( hash_attr_unit , uhid , 1 )
 		if(isBind != true)then
-			call hconsole.log(GetUnitName(u)+"进入了地图")
+			call hconsole.log(GetUnitName(u)+"[进图]")
 			call SaveBoolean( hash_attr_unit , uhid , 1 , true )
-			call GroupAddUnit(ATTR_GROUP, u)
-			//给予默认攻击距离,先判断全局有没有设定过这一个单位类型的攻击距离，大于 1 则使用，否则使用默认的近战100，远程600
-			if(hattr.isInit(u) == false)then
-				if(hunit.getAttackRange(utid) > 1)then
-					call hattr.setAttackRange(u,hunit.getAttackRange(utid),0)
-				else
-					if(his.melee(u))then // 近战
-						call hattr.setAttackRange(u,100,0)
-					elseif(his.ranged(u))then // 远程
-						call hattr.setAttackRange(u,600,0)
-					endif
-				endif
-			endif
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_BEHUNT , u , EVENT_UNIT_DAMAGED )
-			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
-			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE, u, EVENT_UNIT_ISSUED_TARGET_ORDER )
-	        call punishTtg(u)
-			//拥有物品栏的单位绑定物品处理
-			if( his.hasSlot(u) )then
-				call hitem.initUnit(u)
+			if(GetUnitAbilityLevel(u,'Aloc')>0)then
+				//蝗虫不做某些处理
+				call hconsole.log(GetUnitName(u)+"[蝗虫]")
+			else
+				call hunit.setAutoClearAttrGroup(u,true)
+				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
+				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE, u, EVENT_UNIT_ISSUED_TARGET_ORDER )
+				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, u, EVENT_UNIT_ATTACKED )
+				call punishTtg(u)
+				//拥有物品栏的单位绑定物品处理
+				if( his.hasSlot(u) )then
+					call hitem.initUnit(u)
+				endif
+				//触发注册事件(全局)
+				set hevtBean = hEvtBean.create()
+				set hevtBean.triggerKey = "register"
+				set hevtBean.triggerHandle = hevt.getDefaultHandle()
+				set hevtBean.triggerUnit = u
+				call hevt.triggerEvent(hevtBean)
+				call hevtBean.destroy()
 			endif
-			//触发注册事件(全局)
-			set hevtBean = hEvtBean.create()
-			set hevtBean.triggerKey = "register"
-			set hevtBean.triggerHandle = hevt.getDefaultHandle()
-			set hevtBean.triggerUnit = u
-			call hevt.triggerEvent(hevtBean)
-			call hevtBean.destroy()
 		endif
         set u = null
 	endmethod
@@ -1345,15 +1446,17 @@ struct hAttrUnit
 		set ATTR_TRIGGER_UNIT_BEHUNT = CreateTrigger()
 		set ATTR_TRIGGER_UNIT_DEATH = CreateTrigger()
 		set ATTR_TRIGGER_UNIT_ATTACK_RANGE = CreateTrigger()
+		set ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = CreateTrigger()
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_BEHUNT,function thistype.triggerUnitbeHuntAction)
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_DEATH, function thistype.triggerUnitDeathAction)
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE, function thistype.triggerUnitAttackRangeAction)
+		call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, function thistype.triggerUnitAttackRangeAttack)
 
 		//单位进入区域注册
 		call TriggerRegisterEnterRectSimple( triggerIn , GetPlayableMapRect() )
 		call TriggerAddAction( triggerIn , function thistype.triggerInAction)
 
-		call htime.setInterval( 0.45 , function thistype.lifemanaback )
+		call htime.setInterval( 0.50 , function thistype.lifemanaback )
 		call htime.setInterval( 5.00 , function thistype.punishback )
 		call htime.setInterval(25.00 , function thistype.sourceback )
 

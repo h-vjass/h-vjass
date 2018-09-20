@@ -1,17 +1,18 @@
 //判定过滤器
 struct hFilter
 
-	private static unit thisUnit = null
-	private static player array emptyArray
-	private static player array thisPlayer
-	private static player array thisNotPlayer
-	private static integer thisPlayerQty = 0
-	private static integer thisNotPlayerQty = 0
-	private static integer ownItemId = 0
-	private static unit isWhichUnit = null
+	private static player array is_owner_player
+	private static integer is_owner_player_qty = 0
+	private static player array is_not_owner_player
+	private static integer is_not_owner_player_qty = 0
 
 	private static integer is_enemy = 0
+	private static unit is_enemy_unit = null
 	private static integer is_ally = 0
+	private static unit is_ally_unit = null
+	private static integer is_detected = 0
+	private static player is_detected_player = null
+	private static integer is_has_slot = 0
 	private static integer is_death = 0
 	private static integer is_alive = 0
 	private static integer is_invincible = 0
@@ -28,17 +29,20 @@ struct hFilter
 	private static integer is_water = 0
 	private static integer is_floor = 0
 	private static integer is_ownItem = 0
+	private static integer is_ownItem_id = 0
 
 	static method create takes nothing returns hFilter
 		local hFilter s = 0
 		set s = hFilter.allocate()
-		set s.thisUnit = null
-		set s.thisPlayerQty = 0
-		set s.thisNotPlayerQty = 0
-		set s.ownItemId = 0
-		set s.isWhichUnit = null
+		set s.is_owner_player_qty = 0
+		set s.is_not_owner_player_qty = 0
 		set s.is_enemy = 0
+		set s.is_enemy_unit = null
 		set s.is_ally = 0
+		set s.is_ally_unit = null
+		set s.is_detected = 0
+		set s.is_detected_player = null
+		set s.is_has_slot = 0
 		set s.is_death = 0
 		set s.is_alive = 0
 		set s.is_invincible = 0
@@ -55,17 +59,18 @@ struct hFilter
 		set s.is_water = 0
 		set s.is_floor = 0
 		set s.is_ownItem = 0
+		set s.is_ownItem_id = 0
 
 		return s
 	endmethod
 	method destroy takes nothing returns nothing
-		set thisUnit = null
-		set thisPlayerQty = 0
-		set thisNotPlayerQty = 0
-		set ownItemId = 0
-		set isWhichUnit = null
+		set is_owner_player_qty = 0
+		set is_not_owner_player_qty = 0
 		set is_enemy = 0
 		set is_ally = 0
+		set is_detected = 0
+		set is_detected_player = null
+		set is_has_slot = 0
 		set is_death = 0
 		set is_alive = 0
 		set is_invincible = 0
@@ -82,40 +87,41 @@ struct hFilter
 		set is_water = 0
 		set is_floor = 0
 		set is_ownItem = 0
+		set is_ownItem_id = 0
 	endmethod
 
-	//
-	public method setUnit takes unit u returns nothing
-		set thisUnit = u
-	endmethod
-	//
-	public method isPlayer takes player p returns nothing
-		set thisPlayerQty = thisPlayerQty+1
-		set thisPlayer[thisPlayerQty] = p
-	endmethod
-	//
-	public method isNotPlayer takes player p returns nothing
-		set thisNotPlayerQty = thisNotPlayerQty+1
-		set thisNotPlayer[thisNotPlayerQty] = p
-	endmethod
-	//
-	public method setOwnItemId takes integer itemId returns nothing
-        set ownItemId = itemId
-	endmethod
-
-	//-COPY
-	public method isEnemy takes boolean status returns nothing
+	public method isEnemy takes boolean status,unit whichunit returns nothing
 	    if(status==true)then
 	        set is_enemy = 1
+			set is_enemy_unit = whichunit
 	    else
 	        set is_enemy =-1
+			set is_enemy_unit = whichunit
 	    endif
 	endmethod
-	public method isAlly takes boolean status returns nothing
+	public method isAlly takes boolean status,unit whichunit returns nothing
 	    if(status==true)then
 	        set is_ally = 1
+			set is_ally_unit = whichunit
 	    else
 	        set is_ally =-1
+			set is_ally_unit = whichunit
+	    endif
+	endmethod
+	public method isDetected takes boolean status,player whichplayer returns nothing
+	    if(status==true)then
+	        set is_detected = 1
+			set is_detected_player = whichplayer
+	    else
+	        set is_detected =-1
+			set is_detected_player = whichplayer
+	    endif
+	endmethod
+	public method isHasSlot takes boolean status returns nothing
+	    if(status==true)then
+	        set is_has_slot = 1
+	    else
+	        set is_has_slot =-1
 	    endif
 	endmethod
 	public method isDeath takes boolean status returns nothing
@@ -223,11 +229,22 @@ struct hFilter
 	        set is_floor =-1
 	    endif
 	endmethod
-	public method isOwnItem takes boolean status returns nothing
+	public method isOwnItem takes boolean status,integer itemid returns nothing
 	    if(status==true)then
 	        set is_ownItem = 1
+	        set is_ownItem_id = itemid
 	    else
 	        set is_ownItem =-1
+			set is_ownItem_id = itemid
+	    endif
+	endmethod
+	public method isOwnerPlayer takes boolean status,player p returns nothing
+		if(status==true)then
+	        set is_owner_player_qty = is_owner_player_qty+1
+			set is_owner_player[is_owner_player_qty] = p
+	    else
+	        set is_not_owner_player_qty = is_not_owner_player_qty+1
+			set is_not_owner_player[is_not_owner_player_qty] = p
 	    endif
 	endmethod
 
@@ -235,42 +252,48 @@ struct hFilter
 		local unit filterUnit = GetFilterUnit()
 		local boolean status = true
 		local integer i = 0
-		if(is_ownItem == 1 and ownItemId!=0 and his.ownItem(filterUnit,ownItemId)==false)then
-			set status = false
-		endif
-		if(is_ownItem == -1 and ownItemId!=0 and his.ownItem(filterUnit,ownItemId)==true)then
-			set status = false
-		endif
-		if(thisPlayerQty > 0 and status==true )then
-			set i = thisPlayerQty
+		if(is_owner_player_qty > 0 and status==true )then
+			set i = is_owner_player_qty
 			loop
 				exitwhen i<=0 or status==false
-					if(GetOwningPlayer(filterUnit)!=thisPlayer[i])then
+					if(GetOwningPlayer(filterUnit)!=is_owner_player[i])then
 						set status = false
 					endif
 				set i = i-1
 			endloop
 		endif
-		if(thisNotPlayerQty > 0 and status==true )then
-			set i = thisNotPlayerQty
+		if(is_not_owner_player_qty > 0 and status==true )then
+			set i = is_not_owner_player_qty
 			loop
 				exitwhen i<=0 or status==false
-					if(GetOwningPlayer(filterUnit)==thisNotPlayer[i])then
+					if(GetOwningPlayer(filterUnit)==is_not_owner_player[i])then
 						set status = false
 					endif
 				set i = i-1
 			endloop
 		endif
-		if(is_enemy == 1 and his.enemy(filterUnit,thisUnit)==false)then
+		if(is_enemy == 1 and his.enemy(filterUnit,is_enemy_unit)==false)then
 			set status = false
 		endif
-		if(is_enemy == -1 and his.enemy(filterUnit,thisUnit)==true)then
+		if(is_enemy == -1 and his.enemy(filterUnit,is_enemy_unit)==true)then
 			set status = false
 		endif
-		if(is_ally == 1 and his.ally(filterUnit,thisUnit)==false)then
+		if(is_ally == 1 and his.ally(filterUnit,is_ally_unit)==false)then
 			set status = false
 		endif
-		if(is_ally == -1 and his.ally(filterUnit,thisUnit)==true)then
+		if(is_ally == -1 and his.ally(filterUnit,is_ally_unit)==true)then
+			set status = false
+		endif
+		if(is_detected_player != null and is_detected == 1 and his.detected(filterUnit,is_detected_player)==false)then
+			set status = false
+		endif
+		if(is_detected_player != null and is_detected == -1 and his.detected(filterUnit,is_detected_player)==true)then
+			set status = false
+		endif
+		if(is_has_slot == 1 and his.hasSlot(filterUnit)==false)then
+			set status = false
+		endif
+		if(is_has_slot == -1 and his.hasSlot(filterUnit)==true)then
 			set status = false
 		endif
 		if(is_death == 1 and his.death(filterUnit)==false)then
@@ -355,6 +378,12 @@ struct hFilter
 			set status = false
 		endif
 		if(is_floor == -1 and his.floor(filterUnit)==true)then
+			set status = false
+		endif
+		if(is_ownItem == 1 and is_ownItem_id!=0 and his.ownItem(filterUnit,is_ownItem_id)==false)then
+			set status = false
+		endif
+		if(is_ownItem == -1 and is_ownItem_id!=0 and his.ownItem(filterUnit,is_ownItem_id)==true)then
 			set status = false
 		endif
 		return status

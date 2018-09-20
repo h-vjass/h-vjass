@@ -92,9 +92,8 @@ struct hAward
         local integer cutLumber = 0
         local hFilter filter = 0
         set filter = hFilter.create()
-        call filter.setUnit(whichUnit)
         call filter.isHero(true)
-        call filter.isAlly(true)
+        call filter.isAlly(true,whichUnit)
         call filter.isAlive(true)
         call filter.isBuilding(false)
         set g = hgroup.createByUnit(whichUnit,hAwardRange,function hFilter.get)

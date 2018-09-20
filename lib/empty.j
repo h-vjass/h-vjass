@@ -83,6 +83,14 @@ struct hEmpty
     endmethod
 
     /**
+     * 创建1敌军单位XY
+     * @return 最后创建单位
+     */
+    public static method createUnitXYFacing takes integer unitid, real x,real y, real facing returns unit
+        return hunit.createUnitXYFacing(getEmptyPlayer(), unitid, x, y , facing)
+    endmethod
+
+    /**
      * 创建1敌军单位面向角度
      * @return 最后创建单位
      */
@@ -113,6 +121,14 @@ struct hEmpty
      */
     public static method createUnits takes integer unitid, integer qty, location loc returns group
         return hunit.createUnits(getEmptyPlayer(), unitid, qty, loc)
+    endmethod
+    
+    /**
+     * 创建单位组
+     * @return 最后创建单位组
+     */
+    public static method createUnitsXYFacing takes integer unitid, integer qty, real x,real y returns group
+        return hunit.createUnitsXYFacing(getEmptyPlayer(), unitid, qty, x, y)
     endmethod
 
     /**

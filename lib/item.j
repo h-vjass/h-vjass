@@ -29,6 +29,7 @@ globals
 	trigger ITEM_TRIGGER_PICKUP_FALSE = null
 	trigger ITEM_TRIGGER_DROP = null
 	trigger ITEM_TRIGGER_PAWN = null
+	trigger ITEM_TRIGGER_SELL = null
 	trigger ITEM_TRIGGER_SEPARATE = null
 	trigger ITEM_TRIGGER_USE = null
 	string HITEM_TYPE_FOREVER = "forever"
@@ -52,11 +53,12 @@ struct hItemBean
 	public static real mana = 0.0
 	public static real move = 0.0
 	public static real defend  = 0.0
-	public static real attackSpeed  = 0.0
+	public static real attackSpeed = 0.0
 	public static string attackHuntType = ""
 	public static real attackPhysical = 0.0
 	public static real attackMagic = 0.0
 	public static real attackRange = 0.0
+	public static real sight = 0.0
 	public static real str = 0.0
 	public static real agi = 0.0
 	public static real int = 0.0
@@ -128,6 +130,8 @@ struct hItemBean
 	public static real attackMagicDuring = 0.0
 	public static real attackRangeVal = 0.0
 	public static real attackRangeDuring = 0.0
+	public static real sightVal = 0.0
+	public static real sightDuring = 0.0
 	public static real moveVal = 0.0
 	public static real moveDuring = 0.0
 	public static real aimVal = 0.0
@@ -168,14 +172,16 @@ struct hItemBean
 	public static real muggleDuring = 0.0
 	public static real myopiaVal = 0.0
 	public static real myopiaDuring = 0.0
+	public static real blindVal = 0.0
+	public static real blindDuring = 0.0
 	public static real corrosionVal = 0.0
 	public static real corrosionDuring = 0.0
 	public static real chaosVal = 0.0
 	public static real chaosDuring = 0.0
 	public static real twineVal = 0.0
 	public static real twineDuring = 0.0
-	public static real blindVal = 0.0
-	public static real blindDuring = 0.0
+	public static real drunkVal = 0.0
+	public static real drunkDuring = 0.0
 	public static real tortuaVal = 0.0
 	public static real tortuaDuring = 0.0
 	public static real weakVal = 0.0
@@ -229,11 +235,12 @@ struct hItemBean
 		set x.mana = 0
 		set x.move = 0
 		set x.defend  = 0
-		set x.attackSpeed  = 0
+		set x.attackSpeed = 0
 		set x.attackHuntType = ""
 		set x.attackPhysical = 0
 		set x.attackMagic = 0
 		set x.attackRange = 0
+		set x.sight = 0
 		set x.str = 0
 		set x.agi = 0
 		set x.int = 0
@@ -303,6 +310,10 @@ struct hItemBean
 		set x.attackPhysicalDuring = 0.0
 		set x.attackMagicVal = 0.0
 		set x.attackMagicDuring = 0.0
+		set x.attackRangeVal = 0.0
+		set x.attackRangeDuring = 0.0
+		set x.sightVal = 0.0
+		set x.sightDuring = 0.0
 		set x.moveVal = 0.0
 		set x.moveDuring = 0.0
 		set x.aimVal = 0.0
@@ -343,14 +354,16 @@ struct hItemBean
 		set x.muggleDuring = 0.0
 		set x.myopiaVal = 0.0
 		set x.myopiaDuring = 0.0
+		set x.blindVal = 0.0
+		set x.blindDuring = 0.0
 		set x.corrosionVal = 0.0
 		set x.corrosionDuring = 0.0
 		set x.chaosVal = 0.0
 		set x.chaosDuring = 0.0
 		set x.twineVal = 0.0
 		set x.twineDuring = 0.0
-		set x.blindVal = 0.0
-		set x.blindDuring = 0.0
+		set x.drunkVal = 0.0
+		set x.drunkDuring = 0.0
 		set x.tortuaVal = 0.0
 		set x.tortuaDuring = 0.0
 		set x.weakVal = 0.0
@@ -404,11 +417,12 @@ struct hItemBean
 		set mana = 0
 		set move = 0
 		set defend  = 0
-		set attackSpeed  = 0
+		set attackSpeed = 0
 		set attackHuntType = ""
 		set attackPhysical = 0
 		set attackMagic = 0
 		set attackRange = 0
+		set sight = 0
 		set str = 0
 		set agi = 0
 		set int = 0
@@ -480,6 +494,8 @@ struct hItemBean
 		set attackMagicDuring = 0.0
 		set attackRangeVal = 0.0
 		set attackRangeDuring = 0.0
+		set sightVal = 0.0
+		set sightDuring = 0.0
 		set moveVal = 0.0
 		set moveDuring = 0.0
 		set aimVal = 0.0
@@ -520,14 +536,16 @@ struct hItemBean
 		set muggleDuring = 0.0
 		set myopiaVal = 0.0
 		set myopiaDuring = 0.0
+		set blindVal = 0.0
+		set blindDuring = 0.0
 		set corrosionVal = 0.0
 		set corrosionDuring = 0.0
 		set chaosVal = 0.0
 		set chaosDuring = 0.0
 		set twineVal = 0.0
 		set twineDuring = 0.0
-		set blindVal = 0.0
-		set blindDuring = 0.0
+		set drunkVal = 0.0
+		set drunkDuring = 0.0
 		set tortuaVal = 0.0
 		set tortuaDuring = 0.0
 		set weakVal = 0.0
@@ -594,65 +612,66 @@ struct hItem
 	private static integer hk_attackPhysical = 1006
 	private static integer hk_attackMagic = 1007
 	private static integer hk_attackRange = 1008
-	private static integer hk_str = 1009
-	private static integer hk_agi = 1010
-	private static integer hk_int = 1011
-	private static integer hk_strWhite = 1012
-	private static integer hk_agiWhite = 1013
-	private static integer hk_intWhite = 1014
-	private static integer hk_lifeBack = 1015
-	private static integer hk_lifeSource = 1016
-	private static integer hk_lifeSourceCurrent = 1017
-	private static integer hk_manaBack = 1018
-	private static integer hk_manaSource = 1019
-	private static integer hk_manaSourceCurrent = 1020
-	private static integer hk_resistance = 1021
-	private static integer hk_toughness = 1022
-	private static integer hk_avoid = 1023
-	private static integer hk_aim = 1024
-	private static integer hk_knocking = 1025
-	private static integer hk_violence = 1026
-	private static integer hk_mortalOppose = 1027
-	private static integer hk_punish = 1028
-	private static integer hk_punishCurrent = 1029
-	private static integer hk_punishOppose = 1030
-	private static integer hk_meditative = 1031
-	private static integer hk_help = 1032
-	private static integer hk_hemophagia = 1033
-	private static integer hk_hemophagiaSkill = 1034
-	private static integer hk_split = 1035
-	private static integer hk_splitRange = 1036
-	private static integer hk_goldRatio = 1037
-	private static integer hk_lumberRatio = 1038
-	private static integer hk_expRatio = 1039
-	private static integer hk_swimOppose = 1040
-	private static integer hk_luck = 1041
-	private static integer hk_invincible = 1042
-	private static integer hk_weight = 1043
-	private static integer hk_weightCurrent = 1044
-	private static integer hk_huntAmplitude = 1045
-	private static integer hk_huntRebound = 1046
-	private static integer hk_cure = 1047
-	private static integer hk_fire = 1048
-	private static integer hk_soil = 1049
-	private static integer hk_water = 1050
-	private static integer hk_ice = 1051
-	private static integer hk_wind = 1052
-	private static integer hk_light = 1053
-	private static integer hk_dark = 1054
-	private static integer hk_wood = 1055
-	private static integer hk_thunder = 1056
-	private static integer hk_poison = 1057
-	private static integer hk_fireOppose = 1058
-	private static integer hk_soilOppose = 1059
-	private static integer hk_waterOppose = 1060
-	private static integer hk_iceOppose = 1061
-	private static integer hk_windOppose = 1062
-	private static integer hk_lightOppose = 1063
-	private static integer hk_darkOppose = 1064
-	private static integer hk_woodOppose = 1065
-	private static integer hk_thunderOppose = 1066
-	private static integer hk_poisonOppose = 1067
+	private static integer hk_sight = 1009
+	private static integer hk_str = 1010
+	private static integer hk_agi = 1011
+	private static integer hk_int = 1012
+	private static integer hk_strWhite = 1013
+	private static integer hk_agiWhite = 1014
+	private static integer hk_intWhite = 1015
+	private static integer hk_lifeBack = 1016
+	private static integer hk_lifeSource = 1017
+	private static integer hk_lifeSourceCurrent = 1018
+	private static integer hk_manaBack = 1019
+	private static integer hk_manaSource = 1020
+	private static integer hk_manaSourceCurrent = 1021
+	private static integer hk_resistance = 1022
+	private static integer hk_toughness = 1023
+	private static integer hk_avoid = 1024
+	private static integer hk_aim = 1025
+	private static integer hk_knocking = 1026
+	private static integer hk_violence = 1027
+	private static integer hk_mortalOppose = 1028
+	private static integer hk_punish = 1029
+	private static integer hk_punishCurrent = 1030
+	private static integer hk_punishOppose = 1031
+	private static integer hk_meditative = 1032
+	private static integer hk_help = 1033
+	private static integer hk_hemophagia = 1034
+	private static integer hk_hemophagiaSkill = 1035
+	private static integer hk_split = 1036
+	private static integer hk_splitRange = 1037
+	private static integer hk_goldRatio = 1038
+	private static integer hk_lumberRatio = 1039
+	private static integer hk_expRatio = 1040
+	private static integer hk_swimOppose = 1041
+	private static integer hk_luck = 1042
+	private static integer hk_invincible = 1043
+	private static integer hk_weight = 1044
+	private static integer hk_weightCurrent = 1045
+	private static integer hk_huntAmplitude = 1046
+	private static integer hk_huntRebound = 1047
+	private static integer hk_cure = 1048
+	private static integer hk_fire = 1049
+	private static integer hk_soil = 1050
+	private static integer hk_water = 1051
+	private static integer hk_ice = 1052
+	private static integer hk_wind = 1053
+	private static integer hk_light = 1054
+	private static integer hk_dark = 1055
+	private static integer hk_wood = 1056
+	private static integer hk_thunder = 1057
+	private static integer hk_poison = 1058
+	private static integer hk_fireOppose = 1059
+	private static integer hk_soilOppose = 1060
+	private static integer hk_waterOppose = 1061
+	private static integer hk_iceOppose = 1062
+	private static integer hk_windOppose = 1063
+	private static integer hk_lightOppose = 1064
+	private static integer hk_darkOppose = 1065
+	private static integer hk_woodOppose = 1066
+	private static integer hk_thunderOppose = 1067
+	private static integer hk_poisonOppose = 1068
 	private static integer hk_lifeBackVal = 10000
 	private static integer hk_lifeBackDuring = 10001
 	private static integer hk_manaBackVal = 10100
@@ -663,92 +682,98 @@ struct hItem
 	private static integer hk_attackPhysicalDuring = 10301
 	private static integer hk_attackMagicVal = 10400
 	private static integer hk_attackMagicDuring = 10401
-	private static integer hk_moveVal = 10500
-	private static integer hk_moveDuring = 10501
-	private static integer hk_aimVal = 10600
-	private static integer hk_aimDuring = 10601
-	private static integer hk_strVal = 10700
-	private static integer hk_strDuring = 10701
-	private static integer hk_agiVal = 10800
-	private static integer hk_agiDuring = 10801
-	private static integer hk_intVal = 10900
-	private static integer hk_intDuring = 10901
-	private static integer hk_knockingVal = 11000
-	private static integer hk_knockingDuring = 11001
-	private static integer hk_violenceVal = 11100
-	private static integer hk_violenceDuring = 11101
-	private static integer hk_hemophagiaVal = 11200
-	private static integer hk_hemophagiaDuring = 11201
-	private static integer hk_hemophagiaSkillVal = 11300
-	private static integer hk_hemophagiaSkillDuring = 11301
-	private static integer hk_splitVal = 11400
-	private static integer hk_splitDuring = 11401
-	private static integer hk_luckVal = 11500
-	private static integer hk_luckDuring = 11501
-	private static integer hk_huntAmplitudeVal = 11600
-	private static integer hk_huntAmplitudeDuring = 11601
-	private static integer hk_poisonVal = 11700
-	private static integer hk_poisonDuring = 11701
-	private static integer hk_fireVal = 11800
-	private static integer hk_fireDuring = 11801
-	private static integer hk_dryVal = 11900
-	private static integer hk_dryDuring = 11901
-	private static integer hk_freezeVal = 12000
-	private static integer hk_freezeDuring = 12001
-	private static integer hk_coldVal = 12100
-	private static integer hk_coldDuring = 12101
-	private static integer hk_bluntVal = 12200
-	private static integer hk_bluntDuring = 12201
-	private static integer hk_muggleVal = 12300
-	private static integer hk_muggleDuring = 12301
-	private static integer hk_myopiaVal = 12400
-	private static integer hk_myopiaDuring = 12401
-	private static integer hk_corrosionVal = 12500
-	private static integer hk_corrosionDuring = 12501
-	private static integer hk_chaosVal = 12600
-	private static integer hk_chaosDuring = 12601
-	private static integer hk_twineVal = 12700
-	private static integer hk_twineDuring = 12701
-	private static integer hk_blindVal = 12800
-	private static integer hk_blindDuring = 12801
-	private static integer hk_tortuaVal = 12900
-	private static integer hk_tortuaDuring = 12901
-	private static integer hk_weakVal = 13000
-	private static integer hk_weakDuring = 13001
-	private static integer hk_astrictVal = 13100
-	private static integer hk_astrictDuring = 13101
-	private static integer hk_foolishVal = 13200
-	private static integer hk_foolishDuring = 13201
-	private static integer hk_dullVal = 13300
-	private static integer hk_dullDuring = 13301
-	private static integer hk_dirtVal = 13400
-	private static integer hk_dirtDuring = 13401
-	private static integer hk_swimOdds = 13500
-	private static integer hk_swimDuring = 13501
-	private static integer hk_heavyOdds = 13600
-	private static integer hk_heavyVal = 13601
-	private static integer hk_breakOdds = 13700
-	private static integer hk_breakDuring = 13701
-	private static integer hk_unluckVal = 13800
-	private static integer hk_unluckDuring = 13801
-	private static integer hk_silentOdds = 13900
-	private static integer hk_silentDuring = 13901
-	private static integer hk_unarmOdds = 14000
-	private static integer hk_unarmDuring = 14001
-	private static integer hk_fetterOdds = 14100
-	private static integer hk_fetterDuring = 14101
-	private static integer hk_bombVal = 14200
-	private static integer hk_bombRange = 14201
-	private static integer hk_bombModel = 14202
-	private static integer hk_lightningChainVal = 14300
-	private static integer hk_lightningChainOdds = 14301
-	private static integer hk_lightningChainQty = 14302
-	private static integer hk_lightningChainReduce = 14303
-	private static integer hk_lightningChainModel = 14304
-	private static integer hk_crackFlyVal = 14400
-	private static integer hk_crackFlyOdds = 14401
-	private static integer hk_crackFlyDistance = 14402
-	private static integer hk_crackFlyHigh = 14403
+	private static integer hk_attackRangeVal = 10500
+	private static integer hk_attackRangeDuring = 10501
+	private static integer hk_sightVal = 10600
+	private static integer hk_sightDuring = 10601
+	private static integer hk_moveVal = 10700
+	private static integer hk_moveDuring = 10701
+	private static integer hk_aimVal = 10800
+	private static integer hk_aimDuring = 10801
+	private static integer hk_strVal = 10900
+	private static integer hk_strDuring = 10901
+	private static integer hk_agiVal = 11000
+	private static integer hk_agiDuring = 11001
+	private static integer hk_intVal = 11100
+	private static integer hk_intDuring = 11101
+	private static integer hk_knockingVal = 11200
+	private static integer hk_knockingDuring = 11201
+	private static integer hk_violenceVal = 11300
+	private static integer hk_violenceDuring = 11301
+	private static integer hk_hemophagiaVal = 11400
+	private static integer hk_hemophagiaDuring = 11401
+	private static integer hk_hemophagiaSkillVal = 11500
+	private static integer hk_hemophagiaSkillDuring = 11501
+	private static integer hk_splitVal = 11600
+	private static integer hk_splitDuring = 11601
+	private static integer hk_luckVal = 11700
+	private static integer hk_luckDuring = 11701
+	private static integer hk_huntAmplitudeVal = 11800
+	private static integer hk_huntAmplitudeDuring = 11801
+	private static integer hk_poisonVal = 11900
+	private static integer hk_poisonDuring = 11901
+	private static integer hk_fireVal = 12000
+	private static integer hk_fireDuring = 12001
+	private static integer hk_dryVal = 12100
+	private static integer hk_dryDuring = 12101
+	private static integer hk_freezeVal = 12200
+	private static integer hk_freezeDuring = 12201
+	private static integer hk_coldVal = 12300
+	private static integer hk_coldDuring = 12301
+	private static integer hk_bluntVal = 12400
+	private static integer hk_bluntDuring = 12401
+	private static integer hk_muggleVal = 12500
+	private static integer hk_muggleDuring = 12501
+	private static integer hk_myopiaVal = 12600
+	private static integer hk_myopiaDuring = 12601
+	private static integer hk_blindVal = 12700
+	private static integer hk_blindDuring = 12701
+	private static integer hk_corrosionVal = 12800
+	private static integer hk_corrosionDuring = 12801
+	private static integer hk_chaosVal = 12900
+	private static integer hk_chaosDuring = 12901
+	private static integer hk_twineVal = 13000
+	private static integer hk_twineDuring = 13001
+	private static integer hk_drunkVal = 13100
+	private static integer hk_drunkDuring = 13101
+	private static integer hk_tortuaVal = 13200
+	private static integer hk_tortuaDuring = 13201
+	private static integer hk_weakVal = 13300
+	private static integer hk_weakDuring = 13301
+	private static integer hk_astrictVal = 13400
+	private static integer hk_astrictDuring = 13401
+	private static integer hk_foolishVal = 13500
+	private static integer hk_foolishDuring = 13501
+	private static integer hk_dullVal = 13600
+	private static integer hk_dullDuring = 13601
+	private static integer hk_dirtVal = 13700
+	private static integer hk_dirtDuring = 13701
+	private static integer hk_swimOdds = 13800
+	private static integer hk_swimDuring = 13801
+	private static integer hk_heavyOdds = 13900
+	private static integer hk_heavyVal = 13901
+	private static integer hk_breakOdds = 14000
+	private static integer hk_breakDuring = 14001
+	private static integer hk_unluckVal = 14100
+	private static integer hk_unluckDuring = 14101
+	private static integer hk_silentOdds = 14200
+	private static integer hk_silentDuring = 14201
+	private static integer hk_unarmOdds = 14300
+	private static integer hk_unarmDuring = 14301
+	private static integer hk_fetterOdds = 14400
+	private static integer hk_fetterDuring = 14401
+	private static integer hk_bombVal = 14500
+	private static integer hk_bombRange = 14501
+	private static integer hk_bombModel = 14502
+	private static integer hk_lightningChainVal = 14600
+	private static integer hk_lightningChainOdds = 14601
+	private static integer hk_lightningChainQty = 14602
+	private static integer hk_lightningChainReduce = 14603
+	private static integer hk_lightningChainModel = 14604
+	private static integer hk_crackFlyVal = 14700
+	private static integer hk_crackFlyOdds = 14701
+	private static integer hk_crackFlyDistance = 14702
+	private static integer hk_crackFlyHigh = 14703
 
 	/**
      * 删除物品回调
@@ -874,6 +899,7 @@ struct hItem
 			set tg = LoadTriggerHandle(hash_item,GetUnitTypeId(it),hk_item_onmoment_trigger)
 			if(tg!=null)then
 				call hevt.setTriggerUnit(tg,triggerUnit)
+				call hevt.setId(tg,GetUnitTypeId(it))
 				call hevt.setValue(tg,charges)
 				call TriggerExecute(tg)
 			endif
@@ -932,6 +958,7 @@ struct hItem
 			call SaveReal(hash_item, bean.item_id, hk_attackPhysical, bean.attackPhysical)
 			call SaveReal(hash_item, bean.item_id, hk_attackMagic, bean.attackMagic)
 			call SaveReal(hash_item, bean.item_id, hk_attackRange, bean.attackRange)
+			call SaveReal(hash_item, bean.item_id, hk_sight, bean.sight)
 			call SaveReal(hash_item, bean.item_id, hk_str, bean.str)
 			call SaveReal(hash_item, bean.item_id, hk_agi, bean.agi)
 			call SaveReal(hash_item, bean.item_id, hk_int, bean.int)
@@ -998,6 +1025,10 @@ struct hItem
 			call SaveReal(hash_item, bean.item_id, hk_attackPhysicalDuring, bean.attackPhysicalDuring)
 			call SaveReal(hash_item, bean.item_id, hk_attackMagicVal, bean.attackMagicVal)
 			call SaveReal(hash_item, bean.item_id, hk_attackMagicDuring, bean.attackMagicDuring)
+			call SaveReal(hash_item, bean.item_id, hk_attackRangeVal, bean.attackRangeVal)
+			call SaveReal(hash_item, bean.item_id, hk_attackRangeDuring, bean.attackRangeDuring)
+			call SaveReal(hash_item, bean.item_id, hk_sightVal, bean.sightVal)
+			call SaveReal(hash_item, bean.item_id, hk_sightDuring, bean.sightDuring)
 			call SaveReal(hash_item, bean.item_id, hk_moveVal, bean.moveVal)
 			call SaveReal(hash_item, bean.item_id, hk_moveDuring, bean.moveDuring)
 			call SaveReal(hash_item, bean.item_id, hk_aimVal, bean.aimVal)
@@ -1038,14 +1069,16 @@ struct hItem
 			call SaveReal(hash_item, bean.item_id, hk_muggleDuring, bean.muggleDuring)
 			call SaveReal(hash_item, bean.item_id, hk_myopiaVal, bean.myopiaVal)
 			call SaveReal(hash_item, bean.item_id, hk_myopiaDuring, bean.myopiaDuring)
+			call SaveReal(hash_item, bean.item_id, hk_blindVal, bean.blindVal)
+			call SaveReal(hash_item, bean.item_id, hk_blindDuring, bean.blindDuring)
 			call SaveReal(hash_item, bean.item_id, hk_corrosionVal, bean.corrosionVal)
 			call SaveReal(hash_item, bean.item_id, hk_corrosionDuring, bean.corrosionDuring)
 			call SaveReal(hash_item, bean.item_id, hk_chaosVal, bean.chaosVal)
 			call SaveReal(hash_item, bean.item_id, hk_chaosDuring, bean.chaosDuring)
 			call SaveReal(hash_item, bean.item_id, hk_twineVal, bean.twineVal)
 			call SaveReal(hash_item, bean.item_id, hk_twineDuring, bean.twineDuring)
-			call SaveReal(hash_item, bean.item_id, hk_blindVal, bean.blindVal)
-			call SaveReal(hash_item, bean.item_id, hk_blindDuring, bean.blindDuring)
+			call SaveReal(hash_item, bean.item_id, hk_drunkVal, bean.drunkVal)
+			call SaveReal(hash_item, bean.item_id, hk_drunkDuring, bean.drunkDuring)
 			call SaveReal(hash_item, bean.item_id, hk_tortuaVal, bean.tortuaVal)
 			call SaveReal(hash_item, bean.item_id, hk_tortuaDuring, bean.tortuaDuring)
 			call SaveReal(hash_item, bean.item_id, hk_weakVal, bean.weakVal)
@@ -1111,6 +1144,9 @@ struct hItem
 			endif
 			if(bean.attackRange!=0)then
 				set score = score + R2I(bean.attackRange)*3
+			endif
+			if(bean.sight!=0)then
+				set score = score + R2I(bean.sight)*3
 			endif
 			if(bean.str!=0)then
 				set score = score + R2I(bean.str)*3
@@ -1304,12 +1340,6 @@ struct hItem
 			if(bean.attackMagicDuring!=0)then
 				set score = score + R2I(bean.attackMagicDuring)*3
 			endif
-			if(bean.attackRangeVal!=0)then
-				set score = score + R2I(bean.attackRangeVal)*3
-			endif
-			if(bean.attackRangeDuring!=0)then
-				set score = score + R2I(bean.attackRangeDuring)*3
-			endif
 			if(bean.moveVal!=0)then
 				set score = score + R2I(bean.moveVal)*3
 			endif
@@ -1430,6 +1460,12 @@ struct hItem
 			if(bean.myopiaDuring!=0)then
 				set score = score + R2I(bean.myopiaDuring)*3
 			endif
+			if(bean.blindVal!=0)then
+				set score = score + R2I(bean.blindVal)*3
+			endif
+			if(bean.blindDuring!=0)then
+				set score = score + R2I(bean.blindDuring)*3
+			endif
 			if(bean.corrosionVal!=0)then
 				set score = score + R2I(bean.corrosionVal)*3
 			endif
@@ -1448,11 +1484,11 @@ struct hItem
 			if(bean.twineDuring!=0)then
 				set score = score + R2I(bean.twineDuring)*3
 			endif
-			if(bean.blindVal!=0)then
-				set score = score + R2I(bean.blindVal)*3
+			if(bean.drunkVal!=0)then
+				set score = score + R2I(bean.drunkVal)*3
 			endif
-			if(bean.blindDuring!=0)then
-				set score = score + R2I(bean.blindDuring)*3
+			if(bean.drunkDuring!=0)then
+				set score = score + R2I(bean.drunkDuring)*3
 			endif
 			if(bean.tortuaVal!=0)then
 				set score = score + R2I(bean.tortuaVal)*3
@@ -1559,6 +1595,7 @@ struct hItem
 			if(bean.crackFlyHigh!=0)then
 				set score = score + R2I(bean.crackFlyHigh)*3
 			endif
+			//
 			call SaveInteger(hash_item, bean.item_id, hk_item_combat_effectiveness,score/10)
         endif
 	endmethod
@@ -1586,6 +1623,7 @@ struct hItem
 		local real attackPhysical = LoadReal(hash_item, item_id, hk_attackPhysical)*charges
 		local real attackMagic = LoadReal(hash_item, item_id, hk_attackMagic)*charges
 		local real attackRange = LoadReal(hash_item, item_id, hk_attackRange)*charges
+		local real sight = LoadReal(hash_item, item_id, hk_sight)*charges
 		local real str = LoadReal(hash_item, item_id, hk_str)*charges
 		local real agi = LoadReal(hash_item, item_id, hk_agi)*charges
 		local real int = LoadReal(hash_item, item_id, hk_int)*charges
@@ -1652,6 +1690,10 @@ struct hItem
 		local real attackPhysicalDuring = LoadReal(hash_item, item_id, hk_attackPhysicalDuring)*charges
 		local real attackMagicVal = LoadReal(hash_item, item_id, hk_attackMagicVal)*charges
 		local real attackMagicDuring = LoadReal(hash_item, item_id, hk_attackMagicDuring)*charges
+		local real attackRangeVal = LoadReal(hash_item, item_id, hk_attackRangeVal)*charges
+		local real attackRangeDuring = LoadReal(hash_item, item_id, hk_attackRangeDuring)*charges
+		local real sightVal = LoadReal(hash_item, item_id, hk_sightVal)*charges
+		local real sightDuring = LoadReal(hash_item, item_id, hk_sightDuring)*charges
 		local real moveVal = LoadReal(hash_item, item_id, hk_moveVal)*charges
 		local real moveDuring = LoadReal(hash_item, item_id, hk_moveDuring)*charges
 		local real aimVal = LoadReal(hash_item, item_id, hk_aimVal)*charges
@@ -1692,14 +1734,16 @@ struct hItem
 		local real muggleDuring = LoadReal(hash_item, item_id, hk_muggleDuring)*charges
 		local real myopiaVal = LoadReal(hash_item, item_id, hk_myopiaVal)*charges
 		local real myopiaDuring = LoadReal(hash_item, item_id, hk_myopiaDuring)*charges
+		local real blindVal = LoadReal(hash_item, item_id, hk_blindVal)*charges
+		local real blindDuring = LoadReal(hash_item, item_id, hk_blindDuring)*charges
 		local real corrosionVal = LoadReal(hash_item, item_id, hk_corrosionVal)*charges
 		local real corrosionDuring = LoadReal(hash_item, item_id, hk_corrosionDuring)*charges
 		local real chaosVal = LoadReal(hash_item, item_id, hk_chaosVal)*charges
 		local real chaosDuring = LoadReal(hash_item, item_id, hk_chaosDuring)*charges
 		local real twineVal = LoadReal(hash_item, item_id, hk_twineVal)*charges
 		local real twineDuring = LoadReal(hash_item, item_id, hk_twineDuring)*charges
-		local real blindVal = LoadReal(hash_item, item_id, hk_blindVal)*charges
-		local real blindDuring = LoadReal(hash_item, item_id, hk_blindDuring)*charges
+		local real drunkVal = LoadReal(hash_item, item_id, hk_drunkVal)*charges
+		local real drunkDuring = LoadReal(hash_item, item_id, hk_drunkDuring)*charges
 		local real tortuaVal = LoadReal(hash_item, item_id, hk_tortuaVal)*charges
 		local real tortuaDuring = LoadReal(hash_item, item_id, hk_tortuaDuring)*charges
 		local real weakVal = LoadReal(hash_item, item_id, hk_weakVal)*charges
@@ -1775,6 +1819,9 @@ struct hItem
 		endif
 		if(attackRange!=0)then
 			call hattr.addAttackRange(whichUnit,attackRange,0)
+		endif
+		if(sight!=0)then
+			call hattr.addSight(whichUnit,sight,0)
 		endif
 		if(str!=0)then
 			call hattr.addStr(whichUnit,str,0)
@@ -1974,6 +2021,18 @@ struct hItem
 		if(attackMagicDuring!=0)then
 			call hattrEffect.addAttackMagicDuring(whichUnit,attackMagicDuring,0)
 		endif
+		if(attackRangeVal!=0)then
+			call hattrEffect.addAttackRangeVal(whichUnit,attackRangeVal,0)
+		endif
+		if(attackRangeDuring!=0)then
+			call hattrEffect.addAttackRangeDuring(whichUnit,attackRangeDuring,0)
+		endif
+		if(sightVal!=0)then
+			call hattrEffect.addSightVal(whichUnit,sightVal,0)
+		endif
+		if(sightDuring!=0)then
+			call hattrEffect.addSightDuring(whichUnit,sightDuring,0)
+		endif
 		if(moveVal!=0)then
 			call hattrEffect.addMoveVal(whichUnit,moveVal,0)
 		endif
@@ -2094,6 +2153,12 @@ struct hItem
 		if(myopiaDuring!=0)then
 			call hattrEffect.addMyopiaDuring(whichUnit,myopiaDuring,0)
 		endif
+		if(blindVal!=0)then
+			call hattrEffect.addBlindVal(whichUnit,blindVal,0)
+		endif
+		if(blindDuring!=0)then
+			call hattrEffect.addBlindDuring(whichUnit,blindDuring,0)
+		endif
 		if(corrosionVal!=0)then
 			call hattrEffect.addCorrosionVal(whichUnit,corrosionVal,0)
 		endif
@@ -2112,11 +2177,11 @@ struct hItem
 		if(twineDuring!=0)then
 			call hattrEffect.addTwineDuring(whichUnit,twineDuring,0)
 		endif
-		if(blindVal!=0)then
-			call hattrEffect.addBlindVal(whichUnit,blindVal,0)
+		if(drunkVal!=0)then
+			call hattrEffect.addDrunkVal(whichUnit,drunkVal,0)
 		endif
-		if(blindDuring!=0)then
-			call hattrEffect.addBlindDuring(whichUnit,blindDuring,0)
+		if(drunkDuring!=0)then
+			call hattrEffect.addDrunkDuring(whichUnit,drunkDuring,0)
 		endif
 		if(tortuaVal!=0)then
 			call hattrEffect.addTortuaVal(whichUnit,tortuaVal,0)
@@ -2244,6 +2309,7 @@ struct hItem
 		local real attackPhysical = LoadReal(hash_item, item_id, hk_attackPhysical)*charges
 		local real attackMagic = LoadReal(hash_item, item_id, hk_attackMagic)*charges
 		local real attackRange = LoadReal(hash_item, item_id, hk_attackRange)*charges
+		local real sight = LoadReal(hash_item, item_id, hk_sight)*charges
 		local real str = LoadReal(hash_item, item_id, hk_str)*charges
 		local real agi = LoadReal(hash_item, item_id, hk_agi)*charges
 		local real int = LoadReal(hash_item, item_id, hk_int)*charges
@@ -2310,6 +2376,10 @@ struct hItem
 		local real attackPhysicalDuring = LoadReal(hash_item, item_id, hk_attackPhysicalDuring)*charges
 		local real attackMagicVal = LoadReal(hash_item, item_id, hk_attackMagicVal)*charges
 		local real attackMagicDuring = LoadReal(hash_item, item_id, hk_attackMagicDuring)*charges
+		local real attackRangeVal = LoadReal(hash_item, item_id, hk_attackRangeVal)*charges
+		local real attackRangeDuring = LoadReal(hash_item, item_id, hk_attackRangeDuring)*charges
+		local real sightVal = LoadReal(hash_item, item_id, hk_sightVal)*charges
+		local real sightDuring = LoadReal(hash_item, item_id, hk_sightDuring)*charges
 		local real moveVal = LoadReal(hash_item, item_id, hk_moveVal)*charges
 		local real moveDuring = LoadReal(hash_item, item_id, hk_moveDuring)*charges
 		local real aimVal = LoadReal(hash_item, item_id, hk_aimVal)*charges
@@ -2350,14 +2420,16 @@ struct hItem
 		local real muggleDuring = LoadReal(hash_item, item_id, hk_muggleDuring)*charges
 		local real myopiaVal = LoadReal(hash_item, item_id, hk_myopiaVal)*charges
 		local real myopiaDuring = LoadReal(hash_item, item_id, hk_myopiaDuring)*charges
+		local real blindVal = LoadReal(hash_item, item_id, hk_blindVal)*charges
+		local real blindDuring = LoadReal(hash_item, item_id, hk_blindDuring)*charges
 		local real corrosionVal = LoadReal(hash_item, item_id, hk_corrosionVal)*charges
 		local real corrosionDuring = LoadReal(hash_item, item_id, hk_corrosionDuring)*charges
 		local real chaosVal = LoadReal(hash_item, item_id, hk_chaosVal)*charges
 		local real chaosDuring = LoadReal(hash_item, item_id, hk_chaosDuring)*charges
 		local real twineVal = LoadReal(hash_item, item_id, hk_twineVal)*charges
 		local real twineDuring = LoadReal(hash_item, item_id, hk_twineDuring)*charges
-		local real blindVal = LoadReal(hash_item, item_id, hk_blindVal)*charges
-		local real blindDuring = LoadReal(hash_item, item_id, hk_blindDuring)*charges
+		local real drunkVal = LoadReal(hash_item, item_id, hk_drunkVal)*charges
+		local real drunkDuring = LoadReal(hash_item, item_id, hk_drunkDuring)*charges
 		local real tortuaVal = LoadReal(hash_item, item_id, hk_tortuaVal)*charges
 		local real tortuaDuring = LoadReal(hash_item, item_id, hk_tortuaDuring)*charges
 		local real weakVal = LoadReal(hash_item, item_id, hk_weakVal)*charges
@@ -2433,6 +2505,9 @@ struct hItem
 		endif
 		if(attackRange!=0)then
 			call hattr.subAttackRange(whichUnit,attackRange,0)
+		endif
+		if(sight!=0)then
+			call hattr.subSight(whichUnit,sight,0)
 		endif
 		if(str!=0)then
 			call hattr.subStr(whichUnit,str,0)
@@ -2632,6 +2707,18 @@ struct hItem
 		if(attackMagicDuring!=0)then
 			call hattrEffect.subAttackMagicDuring(whichUnit,attackMagicDuring,0)
 		endif
+		if(attackRangeVal!=0)then
+			call hattrEffect.subAttackRangeVal(whichUnit,attackRangeVal,0)
+		endif
+		if(attackRangeDuring!=0)then
+			call hattrEffect.subAttackRangeDuring(whichUnit,attackRangeDuring,0)
+		endif
+		if(sightVal!=0)then
+			call hattrEffect.subSightVal(whichUnit,sightVal,0)
+		endif
+		if(sightDuring!=0)then
+			call hattrEffect.subSightDuring(whichUnit,sightDuring,0)
+		endif
 		if(moveVal!=0)then
 			call hattrEffect.subMoveVal(whichUnit,moveVal,0)
 		endif
@@ -2752,6 +2839,12 @@ struct hItem
 		if(myopiaDuring!=0)then
 			call hattrEffect.subMyopiaDuring(whichUnit,myopiaDuring,0)
 		endif
+		if(blindVal!=0)then
+			call hattrEffect.subBlindVal(whichUnit,blindVal,0)
+		endif
+		if(blindDuring!=0)then
+			call hattrEffect.subBlindDuring(whichUnit,blindDuring,0)
+		endif
 		if(corrosionVal!=0)then
 			call hattrEffect.subCorrosionVal(whichUnit,corrosionVal,0)
 		endif
@@ -2770,11 +2863,11 @@ struct hItem
 		if(twineDuring!=0)then
 			call hattrEffect.subTwineDuring(whichUnit,twineDuring,0)
 		endif
-		if(blindVal!=0)then
-			call hattrEffect.subBlindVal(whichUnit,blindVal,0)
+		if(drunkVal!=0)then
+			call hattrEffect.subDrunkVal(whichUnit,drunkVal,0)
 		endif
-		if(blindDuring!=0)then
-			call hattrEffect.subBlindDuring(whichUnit,blindDuring,0)
+		if(drunkDuring!=0)then
+			call hattrEffect.subDrunkDuring(whichUnit,drunkDuring,0)
 		endif
 		if(tortuaVal!=0)then
 			call hattrEffect.subTortuaVal(whichUnit,tortuaVal,0)
@@ -2950,6 +3043,9 @@ struct hItem
 		local integer canGetQty = 0
 		local integer notGetQty = 0
 		local trigger tg = null
+		if(charges<1)then
+			set charges = 1
+		endif
 		//检测物品类型,是否瞬逝型
 		if(getType(itemid)==HITEM_TYPE_MOMENT)then
 			set tg = LoadTriggerHandle(hash_item,itemid,hk_item_onmoment_trigger)
@@ -3078,13 +3174,16 @@ struct hItem
 		local real range = 0
 		local item it = null
 		local unit itMoment = null
+		if(charges<1)then
+			set charges = 1
+		endif
 		if(ittype == HITEM_TYPE_MOMENT)then
 			set itMoment = hunit.createUnitXY(Player(PLAYER_NEUTRAL_PASSIVE),itemid,x,y)
 			call SetUnitUserData(itMoment,charges)
 			if(hcamera.model=="zoomin")then
-				set range = 15
+				set range = 50
 			else
-				set range = 30
+				set range = 100
 			endif
 			call hevt.onEnterUnitRange(itMoment,range,function thistype.triggerMoment)
 			if(during > 0)then
@@ -3223,7 +3322,7 @@ struct hItem
 		endif
 	endmethod
 
-	//售卖物品
+	//单位售卖物品给商店
 	private static method itemPawn takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local item it = GetSoldItem()
@@ -3243,6 +3342,36 @@ struct hItem
 			set hevtBean.triggerItem = it
 			call hevt.triggerEvent(hevtBean)
 			call hevtBean.destroy()
+		endif
+	endmethod
+
+	//商店卖出物品
+	private static method itemSell takes nothing returns nothing
+		local unit u = GetSellingUnit()
+		local unit buyer = GetBuyingUnit()
+		local item it = GetSoldItem()
+		local integer itid = GetItemTypeId(it)
+		local integer charges = GetItemCharges(it)
+		local integer gold = getGold(itid)*charges
+		local integer lumber = getLumber(itid)*charges
+		local player p = GetOwningPlayer(buyer)
+		call hconsole.warning(GetUnitName(u))
+		if(it!=null)then
+			if(hplayer.getGold(p) < gold or hplayer.getLumber(p) < lumber)then
+				call RemoveItem(it)
+				call hmsg.style(hmsg.ttg2Unit(buyer,"金币木材不足",6.00,"ffff80",0,2.50,50.00) ,"scale",0,0.05)
+			else
+				call hplayer.subGold(p,gold)
+				call hplayer.subGold(p,lumber)
+				//@触发 售卖物品 事件
+				set hevtBean = hEvtBean.create()
+				set hevtBean.triggerKey = "itemSell"
+				set hevtBean.triggerUnit = u
+				set hevtBean.targetUnit = buyer
+				set hevtBean.triggerItem = it
+				call hevt.triggerEvent(hevtBean)
+				call hevtBean.destroy()
+			endif
 		endif
 	endmethod
 
@@ -3474,8 +3603,14 @@ struct hItem
     	call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_POINT_ORDER )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_DROP, whichUnit, EVENT_UNIT_DROP_ITEM )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PAWN, whichUnit, EVENT_UNIT_PAWN_ITEM )
+		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SELL, whichUnit, EVENT_UNIT_SELL_ITEM )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SEPARATE, whichUnit, EVENT_UNIT_SPELL_EFFECT )
 		call TriggerRegisterUnitEvent( ITEM_TRIGGER_USE, whichUnit, EVENT_UNIT_USE_ITEM )
+	endmethod
+
+	//初始化商店，绑定事件等
+	public static method initShop takes unit whichUnit returns nothing
+		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SELL, whichUnit, EVENT_UNIT_SELL_ITEM )
 	endmethod
 
 	//初始化
@@ -3485,6 +3620,7 @@ struct hItem
 		set ITEM_TRIGGER_PICKUP_FALSE = CreateTrigger()
 		set ITEM_TRIGGER_DROP = CreateTrigger()
 		set ITEM_TRIGGER_PAWN = CreateTrigger()
+		set ITEM_TRIGGER_SELL = CreateTrigger()
 		set ITEM_TRIGGER_SEPARATE = CreateTrigger()
 		set ITEM_TRIGGER_USE = CreateTrigger()
 		call TriggerAddAction(ITEM_TRIGGER_PICKUP, function thistype.itemPickup)
@@ -3492,6 +3628,7 @@ struct hItem
 		call TriggerAddAction(ITEM_TRIGGER_PICKUP_FALSE, function thistype.itemPickupFalse)
 		call TriggerAddAction(ITEM_TRIGGER_DROP, function thistype.itemDrop)
 		call TriggerAddAction(ITEM_TRIGGER_PAWN, function thistype.itemPawn)
+		call TriggerAddAction(ITEM_TRIGGER_SELL, function thistype.itemSell)
 		call TriggerAddAction(ITEM_TRIGGER_SEPARATE, function thistype.itemSeparate)
 		call TriggerAddAction(ITEM_TRIGGER_USE, function thistype.itemUse)
 	endmethod

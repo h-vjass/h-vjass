@@ -37,8 +37,7 @@ struct hSkill
         local hAttrHuntBean bean
         local hFilter filter
         set filter = hFilter.create()
-        call filter.setUnit(fromUnit)
-        call filter.isEnemy(true)
+        call filter.isEnemy(true,fromUnit)
         call filter.isBuilding(false)
         call filter.isAlive(true)
         set g = hgroup.createByUnit(prevUnit,400,function hFilter.get)
@@ -49,7 +48,7 @@ struct hSkill
                 set u = FirstOfGroup(g)
                 call GroupRemoveUnit( g , u )
                 if(u!=prevUnit)then
-                    if(repeatGroup==null or hgroup.isin(u,repeatGroup)==false)then
+                    if(repeatGroup==null or hgroup.isIn(u,repeatGroup)==false)then
                         set nextUnit = u
                         call GroupAddUnit(repeatGroup,u)
                         call DoNothing() YDNL exitwhen true//(  )

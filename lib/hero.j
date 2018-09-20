@@ -529,7 +529,7 @@ struct hHero
         call SaveInteger(hash_hero,pid,uid,clickQty)
         if(clickQty >= 2)then
             set qty = qty+1
-            call GroupRemoveUnit(isHeroGroup,u)
+            call GroupRemoveUnit(buildGroup,u)
             call setPlayerUnitQty(p,qty)
             call itIs(u)
             call SetUnitOwner( u, p , true )

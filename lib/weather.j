@@ -21,7 +21,8 @@ globals
 endglobals
 
 struct hWeatherBean
-    public static location loc = null
+    public static real x = 0
+    public static real y = 0
     public static integer id = 0
     public static real width = 0
     public static real height = 0
@@ -30,7 +31,8 @@ struct hWeatherBean
     static method create takes nothing returns hWeatherBean
         local hWeatherBean x = 0
         set x = hWeatherBean.allocate()
-        set x.loc = null
+        set x.x = 0
+        set x.y = 0
         set x.id = 0
         set x.width = 0
         set x.height = 0
@@ -38,10 +40,8 @@ struct hWeatherBean
         return x
     endmethod
     method destroy takes nothing returns nothing
-        if(loc!=null)then
-            call RemoveLocation(loc)
-            set loc = null
-        endif
+        set x = 0
+        set y = 0
         set id = 0
         set width = 0
         set height = 0
@@ -69,6 +69,7 @@ struct hWeather
 
     //删除天气
     public static method del takes weathereffect w returns nothing
+        call EnableWeatherEffect(w, false )
         call RemoveWeatherEffect(w)
         set w = null
     endmethod
@@ -87,25 +88,21 @@ struct hWeather
 		local weathereffect w = null
         local rect area = null
         local timer t = null
-        if(bean.loc==null)then
-            call hconsole.error("hWeather.build")
+        
+        if(bean.width<=0 or bean.height<=0)then
+            call hconsole.error("hWeather.build -w-h")
             return null
-        endif
-        if(bean.loc!=null)then
-            if(bean.width<=0 or bean.height<=0)then
-                call hconsole.error("hWeather.build -w-h")
-                return null
-            else
-                set area = hrect.createInLoc(GetLocationX(bean.loc),GetLocationY(bean.loc),bean.width,bean.height)
-                set w = AddWeatherEffect( area , bean.id )
-                if(bean.during>0)then
-                    set t = htime.setTimeout(bean.during,function thistype.delCall)
-                    call saveWatherHashCache(t,w)
-                endif
-                call RemoveRect(area)
-                set area = null
+        else
+            set area = hrect.createInLoc(bean.x,bean.y,bean.width,bean.height)
+            set w = AddWeatherEffect( area , bean.id )
+            if(bean.during>0)then
+                set t = htime.setTimeout(bean.during,function thistype.delCall)
+                call saveWatherHashCache(t,w)
             endif
+            call RemoveRect(area)
+            set area = null
         endif
+
 		call EnableWeatherEffect( w , true )
 		return w
 	endmethod

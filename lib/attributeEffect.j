@@ -6,6 +6,7 @@
 	attack_physical 物理攻击力效果：增加物理攻击力
 	attack_magic    魔法攻击力效果：增加魔法攻击力
 	attack_range    攻击距离效果：增加攻击距离
+	sight           视野效果：增加视野
 	aim 			命中效果：增加命中
 	str 			力量效果：增加力量(绿字)
 	agi 			敏捷效果：增加敏捷(绿字)
@@ -26,11 +27,12 @@
 	blunt			迟钝[减少物理攻击力]
 	muggle			麻瓜[减少魔法攻击力]
 	myopia			短视[减少攻击距离]
+    blind			致盲[减少视野]
 	corrosion		腐蚀[减少护甲]
 	chaos			混乱[减少魔抗]
 	twine			缠绕[减少回避]
-	blind			致盲[减少命中]
-	tortua			剧痛[减少命中]
+	drunk			致盲[减少命中]
+	tortua			剧痛[减少韧性]
 	weak			乏力[减少力量(绿字)]
 	astrict			束缚[减少敏捷(绿字)]
 	foolish			愚蠢[减少智力(绿字)]
@@ -68,92 +70,96 @@ struct hAttrEffect
     private static integer ATTR_FLAG_EFFECT_ATTACK_MAGIC_DURING = 2041
     private static integer ATTR_FLAG_EFFECT_ATTACK_RANGE_VAL = 2050
     private static integer ATTR_FLAG_EFFECT_ATTACK_RANGE_DURING = 2051
-    private static integer ATTR_FLAG_EFFECT_MOVE_VAL = 2060
-    private static integer ATTR_FLAG_EFFECT_MOVE_DURING = 2061
-    private static integer ATTR_FLAG_EFFECT_AIM_VAL = 2070
-    private static integer ATTR_FLAG_EFFECT_AIM_DURING = 2071
-    private static integer ATTR_FLAG_EFFECT_STR_VAL = 2080
-    private static integer ATTR_FLAG_EFFECT_STR_DURING = 2081
-    private static integer ATTR_FLAG_EFFECT_AGI_VAL = 2090
-    private static integer ATTR_FLAG_EFFECT_AGI_DURING = 2091
-    private static integer ATTR_FLAG_EFFECT_INT_VAL = 2100
-    private static integer ATTR_FLAG_EFFECT_INT_DURING = 2101
-    private static integer ATTR_FLAG_EFFECT_KNOCKING_VAL = 2110
-    private static integer ATTR_FLAG_EFFECT_KNOCKING_DURING = 2111
-    private static integer ATTR_FLAG_EFFECT_VIOLENCE_VAL = 2120
-    private static integer ATTR_FLAG_EFFECT_VIOLENCE_DURING = 2121
-    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_VAL = 2130
-    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_DURING = 2131
-    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_VAL = 2140
-    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_DURING = 2141
-    private static integer ATTR_FLAG_EFFECT_SPLIT_VAL = 2150
-    private static integer ATTR_FLAG_EFFECT_SPLIT_DURING = 2151
-    private static integer ATTR_FLAG_EFFECT_LUCK_VAL = 2160
-    private static integer ATTR_FLAG_EFFECT_LUCK_DURING = 2161
-    private static integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_VAL = 2170
-    private static integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_DURING = 2171
-    private static integer ATTR_FLAG_EFFECT_POISON_VAL = 2180
-    private static integer ATTR_FLAG_EFFECT_POISON_DURING = 2181
-    private static integer ATTR_FLAG_EFFECT_FIRE_VAL = 2190
-    private static integer ATTR_FLAG_EFFECT_FIRE_DURING = 2191
-    private static integer ATTR_FLAG_EFFECT_DRY_VAL = 2200
-    private static integer ATTR_FLAG_EFFECT_DRY_DURING = 2201
-    private static integer ATTR_FLAG_EFFECT_FREEZE_VAL = 2210
-    private static integer ATTR_FLAG_EFFECT_FREEZE_DURING = 2211
-    private static integer ATTR_FLAG_EFFECT_COLD_VAL = 2220
-    private static integer ATTR_FLAG_EFFECT_COLD_DURING = 2221
-    private static integer ATTR_FLAG_EFFECT_BLUNT_VAL = 2230
-    private static integer ATTR_FLAG_EFFECT_BLUNT_DURING = 2231
-    private static integer ATTR_FLAG_EFFECT_MUGGLE_VAL = 2240
-    private static integer ATTR_FLAG_EFFECT_MUGGLE_DURING = 2241
-    private static integer ATTR_FLAG_EFFECT_MYOPIA_VAL = 2250
-    private static integer ATTR_FLAG_EFFECT_MYOPIA_DURING = 2251
-    private static integer ATTR_FLAG_EFFECT_CORROSION_VAL = 2260
-    private static integer ATTR_FLAG_EFFECT_CORROSION_DURING = 2261
-    private static integer ATTR_FLAG_EFFECT_CHAOS_VAL = 2270
-    private static integer ATTR_FLAG_EFFECT_CHAOS_DURING = 2271
-    private static integer ATTR_FLAG_EFFECT_TWINE_VAL = 2280
-    private static integer ATTR_FLAG_EFFECT_TWINE_DURING = 2281
-    private static integer ATTR_FLAG_EFFECT_BLIND_VAL = 2290
-    private static integer ATTR_FLAG_EFFECT_BLIND_DURING = 2291
-    private static integer ATTR_FLAG_EFFECT_TORTUA_VAL = 2300
-    private static integer ATTR_FLAG_EFFECT_TORTUA_DURING = 2301
-    private static integer ATTR_FLAG_EFFECT_WEAK_VAL = 2310
-    private static integer ATTR_FLAG_EFFECT_WEAK_DURING = 2311
-    private static integer ATTR_FLAG_EFFECT_ASTRICT_VAL = 2320
-    private static integer ATTR_FLAG_EFFECT_ASTRICT_DURING = 2321
-    private static integer ATTR_FLAG_EFFECT_FOOLISH_VAL = 2330
-    private static integer ATTR_FLAG_EFFECT_FOOLISH_DURING = 2331
-    private static integer ATTR_FLAG_EFFECT_DULL_VAL = 2340
-    private static integer ATTR_FLAG_EFFECT_DULL_DURING = 2341
-    private static integer ATTR_FLAG_EFFECT_DIRT_VAL = 2350
-    private static integer ATTR_FLAG_EFFECT_DIRT_DURING = 2351
-    private static integer ATTR_FLAG_EFFECT_SWIM_ODDS = 2360
-    private static integer ATTR_FLAG_EFFECT_SWIM_DURING = 2361
-    private static integer ATTR_FLAG_EFFECT_HEAVY_ODDS = 2370
-    private static integer ATTR_FLAG_EFFECT_HEAVY_VAL = 2371
-    private static integer ATTR_FLAG_EFFECT_BREAK_ODDS = 2380
-    private static integer ATTR_FLAG_EFFECT_BREAK_DURING = 2381
-    private static integer ATTR_FLAG_EFFECT_UNLUCK_VAL = 2390
-    private static integer ATTR_FLAG_EFFECT_UNLUCK_DURING = 2391
-    private static integer ATTR_FLAG_EFFECT_SILENT_ODDS = 2400
-    private static integer ATTR_FLAG_EFFECT_SILENT_DURING = 2401
-    private static integer ATTR_FLAG_EFFECT_UNARM_ODDS = 2410
-    private static integer ATTR_FLAG_EFFECT_UNARM_DURING = 2411
-    private static integer ATTR_FLAG_EFFECT_FETTER_ODDS = 2420
-    private static integer ATTR_FLAG_EFFECT_FETTER_DURING = 2421
-    private static integer ATTR_FLAG_EFFECT_BOMB_VAL = 2430
-    private static integer ATTR_FLAG_EFFECT_BOMB_RANGE = 2431
-    private static integer ATTR_FLAG_EFFECT_BOMB_MODEL = 2432
-    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL = 2440
-    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS = 2441
-    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY = 2442
-    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_REDUCE = 2443
-    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_MODEL = 2444
-    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_VAL = 2450
-    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_ODDS = 2451
-    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_DISTANCE = 2452
-    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_HIGH = 2453
+    private static integer ATTR_FLAG_EFFECT_SIGHT_VAL = 2060
+    private static integer ATTR_FLAG_EFFECT_SIGHT_DURING = 2061
+    private static integer ATTR_FLAG_EFFECT_MOVE_VAL = 2070
+    private static integer ATTR_FLAG_EFFECT_MOVE_DURING = 2071
+    private static integer ATTR_FLAG_EFFECT_AIM_VAL = 2080
+    private static integer ATTR_FLAG_EFFECT_AIM_DURING = 2081
+    private static integer ATTR_FLAG_EFFECT_STR_VAL = 2090
+    private static integer ATTR_FLAG_EFFECT_STR_DURING = 2091
+    private static integer ATTR_FLAG_EFFECT_AGI_VAL = 2100
+    private static integer ATTR_FLAG_EFFECT_AGI_DURING = 2101
+    private static integer ATTR_FLAG_EFFECT_INT_VAL = 2110
+    private static integer ATTR_FLAG_EFFECT_INT_DURING = 2111
+    private static integer ATTR_FLAG_EFFECT_KNOCKING_VAL = 2120
+    private static integer ATTR_FLAG_EFFECT_KNOCKING_DURING = 2121
+    private static integer ATTR_FLAG_EFFECT_VIOLENCE_VAL = 2130
+    private static integer ATTR_FLAG_EFFECT_VIOLENCE_DURING = 2131
+    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_VAL = 2140
+    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_DURING = 2141
+    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_VAL = 2150
+    private static integer ATTR_FLAG_EFFECT_HEMOPHAGIA_SKILL_DURING = 2151
+    private static integer ATTR_FLAG_EFFECT_SPLIT_VAL = 2160
+    private static integer ATTR_FLAG_EFFECT_SPLIT_DURING = 2161
+    private static integer ATTR_FLAG_EFFECT_LUCK_VAL = 2170
+    private static integer ATTR_FLAG_EFFECT_LUCK_DURING = 2171
+    private static integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_VAL = 2180
+    private static integer ATTR_FLAG_EFFECT_HUNT_AMPLITUDE_DURING = 2181
+    private static integer ATTR_FLAG_EFFECT_POISON_VAL = 2190
+    private static integer ATTR_FLAG_EFFECT_POISON_DURING = 2191
+    private static integer ATTR_FLAG_EFFECT_FIRE_VAL = 2200
+    private static integer ATTR_FLAG_EFFECT_FIRE_DURING = 2201
+    private static integer ATTR_FLAG_EFFECT_DRY_VAL = 2210
+    private static integer ATTR_FLAG_EFFECT_DRY_DURING = 2211
+    private static integer ATTR_FLAG_EFFECT_FREEZE_VAL = 2220
+    private static integer ATTR_FLAG_EFFECT_FREEZE_DURING = 2221
+    private static integer ATTR_FLAG_EFFECT_COLD_VAL = 2230
+    private static integer ATTR_FLAG_EFFECT_COLD_DURING = 2231
+    private static integer ATTR_FLAG_EFFECT_BLUNT_VAL = 2240
+    private static integer ATTR_FLAG_EFFECT_BLUNT_DURING = 2241
+    private static integer ATTR_FLAG_EFFECT_MUGGLE_VAL = 2250
+    private static integer ATTR_FLAG_EFFECT_MUGGLE_DURING = 2251
+    private static integer ATTR_FLAG_EFFECT_MYOPIA_VAL = 2260
+    private static integer ATTR_FLAG_EFFECT_MYOPIA_DURING = 2261
+    private static integer ATTR_FLAG_EFFECT_BLIND_VAL = 2270
+    private static integer ATTR_FLAG_EFFECT_BLIND_DURING = 2271
+    private static integer ATTR_FLAG_EFFECT_CORROSION_VAL = 2280
+    private static integer ATTR_FLAG_EFFECT_CORROSION_DURING = 2281
+    private static integer ATTR_FLAG_EFFECT_CHAOS_VAL = 2290
+    private static integer ATTR_FLAG_EFFECT_CHAOS_DURING = 2291
+    private static integer ATTR_FLAG_EFFECT_TWINE_VAL = 2300
+    private static integer ATTR_FLAG_EFFECT_TWINE_DURING = 2301
+    private static integer ATTR_FLAG_EFFECT_DRUNK_VAL = 2310
+    private static integer ATTR_FLAG_EFFECT_DRUNK_DURING = 2311
+    private static integer ATTR_FLAG_EFFECT_TORTUA_VAL = 2320
+    private static integer ATTR_FLAG_EFFECT_TORTUA_DURING = 2321
+    private static integer ATTR_FLAG_EFFECT_WEAK_VAL = 2330
+    private static integer ATTR_FLAG_EFFECT_WEAK_DURING = 2331
+    private static integer ATTR_FLAG_EFFECT_ASTRICT_VAL = 2340
+    private static integer ATTR_FLAG_EFFECT_ASTRICT_DURING = 2341
+    private static integer ATTR_FLAG_EFFECT_FOOLISH_VAL = 2350
+    private static integer ATTR_FLAG_EFFECT_FOOLISH_DURING = 2351
+    private static integer ATTR_FLAG_EFFECT_DULL_VAL = 2360
+    private static integer ATTR_FLAG_EFFECT_DULL_DURING = 2361
+    private static integer ATTR_FLAG_EFFECT_DIRT_VAL = 2370
+    private static integer ATTR_FLAG_EFFECT_DIRT_DURING = 2371
+    private static integer ATTR_FLAG_EFFECT_SWIM_ODDS = 2380
+    private static integer ATTR_FLAG_EFFECT_SWIM_DURING = 2381
+    private static integer ATTR_FLAG_EFFECT_HEAVY_ODDS = 2390
+    private static integer ATTR_FLAG_EFFECT_HEAVY_VAL = 2391
+    private static integer ATTR_FLAG_EFFECT_BREAK_ODDS = 2400
+    private static integer ATTR_FLAG_EFFECT_BREAK_DURING = 2401
+    private static integer ATTR_FLAG_EFFECT_UNLUCK_VAL = 2410
+    private static integer ATTR_FLAG_EFFECT_UNLUCK_DURING = 2411
+    private static integer ATTR_FLAG_EFFECT_SILENT_ODDS = 2420
+    private static integer ATTR_FLAG_EFFECT_SILENT_DURING = 2421
+    private static integer ATTR_FLAG_EFFECT_UNARM_ODDS = 2430
+    private static integer ATTR_FLAG_EFFECT_UNARM_DURING = 2431
+    private static integer ATTR_FLAG_EFFECT_FETTER_ODDS = 2440
+    private static integer ATTR_FLAG_EFFECT_FETTER_DURING = 2441
+    private static integer ATTR_FLAG_EFFECT_BOMB_VAL = 2450
+    private static integer ATTR_FLAG_EFFECT_BOMB_RANGE = 2451
+    private static integer ATTR_FLAG_EFFECT_BOMB_MODEL = 2452
+    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL = 2460
+    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS = 2461
+    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY = 2462
+    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_REDUCE = 2463
+    private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_MODEL = 2464
+    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_VAL = 2470
+    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_ODDS = 2471
+    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_DISTANCE = 2472
+    private static integer ATTR_FLAG_EFFECT_CRACK_FLY_HIGH = 2473
 
 	static method create takes nothing returns hAttrEffect
         local hAttrEffect x = 0
@@ -183,6 +189,8 @@ struct hAttrEffect
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_ATTACK_MAGIC_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_ATTACK_RANGE_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_ATTACK_RANGE_DURING , 0 )
+            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_SIGHT_VAL , 0 )
+            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_SIGHT_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_MOVE_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_MOVE_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_AIM_VAL , 0 )
@@ -223,14 +231,16 @@ struct hAttrEffect
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_MUGGLE_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_MYOPIA_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_MYOPIA_DURING , 0 )
+            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BLIND_VAL , 0 )
+            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BLIND_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_CORROSION_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_CORROSION_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_CHAOS_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_CHAOS_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_TWINE_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_TWINE_DURING , 0 )
-            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BLIND_VAL , 0 )
-            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BLIND_DURING , 0 )
+            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_DRUNK_VAL , 0 )
+            call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_DRUNK_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_TORTUA_VAL , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_TORTUA_DURING , 0 )
             call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_WEAK_VAL , 0 )
@@ -506,6 +516,38 @@ public static method coverAttackRangeDuring takes unit whichUnit , real value , 
 endmethod
 public static method setAttackRangeDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_ATTACK_RANGE_DURING , whichUnit , value , during )
+endmethod
+ // 攻击|伤害特效[sight][val]
+public static method getSightVal takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_SIGHT_VAL , whichUnit )
+endmethod
+public static method addSightVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_VAL , whichUnit , value , during )
+endmethod
+public static method subSightVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_VAL , whichUnit , -value, during )
+endmethod
+public static method coverSightVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_VAL , whichUnit , hlogic.coverAttrEffectVal(getSightVal(whichUnit),value)-getSightVal(whichUnit) , during )
+endmethod
+public static method setSightVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_VAL , whichUnit , value , during )
+endmethod
+ // 攻击|伤害特效[sight][during]
+public static method getSightDuring takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_SIGHT_DURING , whichUnit )
+endmethod
+public static method addSightDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_DURING , whichUnit , value , during )
+endmethod
+public static method subSightDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_DURING , whichUnit , -value, during )
+endmethod
+public static method coverSightDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_DURING , whichUnit , hlogic.coverAttrEffectVal(getSightDuring(whichUnit),value)-getSightDuring(whichUnit) , during )
+endmethod
+public static method setSightDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_SIGHT_DURING , whichUnit , value , during )
 endmethod
  // 攻击|伤害特效[move][val]
 public static method getMoveVal takes unit whichUnit returns real
@@ -1115,7 +1157,7 @@ endmethod
 public static method setMuggleDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MUGGLE_DURING , whichUnit , value , during )
 endmethod
-// 攻击|伤害特效[myopia][val]
+ // 攻击|伤害特效[myopia][val]
 public static method getMyopiaVal takes unit whichUnit returns real
    return getAttr( ATTR_FLAG_EFFECT_MYOPIA_VAL , whichUnit )
 endmethod
@@ -1146,6 +1188,38 @@ public static method coverMyopiaDuring takes unit whichUnit , real value , real 
 endmethod
 public static method setMyopiaDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_MYOPIA_DURING , whichUnit , value , during )
+endmethod
+ // 攻击|伤害特效[blind][val]
+public static method getBlindVal takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit )
+endmethod
+public static method addBlindVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , value , during )
+endmethod
+public static method subBlindVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , -value, during )
+endmethod
+public static method coverBlindVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , hlogic.coverAttrEffectVal(getBlindVal(whichUnit),value)-getBlindVal(whichUnit) , during )
+endmethod
+public static method setBlindVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , value , during )
+endmethod
+ // 攻击|伤害特效[blind][during]
+public static method getBlindDuring takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit )
+endmethod
+public static method addBlindDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , value , during )
+endmethod
+public static method subBlindDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , -value, during )
+endmethod
+public static method coverBlindDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , hlogic.coverAttrEffectVal(getBlindDuring(whichUnit),value)-getBlindDuring(whichUnit) , during )
+endmethod
+public static method setBlindDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , value , during )
 endmethod
  // 攻击|伤害特效[corrosion][val]
 public static method getCorrosionVal takes unit whichUnit returns real
@@ -1243,37 +1317,37 @@ endmethod
 public static method setTwineDuring takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_TWINE_DURING , whichUnit , value , during )
 endmethod
- // 攻击|伤害特效[blind][val]
-public static method getBlindVal takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit )
+ // 攻击|伤害特效[drunk][val]
+public static method getDrunkVal takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_DRUNK_VAL , whichUnit )
 endmethod
-public static method addBlindVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , value , during )
+public static method addDrunkVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_VAL , whichUnit , value , during )
 endmethod
-public static method subBlindVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , -value, during )
+public static method subDrunkVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_VAL , whichUnit , -value, during )
 endmethod
-public static method coverBlindVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , hlogic.coverAttrEffectVal(getBlindVal(whichUnit),value)-getBlindVal(whichUnit) , during )
+public static method coverDrunkVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_VAL , whichUnit , hlogic.coverAttrEffectVal(getDrunkVal(whichUnit),value)-getDrunkVal(whichUnit) , during )
 endmethod
-public static method setBlindVal takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_VAL , whichUnit , value , during )
+public static method setDrunkVal takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_VAL , whichUnit , value , during )
 endmethod
- // 攻击|伤害特效[blind][during]
-public static method getBlindDuring takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit )
+ // 攻击|伤害特效[drunk][during]
+public static method getDrunkDuring takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_DRUNK_DURING , whichUnit )
 endmethod
-public static method addBlindDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , value , during )
+public static method addDrunkDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_DURING , whichUnit , value , during )
 endmethod
-public static method subBlindDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , -value, during )
+public static method subDrunkDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_DURING , whichUnit , -value, during )
 endmethod
-public static method coverBlindDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , hlogic.coverAttrEffectVal(getBlindDuring(whichUnit),value)-getBlindDuring(whichUnit) , during )
+public static method coverDrunkDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_DURING , whichUnit , hlogic.coverAttrEffectVal(getDrunkDuring(whichUnit),value)-getDrunkDuring(whichUnit) , during )
 endmethod
-public static method setBlindDuring takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_EFFECT_BLIND_DURING , whichUnit , value , during )
+public static method setDrunkDuring takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_DRUNK_DURING , whichUnit , value , during )
 endmethod
  // 攻击|伤害特效[tortua][val]
 public static method getTortuaVal takes unit whichUnit returns real

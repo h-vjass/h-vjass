@@ -45,6 +45,28 @@ struct hPlayer
 		return GetConvertedPlayerId(whichPlayer) 
 	endmethod
 
+	//getDandomUnit
+	public static method getDandomUnit takes nothing returns unit
+		local player p = null
+		local integer i = 0
+		local integer j = 0
+		local player array rannum
+		set i = 1
+		loop
+			exitwhen i>player_max_qty
+				if(thistype.getStatus(players[i]) == default_status_gaming)then
+					set j = j+1
+					set rannum[j] = players[i]
+				endif
+			set i=i+1
+		endloop
+		set p = rannum[GetRandomInt(1,j)]
+		if(p==null)then
+			return null
+		endif
+		return hhero.getPlayerUnit(p,GetRandomInt(1,hhero.getPlayerUnitQty(p)))
+	endmethod
+
 	//apm
 	private static method setApm takes player whichPlayer , integer apm returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_apm, apm)
@@ -102,7 +124,7 @@ struct hPlayer
 		local group g = null
 		local unit u = null
 		set filter = hFilter.create()
-		call filter.isPlayer(whichPlayer)
+		call filter.isOwnerPlayer(true,whichPlayer)
 		set g = hgroup.createByRect(GetEntireMapRect(),function hFilter.get)
 		call filter.destroy()
 		loop

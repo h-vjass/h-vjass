@@ -11,14 +11,48 @@ struct hGroup
 	 * 统计单位组当前单位数
 	 */
 	public static method count takes group whichGroup returns integer
+		if(whichGroup == null)then
+			return -1
+		endif
 		return CountUnitsInGroup(whichGroup)
 	endmethod
 
 	/**
 	 * 判断单位是否在单位组内
 	 */
-	public static method isin takes unit whichunit,group whichGroup returns boolean
-		return IsUnitInGroup(whichunit, whichGroup)
+	public static method isIn takes unit whichUnit,group whichGroup returns boolean
+		if(whichGroup == null)then
+			return false
+		endif
+		return IsUnitInGroup(whichUnit, whichGroup)
+	endmethod
+
+	/**
+	 * 判断单位组是否为空
+	 */
+	public static method isEmpty takes group whichGroup returns boolean
+		if(whichGroup == null)then
+			return true
+		endif
+		return IsUnitGroupEmptyBJ(whichGroup)
+	endmethod
+
+	/**
+	 * 把单位加进单位组内
+	 */
+	public static method in takes unit whichUnit,group whichGroup returns nothing
+		if(isIn(whichUnit, whichGroup) == false) then
+			call GroupAddUnit(whichGroup, whichUnit)
+		endif
+	endmethod
+	
+	/**
+	 * 把单位移出单位组
+	 */
+	public static method out takes unit whichUnit,group whichGroup returns nothing
+		if(isIn(whichUnit, whichGroup) == true) then
+			call GroupRemoveUnit(whichGroup, whichUnit)
+		endif
 	endmethod
 
 	/**
@@ -73,8 +107,12 @@ struct hGroup
 	 */
 	public static method move takes group whichGroup,location loc,string meffect,boolean isFollow returns nothing
 	    local boolean canMove = false
-	    local group g = CreateGroup()
+	    local group g = null
 	    local unit u = null
+		if(whichGroup == null or loc == null)then
+			return
+		endif
+		set g = CreateGroup()
 	    call GroupAddGroup(g, whichGroup)
 	    loop
 	        exitwhen(IsUnitGroupEmptyBJ(g) == true)
@@ -100,8 +138,12 @@ struct hGroup
 	  */
 	public static method animate takes group whichGroup,string animateno returns nothing
 	    local boolean canAction = false
-	    local group g = CreateGroup()
+	    local group g = null
 	    local unit u = null
+		if(whichGroup == null or animateno == null or animateno == "")then
+			return
+		endif
+		set g = CreateGroup()
 	    call GroupAddGroup(g, whichGroup)
 	    loop
 	        exitwhen(IsUnitGroupEmptyBJ(g) == true)
@@ -119,6 +161,31 @@ struct hGroup
 	    call GroupClear(g)
 	    call DestroyGroup(g)
 	    set g = null
+	endmethod
+
+	/**
+	  * 清空单位组
+	  * synconly 是否同时删除单位组
+	  * realdelunit 是否同时删除单位组里面的单位
+	  */
+	public static method clear takes group whichGroup,boolean synconly,boolean realdelunit returns nothing
+		local unit u = null
+		if (whichGroup == null) then
+			return
+		endif
+	    loop
+	        exitwhen(IsUnitGroupEmptyBJ(whichGroup) == true)
+	            set u = FirstOfGroup(whichGroup)
+	            call GroupRemoveUnit( whichGroup , u )
+	            if( realdelunit == true ) then
+	                call RemoveUnit( u )
+	            endif
+				set u = null
+	    endloop
+		if(synconly == true)then
+			call DestroyGroup(whichGroup)
+	    	set whichGroup = null
+		endif
 	endmethod
 	
 endstruct

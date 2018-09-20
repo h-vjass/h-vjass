@@ -12,6 +12,11 @@ endglobals
 globals
 	hAttr hattr
 	hashtable hash_attr = null
+	group ATTR_GROUP_LIFE_BACK = CreateGroup()
+	group ATTR_GROUP_MANA_BACK = CreateGroup()
+	group ATTR_GROUP_LIFE_SOURCE = CreateGroup()
+	group ATTR_GROUP_MANA_SOURCE = CreateGroup()
+	group ATTR_GROUP_PUNISH = CreateGroup()
 endglobals
 
 struct hAttrBean
@@ -24,6 +29,7 @@ struct hAttrBean
 	public static real attackPhysical = 0.0
 	public static real attackMagic = 0.0
 	public static real attackRange = 0.0
+	public static real sight = 0.0
 	public static real str = 0.0
 	public static real agi = 0.0
 	public static real int = 0.0
@@ -95,6 +101,8 @@ struct hAttrBean
 	public static real attackMagicDuring = 0.0
 	public static real attackRangeVal = 0.0
 	public static real attackRangeDuring = 0.0
+	public static real sightVal = 0.0
+	public static real sightDuring = 0.0
 	public static real moveVal = 0.0
 	public static real moveDuring = 0.0
 	public static real aimVal = 0.0
@@ -131,18 +139,20 @@ struct hAttrBean
 	public static real coldDuring = 0.0
 	public static real bluntVal = 0.0
 	public static real bluntDuring = 0.0
-	public static real muggleVal = 0.0
-	public static real muggleDuring = 0.0
 	public static real myopiaVal = 0.0
 	public static real myopiaDuring = 0.0
+	public static real muggleVal = 0.0
+	public static real muggleDuring = 0.0
+	public static real blindVal = 0.0
+	public static real blindDuring = 0.0
 	public static real corrosionVal = 0.0
 	public static real corrosionDuring = 0.0
 	public static real chaosVal = 0.0
 	public static real chaosDuring = 0.0
 	public static real twineVal = 0.0
 	public static real twineDuring = 0.0
-	public static real blindVal = 0.0
-	public static real blindDuring = 0.0
+	public static real drunkVal = 0.0
+	public static real drunkDuring = 0.0
 	public static real tortuaVal = 0.0
 	public static real tortuaDuring = 0.0
 	public static real weakVal = 0.0
@@ -187,11 +197,12 @@ struct hAttrBean
 		set x.mana = 0
 		set x.move = 0
 		set x.defend  = 0
-		set x.attackSpeed  = 0
+		set x.attackSpeed = 0
 		set x.attackHuntType = ""
 		set x.attackPhysical = 0
 		set x.attackMagic = 0
 		set x.attackRange = 0
+		set x.sight = 0
 		set x.str = 0
 		set x.agi = 0
 		set x.int = 0
@@ -261,6 +272,10 @@ struct hAttrBean
 		set x.attackPhysicalDuring = 0.0
 		set x.attackMagicVal = 0.0
 		set x.attackMagicDuring = 0.0
+		set x.attackRangeVal = 0.0
+		set x.attackRangeDuring = 0.0
+		set x.sightVal = 0.0
+		set x.sightDuring = 0.0
 		set x.moveVal = 0.0
 		set x.moveDuring = 0.0
 		set x.aimVal = 0.0
@@ -297,18 +312,20 @@ struct hAttrBean
 		set x.coldDuring = 0.0
 		set x.bluntVal = 0.0
 		set x.bluntDuring = 0.0
-		set x.muggleVal = 0.0
-		set x.muggleDuring = 0.0
 		set x.myopiaVal = 0.0
 		set x.myopiaDuring = 0.0
+		set x.muggleVal = 0.0
+		set x.muggleDuring = 0.0
+		set x.blindVal = 0.0
+		set x.blindDuring = 0.0
 		set x.corrosionVal = 0.0
 		set x.corrosionDuring = 0.0
 		set x.chaosVal = 0.0
 		set x.chaosDuring = 0.0
 		set x.twineVal = 0.0
 		set x.twineDuring = 0.0
-		set x.blindVal = 0.0
-		set x.blindDuring = 0.0
+		set x.drunkVal = 0.0
+		set x.drunkDuring = 0.0
 		set x.tortuaVal = 0.0
 		set x.tortuaDuring = 0.0
 		set x.weakVal = 0.0
@@ -353,11 +370,12 @@ struct hAttrBean
 		set mana = 0
 		set move = 0
 		set defend  = 0
-		set attackSpeed  = 0
+		set attackSpeed = 0
 		set attackHuntType = ""
 		set attackPhysical = 0
 		set attackMagic = 0
 		set attackRange = 0
+		set sight = 0
 		set str = 0
 		set agi = 0
 		set int = 0
@@ -427,6 +445,10 @@ struct hAttrBean
 		set attackPhysicalDuring = 0.0
 		set attackMagicVal = 0.0
 		set attackMagicDuring = 0.0
+		set attackRangeVal = 0.0
+		set attackRangeDuring = 0.0
+		set sightVal = 0.0
+		set sightDuring = 0.0
 		set moveVal = 0.0
 		set moveDuring = 0.0
 		set aimVal = 0.0
@@ -463,18 +485,20 @@ struct hAttrBean
 		set coldDuring = 0.0
 		set bluntVal = 0.0
 		set bluntDuring = 0.0
-		set muggleVal = 0.0
-		set muggleDuring = 0.0
 		set myopiaVal = 0.0
 		set myopiaDuring = 0.0
+		set muggleVal = 0.0
+		set muggleDuring = 0.0
+		set blindVal = 0.0
+		set blindDuring = 0.0
 		set corrosionVal = 0.0
 		set corrosionDuring = 0.0
 		set chaosVal = 0.0
 		set chaosDuring = 0.0
 		set twineVal = 0.0
 		set twineDuring = 0.0
-		set blindVal = 0.0
-		set blindDuring = 0.0
+		set drunkVal = 0.0
+		set drunkDuring = 0.0
 		set tortuaVal = 0.0
 		set tortuaDuring = 0.0
 		set weakVal = 0.0
@@ -518,9 +542,10 @@ endstruct
 struct hAttr
 
 	private static integer ATTR_FLAG_UNIT = 1
+	private static integer ATTR_FLAG_IS_PUNISH = 2
 
-    private static integer ATTR_FLAG_LIFE = 3
-    private static integer ATTR_FLAG_MANA = 6
+    private static integer ATTR_FLAG_LIFE = 7
+    private static integer ATTR_FLAG_MANA = 8
     private static integer ATTR_FLAG_MOVE = 9
     private static integer ATTR_FLAG_DEFEND = 10
     private static integer ATTR_FLAG_ATTACK_SPEED = 12
@@ -529,12 +554,13 @@ struct hAttr
     private static integer ATTR_FLAG_ATTACK_PHYSICAL = 15
     private static integer ATTR_FLAG_ATTACK_MAGIC = 16
     private static integer ATTR_FLAG_ATTACK_RANGE = 17
-    private static integer ATTR_FLAG_STR = 18
-    private static integer ATTR_FLAG_AGI = 19
-    private static integer ATTR_FLAG_INT = 20
-    private static integer ATTR_FLAG_STR_WHITE = 21
-    private static integer ATTR_FLAG_AGI_WHITE = 22
-    private static integer ATTR_FLAG_INT_WHITE = 23
+    private static integer ATTR_FLAG_SIGHT = 18
+    private static integer ATTR_FLAG_STR = 19
+    private static integer ATTR_FLAG_AGI = 20
+    private static integer ATTR_FLAG_INT = 21
+    private static integer ATTR_FLAG_STR_WHITE = 22
+    private static integer ATTR_FLAG_AGI_WHITE = 23
+    private static integer ATTR_FLAG_INT_WHITE = 24
 
 	private static integer ATTR_FLAG_UP_LIFE_BACK = 1001
 	private static integer ATTR_FLAG_UP_LIFE_SOURCE = 1002
@@ -648,7 +674,7 @@ struct hAttr
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_1000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_10000000 )
 		call UnitRemoveAbility( whichUnit, Attr_Ability_mana_FU_100000000 )
-		//白字攻击
+		//物品栏
         if(GetUnitAbilityLevel(whichUnit,ITEM_ABILITY)<1)then
             call UnitAddAbility(whichUnit, ITEM_ABILITY)
             call UnitRemoveAbility(whichUnit, ITEM_ABILITY)
@@ -831,7 +857,19 @@ struct hAttr
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_1000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_10000)
         call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_defend_FU_100000)
-
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_50 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_100 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_200 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_300 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_400 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_1000 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_FU_50 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_FU_100 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_FU_200 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_FU_300 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_FU_400 )
+		call UnitMakeAbilityPermanent( whichUnit , true, Attr_Ability_sight_FU_1000 )
+		// 
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_1,   	1 )
     	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_10,  	1 )
     	call SetUnitAbilityLevel( whichUnit , Attr_Ability_attackSpeed_100, 	1 )
@@ -943,6 +981,21 @@ struct hAttr
     	endloop
     endmethod
 
+	/**
+     * 为单位添加N个同样的视野技能
+     */
+    private static method setSightAbility takes unit u,integer abilityId ,integer qty returns nothing
+    	local integer i = 1
+    	if( qty <= 0 )then
+	    	return
+		endif
+    	loop
+	    	exitwhen i > qty
+	    		call UnitAddAbility( u, abilityId )
+	    	set i = i+1
+    	endloop
+    endmethod
+
     /**
      * 为单位添加N个同样的攻击之书 （ITEM_ABILITY 为物品栏技能）
      */
@@ -973,6 +1026,7 @@ struct hAttr
 	//白字攻击	-999999999 ～ 999999999
 	//绿字攻击	-999999999 ～ 999999999
 	//攻速 		-9999% ～ 9999%<*实际上为-80% ～ 400%>
+	//视野 		-2050 ～ 2050（视野设定以50一个间隔设定，如/-50/0/50/500/950，自动退一法归50，例如即使你设为1/21/44会归为0，151/199会归为150）
 	//射程 		0 ～ 
     //力敏智		～
     //力敏智(绿)	-99999999 ～ 99999999
@@ -988,6 +1042,7 @@ struct hAttr
 		local real tempPercent = 0
 		local integer tempInt = 0
 		if( diff!=0 )then
+			// 生命
 			if( flag == ATTR_FLAG_LIFE ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
@@ -1064,7 +1119,10 @@ struct hAttr
 					set tempInt = tempInt - (tempInt/1)*1
 					call setLM( whichUnit , Attr_Ability_life_FU_1 , level )
 				endif
-			elseif( flag == ATTR_FLAG_MANA ) then
+				return
+			endif
+			// 魔法
+			if( flag == ATTR_FLAG_MANA ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1140,7 +1198,10 @@ struct hAttr
 					set tempInt = tempInt - (tempInt/1)*1
 					call setLM( whichUnit , Attr_Ability_mana_FU_1 , level )
 				endif
-			elseif( flag == ATTR_FLAG_MOVE ) then
+				return
+			endif
+			// 移动
+			if( flag == ATTR_FLAG_MOVE ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1153,7 +1214,10 @@ struct hAttr
 						call SetUnitMoveSpeed( whichUnit , R2I(futureVal) )
 					endif
 				endif
-			elseif( flag == ATTR_FLAG_DEFEND ) then
+				return
+			endif
+			// 护甲
+			if( flag == ATTR_FLAG_DEFEND ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1201,7 +1265,10 @@ struct hAttr
 		            set tempInt = tempInt - (tempInt/10)*10
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1, tempInt+1 )
 		        endif
-		    elseif( flag == ATTR_FLAG_ATTACK_SPEED ) then
+				return
+			endif
+			// 攻击速度
+		    if( flag == ATTR_FLAG_ATTACK_SPEED ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1239,7 +1306,10 @@ struct hAttr
 		        endif
 				//修改攻速间隔
 				call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , hunit.getAttackSpeedBaseSpace(GetUnitTypeId(whichUnit))/(1+futureVal*0.01) )
-			elseif( flag == ATTR_FLAG_ATTACK_PHYSICAL ) then
+				return
+			endif
+			// 物理攻击
+			if( flag == ATTR_FLAG_ATTACK_PHYSICAL ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1305,7 +1375,10 @@ struct hAttr
 					set tempInt = tempInt - (tempInt/1)*1
 					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_FU_item_1 , level )
 				endif
-			elseif( flag == ATTR_FLAG_ATTACK_MAGIC ) then
+				return
+			endif
+			// 魔法攻击
+			if( flag == ATTR_FLAG_ATTACK_MAGIC ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1371,7 +1444,10 @@ struct hAttr
 		            set tempInt = tempInt - (tempInt/10)*10
 		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_attack_magic_FU_1, tempInt+1 )
 				endif
-			elseif( flag == ATTR_FLAG_ATTACK_RANGE ) then
+				return
+			endif
+			// 攻击范围
+			if( flag == ATTR_FLAG_ATTACK_RANGE ) then
 				set futureVal = LoadReal( hash_attr , uhid , flag ) + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
 				if(futureVal < 550)then
@@ -1381,7 +1457,118 @@ struct hAttr
 					set futureVal = futureVal * 0.5
 				endif
 				call SetUnitAcquireRange( whichUnit, futureVal*1.1 )
-			elseif( flag == ATTR_FLAG_STR ) then
+				return
+			endif
+			// 视野
+			if( flag == ATTR_FLAG_SIGHT ) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+				set futureVal = currentVal + diff
+				call SaveReal( hash_attr , uhid , flag , futureVal )
+				if( futureVal < -ATTR_MAX_SIGHT ) then
+					set futureVal = -ATTR_MAX_SIGHT
+				elseif( futureVal > ATTR_MAX_SIGHT ) then
+					set futureVal = ATTR_MAX_SIGHT
+				endif
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_50 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_100 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_200 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_300 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_400 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_1000 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_FU_50 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_FU_100 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_FU_200 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_FU_300 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_FU_400 )
+				call UnitRemoveAbility( whichUnit , Attr_Ability_sight_FU_1000 )
+				set tempInt = hlogic.iabs(R2I(futureVal) / 50)
+				if(hlogic.imod(tempInt,2) == 1)then
+					call UnitAddAbility(whichUnit,Attr_Ability_sight_50)// is50
+					set tempInt = (tempInt-1) * 50
+				else
+					set tempInt = tempInt * 50
+				endif
+				if(tempInt > 0)then
+					if(futureVal > 0)then
+						if(tempInt >= 1000)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_1000)
+							set tempInt = tempInt - 1000
+						endif
+						if(tempInt == 0)then//nothing
+						elseif(tempInt == 100)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_100)
+						elseif(tempInt == 200)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_200)
+						elseif(tempInt == 300)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_300)
+						elseif(tempInt == 400)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						elseif(tempInt == 500)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_100)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						elseif(tempInt == 600)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_200)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						elseif(tempInt == 700)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						elseif(tempInt == 800)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_100)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						elseif(tempInt == 900)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_200)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						elseif(tempInt == 1000)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_100)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_200)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_400)
+						endif
+					else
+						if(tempInt >= 1000)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_1000)
+							set tempInt = tempInt - 1000
+						endif
+						if(tempInt == 0)then//nothing
+						elseif(tempInt == 100)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_100)
+						elseif(tempInt == 200)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_200)
+						elseif(tempInt == 300)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_300)
+						elseif(tempInt == 400)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						elseif(tempInt == 500)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_100)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						elseif(tempInt == 600)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_200)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						elseif(tempInt == 700)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						elseif(tempInt == 800)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_100)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						elseif(tempInt == 900)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_200)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						elseif(tempInt == 1000)then
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_100)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_200)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_300)
+							call UnitAddAbility(whichUnit,Attr_Ability_sight_FU_400)
+						endif
+					endif
+				endif
+				return
+			endif
+			// 绿字力量
+			if( flag == ATTR_FLAG_STR ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1577,7 +1764,47 @@ struct hAttr
 				call SaveReal( hash_attr , uhid , flag , futureVal )
 				call SetHeroInt( whichUnit , R2I(futureVal) , true )
             //TODO - EXT
-            elseif( flag == ATTR_FLAG_UP_PUNISH ) then
+			elseif( flag == ATTR_FLAG_UP_LIFE_BACK ) then
+				set futureVal = LoadReal( hash_attr , uhid , flag ) + diff
+				if (hlogic.rabs(futureVal) > 0.02) then
+					call hgroup.in(whichUnit, ATTR_GROUP_LIFE_BACK)
+				elseif (hlogic.rabs(futureVal) < 0.02) then
+					call hgroup.out(whichUnit, ATTR_GROUP_LIFE_BACK)
+				endif
+                call SaveReal( hash_attr , uhid , flag , futureVal )
+			elseif( flag == ATTR_FLAG_UP_MANA_BACK ) then
+				set futureVal = LoadReal( hash_attr , uhid , flag ) + diff
+				if (hlogic.rabs(futureVal) > 0.02) then
+					call hgroup.in(whichUnit, ATTR_GROUP_MANA_BACK)
+				elseif (hlogic.rabs(futureVal) < 0.02) then
+					call hgroup.out(whichUnit, ATTR_GROUP_MANA_BACK)
+				endif
+                call SaveReal( hash_attr , uhid , flag , futureVal )
+			elseif( flag == ATTR_FLAG_UP_LIFE_SOURCE_CURRENT ) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+                set futureVal = currentVal + diff
+                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE ) ) then
+                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE )
+                endif
+				if (futureVal > 1 ) then
+					call hgroup.in(whichUnit, ATTR_GROUP_LIFE_SOURCE)
+				elseif (futureVal < 1 ) then
+					call hgroup.out(whichUnit, ATTR_GROUP_LIFE_SOURCE)
+				endif
+                call SaveReal( hash_attr , uhid , flag , futureVal )
+			elseif( flag == ATTR_FLAG_UP_MANA_SOURCE_CURRENT ) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+                set futureVal = currentVal + diff
+                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE ) ) then
+                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE )
+                endif
+				if (futureVal > 1 ) then
+					call hgroup.in(whichUnit, ATTR_GROUP_MANA_SOURCE)
+				elseif (futureVal < 1 ) then
+					call hgroup.out(whichUnit, ATTR_GROUP_MANA_SOURCE)
+				endif
+                call SaveReal( hash_attr , uhid , flag , futureVal )
+            elseif( flag == ATTR_FLAG_UP_PUNISH and hunit.isOpenPunish(whichUnit)) then
                 set currentVal = LoadReal( hash_attr , uhid , flag )
                 set futureVal = currentVal + diff
                 call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1587,25 +1814,11 @@ struct hAttr
                 else
                     call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , futureVal )
                 endif
-            elseif( flag == ATTR_FLAG_UP_PUNISH_CURRENT ) then
+            elseif( flag == ATTR_FLAG_UP_PUNISH_CURRENT and hunit.isOpenPunish(whichUnit)) then
                 set currentVal = LoadReal( hash_attr , uhid , flag )
                 set futureVal = currentVal + diff
                 if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH ) ) then
                     set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH )
-                endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
-			elseif( flag == ATTR_FLAG_UP_LIFE_SOURCE_CURRENT ) then
-				set currentVal = LoadReal( hash_attr , uhid , flag )
-                set futureVal = currentVal + diff
-                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE ) ) then
-                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE )
-                endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
-			elseif( flag == ATTR_FLAG_UP_MANA_SOURCE_CURRENT ) then
-				set currentVal = LoadReal( hash_attr , uhid , flag )
-                set futureVal = currentVal + diff
-                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE ) ) then
-                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE )
                 endif
                 call SaveReal( hash_attr , uhid , flag , futureVal )
             else
@@ -1629,9 +1842,9 @@ struct hAttr
 		local integer judgeHandleId = LoadInteger( hash_attr , uhid , ATTR_FLAG_UNIT )
 		local real tempReal = 0
 		if( uhid != judgeHandleId ) then
-            call hconsole.log(GetUnitName(whichUnit)+"准备注册技能")
+            //call hconsole.log(GetUnitName(whichUnit)+"准备注册技能")
 			call regAllAttrSkill(whichUnit)//注册技能
-            call hconsole.log(GetUnitName(whichUnit)+"完成技能注册")
+            //call hconsole.log(GetUnitName(whichUnit)+"完成技能注册")
 			call SaveInteger( hash_attr , uhid , ATTR_FLAG_UNIT , uhid )
 			//todo 变量初始化
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_LIFE , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit) )
@@ -1726,7 +1939,16 @@ struct hAttr
             endif
             call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
             call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
-
+			//给予默认攻击距离,先判断全局有没有设定过这一个单位类型的攻击距离，大于 1 则使用，否则使用默认的近战100，远程600
+			if(hunit.getAttackRange(GetUnitTypeId(whichUnit)) > 1)then
+				call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , hunit.getAttackRange(GetUnitTypeId(whichUnit)) )
+			else
+				if(his.melee(whichUnit))then // 近战
+					call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 100 )
+				elseif(his.ranged(whichUnit))then // 远程
+					call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 600 )
+				endif
+			endif
 			return true
 		endif
 		return false
@@ -1806,6 +2028,26 @@ struct hAttr
 	private static method getAttr takes integer flag , unit whichUnit returns real
 		call initAttr( whichUnit )
 		return LoadReal( hash_attr , GetHandleId(whichUnit) , flag )
+	endmethod
+
+	// 使单位硬直
+	private static method setPunishingOver takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local integer id = htime.getInteger(t,1)
+		call htime.delTimer(t)
+		call SaveBoolean( hash_attr, id , ATTR_FLAG_IS_PUNISH , false)
+	endmethod
+	public static method setPunishing takes unit whichUnit, real during returns nothing
+		local boolean isPunish = LoadBoolean( hash_attr, GetHandleId(whichUnit) , ATTR_FLAG_IS_PUNISH )
+		local timer t = null
+		if(isPunish != true)then
+			call SaveBoolean( hash_attr, GetHandleId(whichUnit) , ATTR_FLAG_IS_PUNISH , true)
+			set t = htime.setTimeout(during,function thistype.setPunishingOver)
+			call htime.setInteger(t,1,GetHandleId(whichUnit))
+		endif
+	endmethod
+	public static method isPunishing takes unit whichUnit returns boolean
+		return LoadBoolean( hash_attr, GetHandleId(whichUnit) , ATTR_FLAG_IS_PUNISH )
 	endmethod
 
 
@@ -2012,6 +2254,20 @@ struct hAttr
 	endmethod
 	public static method setAttackRange takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , value - getAttackRange(whichUnit) , during )
+	endmethod
+
+	// 视野 ------------------------------------------------------------ 
+	public static method getSight takes unit whichUnit returns real
+		return getAttr( ATTR_FLAG_SIGHT , whichUnit )
+	endmethod
+	public static method addSight takes unit whichUnit , real value , real during returns nothing
+		call setAttr( ATTR_FLAG_SIGHT , whichUnit , value , during )
+	endmethod
+	public static method subSight takes unit whichUnit , real value , real during returns nothing
+		call setAttr( ATTR_FLAG_SIGHT , whichUnit , -value , during )
+	endmethod
+	public static method setSight takes unit whichUnit , real value , real during returns nothing
+		call setAttr( ATTR_FLAG_SIGHT , whichUnit , value - getSight(whichUnit) , during )
 	endmethod
 
 	// 力量 ------------------------------------------------------------ 

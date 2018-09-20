@@ -118,8 +118,12 @@ struct hMultiboard
         local real len = LoadReal(hash_hmb,StringHash(content),6789)
         local integer chinaQty = 0
         if(len <= 0)then
-            set chinaQty = hlogic.getChinaQty.evaluate(content)
-            set len = (I2R(StringLength(content))-I2R(chinaQty)*1.65)*0.40
+            /**
+             * //chinies format but so slow,alway close
+             * set chinaQty = hlogic.getChinaQty.evaluate(content)
+             * set len = (I2R(StringLength(content))-I2R(chinaQty)*1.65)*0.40
+             */
+            set len = (I2R(StringLength(content)))*0.35
             call SaveReal(hash_hmb,StringHash(content),6789,len)
         endif
         if( hasIcon )then
@@ -178,6 +182,45 @@ struct hMultiboard
         endif
     endmethod
 
+
+    /**
+     * format mb
+     */
+    private static method hJassFormat_allPlayer takes nothing returns nothing
+        local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local integer maxHeroQty = 0
+        local timer t = null
+        if(hmb_all_player == null) then
+            set maxHeroQty = hhero.getPlayerAllowQty()
+            set hmb_all_player = CreateMultiboard()
+            set mbid = GetHandleId(hmb_all_player)
+            call setContentIcon( mbid , 1, 1, "玩家名称","ReplaceableTextures\\CommandButtons\\BTNVillagerMan1.blp" )
+            set h = 1
+            set r = 1
+            loop
+                exitwhen h>maxHeroQty
+                    set r = r+1
+                    call setContent( mbid , r, 1, "英雄"+I2S(h) )
+                set h=h+1
+            endloop
+            call setContentIcon( mbid , 1+r, 1, "黄金(率)","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid , 2+r, 1, "木头(率)","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid , 3+r, 1, "经验率","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid , 4+r, 1, "杀敌数","ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
+            call setContentIcon( mbid , 5+r, 1, "建筑数","ReplaceableTextures\\CommandButtons\\BTNHumanBuild.blp" )
+            call setContentIcon( mbid , 6+r, 1, "造成伤害","ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+            call setContentIcon( mbid , 7+r, 1, "承受伤害","ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
+            call setContentIcon( mbid , 8+r, 1, "获金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid , 9+r, 1, "获木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid ,10+r, 1, "耗金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid ,11+r, 1, "耗木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid ,12+r, 1, "状态","ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
+            call setContentIcon( mbid ,13+r, 1, "APM","ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
+            call htime.setInterval(2.0,function thistype.hJassDefault_allPlayer)
+        endif
+    endmethod
     private static method hJassDefault_allPlayer takes nothing returns nothing
         local timer t = null
         local integer mbid = 0
@@ -198,6 +241,7 @@ struct hMultiboard
             set i = i+1
         endloop
         if( isDo == true)then
+            call hJassFormat_allPlayer()
             set mbid = GetHandleId(hmb_all_player)
             call setTitle( mbid , "所有玩家情报( "+I2S(player_current_qty)+" 名 )")
             set i = 1
@@ -233,11 +277,54 @@ struct hMultiboard
                 endif
                 set i = i + 1
             endloop
-            set t = htime.setTimeout(0.3,function thistype.build)
+            set t = htime.setTimeout(0.4,function thistype.build)
             call htime.setMultiboard(t,1,hmb_all_player)
         endif
     endmethod
 
+    private static method hJassFormat_me takes integer i returns nothing
+        local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local integer maxHeroQty = 0
+        local timer t = null
+        if (hmb_me[i] == null and hplayer.getStatus(players[i]) != hplayer.default_status_nil) then
+            set maxHeroQty = hhero.getPlayerAllowQty()
+            set hmb_me[i] = CreateMultiboard()
+            set mbid = GetHandleId(hmb_me[i])
+            call setContentIcon( mbid, 1, 1, "黄金(率)", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid, 1, 2, "木头(率)", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid, 1, 3, "经验率", "ReplaceableTextures\\CommandButtons\\BTNTomeBrown.blp" )
+            call setContentIcon( mbid, 1, 4, "杀敌数", "ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
+            call setContentIcon( mbid, 1, 5, "造成伤害", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+            call setContentIcon( mbid, 1, 6, "承受伤害", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
+            call setContentIcon( mbid, 1, 7, "获金总量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid, 1, 8, "获木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid, 1, 9, "耗金总量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid, 1,10, "耗木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid, 1,11, "状态", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
+            call setContentIcon( mbid, 1,12, "APM", "ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
+            call setContent( mbid, 3, 1, "#" )
+            call setContentIcon( mbid, 3, 2, "名称", "ReplaceableTextures\\CommandButtons\\BTNChaosWarlord.blp" )
+            call setContentIcon( mbid, 3, 3, "等级", "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+            call setContentIcon( mbid, 3, 4, "类型", "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp" )
+            call setContentIcon( mbid, 3, 5, "生命量", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
+            call setContentIcon( mbid, 3, 6, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
+            call setContentIcon( mbid, 3, 7, "魔法量", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
+            call setContentIcon( mbid, 3, 8, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
+            call setContentIcon( mbid, 3, 9, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
+            call setContentIcon( mbid, 3,10, "僵直度", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
+            call setContentIcon( mbid, 3,11, "负重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
+            set h = 1
+            loop
+                exitwhen h>maxHeroQty
+                    call setContent( mbid, 3+h, 1, "英雄"+I2S(h) )
+                set h=h+1
+            endloop
+            set t = htime.setInterval(2.0,function thistype.hJassDefault_me)
+            call htime.setInteger(t,1,i)
+        endif
+    endmethod
     private static method hJassDefault_me takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer i = htime.getInteger(t,1)
@@ -251,9 +338,9 @@ struct hMultiboard
             return
         endif
         if(hmb_me[i]!=null and hmb_current_type[i] == "mbme")then
+            call hJassFormat_me(i)
             set mbid = GetHandleId(hmb_me[i])
             call setTitle(mbid, "你的个人状态("+GetPlayerName(players[i])+")")
-
             call setContent( mbid, 2, 1, I2S(hplayer.getGold(players[i]))+"("+R2S(hplayer.getGoldRatio(players[i]))+"%)" )
             call setContent( mbid, 2, 2, I2S(hplayer.getLumber(players[i]))+"("+R2S(hplayer.getLumberRatio(players[i]))+"%)" )
             call setContent( mbid, 2, 3, R2S(hplayer.getExpRatio(players[i]))+"%" )
@@ -289,6 +376,53 @@ struct hMultiboard
         endif
     endmethod
 
+    private static method hJassFormat_selection_attr takes integer i returns nothing
+        local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local integer maxHeroQty = 0
+        local timer t = null
+        if (hmb_selection_attr[i] == null and hplayer.getStatus(players[i]) != hplayer.default_status_nil) then
+            set hmb_selection_attr[i] = CreateMultiboard()
+            set mbid = GetHandleId(hmb_selection_attr[i])
+            call setContentIcon( mbid, 1, 1, "生命", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
+            call setContentIcon( mbid, 1, 2, "生命恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionGreenSmall.blp" )
+            call setContentIcon( mbid, 1, 3, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
+            call setContentIcon( mbid, 1, 4, "硬直", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
+            call setContentIcon( mbid, 1, 5, "物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
+            call setContentIcon( mbid, 1, 6, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
+            call setContentIcon( mbid, 1, 7, "攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
+            call setContentIcon( mbid, 1, 8, "护甲", "ReplaceableTextures\\CommandButtons\\BTNHumanArmorUpOne.blp" )
+            call setContentIcon( mbid, 1, 9, "回避", "ReplaceableTextures\\CommandButtons\\BTNInvisibility.blp" )
+            call setContentIcon( mbid, 1,10, "物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+            call setContentIcon( mbid, 1,11, "致命抵抗", "ReplaceableTextures\\CommandButtons\\BTNPillage.blp" )
+            call setContentIcon( mbid, 1,12, "吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
+            call setContentIcon( mbid, 1,13, "眩晕抵抗", "ReplaceableTextures\\CommandButtons\\BTNNeutralManaShield.blp" )
+            call setContentIcon( mbid, 1,14, "无敌", "ReplaceableTextures\\CommandButtons\\BTNDivineIntervention.blp" )
+            call setContentIcon( mbid, 1,15, "伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
+            call setContentIcon( mbid, 1,16, "负重", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
+
+            call setContentIcon( mbid, 3, 1, "魔法", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
+            call setContentIcon( mbid, 3, 2, "魔法恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionOfClarity.blp" )
+            call setContentIcon( mbid, 3, 3, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
+            call setContentIcon( mbid, 3, 4, "硬直抵抗", "ReplaceableTextures\\CommandButtons\\BTNSirenMaster.blp" )
+            call setContentIcon( mbid, 3, 5, "魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
+            call setContentIcon( mbid, 3, 6, "攻击距离", "ReplaceableTextures\\CommandButtons\\BTNImprovedBows.blp" )
+            call setContentIcon( mbid, 3, 7, "韧性", "ReplaceableTextures\\CommandButtons\\BTNLeatherUpgradeTwo.blp" )
+            call setContentIcon( mbid, 3, 8, "魔抗", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
+            call setContentIcon( mbid, 3, 9, "命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
+            call setContentIcon( mbid, 3,10, "魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
+            call setContentIcon( mbid, 3,11, "分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
+            call setContentIcon( mbid, 3,12, "技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
+            call setContentIcon( mbid, 3,13, "运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
+            call setContentIcon( mbid, 3,14, "治疗", "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp" )
+            call setContentIcon( mbid, 3,15, "伤害反射", "ReplaceableTextures\\CommandButtons\\BTNThornShield.blp" )
+            call setContentIcon( mbid, 3,16, "救助力", "ReplaceableTextures\\CommandButtons\\BTNAnkh.blp" )
+
+            set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_attr)
+            call htime.setInteger(t,1,i)
+        endif
+    endmethod
     private static method hJassDefault_selection_attr takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer i = htime.getInteger(t,1)
@@ -298,6 +432,7 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_attr[i]!=null and hmb_current_type[i] == "mbsa")then
+            call hJassFormat_selection_attr(i)
             set mbid = GetHandleId(hmb_selection_attr[i])
             if(hplayer.getSelection(players[i])!=null)then
                 call setTitle(mbid, "属性( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
@@ -338,12 +473,69 @@ struct hMultiboard
 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_attr[i])
-            else
-                call setTitle(mbid, "无单位( “三击” 锁定单位查看常规属性)")
             endif
         endif
     endmethod
 
+    private static method hJassFormat_selection_effect takes integer i returns nothing
+        local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local integer maxHeroQty = 0
+        local timer t = null
+        if (hmb_selection_effect[i] == null and hplayer.getStatus(players[i]) != hplayer.default_status_nil) then
+            set hmb_selection_effect[i] = CreateMultiboard()
+            set mbid = GetHandleId(hmb_selection_effect[i])
+            call setContentIcon(mbid, 1, 1, "特效:生命恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionGreenSmall.blp" )
+            call setContentIcon(mbid, 1, 2, "特效:魔法恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionOfClarity.blp" )
+            call setContentIcon(mbid, 1, 3, "特效:攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
+            call setContentIcon(mbid, 1, 4, "特效:物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
+            call setContentIcon(mbid, 1, 5, "特效:魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
+            call setContentIcon(mbid, 1, 6, "特效:攻击距离", "ReplaceableTextures\\CommandButtons\\BTNImprovedBows.blp" )
+            call setContentIcon(mbid, 1, 7, "特效:移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
+            call setContentIcon(mbid, 1, 8, "特效:力量", "ReplaceableTextures\\CommandButtons\\BTNBelt.blp" )
+            call setContentIcon(mbid, 1, 9, "特效:敏捷", "ReplaceableTextures\\CommandButtons\\BTNBoots.blp" )
+            call setContentIcon(mbid, 1,10, "特效:智力", "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp" )
+            call setContentIcon(mbid, 1,11, "特效:物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
+            call setContentIcon(mbid, 1,12, "特效:魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
+            call setContentIcon(mbid, 1,13, "特效:命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
+            call setContentIcon(mbid, 1,14, "特效:分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
+            call setContentIcon(mbid, 1,15, "特效:吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
+            call setContentIcon(mbid, 1,16, "特效:技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
+            call setContentIcon(mbid, 1,17, "特效:运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
+            call setContentIcon(mbid, 1,18, "特效:伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
+            call setContentIcon(mbid, 1,19, "特效:爆破", "ReplaceableTextures\\CommandButtons\\BTNVolcano.blp" )
+            call setContentIcon(mbid, 1,20, "特效:闪电链", "ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp" )
+            call setContentIcon(mbid, 1,21, "特效:击飞", "ReplaceableTextures\\CommandButtons\\BTNNagaUnBurrow.blp" )
+            call setContentIcon(mbid, 1,22, "特效:沉默", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp" )
+            call setContentIcon(mbid, 1,23, "特效:缴械", "ReplaceableTextures\\CommandButtons\\BTNPossession.blp")
+            call setContentIcon(mbid, 3, 1, "特效:中毒", "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp" )
+            call setContentIcon(mbid, 3, 2, "特效:灼烧", "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp" )
+            call setContentIcon(mbid, 3, 3, "特效:枯竭", "ReplaceableTextures\\CommandButtons\\BTNDarkRitual.blp" )
+            call setContentIcon(mbid, 3, 4, "特效:冻结", "ReplaceableTextures\\CommandButtons\\BTNFrostBolt.blp" )
+            call setContentIcon(mbid, 3, 5, "特效:寒冷", "ReplaceableTextures\\CommandButtons\\BTNOrbOfFrost.blp" )
+            call setContentIcon(mbid, 3, 6, "特效:迟钝", "ReplaceableTextures\\CommandButtons\\BTNStasisTrap.blp" )
+            call setContentIcon(mbid, 3, 7, "特效:麻瓜", "ReplaceableTextures\\CommandButtons\\BTNAntiMagicShell.blp")
+            call setContentIcon(mbid, 3, 8, "特效:短视", "ReplaceableTextures\\CommandButtons\\BTNUltravision.blp")
+            call setContentIcon(mbid, 3, 9, "特效:腐蚀", "ReplaceableTextures\\CommandButtons\\BTNOrbOfCorruption.blp" )
+            call setContentIcon(mbid, 3,10, "特效:混乱", "ReplaceableTextures\\CommandButtons\\BTNDevourMagic.blp" )
+            call setContentIcon(mbid, 3,11, "特效:缠绕", "ReplaceableTextures\\CommandButtons\\BTNEntanglingRoots.blp" )
+            call setContentIcon(mbid, 3,12, "特效:致盲", "ReplaceableTextures\\CommandButtons\\BTNCharm.blp" )
+            call setContentIcon(mbid, 3,13, "特效:剧痛", "ReplaceableTextures\\CommandButtons\\BTNFanOfKnives.blp" )
+            call setContentIcon(mbid, 3,14, "特效:乏力", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp" )
+            call setContentIcon(mbid, 3,15, "特效:束缚", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
+            call setContentIcon(mbid, 3,16, "特效:愚蠢", "ReplaceableTextures\\CommandButtons\\BTNUnsummonBuilding.blp" )
+            call setContentIcon(mbid, 3,17, "特效:粗钝", "ReplaceableTextures\\CommandButtons\\BTNEatTree.blp" )
+            call setContentIcon(mbid, 3,18, "特效:尘迹", "ReplaceableTextures\\CommandButtons\\BTNOrbOfDarkness.blp")
+            call setContentIcon(mbid, 3,19, "特效:眩晕", "ReplaceableTextures\\CommandButtons\\BTNStun.blp" )
+            call setContentIcon(mbid, 3,20, "特效:沉重", "ReplaceableTextures\\CommandButtons\\BTNDevour.blp" )
+            call setContentIcon(mbid, 3,21, "特效:打断", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp" )
+            call setContentIcon(mbid, 3,22, "特效:倒霉", "ReplaceableTextures\\CommandButtons\\BTNBigBadVoodooSpell.blp" )
+            call setContentIcon(mbid, 3,23, "特效:脚镣", "ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
+            set t = htime.setInterval(3.0,function thistype.hJassDefault_selection_effect)
+            call htime.setInteger(t,1,i)
+        endif
+    endmethod
     private static method hJassDefault_selection_effect takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer i = htime.getInteger(t,1)
@@ -353,6 +545,7 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_effect[i]!=null and hmb_current_type[i] == "mbse")then
+            call hJassFormat_selection_effect(i)
             set mbid = GetHandleId(hmb_selection_effect[i])
             if(hplayer.getSelection(players[i])!=null)then
                 call setTitle(mbid, "攻击/伤害特效( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
@@ -406,12 +599,43 @@ struct hMultiboard
                 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_effect[i])
-            else
-                call setTitle(mbid, "无单位( “三击” 锁定单位查看攻击/伤害特效属性)")
             endif
         endif
     endmethod
 
+    private static method hJassFormat_selection_natural takes integer i returns nothing
+        local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local integer maxHeroQty = 0
+        local timer t = null
+        if (hmb_selection_natural[i] == null and hplayer.getStatus(players[i]) != hplayer.default_status_nil) then
+            set hmb_selection_natural[i] = CreateMultiboard()
+            set mbid = GetHandleId(hmb_selection_natural[i])
+            call setContentIcon(mbid, 1, 1, "火攻击", "ReplaceableTextures\\CommandButtons\\BTNFire.blp")
+            call setContentIcon(mbid, 1, 2, "土攻击", "ReplaceableTextures\\CommandButtons\\BTNEarthquake.blp")
+            call setContentIcon(mbid, 1, 3, "水攻击", "ReplaceableTextures\\CommandButtons\\BTNCrushingWave.blp")
+            call setContentIcon(mbid, 1, 4, "冰攻击", "ReplaceableTextures\\CommandButtons\\BTNGlacier.blp")
+            call setContentIcon(mbid, 1, 5, "风攻击", "ReplaceableTextures\\CommandButtons\\BTNCyclone.blp")
+            call setContentIcon(mbid, 1, 6, "光攻击", "ReplaceableTextures\\CommandButtons\\BTNHolyBolt.blp")
+            call setContentIcon(mbid, 1, 7, "暗攻击", "ReplaceableTextures\\CommandButtons\\BTNTheBlackArrow.blp")
+            call setContentIcon(mbid, 1, 8, "木攻击", "ReplaceableTextures\\CommandButtons\\BTNThorns.blp")
+            call setContentIcon(mbid, 1, 9, "雷攻击", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp")
+            call setContentIcon(mbid, 1,10, "毒攻击", "ReplaceableTextures\\CommandButtons\\BTNCorrosiveBreath.blp")
+            call setContent(mbid, 3, 1, "火抗性")
+            call setContent(mbid, 3, 2, "土抗性")
+            call setContent(mbid, 3, 3, "水抗性")
+            call setContent(mbid, 3, 4, "冰抗性")
+            call setContent(mbid, 3, 5, "风抗性")
+            call setContent(mbid, 3, 6, "光抗性")
+            call setContent(mbid, 3, 7, "暗抗性")
+            call setContent(mbid, 3, 8, "木抗性")
+            call setContent(mbid, 3, 9, "雷抗性")
+            call setContent(mbid, 3,10, "毒抗性")
+            set t = htime.setInterval(3.0,function thistype.hJassDefault_selection_natural)
+            call htime.setInteger(t,1,i)
+        endif
+    endmethod
     private static method hJassDefault_selection_natural takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer i = htime.getInteger(t,1)
@@ -421,6 +645,7 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_natural[i]!=null and hmb_current_type[i] == "mbsn")then
+            call hJassFormat_selection_natural(i)
             set mbid = GetHandleId(hmb_selection_natural[i])
             if(hplayer.getSelection(players[i])!=null)then
                 call setTitle(mbid, "自然( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
@@ -448,13 +673,29 @@ struct hMultiboard
 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_natural[i])
-            else
-                call setTitle(mbid, "无单位( “三击” 锁定单位查看自然属性)")
             endif
         endif
     endmethod
 
-
+    private static method hJassFormat_selection_item takes integer i returns nothing
+        local integer mbid = 0
+        local integer h = 0
+        local integer r = 0
+        local integer maxHeroQty = 0
+        local timer t = null
+        if (hmb_selection_item[i] == null and hplayer.getStatus(players[i]) != hplayer.default_status_nil) then
+            set hmb_selection_item[i] = CreateMultiboard()
+            set mbid = GetHandleId(hmb_selection_item[i])
+            call setContent(mbid, 1, 1, "物品")
+            call setContent(mbid, 2, 1, "数量")
+            call setContentIcon(mbid, 3, 1, "黄金", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
+            call setContentIcon(mbid, 4, 1, "木头", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp")
+            call setContentIcon(mbid, 5, 1, "重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp")
+            call setContentIcon(mbid, 6, 1, "战力", "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp")
+            set t = htime.setInterval(3.0,function thistype.hJassDefault_selection_item)
+            call htime.setInteger(t,1,i)
+        endif
+    endmethod
     private static method hJassDefault_selection_item takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer i = htime.getInteger(t,1)
@@ -475,6 +716,7 @@ struct hMultiboard
             return
         endif
         if(hmb_selection_item[i]!=null and hmb_current_type[i] == "mbsi")then
+            call hJassFormat_selection_item(i)
             set mbid = GetHandleId(hmb_selection_item[i])
             if(hplayer.getSelection(players[i])!=null)then
                 call setTitle(mbid, "物品栏( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
@@ -515,222 +757,13 @@ struct hMultiboard
                 call setContent(mbid, 6, j+1, I2S(totalCombatEffectiveness))
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_item[i])
-            else
-                call setTitle(mbid, "无单位( “三击” 锁定单位查看物品)")
             endif
         endif
-    endmethod
-
-
-    private static method start takes nothing returns nothing
-        local integer i = 0
-        local integer h = 0
-        local integer r = 0
-        local integer mbid = 0
-        local timer t = null
-        local integer maxHeroQty = hhero.getPlayerAllowQty()
-        if(hmb_all_player == null) then
-            set hmb_all_player = CreateMultiboard()
-            set mbid = GetHandleId(hmb_all_player)
-            call setContentIcon( mbid , 1, 1, "玩家名称","ReplaceableTextures\\CommandButtons\\BTNVillagerMan1.blp" )
-            set h = 1
-            set r = 1
-            loop
-                exitwhen h>maxHeroQty
-                    set r = r+1
-                    call setContent( mbid , r, 1, "英雄"+I2S(h) )
-                set h=h+1
-            endloop
-            call setContentIcon( mbid , 1+r, 1, "黄金(率)","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid , 2+r, 1, "木头(率)","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid , 3+r, 1, "经验率","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid , 4+r, 1, "杀敌数","ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
-            call setContentIcon( mbid , 5+r, 1, "建筑数","ReplaceableTextures\\CommandButtons\\BTNHumanBuild.blp" )
-            call setContentIcon( mbid , 6+r, 1, "造成伤害","ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-            call setContentIcon( mbid , 7+r, 1, "承受伤害","ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-            call setContentIcon( mbid , 8+r, 1, "获金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid , 9+r, 1, "获木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid ,10+r, 1, "耗金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid ,11+r, 1, "耗木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid ,12+r, 1, "状态","ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
-            call setContentIcon( mbid ,13+r, 1, "APM","ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
-            call htime.setInterval(2.0,function thistype.hJassDefault_allPlayer)
-        endif
-        set i = 1
-        loop
-            exitwhen i > player_max_qty
-            if( hplayer.getStatus(players[i]) != hplayer.default_status_nil ) then
-                if(hmb_me[i] == null) then
-                    set hmb_me[i] = CreateMultiboard()
-                    set mbid = GetHandleId(hmb_me[i])
-                    call setContentIcon( mbid, 1, 1, "黄金(率)", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-                    call setContentIcon( mbid, 1, 2, "木头(率)", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-                    call setContentIcon( mbid, 1, 3, "经验率", "ReplaceableTextures\\CommandButtons\\BTNTomeBrown.blp" )
-                    call setContentIcon( mbid, 1, 4, "杀敌数", "ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
-                    call setContentIcon( mbid, 1, 5, "造成伤害", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-                    call setContentIcon( mbid, 1, 6, "承受伤害", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-                    call setContentIcon( mbid, 1, 7, "获金总量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-                    call setContentIcon( mbid, 1, 8, "获木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-                    call setContentIcon( mbid, 1, 9, "耗金总量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-                    call setContentIcon( mbid, 1,10, "耗木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-                    call setContentIcon( mbid, 1,11, "状态", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
-                    call setContentIcon( mbid, 1,12, "APM", "ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
-                    call setContent( mbid, 3, 1, "#" )
-                    call setContentIcon( mbid, 3, 2, "名称", "ReplaceableTextures\\CommandButtons\\BTNChaosWarlord.blp" )
-                    call setContentIcon( mbid, 3, 3, "等级", "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
-                    call setContentIcon( mbid, 3, 4, "类型", "ReplaceableTextures\\CommandButtons\\BTNOrcCaptureFlag.blp" )
-                    call setContentIcon( mbid, 3, 5, "生命量", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
-                    call setContentIcon( mbid, 3, 6, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
-                    call setContentIcon( mbid, 3, 7, "魔法量", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
-                    call setContentIcon( mbid, 3, 8, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
-                    call setContentIcon( mbid, 3, 9, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
-                    call setContentIcon( mbid, 3,10, "僵直度", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
-                    call setContentIcon( mbid, 3,11, "负重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
-                    set h = 1
-                    loop
-                        exitwhen h>maxHeroQty
-                            call setContent( mbid, 3+h, 1, "英雄"+I2S(h) )
-                        set h=h+1
-                    endloop
-                    set t = htime.setInterval(2.0,function thistype.hJassDefault_me)
-                    call htime.setInteger(t,1,i)
-                endif
-                if(hmb_selection_attr[i] == null) then
-                    set hmb_selection_attr[i] = CreateMultiboard()
-                    set mbid = GetHandleId(hmb_selection_attr[i])
-                    call setContentIcon( mbid, 1, 1, "生命", "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp" )
-                    call setContentIcon( mbid, 1, 2, "生命恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionGreenSmall.blp" )
-                    call setContentIcon( mbid, 1, 3, "生命源", "ReplaceableTextures\\CommandButtons\\BTNHealthStone.blp" )
-                    call setContentIcon( mbid, 1, 4, "硬直", "ReplaceableTextures\\CommandButtons\\BTNSirenAdept.blp" )
-                    call setContentIcon( mbid, 1, 5, "物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
-                    call setContentIcon( mbid, 1, 6, "移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
-                    call setContentIcon( mbid, 1, 7, "攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
-                    call setContentIcon( mbid, 1, 8, "护甲", "ReplaceableTextures\\CommandButtons\\BTNHumanArmorUpOne.blp" )
-                    call setContentIcon( mbid, 1, 9, "回避", "ReplaceableTextures\\CommandButtons\\BTNInvisibility.blp" )
-                    call setContentIcon( mbid, 1,10, "物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-                    call setContentIcon( mbid, 1,11, "致命抵抗", "ReplaceableTextures\\CommandButtons\\BTNPillage.blp" )
-                    call setContentIcon( mbid, 1,12, "吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
-                    call setContentIcon( mbid, 1,13, "眩晕抵抗", "ReplaceableTextures\\CommandButtons\\BTNNeutralManaShield.blp" )
-                    call setContentIcon( mbid, 1,14, "无敌", "ReplaceableTextures\\CommandButtons\\BTNDivineIntervention.blp" )
-                    call setContentIcon( mbid, 1,15, "伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
-                    call setContentIcon( mbid, 1,16, "负重", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp" )
-
-                    call setContentIcon( mbid, 3, 1, "魔法", "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp" )
-                    call setContentIcon( mbid, 3, 2, "魔法恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionOfClarity.blp" )
-                    call setContentIcon( mbid, 3, 3, "魔法源", "ReplaceableTextures\\CommandButtons\\BTNManaStone.blp" )
-                    call setContentIcon( mbid, 3, 4, "硬直抵抗", "ReplaceableTextures\\CommandButtons\\BTNSirenMaster.blp" )
-                    call setContentIcon( mbid, 3, 5, "魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
-                    call setContentIcon( mbid, 3, 6, "攻击距离", "ReplaceableTextures\\CommandButtons\\BTNImprovedBows.blp" )
-                    call setContentIcon( mbid, 3, 7, "韧性", "ReplaceableTextures\\CommandButtons\\BTNLeatherUpgradeTwo.blp" )
-                    call setContentIcon( mbid, 3, 8, "魔抗", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-                    call setContentIcon( mbid, 3, 9, "命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
-                    call setContentIcon( mbid, 3,10, "魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
-                    call setContentIcon( mbid, 3,11, "分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
-                    call setContentIcon( mbid, 3,12, "技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
-                    call setContentIcon( mbid, 3,13, "运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
-                    call setContentIcon( mbid, 3,14, "治疗", "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp" )
-                    call setContentIcon( mbid, 3,15, "伤害反射", "ReplaceableTextures\\CommandButtons\\BTNThornShield.blp" )
-                    call setContentIcon( mbid, 3,16, "救助力", "ReplaceableTextures\\CommandButtons\\BTNAnkh.blp" )
-
-                    set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_attr)
-                    call htime.setInteger(t,1,i)
-                endif
-                if(hmb_selection_effect[i] == null) then
-                    set hmb_selection_effect[i] = CreateMultiboard()
-                    set mbid = GetHandleId(hmb_selection_effect[i])
-                    call setContentIcon(mbid, 1, 1, "特效:生命恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionGreenSmall.blp" )
-                    call setContentIcon(mbid, 1, 2, "特效:魔法恢复", "ReplaceableTextures\\CommandButtons\\BTNPotionOfClarity.blp" )
-                    call setContentIcon(mbid, 1, 3, "特效:攻击速度", "ReplaceableTextures\\CommandButtons\\BTNGlove.blp" )
-                    call setContentIcon(mbid, 1, 4, "特效:物理攻击", "ReplaceableTextures\\CommandButtons\\BTNArcaniteMelee.blp" )
-                    call setContentIcon(mbid, 1, 5, "特效:魔法攻击", "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp" )
-                    call setContentIcon(mbid, 1, 6, "特效:攻击距离", "ReplaceableTextures\\CommandButtons\\BTNImprovedBows.blp" )
-                    call setContentIcon(mbid, 1, 7, "特效:移动力", "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp" )
-                    call setContentIcon(mbid, 1, 8, "特效:力量", "ReplaceableTextures\\CommandButtons\\BTNBelt.blp" )
-                    call setContentIcon(mbid, 1, 9, "特效:敏捷", "ReplaceableTextures\\CommandButtons\\BTNBoots.blp" )
-                    call setContentIcon(mbid, 1,10, "特效:智力", "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp" )
-                    call setContentIcon(mbid, 1,11, "特效:物理暴击", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
-                    call setContentIcon(mbid, 1,12, "特效:魔法暴击", "ReplaceableTextures\\CommandButtons\\BTNGolemThunderclap.blp" )
-                    call setContentIcon(mbid, 1,13, "特效:命中", "ReplaceableTextures\\CommandButtons\\BTNMarksmanship.blp" )
-                    call setContentIcon(mbid, 1,14, "特效:分裂", "ReplaceableTextures\\CommandButtons\\BTNCleavingAttack.blp" )
-                    call setContentIcon(mbid, 1,15, "特效:吸血", "ReplaceableTextures\\CommandButtons\\BTNVampiricAura.blp" )
-                    call setContentIcon(mbid, 1,16, "特效:技能吸血", "ReplaceableTextures\\CommandButtons\\BTNHeal.blp" )
-                    call setContentIcon(mbid, 1,17, "特效:运气", "ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp" )
-                    call setContentIcon(mbid, 1,18, "特效:伤害增幅", "ReplaceableTextures\\CommandButtons\\BTNImprovedStrengthOfTheWild.blp" )
-                    call setContentIcon(mbid, 1,19, "特效:爆破", "ReplaceableTextures\\CommandButtons\\BTNVolcano.blp" )
-                    call setContentIcon(mbid, 1,20, "特效:闪电链", "ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp" )
-                    call setContentIcon(mbid, 1,21, "特效:击飞", "ReplaceableTextures\\CommandButtons\\BTNNagaUnBurrow.blp" )
-                    call setContentIcon(mbid, 1,22, "特效:沉默", "ReplaceableTextures\\CommandButtons\\BTNSilence.blp" )
-                    call setContentIcon(mbid, 1,23, "特效:缴械", "ReplaceableTextures\\CommandButtons\\BTNPossession.blp")
-                    call setContentIcon(mbid, 3, 1, "特效:中毒", "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp" )
-                    call setContentIcon(mbid, 3, 2, "特效:灼烧", "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp" )
-                    call setContentIcon(mbid, 3, 3, "特效:枯竭", "ReplaceableTextures\\CommandButtons\\BTNDarkRitual.blp" )
-                    call setContentIcon(mbid, 3, 4, "特效:冻结", "ReplaceableTextures\\CommandButtons\\BTNFrostBolt.blp" )
-                    call setContentIcon(mbid, 3, 5, "特效:寒冷", "ReplaceableTextures\\CommandButtons\\BTNOrbOfFrost.blp" )
-                    call setContentIcon(mbid, 3, 6, "特效:迟钝", "ReplaceableTextures\\CommandButtons\\BTNStasisTrap.blp" )
-                    call setContentIcon(mbid, 3, 7, "特效:麻瓜", "ReplaceableTextures\\CommandButtons\\BTNAntiMagicShell.blp")
-                    call setContentIcon(mbid, 3, 8, "特效:短视", "ReplaceableTextures\\CommandButtons\\BTNUltravision.blp")
-                    call setContentIcon(mbid, 3, 9, "特效:腐蚀", "ReplaceableTextures\\CommandButtons\\BTNOrbOfCorruption.blp" )
-                    call setContentIcon(mbid, 3,10, "特效:混乱", "ReplaceableTextures\\CommandButtons\\BTNDevourMagic.blp" )
-                    call setContentIcon(mbid, 3,11, "特效:缠绕", "ReplaceableTextures\\CommandButtons\\BTNEntanglingRoots.blp" )
-                    call setContentIcon(mbid, 3,12, "特效:致盲", "ReplaceableTextures\\CommandButtons\\BTNCharm.blp" )
-                    call setContentIcon(mbid, 3,13, "特效:剧痛", "ReplaceableTextures\\CommandButtons\\BTNFanOfKnives.blp" )
-                    call setContentIcon(mbid, 3,14, "特效:乏力", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp" )
-                    call setContentIcon(mbid, 3,15, "特效:束缚", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
-                    call setContentIcon(mbid, 3,16, "特效:愚蠢", "ReplaceableTextures\\CommandButtons\\BTNUnsummonBuilding.blp" )
-                    call setContentIcon(mbid, 3,17, "特效:粗钝", "ReplaceableTextures\\CommandButtons\\BTNEatTree.blp" )
-                    call setContentIcon(mbid, 3,18, "特效:尘迹", "ReplaceableTextures\\CommandButtons\\BTNOrbOfDarkness.blp")
-                    call setContentIcon(mbid, 3,19, "特效:眩晕", "ReplaceableTextures\\CommandButtons\\BTNStun.blp" )
-                    call setContentIcon(mbid, 3,20, "特效:沉重", "ReplaceableTextures\\CommandButtons\\BTNDevour.blp" )
-                    call setContentIcon(mbid, 3,21, "特效:打断", "ReplaceableTextures\\CommandButtons\\BTNCriticalStrike.blp" )
-                    call setContentIcon(mbid, 3,22, "特效:倒霉", "ReplaceableTextures\\CommandButtons\\BTNBigBadVoodooSpell.blp" )
-                    call setContentIcon(mbid, 3,23, "特效:脚镣", "ReplaceableTextures\\CommandButtons\\BTNSlow.blp")
-                    set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_effect)
-                    call htime.setInteger(t,1,i)
-                endif
-                if(hmb_selection_natural[i] == null) then
-                    set hmb_selection_natural[i] = CreateMultiboard()
-                    set mbid = GetHandleId(hmb_selection_natural[i])
-                    call setContentIcon(mbid, 1, 1, "火攻击", "ReplaceableTextures\\CommandButtons\\BTNFire.blp")
-                    call setContentIcon(mbid, 1, 2, "土攻击", "ReplaceableTextures\\CommandButtons\\BTNEarthquake.blp")
-                    call setContentIcon(mbid, 1, 3, "水攻击", "ReplaceableTextures\\CommandButtons\\BTNCrushingWave.blp")
-                    call setContentIcon(mbid, 1, 4, "冰攻击", "ReplaceableTextures\\CommandButtons\\BTNGlacier.blp")
-                    call setContentIcon(mbid, 1, 5, "风攻击", "ReplaceableTextures\\CommandButtons\\BTNCyclone.blp")
-                    call setContentIcon(mbid, 1, 6, "光攻击", "ReplaceableTextures\\CommandButtons\\BTNHolyBolt.blp")
-                    call setContentIcon(mbid, 1, 7, "暗攻击", "ReplaceableTextures\\CommandButtons\\BTNTheBlackArrow.blp")
-                    call setContentIcon(mbid, 1, 8, "木攻击", "ReplaceableTextures\\CommandButtons\\BTNThorns.blp")
-                    call setContentIcon(mbid, 1, 9, "雷攻击", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp")
-                    call setContentIcon(mbid, 1,10, "毒攻击", "ReplaceableTextures\\CommandButtons\\BTNCorrosiveBreath.blp")
-                    call setContent(mbid, 3, 1, "火抗性")
-                    call setContent(mbid, 3, 2, "土抗性")
-                    call setContent(mbid, 3, 3, "水抗性")
-                    call setContent(mbid, 3, 4, "冰抗性")
-                    call setContent(mbid, 3, 5, "风抗性")
-                    call setContent(mbid, 3, 6, "光抗性")
-                    call setContent(mbid, 3, 7, "暗抗性")
-                    call setContent(mbid, 3, 8, "木抗性")
-                    call setContent(mbid, 3, 9, "雷抗性")
-                    call setContent(mbid, 3,10, "毒抗性")
-                    set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_natural)
-                    call htime.setInteger(t,1,i)
-                endif
-                if(hmb_selection_item[i] == null) then
-                    set hmb_selection_item[i] = CreateMultiboard()
-                    set mbid = GetHandleId(hmb_selection_item[i])
-                    call setContent(mbid, 1, 1, "物品")
-                    call setContent(mbid, 2, 1, "数量")
-                    call setContentIcon(mbid, 3, 1, "黄金", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp")
-                    call setContentIcon(mbid, 4, 1, "木头", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp")
-                    call setContentIcon(mbid, 5, 1, "重量", "ReplaceableTextures\\CommandButtons\\BTNPackBeast.blp")
-                    call setContentIcon(mbid, 6, 1, "战力", "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp")
-                    set t = htime.setInterval(2.0,function thistype.hJassDefault_selection_item)
-                    call htime.setInteger(t,1,i)
-                endif
-            endif
-        endloop
     endmethod
 
     private static method mbap takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        call hJassFormat_allPlayer()
         set hmb_current_type[i] = "mbap"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_all_player, true)
@@ -738,6 +771,7 @@ struct hMultiboard
     endmethod
     private static method mbme takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        call hJassFormat_me(i)
         set hmb_current_type[i] = "mbme"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_me[i], true)
@@ -745,6 +779,7 @@ struct hMultiboard
     endmethod
     private static method mbsa takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        call hJassFormat_selection_attr(i)
         set hmb_current_type[i] = "mbsa"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_selection_attr[i], true)
@@ -752,6 +787,7 @@ struct hMultiboard
     endmethod
     private static method mbse takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        call hJassFormat_selection_effect(i)
         set hmb_current_type[i] = "mbse"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_selection_effect[i], true)
@@ -759,6 +795,7 @@ struct hMultiboard
     endmethod
     private static method mbsn takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        call hJassFormat_selection_natural(i)
         set hmb_current_type[i] = "mbsn"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_selection_natural[i], true)
@@ -766,6 +803,7 @@ struct hMultiboard
     endmethod
     private static method mbsi takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+         call hJassFormat_selection_item(i)
         set hmb_current_type[i] = "mbsi"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_selection_item[i], true)
@@ -774,17 +812,13 @@ struct hMultiboard
 
     public static method initSet takes nothing returns nothing
         local integer i = 0
-        local trigger startTrigger = null
         local trigger mbapTrigger = null
         local trigger mbmeTrigger = null
         local trigger mbsaTrigger = null
         local trigger mbseTrigger = null
         local trigger mbsnTrigger = null
         local trigger mbsiTrigger = null
-
-        set startTrigger = CreateTrigger()
-        call TriggerRegisterTimerEventSingle( startTrigger, 0.5 )
-        call TriggerAddAction(startTrigger, function thistype.start)
+        local string txt = null
 
         set mbapTrigger = CreateTrigger()
         set mbmeTrigger = CreateTrigger()
@@ -810,7 +844,15 @@ struct hMultiboard
                 call TriggerAddAction(mbsiTrigger, function thistype.mbsi)
             set i = i + 1
         endloop
-
+        // 任务F9提醒
+        set txt = ""
+		set txt = txt + "-mbap 查看所有玩家统计"
+		set txt = txt + "|n-mbme 查看你的个人实时状态"
+		set txt = txt + "|n-mbsa 查看三击锁定单位的基本属性"
+		set txt = txt + "|n-mbse 查看三击锁定单位的特效属性"
+		set txt = txt + "|n-mbsn 查看三击锁定单位的自然属性"
+		set txt = txt + "|n-mbsi 查看三击锁定单位的物品"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用hJass多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
     endmethod
 
 endstruct

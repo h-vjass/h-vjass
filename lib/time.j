@@ -23,10 +23,7 @@ struct hTime
                 set clock_m = 0
             endif
         endif
-        if(hconsole.status==true)then
-            call FogEnable( false )
-            call FogMaskEnable( false )
-        else
+        if(hconsole.status==false)then
             call FogEnable( true )
             call FogMaskEnable( true )
         endif
@@ -167,6 +164,10 @@ struct hTime
         local integer timerHandleId = GetHandleId(t)
         call SaveDestructableHandle(hash_time, timerHandleId, k, value)
     endmethod
+    public static method setForce takes timer t,integer k,force value returns nothing
+        local integer timerHandleId = GetHandleId(t)
+        call SaveForceHandle(hash_time, timerHandleId, k, value)
+    endmethod
     //GET
     public static method getReal takes timer t,integer k returns real
         local integer timerHandleId = GetHandleId(t)
@@ -239,6 +240,10 @@ struct hTime
     public static method getDestructable takes timer t,integer k returns destructable
         local integer timerHandleId = GetHandleId(t)
         return LoadDestructableHandle(hash_time, timerHandleId, k)
+    endmethod
+    public static method getForce takes timer t,integer k returns force
+        local integer timerHandleId = GetHandleId(t)
+        return LoadForceHandle(hash_time, timerHandleId, k)
     endmethod
 
     /**

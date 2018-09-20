@@ -46,6 +46,23 @@ struct hTest
 		call hconsole.log("charges"+I2S(charges))
 		call haward.forUnitGold(u,100*charges)
 	endmethod
+	private static method changeSight takes nothing returns nothing
+		local unit u = htime.getUnit(GetExpiredTimer(),1)
+		local boolean isAdd = htime.getBoolean(GetExpiredTimer(),2)
+		local real sight = hattr.getSight(u)
+		call hconsole.warning(R2S(sight))
+		if(isAdd == true)then
+			call hattr.addSight(u,50,0)
+		elseif(isAdd == false)then
+			call hattr.subSight(u,50,0)
+		endif
+		if(sight > 500)then
+			call htime.setBoolean(GetExpiredTimer(),2,false)
+		endif
+		if(sight < -500)then
+			call htime.setBoolean(GetExpiredTimer(),2,true)
+		endif
+	endmethod
 
 	public static method run takes nothing returns nothing
 
@@ -60,6 +77,7 @@ struct hTest
 		local integer rand=0
 		local hAttrBean hattrbean
 		local hItemBean hitembean
+		local timer t = null
 
 		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_GOLD, 999999 )
 		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_LUMBER, 999999 )
@@ -75,6 +93,10 @@ struct hTest
 		call hattr.addAttackRange( u, 100, 40 )
 
 		call hattr.addAttackPhysical(u,10000,0)
+
+		set t = htime.setInterval(0.2,function thistype.changeSight)
+		call htime.setUnit(t,1,u)
+		call htime.setBoolean(t,2,true)
 
 		//测试物品
 		set hitembean = hItemBean.create()

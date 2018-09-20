@@ -21,6 +21,10 @@ struct hRect
 	private static integer HASH_HEIGHT = 103
 	private static integer HASH_GROUP = 104
 	private static integer HASH_NAME = 105
+	private static integer HASH_START_X = 106
+	private static integer HASH_START_Y = 107
+	private static integer HASH_END_X = 108
+	private static integer HASH_END_Y = 109
 
 	static method create takes nothing returns hRect
         local hRect x = 0
@@ -40,7 +44,42 @@ struct hRect
 		local integer recthid = GetHandleId(r)
 		call SaveReal(hash_hrect, recthid, HASH_WIDTH , width)
 		call SaveReal(hash_hrect, recthid, HASH_HEIGHT , height)
+		call SaveReal(hash_hrect, recthid, HASH_START_X , startX)
+		call SaveReal(hash_hrect, recthid, HASH_START_Y , startY)
+		call SaveReal(hash_hrect, recthid, HASH_END_X , endX)
+		call SaveReal(hash_hrect, recthid, HASH_END_Y , endY)
 		return r
+	endmethod
+
+	public static method getWidth takes rect r returns real
+		return LoadReal(hash_hrect, GetHandleId(r), HASH_WIDTH)
+	endmethod
+
+	public static method getHeight takes rect r returns real
+		return LoadReal(hash_hrect, GetHandleId(r), HASH_HEIGHT)
+	endmethod
+
+	public static method getStartX takes rect r returns real
+		return LoadReal(hash_hrect, GetHandleId(r), HASH_START_X)
+	endmethod
+	public static method getStartY takes rect r returns real
+		return LoadReal(hash_hrect, GetHandleId(r), HASH_START_Y)
+	endmethod
+	public static method getEndX takes rect r returns real
+		return LoadReal(hash_hrect, GetHandleId(r), HASH_END_X)
+	endmethod
+	public static method getEndY takes rect r returns real
+		return LoadReal(hash_hrect, GetHandleId(r), HASH_END_Y)
+	endmethod
+
+	//设置区域名称
+	public static method setName takes rect whichRect,string name returns nothing
+		call SaveStr(hash_hrect, GetHandleId(whichRect),HASH_NAME,name)
+	endmethod
+
+	//获取区域名称
+	public static method getName takes rect whichRect returns string
+		return LoadStr(hash_hrect, GetHandleId(whichRect),HASH_NAME)
 	endmethod
 
 	//删除区域
@@ -307,16 +346,6 @@ struct hRect
 			call htime.delTimer(t)
     		call SaveTimerHandle(hash_hrect, hid, HASH_TIMER , null)
     	endif
-	endmethod
-
-	//设置区域名称
-	public static method setName takes rect whichRect,string name returns nothing
-		call SaveStr(hash_hrect, GetHandleId(whichRect),HASH_NAME,name)
-	endmethod
-
-	//获取区域名称
-	public static method getName takes rect whichRect returns string
-		return LoadStr(hash_hrect, GetHandleId(whichRect),HASH_NAME)
 	endmethod
 
 endstruct
