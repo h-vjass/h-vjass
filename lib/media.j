@@ -78,4 +78,14 @@ struct hMedia
 		endif
 	endmethod
 
+	// 停止BGM
+	public static method bgmStop takes nothing returns nothing
+		call StopMusic( true )
+	endmethod
+	public static method bgmStop2Player takes player whichPlayer returns nothing
+		if(GetLocalPlayer() == whichPlayer)then
+			call StopMusic( true )
+		endif
+	endmethod
+
 endstruct

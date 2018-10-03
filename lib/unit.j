@@ -244,6 +244,62 @@ struct hUnit
     endmethod
 
     /**
+     * 杀死单位回调
+     */
+    private static method killCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local unit targetUnit = htime.getUnit( t, -1 )
+        if( targetUnit != null ) then
+            call KillUnit( targetUnit )
+            set targetUnit = null
+        endif
+        call htime.delTimer(t)
+    endmethod
+
+    /**
+     * 杀死单位，可延时
+     */
+    public static method kill takes unit targetUnit , real during returns nothing
+        local timer t = null
+        if( during <= 0 ) then
+            call KillUnit( targetUnit )
+            set targetUnit = null
+        else
+            set t = htime.setTimeout( during , function thistype.killCall)
+            call htime.setUnit( t, -1 ,targetUnit )
+        endif
+    endmethod
+
+    /**
+     * 爆毁单位回调
+     */
+    private static method explodedCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local unit targetUnit = htime.getUnit( t, -1 )
+        if( targetUnit != null ) then
+            call SetUnitExploded(targetUnit, true)
+            call KillUnit(targetUnit)
+            set targetUnit = null
+        endif
+        call htime.delTimer(t)
+    endmethod
+
+    /**
+     * 爆毁单位，可延时
+     */
+    public static method exploded takes unit targetUnit , real during returns nothing
+        local timer t = null
+        if( during <= 0 ) then
+            call SetUnitExploded(targetUnit, true)
+            call KillUnit(targetUnit)
+            set targetUnit = null
+        else
+            set t = htime.setTimeout( during , function thistype.explodedCall)
+            call htime.setUnit( t, -1 ,targetUnit )
+        endif
+    endmethod
+
+    /**
      * 获取单位面向角度
      */
     public static method getFacing takes unit u returns real
@@ -289,8 +345,12 @@ struct hUnit
         local unit u = htime.getUnit(t,1)
         local real x = htime.getReal(t,2)
         local real y = htime.getReal(t,3)
+        local real invulnerable = htime.getReal(t,4)
         call htime.delTimer(t)
         call ReviveHero( u,x,y,true )
+        if(invulnerable > 0)then
+            call hability.invulnerable(u,invulnerable)
+        endif
         //@触发复活事件
         set hevtBean = hEvtBean.create()
         set hevtBean.triggerKey = "reborn"
@@ -298,11 +358,14 @@ struct hUnit
         call hevt.triggerEvent(hevtBean)
         call hevtBean.destroy()
     endmethod
-    public static method rebornAtXY takes unit u,real x,real y,real delay returns nothing
+    public static method rebornAtXY takes unit u,real x,real y,real delay,real invulnerable returns nothing
         local timer t = null
         if(his.hero(u))then
             if(delay<1)then
                 call ReviveHero( u,x,y,true )
+                if(invulnerable > 0)then
+                    call hability.invulnerable(u,invulnerable)
+                endif
                 //@触发复活事件
                 set hevtBean = hEvtBean.create()
                 set hevtBean.triggerKey = "reborn"
@@ -314,6 +377,7 @@ struct hUnit
                 call htime.setUnit(t,1,u)
                 call htime.setReal(t,2,x)
                 call htime.setReal(t,3,y)
+                call htime.setReal(t,4,invulnerable)
             endif
         endif
     endmethod
@@ -323,16 +387,8 @@ struct hUnit
      * 只有英雄能被复活
      * 只有调用此方法会触发复活事件
      */
-    public static method rebornAtLoc takes unit u,location loc returns nothing
-        if(his.hero(u))then
-            call ReviveHeroLoc( u, loc, true )
-            //@触发复活事件
-            set hevtBean = hEvtBean.create()
-            set hevtBean.triggerKey = "reborn"
-            set hevtBean.triggerUnit = u
-            call hevt.triggerEvent(hevtBean)
-            call hevtBean.destroy()
-        endif
+    public static method rebornAtLoc takes unit u,location loc,real delay,real invulnerable returns nothing
+        call thistype.rebornAtXY(u,GetLocationX(loc),GetLocationY(loc),delay,invulnerable)
     endmethod
 
     /**

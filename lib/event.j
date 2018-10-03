@@ -1751,13 +1751,13 @@ struct hEvt
         return tg
     endmethod
 
-    //on - 任意单位注册进hjass系统时(注意则是全局事件)
+    //on - 任意单位注册进hjass系统时(注意这是全局事件)
     //@getTriggerUnit 获取触发单位
     public static method onRegister takes code action returns trigger
         return onEventByHandle("register",getDefaultHandle(),action)
     endmethod
 
-    //on - 任意单位经过hero方法被玩家所挑选为英雄时
+    //on - 任意单位经过hero方法被玩家所挑选为英雄时(注意这是全局事件)
     //@getTriggerUnit 获取触发单位
     public static method onPickHero takes code action returns trigger
         return onEventByHandle("pickHero",getDefaultHandle(),action)

@@ -10,6 +10,7 @@ globals
 	trigger ATTR_TRIGGER_UNIT_DEATH = null
 	trigger ATTR_TRIGGER_UNIT_ATTACK_RANGE = null
 	trigger ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = null
+	boolean allowDenied = false
 endglobals
 
 struct hAttrUnit
@@ -19,6 +20,14 @@ struct hAttrUnit
         set x = hAttrUnit.allocate()
         return x
     endmethod
+
+	public static method setAllowDenied takes boolean b returns nothing
+		set allowDenied = b
+	endmethod
+
+	public static method getAllowDenied takes nothing returns boolean
+		return allowDenied
+	endmethod
 
 	//根据bean修改单位属性
 	public static method modifyAttrByBean takes unit whichUnit,hAttrBean bean,real during returns nothing
@@ -1252,7 +1261,11 @@ struct hAttrUnit
 			set distance = distance * 2
 		endif
 		if(hattr.getAttackRange(u) >= distance)then
-			call IssueTargetOrder( u, "attack", target )
+			if(thistype.getAllowDenied() == true or his.enemy(u, target))then
+				call IssueTargetOrder( u, "attack", target )
+			else
+				call IssueTargetOrder( u, "smart", target )
+			endif
 			call htime.delTimer( t )
 			call SaveUnitHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_TARGET_"),null)
 		endif
@@ -1387,12 +1400,14 @@ struct hAttrUnit
 		local unit u = GetTriggerUnit()
 		local unit targetUnit = GetOrderTargetUnit()
 		local destructable targetDestructable = GetOrderTargetDestructable()
+		call hconsole.warning(OrderId2StringBJ(GetUnitCurrentOrder(u)))
 		call thistype.triggerUnitAttackRangeDo(u,targetUnit,targetDestructable,GetIssuedOrderId())
 	endmethod
 	private static method triggerUnitAttackRangeAttack takes nothing returns nothing
 		local unit u = GetAttacker()
 		local unit targetUnit = GetTriggerUnit()
 		local real distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetUnitX(targetUnit),GetUnitY(targetUnit)) - 80
+		call hconsole.warning(I2S(GetUnitCurrentOrder(u))) // 851993
 		if(hattr.getAttackRange(u) < distance)then
 			call thistype.triggerUnitAttackRangeDo(u,targetUnit,null,-1)
 		endif

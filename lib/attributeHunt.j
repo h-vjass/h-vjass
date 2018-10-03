@@ -997,7 +997,7 @@ struct hAttrHunt
                 call hevtBean.destroy()
             endif
             //硬直
-            if( realDamage > 3 and his.alive(toUnit) and hattr.isPunishing(toUnit) != true )then
+            if( realDamage > 3 and his.alive(toUnit) and hattr.isPunishing(toUnit) != true and hunit.isOpenPunish(toUnit) )then
                 if( isEffect == true and fromUnitHuntEffectHeavyVal > 100 and GetRandomReal(1,100) <= fromUnitHuntEffectHeavyOdds ) then
                     set fromUnitPunishHeavy = fromUnitPunishHeavy * (fromUnitHuntEffectHeavyVal* 0.01)
                 endif
