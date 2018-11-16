@@ -46,7 +46,7 @@
 	unarm 			缴械[无法进行攻击]
 	fetter			脚镣[无法进行移动]
     bomb			爆破[范围伤害]
-    lightning_chain 闪电链[被动传递点击]
+    lightning_chain 闪电链[被动传递电击]
     crack_fly 		击飞[上天]
 */
 globals

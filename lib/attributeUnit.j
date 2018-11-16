@@ -1183,7 +1183,7 @@ struct hAttrUnit
 		set bean.huntType = hattr.getAttackHuntType(fromUnit)
 		call hattrHunt.huntUnit( bean )
 		call bean.destroy()
-		call thistype.triggerUnitAttackRangeDo(fromUnit,toUnit,null,-1)
+		//call thistype.triggerUnitAttackRangeDo(fromUnit,toUnit,null,-1)
 	endmethod
 
 	private static method triggerUnitbeHuntAction takes nothing returns nothing
@@ -1435,13 +1435,18 @@ struct hAttrUnit
 			else
 				call hunit.setAutoClearAttrGroup(u,true)
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
-				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE, u, EVENT_UNIT_ISSUED_TARGET_ORDER )
-				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, u, EVENT_UNIT_ATTACKED )
 				call punishTtg(u)
 				//拥有物品栏的单位绑定物品处理
 				if( his.hasSlot(u) )then
 					call hitem.initUnit(u)
 				endif
+				//英雄处理
+				/*
+				if( his.hero(u) )then
+					call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE, u, EVENT_UNIT_ISSUED_TARGET_ORDER )
+					call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, u, EVENT_UNIT_ATTACKED )
+				endif
+				*/
 				//触发注册事件(全局)
 				set hevtBean = hEvtBean.create()
 				set hevtBean.triggerKey = "register"
@@ -1460,12 +1465,12 @@ struct hAttrUnit
 		//触发设定
 		set ATTR_TRIGGER_UNIT_BEHUNT = CreateTrigger()
 		set ATTR_TRIGGER_UNIT_DEATH = CreateTrigger()
-		set ATTR_TRIGGER_UNIT_ATTACK_RANGE = CreateTrigger()
-		set ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = CreateTrigger()
+		//set ATTR_TRIGGER_UNIT_ATTACK_RANGE = CreateTrigger()
+		//set ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = CreateTrigger()
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_BEHUNT,function thistype.triggerUnitbeHuntAction)
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_DEATH, function thistype.triggerUnitDeathAction)
-		call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE, function thistype.triggerUnitAttackRangeAction)
-		call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, function thistype.triggerUnitAttackRangeAttack)
+		//call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE, function thistype.triggerUnitAttackRangeAction)
+		//call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, function thistype.triggerUnitAttackRangeAttack)
 
 		//单位进入区域注册
 		call TriggerRegisterEnterRectSimple( triggerIn , GetPlayableMapRect() )

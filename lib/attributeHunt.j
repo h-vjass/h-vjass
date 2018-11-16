@@ -1033,7 +1033,7 @@ struct hAttrHunt
             //反射
             if( toUnitHuntRebound >0 )then
                 call hunit.subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
-                call hmsg.style(hmsg.ttg2Unit(fromUnit,"反射"+I2S(R2I(realDamage*toUnitHuntRebound*0.01)),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",-0.05,0)
+                call hmsg.style(hmsg.ttg2Unit(fromUnit,"反伤"+R2S(realDamage*toUnitHuntRebound*0.01),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",-0.05,0)
                 //@触发反伤事件
                 set hevtBean = hEvtBean.create()
                 set hevtBean.triggerKey = "rebound"
@@ -1190,12 +1190,12 @@ endif
                 call hattr.subViolence(toUnit,fromUnitHuntEffectDirtVal,fromUnitHuntEffectDirtDuring)
                 call heffect.toUnit("Abilities\\Spells\\Items\\OrbCorruption\\OrbCorruptionSpecialArt.mdl",toUnit,"weapon",fromUnitHuntEffectDirtDuring)
             endif
-            if( fromUnitHuntEffectSwimOdds>0 and fromUnitHuntEffectSwimDuring>0 ) then
+            if( fromUnitHuntEffectSwimOdds>0 and fromUnitHuntEffectSwimDuring>=0.01 ) then
                 if(toUnitSwimOppose!=0)then
                     set fromUnitHuntEffectSwimOdds = fromUnitHuntEffectSwimOdds - toUnitSwimOppose
                     set fromUnitHuntEffectSwimDuring = fromUnitHuntEffectSwimDuring * (1-toUnitSwimOppose*0.01)
                 endif
-                if(fromUnitHuntEffectSwimOdds>=1)then
+                if(fromUnitHuntEffectSwimOdds>=1 and fromUnitHuntEffectSwimDuring>=0.01)then
                     //@触发眩晕事件
                     set hevtBean = hEvtBean.create()
                     set hevtBean.triggerKey = "swim"
@@ -1214,7 +1214,7 @@ endif
                     set hevtBean.during = fromUnitHuntEffectSwimDuring
                     call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
-                    if(GetRandomReal(1,100)<=fromUnitHuntEffectSwimOdds and fromUnitHuntEffectSwimDuring>0)then
+                    if(GetRandomReal(1,100)<=fromUnitHuntEffectSwimOdds and fromUnitHuntEffectSwimDuring>=0.01)then
                         call hability.swim( toUnit , fromUnitHuntEffectSwimDuring )
                     endif
                 endif
@@ -1297,7 +1297,7 @@ endif
                 call hskill.lightningChain(lightningCode_shandianlian_ci,R2I(fromUnitHuntEffectLightningChainQty),fromUnitHuntEffectLightningChainReduce,false,huntBean)
                 call huntBean.destroy()
             endif
-            if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal!=0 ) then
+            if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal!=0 and his.building(toUnit) == false ) then
                 set huntBean = hAttrHuntBean.create()
                 set huntBean.fromUnit = fromUnit
                 set huntBean.toUnit = toUnit

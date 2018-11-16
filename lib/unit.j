@@ -472,8 +472,21 @@ struct hUnit
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call CreateUnitAtLocSaveLast(whichPlayer, unitid, loc, bj_UNIT_FACING)
-                call GroupAddUnit(g, bj_lastCreatedUnit)
+                call GroupAddUnit(g, createUnit(whichPlayer, unitid, loc))
+        endloop
+        return g
+    endmethod
+
+    /**
+     * 创建单位组面向角度
+     * @return 最后创建单位组
+     */
+    public static method createUnitsFacing takes player whichPlayer, integer unitid,integer qty, location loc, real facing returns group
+        local group g = CreateGroup()
+        loop
+            set qty = qty - 1
+            exitwhen qty < 0
+                call GroupAddUnit(g, createUnitFacing(whichPlayer, unitid, loc, facing))
         endloop
         return g
     endmethod
@@ -484,12 +497,10 @@ struct hUnit
      */
     public static method createUnitsXY takes player whichPlayer, integer unitid, integer qty, real x,real y returns group
         local group g = CreateGroup()
-        local unit u = null
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                set u = createUnitXY(whichPlayer, unitid, x, y)
-                call GroupAddUnit(g, u)
+                call GroupAddUnit(g, createUnitXY(whichPlayer, unitid, x, y))
         endloop
         return g
     endmethod
@@ -500,12 +511,10 @@ struct hUnit
      */
     public static method createUnitsXYFacing takes player whichPlayer, integer unitid, integer qty, real x,real y returns group
         local group g = CreateGroup()
-        local unit u = null
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                set u = createUnitXYFacing(whichPlayer, unitid, x, y, GetRandomReal(0,360))
-                call GroupAddUnit(g, u)
+                call GroupAddUnit(g, createUnitXYFacing(whichPlayer, unitid, x, y, GetRandomReal(0,360)))
         endloop
         return g
     endmethod
@@ -519,8 +528,7 @@ struct hUnit
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call CreateUnitAtLocSaveLast(whichPlayer, unitid, loc, AngleBetweenPoints(loc, lookAt))
-                call GroupAddUnit(g, bj_lastCreatedUnit)
+                call GroupAddUnit(g, createUnitLookAt(whichPlayer, unitid, loc, lookAt))
         endloop
         return g
     endmethod

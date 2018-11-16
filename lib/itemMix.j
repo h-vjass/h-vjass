@@ -107,6 +107,15 @@ struct hItemMix
         call SaveInteger(hash_item_mix, itemId, StringHash("_FLAGMENT_QTY_"), qty)
     endmethod
 
+    //获取零件是否存在于当前最新公式
+    public static method getFlagmentIsset takes integer itemId returns boolean
+        return LoadBoolean(hash_item_mix, itemId, StringHash("_FLAGMENT_ISSET_"+I2S(thistype.getTotalQty())))
+    endmethod
+    //设定零件已经存在于当前最新公式（默认false）
+    public static method setFlagmentIsset takes integer itemId returns nothing
+        call SaveBoolean(hash_item_mix, itemId, StringHash("_FLAGMENT_ISSET_"+I2S(thistype.getTotalQty())), true)
+    endmethod
+
     //获取零件服务的第 x 索引的结果物品id
     public static method getFlagmentResult takes integer itemId,integer x returns integer
         return LoadInteger(hash_item_mix, itemId, StringHash("_FLAGMENT_RESULT_"+I2S(x)))
@@ -116,11 +125,11 @@ struct hItemMix
         call SaveInteger(hash_item_mix, itemId, StringHash("_FLAGMENT_RESULT_"+I2S(x)), result)
     endmethod
 
-    //获取零件服务的第 x 索引对应的公式索引
+    //获取零件服务的对应目标物品的公式索引
     public static method getFlagmentFormulaIndex takes integer flagmentId,integer x returns integer
         return LoadInteger(hash_item_mix, flagmentId, StringHash("_FLAGMENT_FORMULA_INDEX_"+I2S(x)))
     endmethod
-    //设定零件服务的第 x 索引对应的公式索引
+    //设定零件服务的对应目标物品的公式索引
     public static method setFlagmentFormulaIndex takes integer flagmentId,integer x,integer index returns nothing
         call SaveInteger(hash_item_mix, flagmentId, StringHash("_FLAGMENT_FORMULA_INDEX_"+I2S(x)), index)
     endmethod
@@ -148,7 +157,7 @@ struct hItemMix
 
     /**
      * 设定新的合成公式,每一次newFormula代表一个新的公式
-     * 后面的 addFlag 设定的那条公式内的零件
+     * 后面继续调用 addFlag 设定的那条公式内的零件
      */
     public static method newFormula takes integer targetItemId,integer targetQty returns nothing
         local integer formulaIndex = 0
@@ -186,13 +195,16 @@ struct hItemMix
             set formulaFlagmentQty = 0
         endif
         set flagmentQty = getFlagmentQty(flagmentItemId)
-        if(formulaFlagmentQty<0)then
-            set formulaFlagmentQty = 0
+        if(flagmentQty<0)then
+            set flagmentQty = 0
         endif
         //寻找过去是否已经设定过这个零件，有就增加需求数量，没有就建立新数据
-        set flagmentIndex = getFlagmentFormulaIndex(flagmentItemId,formulaIndex)
-        if(flagmentIndex<=0)then
-            //新零件,零件数量+1
+        if(getFlagmentIsset(flagmentItemId) != true)then // 判断是否新公式
+            //新零件,零件服务公式数量+1
+            set flagmentQty = flagmentQty+1
+            call setFlagmentQty(flagmentItemId,flagmentQty) //刷新零件服务公式数
+            call setFlagmentIsset(flagmentItemId)
+            //新零件,公式零件数量+1
             set formulaFlagmentQty = formulaFlagmentQty+1
             if( formulaFlagmentQty > MIX_MAX_FLAG_QTY)then
                 call hconsole.error("该公式已超出最大零件种类数")
@@ -201,9 +213,6 @@ struct hItemMix
             call setFormulaFlagmentQty(targetItemId,formulaIndex,formulaFlagmentQty) //刷新零件种类数
             call setFormulaFlagmentNeedType(targetItemId,formulaIndex,formulaFlagmentQty,flagmentItemId) //记录公式第 formulaIndex 条的第 formulaFlagmentQty个零件的种类
             call setFormulaFlagmentNeedQty(targetItemId,formulaIndex,formulaFlagmentQty,flagmentItemQty) //记录公式第 formulaIndex 条的flagmentItemId零件的数量
-
-            set flagmentQty = flagmentQty+1
-            call setFlagmentQty(flagmentItemId,flagmentQty) //刷新零件服务公式数
             call setFlagmentResult(flagmentItemId,flagmentQty,targetItemId) //刷新零件服务公式数
             call setFlagmentNeedQty(flagmentItemId,flagmentQty,flagmentItemQty)
             call setFlagmentFormulaIndex(flagmentItemId,flagmentQty,formulaIndex)
@@ -263,8 +272,8 @@ struct hItemMix
                                         set tempCharge = tempCharge + charges
                                     endif
                                     //判断 j 这个零件数量够不够,不够就清掉target,并跳出 j 循环
-                                    set flagmentItemNeedQty = getFlagmentNeedQty(flagmentItemId,i)
-                                    if(tempCharge<flagmentItemNeedQty)then
+                                    set flagmentItemNeedQty = getFormulaFlagmentNeedQty(resultItemId,formulaIndex,j)
+                                    if(flagmentItemNeedQty<=0 or tempCharge<flagmentItemNeedQty)then
                                         set formulaIndex = 0
                                         set resultItemId = 0
                                         call DoNothing() YDNL exitwhen true//( j )
@@ -320,7 +329,6 @@ struct hItemMix
                     set i = i-1
                     set slot_index = 1
                 endloop
-                //建在地上
                 set resultItemCharges = getFormulaResultQty(resultItemId,formulaIndex)
                 if(resultItemCharges>0)then
                     call hitem.toUnitMix(resultItemId,resultItemCharges,whichUnit)

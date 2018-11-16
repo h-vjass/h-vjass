@@ -25,6 +25,7 @@ struct hHero
     private static integer hk_isout = 4
     private static integer hk_hero_type = 5
     private static integer hk_unit_type = 10000
+    private static integer hk_hero_lv = 10001
 
 	private static integer unit_qty = 0             //选择英雄数量
 	private static integer drunkery_allow_qty = 11  //酒馆最大单位数量
@@ -38,18 +39,33 @@ struct hHero
     private static real bornX = 250                 //生成英雄初始坐标X
     private static real bornY = 250                 //生成英雄初始坐标Y
 
+    // 设置英雄之前的等级
+    public static method setHeroPrevLevel takes unit u,integer lv returns nothing
+        call SaveInteger(hash_hero,GetHandleId(u),hk_hero_lv,lv)
+    endmethod
+
+    // 获取英雄之前的等级
+    public static method getHeroPrevLevel takes unit u returns integer
+        return LoadInteger(hash_hero,GetHandleId(u),hk_hero_lv)
+    endmethod
+
     //英雄升级 - 计算白字
 	private static method triggerUnitHeroLevelAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
+        local real diffLv = I2R(GetHeroLevel(u) - thistype.getHeroPrevLevel(u))
 
-		call hconsole.log("level="+I2S(GetHeroLevel(u)))
+		call hconsole.log("diffLv="+R2S(diffLv))
+        if(diffLv < 1)then
+			return
+		endif
+
 		call hattr.setStrWhite( u , GetHeroStr(u,false) , 0 )
 		call hattr.setAgiWhite( u , GetHeroAgi(u,false) , 0 )
 		call hattr.setIntWhite( u , GetHeroInt(u,false) , 0 )
-		call hattr.addHelp( u , 2 , 0 )
-		call hattr.addWeight( u , 0.25 , 0 )
-		call hattr.addLifeSource( u , 10 , 0 )
-		call hattr.addManaSource( u , 10 , 0 )
+		call hattr.addHelp( u , 2 * diffLv , 0 )
+		call hattr.addWeight( u , 0.25 * diffLv , 0 )
+		call hattr.addLifeSource( u , 10 * diffLv , 0 )
+		call hattr.addManaSource( u , 10 * diffLv , 0 )
 
 		//@触发升级事件
 		set hevtBean = hEvtBean.create()
@@ -58,6 +74,7 @@ struct hHero
         call hevt.triggerEvent(hevtBean)
         call hevtBean.destroy()
 
+        call thistype.setHeroPrevLevel(u,GetHeroLevel(u))
 		set u = null
 	endmethod
     static method create takes nothing returns hHero
@@ -220,6 +237,7 @@ struct hHero
     public static method itIs takes unit u returns nothing
         if(IsUnitInGroup(u,isHeroGroup)==false)then
             call GroupAddUnit(isHeroGroup,u)
+            call thistype.setHeroPrevLevel(u,1)
             call TriggerRegisterUnitEvent( TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
         endif
     endmethod

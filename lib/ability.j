@@ -67,6 +67,7 @@ struct hAbility
 				return
 			else
 				call htime.delTimer(t)
+				call UnitRemoveAbility(u, 'BPSE' )
 				call hmsg.style(hmsg.ttg2Unit(u,"劲眩",6.00,"64e3f2",10,1.00,10.00)  ,"scale",0,0.05)
 	    	endif
 	    endif

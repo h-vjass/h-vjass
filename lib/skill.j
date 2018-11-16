@@ -271,6 +271,287 @@ struct hSkill
         call htime.setReal(t, 16,hunit.getFacingBetween(bean.fromUnit,bean.toUnit))
     endmethod
 
+    //剃回调
+    public static method leapCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local real duringInc = htime.getReal(t,1)
+        local real speed = htime.getReal(t,2)
+        local real range = htime.getReal(t,3)
+        local unit mover = htime.getUnit(t,4)
+        local location targetLoc = htime.getLoc(t,6)
+        local string MEffect = htime.getString(t,5)
+        local group remove_group = htime.getGroup(t,7)
+        local unit fromUnit = htime.getUnit(t,8)
+        local string huntEff = htime.getString(t,9)
+        local real damage = htime.getReal(t,10)
+        local string hkind = htime.getString(t,11)
+        local string htype = htime.getString(t,12)
+        local string isBreak = htime.getString(t,13)
+        local boolean isNoAvoid = htime.getBoolean(t,14)
+        local real distance = 0
+        local location loc = null
+        local location loc2 = null
+        local group tmp_group = null
+        local unit u = null
+        local hFilter hf = 0
+        local hAttrHuntBean bean
+        call htime.setReal(t,1,duringInc+TimerGetTimeout(t))
+        set loc =  GetUnitLoc(mover)
+        set hxy.x = GetLocationX(loc)
+        set hxy.y = GetLocationY(loc)
+        set hxy = hlogic.polarProjection(hxy, speed, hlogic.getDegBetweenLoc(loc, targetLoc))
+        call SetUnitPosition( mover, hxy.x, hxy.y )
+        if(MEffect != null)then
+            call heffect.toLoc(MEffect,loc,0.5)
+        endif
+        if(damage > 0) then
+            set hf = hFilter.create()
+            call hf.isAlive(true)
+            call hf.isBuilding(false)
+            call hf.isEnemy(true,fromUnit)
+            set tmp_group = hgroup.createByLoc(loc,range,function hFilter.get)
+            call hf.destroy()
+            set bean = hAttrHuntBean.create()
+            set bean.whichGroup = tmp_group
+            set bean.whichGroupRepeat = remove_group
+            set bean.damage = damage
+            set bean.fromUnit = fromUnit
+            set bean.huntEff = huntEff
+            set bean.huntKind = hkind
+            set bean.huntType = htype
+            set bean.isBreak = isBreak
+            set bean.isNoAvoid = isNoAvoid
+            call hattrHunt.huntGroup(bean)
+            call bean.destroy()
+            call GroupClear(tmp_group)
+            call DestroyGroup(tmp_group)
+            set tmp_group = null
+        endif
+        set distance = hlogic.getDistanceBetweenLoc(loc, targetLoc)
+        call RemoveLocation(loc)
+        if(distance<speed or distance<=0 or speed<=0 or IsUnitDeadBJ(mover)==true or duringInc>5) then
+            call htime.delTimer(t)
+            call SetUnitInvulnerable( mover, false )
+            call SetUnitPathing( mover, true )
+            call SetUnitPositionLoc( mover, targetLoc)
+            call SetUnitVertexColorBJ( mover, 100, 100, 100, 0 )
+            call DestroyGroup(remove_group)
+            call RemoveLocation(targetLoc)
+        endif
+    endmethod
+
+    //剃
+    public static method leap takes unit mover,location targetLoc,real speed,string Meffect,real range,boolean isRepeat,hAttrHuntBean bean returns nothing
+        local real lock_var_period = 0.02
+        local timer t = null
+        local group remove_group = null
+        if(mover==null or targetLoc==null) then
+            return
+        endif
+        if( isRepeat == false ) then
+            set remove_group = CreateGroup()
+        else
+            set remove_group = null
+        endif
+        if(speed>150) then
+            set speed = 150   //最大速度
+        elseif(speed<=1) then
+            set speed = 1   //最小速度
+        endif
+        call SetUnitInvulnerable( mover, true )
+        call SetUnitPathing( mover, false )
+        set t = htime.setInterval(lock_var_period,function thistype.leapCall)
+        call htime.setReal(t,1,0)
+        call htime.setReal(t,2,speed)
+        call htime.setReal(t,3,range)
+        call htime.setUnit(t,4,mover)
+        call htime.setString(t,5,Meffect)
+        call htime.setLoc(t,6,targetLoc)
+        call htime.setGroup(t,7,remove_group)
+        call htime.setUnit(t,8,bean.fromUnit)
+        call htime.setString(t,9,bean.huntEff)
+        call htime.setReal(t,10,bean.damage)
+        call htime.setString(t,11,bean.huntKind)
+        call htime.setString(t,12,bean.huntType)
+        call htime.setString(t,13,bean.isBreak)
+        call htime.setBoolean(t,14,bean.isNoAvoid)
+    endmethod
+
+    //穿梭回调
+    private static method shuttleCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local integer during = htime.getInteger( t , 1 )
+        local unit shutter = htime.getUnit( t , 2  )
+        local group whichGroup = htime.getGroup( t , 3 )
+        local integer times = htime.getInteger( t , 4 )
+        local real speed = htime.getReal( t , 5  )
+        local real speedPlus = htime.getReal( t , 6 )
+        local real offsetDistance = htime.getReal( t , 7 )
+        local string JEffect = htime.getString( t , 8 )
+        local string animate = htime.getString( t , 9 )
+        local integer skillModel = htime.getInteger( t , 10  )
+        local string huntEff = htime.getString(t,11)
+        local real damage = htime.getReal(t,12)
+        local string hkind = htime.getString(t,13)
+        local string htype = htime.getString(t,14)
+        local string isBreak = htime.getString(t,15)
+        local boolean isNoAvoid = htime.getBoolean(t,16)
+        local unit targetUnit = htime.getUnit( t , 17 )
+        local location targetLoc = htime.getLoc( t , 18 )
+        //--------------------
+        local integer playerIndex = GetConvertedPlayerId(GetOwningPlayer(shutter))
+        local real distance = 0
+        local location loc = null
+        local location tempLoc = null
+        local integer i = 0
+        local unit tempUnit = null
+        local group crashGroup = null
+        local hAttrHuntBean bean
+        if( shutter !=null and IsUnitAliveBJ(shutter) == true and CountUnitsInGroup(whichGroup)>0 ) then
+            if( during <1 ) then
+                call UnitAddAbility( shutter, skillModel)
+            endif
+            //TODO
+            set loc = GetUnitLoc(shutter)
+            //向一个单位进行目标穿梭,如果没有，从单位组取一个(需要进行缓存)
+            if( targetUnit == null ) then
+                set targetUnit = GroupPickRandomUnit(whichGroup)
+                set tempLoc = GetUnitLoc(targetUnit)
+                set targetLoc = PolarProjectionBJ( tempLoc , offsetDistance , hlogic.getDegBetweenLoc(loc, tempLoc) )
+                call htime.setUnit( t , 17 , targetUnit ) //save
+                call htime.setLoc( t , 18 , targetLoc ) //save
+                call RemoveLocation(tempLoc)
+            endif
+            //移动
+            call SetUnitFacing(shutter, hlogic.getDegBetweenLoc(loc, targetLoc))
+            call SetUnitPositionLoc( shutter, PolarProjectionBJ(loc, speed, hlogic.getDegBetweenLoc(loc, targetLoc)) )
+            //移动特效
+            if( JEffect != null )then
+                call heffect.toLoc( JEffect , loc, 0.5 )
+            endif
+            //计算单轮距离是否到终点
+            set distance = hlogic.getDistanceBetweenLoc( loc, targetLoc )
+            call RemoveLocation(loc)
+            //
+            if( distance < speed ) then //单轮结束
+                call SetUnitAnimation( shutter, animate )
+                call SetUnitPositionLoc( shutter, targetLoc)
+                call RemoveLocation(targetLoc)
+                //伤害
+                if( IsUnitAliveBJ(targetUnit) == true and damage > 0 ) then
+                    set bean = hAttrHuntBean.create()
+                    set bean.damage = damage
+                    set bean.fromUnit = shutter
+                    set bean.toUnit = targetUnit
+                    set bean.huntEff = huntEff
+                    set bean.huntKind = hkind
+                    set bean.huntType = htype
+                    set bean.isBreak = isBreak
+                    set bean.isNoAvoid = isNoAvoid
+                    call hattrHunt.huntUnit(bean)
+                    call bean.destroy()
+                endif
+                if( during+1 >= times ) then
+                    call htime.delTimer( t )
+                    if(skillModel!=null) then
+                        call UnitAddAbility( shutter, skillModel)
+                    endif
+                    call SetUnitPositionLoc( shutter, targetLoc)
+                    call RemoveLocation(targetLoc)
+                    call SetUnitTimeScale( shutter, 1 )
+                    call SetUnitInvulnerable( shutter, false )
+                    call SetUnitPathing( shutter, true )
+                    call SetUnitVertexColorBJ( shutter, 100, 100, 100, 0.00 )
+                    call GroupClear(whichGroup)
+                    call DestroyGroup(whichGroup)
+                else
+                    //选定下一个
+                    set i = 1
+                    set tempUnit = GroupPickRandomUnit(whichGroup)
+                    loop
+                        exitwhen( (IsUnitAliveBJ(targetUnit) ==true and tempUnit != targetUnit) or i>5 )
+                        set tempUnit = GroupPickRandomUnit(whichGroup)
+                        set i = i + 1
+                    endloop
+                    set loc = GetUnitLoc(shutter)
+                    set tempLoc = GetUnitLoc(tempUnit)
+                    set targetLoc = PolarProjectionBJ( tempLoc , offsetDistance , hlogic.getDegBetweenLoc(loc, targetLoc) )
+                    call RemoveLocation(tempLoc)
+                    call RemoveLocation(loc)
+                    call htime.setInteger( t , 1 ,(during + 1))
+                    call htime.setUnit( t , 17 , tempUnit )
+                    call htime.setLoc( t , 18 , targetLoc )
+                    call htime.setReal( t , 5 , speed+speedPlus )
+                endif
+            endif
+        else
+            call htime.delTimer( t )
+            if(shutter !=null ) then
+                if(skillModel!=null) then
+                    call UnitRemoveAbility( shutter, skillModel)
+                endif
+                call SetUnitTimeScale( shutter, 1 )
+                call SetUnitInvulnerable( shutter, false )
+                call SetUnitPathing( shutter, true )
+                call SetUnitVertexColorBJ( shutter, 100, 100, 100, 0.00 )
+            endif
+            if( targetLoc !=null )then
+                call RemoveLocation(targetLoc)
+            endif
+            call GroupClear(whichGroup)
+            call DestroyGroup(whichGroup)
+        endif
+    endmethod
+
+    /**
+     *  穿梭选定单位组
+     * shuttlePeriod 穿梭周期
+     * times 穿梭次数
+     * isAttack 是否触发普通攻击判定
+     */
+    public static method shuttleToGroup takes unit shutter,group whichGroup,integer times,real speed,real speedPlus,real offsetDistance,string JEffect,string animate,integer skillModel,hAttrHuntBean bean returns nothing
+        local timer t = null
+        local real shuttlePeriod = 0.03
+        call SetUnitTimeScale( shutter, 10 )
+        call SetUnitInvulnerable( shutter, true )
+        call SetUnitPathing( shutter, false )
+        set t = htime.setInterval( shuttlePeriod ,function thistype.shuttleCall )
+        call htime.setInteger( t , 1 , 0 )
+        call htime.setUnit( t , 2 , shutter )
+        call htime.setGroup( t , 3 , whichGroup )
+        call htime.setInteger( t , 4 , times )
+        call htime.setReal( t , 5 , speed )
+        call htime.setReal( t , 6 , speedPlus )
+        call htime.setReal( t , 7 , offsetDistance )
+        call htime.setString( t , 8 , JEffect )
+        call htime.setString( t , 9 , animate )
+        call htime.setInteger( t , 10 , skillModel )
+        call htime.setString(t,11,bean.huntEff)
+        call htime.setReal(t,12,bean.damage)
+        call htime.setString(t,13,bean.huntKind)
+        call htime.setString(t,14,bean.huntType)
+        call htime.setString(t,15,bean.isBreak)
+        call htime.setBoolean(t,16,bean.isNoAvoid)
+    endmethod
+
+    /**
+     *  穿梭指定单位
+     * shuttlePeriod 穿梭周期
+     * times 穿梭次数
+     * isAttack 是否触发普通攻击判定
+     */
+    public static method shuttleToUnit takes unit shutter,unit whichUnit,real range,integer times,real speed,real speedPlus,real offsetDistance,string JEffect,string animate,integer skillModel,hAttrHuntBean bean returns nothing
+        local group whichGroup = null
+        local hFilter hf
+        set hf = hFilter.create()
+        call hf.isAlive(true)
+        call hf.isBuilding(false)
+        call hf.isEnemy(true,shutter)
+        set whichGroup = hgroup.createByUnit(whichUnit,range,function hFilter.get)
+        call thistype.shuttleToGroup(shutter,whichGroup,times,speed,speedPlus,offsetDistance,JEffect,animate,skillModel,bean)
+        call hf.destroy()
+    endmethod
+
     /*
     //撞退Call
     private method crashCall takes nothing returns nothing
@@ -325,8 +606,8 @@ struct hSkill
             set loc = GetUnitLoc(targetUnit)
             call SetUnitTimeScalePercent( targetUnit, 150 )
             //call SetUnitAnimation( targetUnit , "death" )
-            set deg = AngleBetweenPoints(triggerLoc, loc)
-            set facing = AngleBetweenPoints(loc, triggerLoc)
+            set deg = AngleBetweenlocs(triggerLoc, loc)
+            set facing = AngleBetweenlocs(loc, triggerLoc)
             set t = funcs_setInterval( 0.02 , function thistype.crashCall)
             call funcs_setTimerParams_Unit( t , Key_Skill_Unit , targetUnit )
             call funcs_setTimerParams_Real( t , Key_Skill_Unit , speed )
@@ -371,8 +652,8 @@ struct hSkill
                     set loc = GetUnitLoc(u)
                     call SetUnitTimeScalePercent( u, 150 )
                     //call SetUnitAnimation( u , "death" )
-                    set deg = AngleBetweenPoints(triggerLoc, loc)
-                    set facing = AngleBetweenPoints(loc, triggerLoc)
+                    set deg = AngleBetweenlocs(triggerLoc, loc)
+                    set facing = AngleBetweenlocs(loc, triggerLoc)
                     set t = funcs_setInterval( 0.02 , method crashCall)
                     call funcs_setTimerParams_Unit( t , Key_Skill_Unit , u )
                     call funcs_setTimerParams_Real( t , Key_Skill_Unit , speed )
@@ -464,115 +745,6 @@ struct hSkill
         call RemoveLocation(triggerLoc)
     endmethod
 
-    //剃回调
-    public method leapCall takes nothing returns nothing
-        local timer t = GetExpiredTimer()
-        local real speed = htime.getReal(t,Key_Skill_Speed)
-        local real range = htime.getReal(t,Key_Skill_Range)
-        local location targetPoint = htime.getLoc(t,Key_Skill_TargetPoint)
-        local string MEffect = htime.getString(t,Key_Skill_MEffect)
-        local unit mover = htime.getUnit(t,Key_Skill_Unit)
-        local group remove_group = htime.getGroup(t,Key_Skill_Group)
-        local real duringInc = htime.getReal(t,Key_Skill_DuringInc)
-
-        local unit fromUnit = htime.getUnit(t,Key_Skill_FromUnit)
-        local string heffect = htime.getString(t,Key_Skill_HEffect)
-        local real damage = htime.getReal(t,Key_Skill_Damage)
-        local string hkind = htime.getString(t,Key_Skill_Hkind)
-        local string htype = htime.getString(t,Key_Skill_Htype)
-        local boolean isBreak = htime.getBoolean(t,Key_Skill_IsBreak)
-        local boolean isNoAvoid = htime.getBoolean(t,Key_Skill_IsNoAvoid)
-        local string special = htime.getString(t,Key_Skill_Special)
-        local real specialVal = htime.getReal(t,Key_Skill_SpecialVal)
-        local real specialDuring = htime.getReal(t,Key_Skill_SpecialDuring)
-
-        local real distance = 0
-        local location point = null
-        local location point2 = null
-        local group tmp_group = null
-        local unit u = null
-
-        call funcs_setTimerParams_Real(t,Key_Skill_DuringInc,duringInc+TimerGetTimeout(t))
-
-        set point =  GetUnitLoc(mover)
-        set point2 = PolarProjectionBJ(point, speed, AngleBetweenPoints(point, targetPoint))
-        call SetUnitPositionLoc( mover, point2 )
-        call RemoveLocation(point2)
-        call RemoveLocation(point)
-
-        set point =  GetUnitLoc(mover)
-        if(MEffect != null)then
-            call funcs_effectLoc(MEffect,point)
-        endif
-        if(damage > 0) then
-            set tmp_group = funcs_getGroupByLoc(point,range,method filter_live_disbuild)
-            call attributeHunt_huntGroup(tmp_group,remove_group,null,null,fromUnit,heffect,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
-            call GroupClear(tmp_group)
-            call DestroyGroup(tmp_group)
-            set tmp_group = null
-        endif
-        set distance = DistanceBetweenPoints(point, targetPoint)
-        call RemoveLocation(point)
-
-        if(distance<speed or distance<=0 or speed <=0 or IsUnitDeadBJ(mover) == true or duringInc > 5) then
-            call funcs_delTimer(t,null)
-            call SetUnitInvulnerable( mover, false )
-            call SetUnitPathing( mover, true )
-            call SetUnitPositionLoc( mover, targetPoint)
-            call SetUnitVertexColorBJ( mover, 100, 100, 100, 0 )
-            call DestroyGroup(remove_group)
-            call RemoveLocation(targetPoint)
-        endif
-    endmethod
-
-    //剃
-    public method leap takes unit mover,location targetPoint,real speed,string Meffect,real range,boolean isRepeat,unit fromUnit,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
-        local real lock_var_period = 0.02
-        local location point = null
-        local timer t = null
-        local group remove_group = null
-
-        //debug
-        if(mover==null or targetPoint==null) then
-            return
-        endif
-
-        //重复判定
-        if( isRepeat == false ) then
-            set remove_group = CreateGroup()
-        else
-            set remove_group = null
-        endif
-
-        set point = GetUnitLoc(mover)
-        if(speed>150) then
-            set speed = 150   //最大速度
-        elseif(speed<=1) then
-            set speed = 1   //最小速度
-        endif
-        call RemoveLocation(point)
-        call SetUnitInvulnerable( mover, true )
-        call SetUnitPathing( mover, false )
-        set t = funcs_setInterval(lock_var_period,method leapCall)
-        call funcs_setTimerParams_Real(t,Key_Skill_Speed,speed)
-        call funcs_setTimerParams_Real(t,Key_Skill_Range,range)
-        call funcs_setTimerParams_Unit(t,Key_Skill_Unit,mover)
-        call funcs_setTimerParams_String(t,Key_Skill_MEffect,Meffect)
-        call funcs_setTimerParams_Loc(t,Key_Skill_TargetPoint,targetPoint)
-        call funcs_setTimerParams_Group(t,Key_Skill_Group,remove_group)
-        call funcs_setTimerParams_Real(t,Key_Skill_DuringInc,0)
-        call funcs_setTimerParams_Unit(t,Key_Skill_FromUnit,fromUnit)
-        call funcs_setTimerParams_String(t,Key_Skill_HEffect,heffect)
-        call funcs_setTimerParams_Real(t,Key_Skill_Damage,damage)
-        call funcs_setTimerParams_String(t,Key_Skill_Hkind,hkind)
-        call funcs_setTimerParams_String(t,Key_Skill_Htype,htype)
-        call funcs_setTimerParams_Boolean(t,Key_Skill_IsBreak,isBreak)
-        call funcs_setTimerParams_Boolean(t,Key_Skill_IsNoAvoid,isNoAvoid)
-        call funcs_setTimerParams_String(t,Key_Skill_Special,special)
-        call funcs_setTimerParams_Real(t,Key_Skill_SpecialVal,specialVal)
-        call funcs_setTimerParams_Real(t,Key_Skill_SpecialDuring,specialDuring)
-    endmethod
-
     //冲锋回调
     public method chargeCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
@@ -582,7 +754,7 @@ struct hSkill
         local string chargeType = htime.getString(t,Key_Skill_Type)
         local string MEffect = htime.getString(t,Key_Skill_MEffect)
         local unit mover = htime.getUnit(t,Key_Skill_Unit)
-        local location targetPoint = htime.getLoc(t,Key_Skill_TargetPoint)
+        local location targetLoc = htime.getLoc(t,Key_Skill_targetLoc)
         local group remove_group = htime.getGroup(t,Key_Skill_Group)
         local group remove_group2 = htime.getGroup(t,Key_Skill_Group2)
         local real duringInc = htime.getReal(t,Key_Skill_DuringInc)
@@ -597,38 +769,38 @@ struct hSkill
         local real specialVal = htime.getReal(t,Key_Skill_SpecialVal)
         local real specialDuring = htime.getReal(t,Key_Skill_SpecialDuring)
         local real distance = 0.00
-        local location point = null
-        local location point2 = null
+        local location loc = null
+        local location loc2 = null
         local group tmp_group = null
 
         call funcs_setTimerParams_Real(t,Key_Skill_DuringInc,duringInc+TimerGetTimeout(t))
 
-        set point =  GetUnitLoc(mover)
-        set point2 = PolarProjectionBJ(point, speed, AngleBetweenPoints(point, targetPoint))
-        call SetUnitPositionLoc( mover, point2 )
-        set distance = DistanceBetweenPoints( point2, targetPoint)
+        set loc =  GetUnitLoc(mover)
+        set loc2 = PolarProjectionBJ(loc, speed, AngleBetweenlocs(loc, targetLoc))
+        call SetUnitPositionLoc( mover, loc2 )
+        set distance = DistanceBetweenlocs( loc2, targetLoc)
 
         //如果强制设定移动特效，则显示设定的否则自动判断地形产生特效
         if(MEffect != null)then
-            call funcs_effectLoc(MEffect,point2)
+            call funcs_effectLoc(MEffect,loc2)
         else
-            if( funcs_isWater(point) == true ) then
+            if( funcs_isWater(loc) == true ) then
                 //如果是水面，创建水花
-                call funcs_effectLoc(Effect_CrushingWaveDamage,point2)
+                call funcs_effectLoc(Effect_CrushingWaveDamage,loc2)
             else
                 //如果是地面，创建沙尘
-                call funcs_effectLoc(Effect_ImpaleTargetDust,point2)
+                call funcs_effectLoc(Effect_ImpaleTargetDust,loc2)
             endif
         endif
 
-        call RemoveLocation(point2)
-        call RemoveLocation(point)
+        call RemoveLocation(loc2)
+        call RemoveLocation(loc)
         if(damage > 0) then
-            set point =  GetUnitLoc(mover)
-            set tmp_group = funcs_getGroupByLoc( point,range,method filter_live_disbuild )
+            set loc =  GetUnitLoc(mover)
+            set tmp_group = funcs_getGroupByLoc( loc,range,method filter_live_disbuild )
             call attributeHunt_huntGroup(tmp_group,remove_group,null,null,fromUnit,heffect,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
             call DestroyGroup(tmp_group)
-            call RemoveLocation(point)
+            call RemoveLocation(loc)
         endif
 
         //冲锋特技
@@ -640,25 +812,25 @@ struct hSkill
              call skills_fly( mover , 75.00 , speed , 500.00,remove_group2 )
         elseif( chargeType == SKILL_CHARGE_DRAG ) then
             //拖行
-            set point = GetUnitLoc(mover)
-            set point2 = PolarProjectionBJ(point, 135.00, facing)
-            set tmp_group = funcs_getGroupByLoc(point,100.00,method filter_live_disbuild_ground)
-            call funcs_moveGroup(mover,tmp_group,point2,null,true,FILTER_ENEMY)
+            set loc = GetUnitLoc(mover)
+            set loc2 = PolarProjectionBJ(loc, 135.00, facing)
+            set tmp_group = funcs_getGroupByLoc(loc,100.00,method filter_live_disbuild_ground)
+            call funcs_moveGroup(mover,tmp_group,loc2,null,true,FILTER_ENEMY)
             call DestroyGroup(tmp_group)
-            call RemoveLocation(point2)
-            call RemoveLocation(point)
+            call RemoveLocation(loc2)
+            call RemoveLocation(loc)
         endif
 
         if(distance<speed or distance<=0 or speed <=0 or IsUnitDeadBJ(mover) == true or duringInc > 5) then
             //停止
             call funcs_delTimer(t,null)
-            call SetUnitPositionLoc( mover, targetPoint)
+            call SetUnitPositionLoc( mover, targetLoc)
             call SetUnitPathing( mover, true )
             call PauseUnitBJ( false, mover )
             call SetUnitTimeScalePercent( mover, 100 )
             call SetUnitVertexColorBJ( mover, 100, 100, 100, 0.00 )
             call ResetUnitAnimation(  mover ) //恢复动画
-            call RemoveLocation(targetPoint)
+            call RemoveLocation(targetLoc)
             if(remove_group!=null)then
                 call GroupClear(remove_group)
                 call DestroyGroup(remove_group)
@@ -677,8 +849,8 @@ struct hSkill
     //不能攻击空中单位
     public method charge takes unit mover,real facing,real distance,real speed,string chargeType,string Meffect,real range,boolean isRepeat,unit fromUnit,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
         local real lock_var_period = 0.02
-        local location point
-        local location targetPoint
+        local location loc
+        local location targetLoc
         local timer t
         local group remove_group = null
         local group remove_group2 = null
@@ -692,14 +864,14 @@ struct hSkill
             set remove_group2 = CreateGroup()
         endif
 
-        set point = GetUnitLoc(mover)
-        set targetPoint = PolarProjectionBJ(point, distance, facing)
+        set loc = GetUnitLoc(mover)
+        set targetLoc = PolarProjectionBJ(loc, distance, facing)
         if(speed>150) then
             set speed = 150   //最大速度
         elseif(speed<=1) then
             set speed = 1   //最小速度
         endif
-        call RemoveLocation(point)
+        call RemoveLocation(loc)
         call SetUnitPathing( mover, false )
         call PauseUnitBJ( true, mover )
         call SetUnitTimeScalePercent( mover, 300 )
@@ -710,7 +882,7 @@ struct hSkill
         call funcs_setTimerParams_Unit(t,Key_Skill_Unit,mover)
         call funcs_setTimerParams_String(t,Key_Skill_Type,chargeType)
         call funcs_setTimerParams_String(t,Key_Skill_MEffect,Meffect)
-        call funcs_setTimerParams_Loc(t,Key_Skill_TargetPoint,targetPoint)
+        call funcs_setTimerParams_Loc(t,Key_Skill_targetLoc,targetLoc)
         call funcs_setTimerParams_Group(t,Key_Skill_Group,remove_group)
         call funcs_setTimerParams_Group(t,Key_Skill_Group2,remove_group2)
         call funcs_setTimerParams_Real(t,Key_Skill_DuringInc,0)
@@ -734,7 +906,7 @@ struct hSkill
         local real duringInc = htime.getReal(t,Key_Skill_DuringInc)
         local string MEffect = htime.getString(t,Key_Skill_MEffect)
         local unit mover = htime.getUnit(t,Key_Skill_Unit)
-        local location targetPoint = htime.getLoc(t,Key_Skill_TargetPoint)
+        local location targetLoc = htime.getLoc(t,Key_Skill_targetLoc)
         local group remove_group = htime.getGroup(t,Key_Skill_Group)
         local real during = htime.getReal(t,Key_Skill_During)
         local unit fromUnit = htime.getUnit(t,Key_Skill_FromUnit)
@@ -748,36 +920,36 @@ struct hSkill
         local real specialVal = htime.getReal(t,Key_Skill_SpecialVal)
         local real specialDuring = htime.getReal(t,Key_Skill_SpecialDuring)
         local real distance = 0
-        local location point = null
-        local location point2 = null
+        local location loc = null
+        local location loc2 = null
         local group tmp_group = null
 
         call funcs_setTimerParams_Real(t,Key_Skill_DuringInc,duringInc+TimerGetTimeout(t))
 
-        set point =  GetUnitLoc(mover)
-        set distance = DistanceBetweenPoints(point, targetPoint)
-        if((GetLocationX(targetPoint)==0 and GetLocationX(targetPoint)==0) or distance<speed) then
-            call SetUnitPositionLoc( mover, targetPoint)
-            call RemoveLocation(targetPoint)
+        set loc =  GetUnitLoc(mover)
+        set distance = DistanceBetweenlocs(loc, targetLoc)
+        if((GetLocationX(targetLoc)==0 and GetLocationX(targetLoc)==0) or distance<speed) then
+            call SetUnitPositionLoc( mover, targetLoc)
+            call RemoveLocation(targetLoc)
         else
-            set point2 = PolarProjectionBJ(point, speed, AngleBetweenPoints(point, targetPoint))
-            call SetUnitPositionLoc( mover, point2 )
+            set loc2 = PolarProjectionBJ(loc, speed, AngleBetweenlocs(loc, targetLoc))
+            call SetUnitPositionLoc( mover, loc2 )
             if(MEffect != null)then
-                call funcs_effectLoc(MEffect,point2)
+                call funcs_effectLoc(MEffect,loc2)
             endif
-            call RemoveLocation(point2)
+            call RemoveLocation(loc2)
         endif
-        call RemoveLocation(point)
+        call RemoveLocation(loc)
 
         if(damage > 0 and ModuloReal( duringInc , TimerGetTimeout(t)*10 ) == TimerGetTimeout(t) ) then
-            set point =  GetUnitLoc(mover)
-            set tmp_group = funcs_getGroupByLoc(point,range,method filter_live_disbuild)
+            set loc =  GetUnitLoc(mover)
+            set tmp_group = funcs_getGroupByLoc(loc,range,method filter_live_disbuild)
             call attributeHunt_huntGroup(tmp_group,remove_group,null,null,fromUnit,heffect,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
             call GroupClear(tmp_group)
             call DestroyGroup(tmp_group)
             set tmp_group = null
-            call RemoveLocation(point)
-            set point = null
+            call RemoveLocation(loc)
+            set loc = null
         endif
 
         if(duringInc >= during or IsUnitDeadBJ(mover) == TRUE) then
@@ -788,14 +960,14 @@ struct hSkill
     endmethod
 
     //前进
-    public method forward takes unit mover,location targetPoint,real speed,string Meffect,real range,boolean isRepeat,real during,unit fromUnit,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
+    public method forward takes unit mover,location targetLoc,real speed,string Meffect,real range,boolean isRepeat,real during,unit fromUnit,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
         local real lock_var_period = 0.02
-        local location point = null
+        local location loc = null
         local timer t = null
         local group remove_group = null
 
         //debug
-        if(mover==null or targetPoint==null or during==null) then
+        if(mover==null or targetLoc==null or during==null) then
             return
         endif
 
@@ -806,14 +978,14 @@ struct hSkill
             set remove_group = null
         endif
 
-        set point = GetUnitLoc(mover)
+        set loc = GetUnitLoc(mover)
         if(speed>150) then
             set speed = 150   //最大速度
         elseif(speed<=1) then
             set speed = 1   //最小速度
         endif
-        call RemoveLocation(point)
-        set point = null
+        call RemoveLocation(loc)
+        set loc = null
         call SetUnitInvulnerable( mover, true )
         call SetUnitPathing( mover, false )
         set t = funcs_setInterval(lock_var_period,method forwardCall)
@@ -823,7 +995,7 @@ struct hSkill
         call funcs_setTimerParams_Real(t,Key_Skill_During,during)
         call funcs_setTimerParams_Unit(t,Key_Skill_Unit,mover)
         call funcs_setTimerParams_String(t,Key_Skill_MEffect,Meffect)
-        call funcs_setTimerParams_Loc(t,Key_Skill_TargetPoint,targetPoint)
+        call funcs_setTimerParams_Loc(t,Key_Skill_targetLoc,targetLoc)
         call funcs_setTimerParams_Group(t,Key_Skill_Group,remove_group)
         call funcs_setTimerParams_Unit(t,Key_Skill_FromUnit,fromUnit)
         call funcs_setTimerParams_String(t,Key_Skill_HEffect,heffect)
@@ -856,45 +1028,45 @@ struct hSkill
         local real specialVal = htime.getReal(t,Key_Skill_SpecialVal)
         local real specialDuring = htime.getReal(t,Key_Skill_SpecialDuring)
         local real distance = 0
-        local location point = null
-        local location point2 = null
-        local location targetPoint = GetUnitLoc(targetUnit)
+        local location loc = null
+        local location loc2 = null
+        local location targetLoc = GetUnitLoc(targetUnit)
 
 		call funcs_setTimerParams_Real(t,Key_Skill_DuringInc,duringInc+TimerGetTimeout(t))
 
-        set point =  GetUnitLoc(jumper)
-        set point2 = PolarProjectionBJ(point, speed, AngleBetweenPoints(point, targetPoint))
-        call SetUnitPositionLoc( jumper, point2 )
-        call RemoveLocation(point2)
-        call RemoveLocation(point)
+        set loc =  GetUnitLoc(jumper)
+        set loc2 = PolarProjectionBJ(loc, speed, AngleBetweenlocs(loc, targetLoc))
+        call SetUnitPositionLoc( jumper, loc2 )
+        call RemoveLocation(loc2)
+        call RemoveLocation(loc)
 
-        set point =  GetUnitLoc(jumper)
+        set loc =  GetUnitLoc(jumper)
         if(JEffect != null)then
-            call funcs_effectLoc(JEffect,point)
+            call funcs_effectLoc(JEffect,loc)
         endif
-        set distance = DistanceBetweenPoints(point, targetPoint)
+        set distance = DistanceBetweenlocs(loc, targetLoc)
         call funcs_console("distance:"+R2S(distance))
         call funcs_console("speed:"+R2S(speed))
-        call RemoveLocation(point)
+        call RemoveLocation(loc)
 
         if(distance<speed or IsUnitDeadBJ(jumper) or IsUnitDeadBJ(targetUnit) or duringInc > 10) then
             call funcs_console("handle:jumpCallBack END")
             call funcs_delTimer(t,null)
             call SetUnitInvulnerable( jumper, false )
             call SetUnitPathing( jumper, true )
-            call SetUnitPositionLoc( jumper, targetPoint)
+            call SetUnitPositionLoc( jumper, targetLoc)
             call SetUnitVertexColorBJ( jumper, 100, 100, 100, 0.00 )
             if(damage > 0) then
                 call attributeHunt_huntUnit(jumper,targetUnit,heffect,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
             endif
-            call RemoveLocation(targetPoint)
+            call RemoveLocation(targetLoc)
         endif
     endmethod
     //跳跃(向某单位)
     public method jump takes unit jumper,unit targetUnit,real speed,string Jeffect,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
         local real lock_var_period = 0.02
-        local location point = null
-        local location targetPoint = null
+        local location loc = null
+        local location targetLoc = null
         local timer t = null
         local real distance = 0
         //local group remove_group = CreateGroup()
@@ -903,16 +1075,16 @@ struct hSkill
             return
         endif
 
-        set point = GetUnitLoc(jumper)
-        set targetPoint = GetUnitLoc(targetUnit)
-        set distance = DistanceBetweenPoints(point, targetPoint)
+        set loc = GetUnitLoc(jumper)
+        set targetLoc = GetUnitLoc(targetUnit)
+        set distance = DistanceBetweenlocs(loc, targetLoc)
         if(speed>150) then
             set speed = 150   //最大速度
         elseif(speed<=1) then
             set speed = 1   //最小速度
         endif
-        call RemoveLocation(point)
-        call RemoveLocation(targetPoint)
+        call RemoveLocation(loc)
+        call RemoveLocation(targetLoc)
         call SetUnitInvulnerable(jumper, true )
         call SetUnitPathing( jumper, false )
         set t = funcs_setInterval(lock_var_period,method jumpCallBack)
@@ -932,162 +1104,6 @@ struct hSkill
         call funcs_setTimerParams_Real(t,Key_Skill_SpecialDuring,specialDuring)
     endmethod
 
-    //穿梭回调
-    private method shuttleCall takes nothing returns nothing
-        local timer t = GetExpiredTimer()
-        local integer during = htime.getInteger( t , Key_Skill_During )
-        local unit shutter = htime.getUnit( t , Key_Skill_Unit  )
-        local group whichGroup = htime.getGroup( t , Key_Skill_Group )
-        local integer times = htime.getInteger( t , Key_Skill_Times )
-        local real speed = htime.getReal( t , Key_Skill_Speed  )
-        local real speedPlus = htime.getReal( t , Key_Skill_SpeedPlus )
-        local real offsetDistance = htime.getReal( t , Key_Skill_Distance )
-        local string JEffect = htime.getString( t , Key_Skill_JEffect )
-        local string animate = htime.getString( t , Key_Skill_Animate )
-        local integer skillModel = htime.getInteger( t , Key_Skill_Model  )
-        local unit targetUnit = htime.getUnit( t , Key_Skill_TargetUnit )
-        local location targetLoc = htime.getLoc( t , Key_Skill_Loc )
-
-        local string heffect = htime.getString(t,Key_Skill_HEffect)
-        local real damage = htime.getReal(t,Key_Skill_Damage)
-        local string hkind = htime.getString(t,Key_Skill_Hkind)
-        local string htype = htime.getString(t,Key_Skill_Htype)
-        local boolean isBreak = htime.getBoolean(t,Key_Skill_IsBreak)
-        local boolean isNoAvoid = htime.getBoolean(t,Key_Skill_IsNoAvoid)
-        local string special = htime.getString(t,Key_Skill_Special)
-        local real specialVal = htime.getReal(t,Key_Skill_SpecialVal)
-        local real specialDuring = htime.getReal(t,Key_Skill_SpecialDuring)
-
-        //--------------------
-        local integer playerIndex = GetConvertedPlayerId(GetOwningPlayer(shutter))
-        local real distance = 0
-        local location loc = null
-        local location tempLoc = null
-        local integer i = 0
-        local unit tempUnit = null
-        local group crashGroup = null
-
-        if( shutter !=null and IsUnitAliveBJ(shutter) == true and CountUnitsInGroup(whichGroup)>0 ) then
-            if( during <1 ) then
-                call UnitAddAbility( shutter, skillModel)
-            endif
-            //TODO
-            set loc = GetUnitLoc(shutter)
-            //向一个单位进行目标穿梭,如果没有，从单位组取一个(需要进行缓存)
-            if( targetUnit == null ) then
-                set targetUnit = GroupPickRandomUnit(whichGroup)
-                set tempLoc = GetUnitLoc(targetUnit)
-                set targetLoc = PolarProjectionBJ( tempLoc , offsetDistance , AngleBetweenPoints(loc, tempLoc) )
-                call funcs_setTimerParams_Unit( t , Key_Skill_TargetUnit , targetUnit ) //save
-                call funcs_setTimerParams_Loc( t , Key_Skill_Loc , targetLoc ) //save
-                call RemoveLocation(tempLoc)
-            endif
-            //移动
-            call SetUnitFacing(shutter, AngleBetweenPoints(loc, targetLoc))
-            call SetUnitPositionLoc( shutter, PolarProjectionBJ(loc, speed, AngleBetweenPoints(loc, targetLoc)) )
-            //移动特效
-            if( JEffect != null )then
-                call funcs_effectLoc( JEffect , loc )
-            endif
-            //计算单轮距离是否到终点
-            set distance = DistanceBetweenPoints( loc, targetLoc )
-            call RemoveLocation(loc)
-            //
-            if( distance < speed ) then //单轮结束
-                call SetUnitAnimation( shutter, animate )
-                call SetUnitPositionLoc( shutter, targetLoc)
-                call RemoveLocation(targetLoc)
-                //伤害
-                if( IsUnitAliveBJ(targetUnit) == true and damage > 0 ) then
-                    call attributeHunt_huntUnit(shutter,targetUnit,heffect,damage,hkind,htype,isBreak,isNoAvoid,special,specialVal,specialDuring)
-                endif
-                if( during+1 >= times ) then
-                    call funcs_delTimer( t, null )
-                    if(skillModel!=null) then
-                        call UnitAddAbility( shutter, skillModel)
-                    endif
-                    call SetUnitPositionLoc( shutter, targetLoc)
-                    call RemoveLocation(targetLoc)
-                    call SetUnitTimeScale( shutter, 1 )
-                    call SetUnitInvulnerable( shutter, false )
-                    call SetUnitPathing( shutter, true )
-                    call SetUnitVertexColorBJ( shutter, 100, 100, 100, 0.00 )
-                    call GroupClear(whichGroup)
-                    call DestroyGroup(whichGroup)
-                else
-                    //选定下一个
-                    set i = 1
-                    set tempUnit = GroupPickRandomUnit(whichGroup)
-                    loop
-                        exitwhen( (IsUnitAliveBJ(targetUnit) ==true and tempUnit != targetUnit) or i>5 )
-                        set tempUnit = GroupPickRandomUnit(whichGroup)
-                        set i = i + 1
-                    endloop
-                    set loc = GetUnitLoc(shutter)
-                    set tempLoc = GetUnitLoc(tempUnit)
-                    set targetLoc = PolarProjectionBJ( tempLoc , offsetDistance , AngleBetweenPoints(loc, tempLoc) )
-                    call RemoveLocation(tempLoc)
-                    call RemoveLocation(loc)
-                    call funcs_setTimerParams_Integer( t , Key_Skill_During ,(during + 1))
-                    call funcs_setTimerParams_Unit( t , Key_Skill_TargetUnit , tempUnit )
-                    call funcs_setTimerParams_Loc( t , Key_Skill_Loc , targetLoc )
-                    call funcs_setTimerParams_Real( t , Key_Skill_Speed , speed+speedPlus )
-                endif
-            endif
-        else
-            call funcs_delTimer( t, null )
-            if(shutter !=null ) then
-                if(skillModel!=null) then
-                    call UnitRemoveAbility( shutter, skillModel)
-                endif
-                call SetUnitTimeScale( shutter, 1 )
-                call SetUnitInvulnerable( shutter, false )
-                call SetUnitPathing( shutter, true )
-                call SetUnitVertexColorBJ( shutter, 100, 100, 100, 0.00 )
-            endif
-            if( targetLoc !=null )then
-                call RemoveLocation(targetLoc)
-            endif
-            call GroupClear(whichGroup)
-            call DestroyGroup(whichGroup)
-        endif
-    endmethod
-    */
-
-    /**
-     *  穿梭选定单位组
-     * shuttlePeriod 穿梭周期
-     * times 穿梭次数
-     * isAttack 是否触发普通攻击判定
-     */
-     /*
-    public method shuttleForGroup takes unit shutter,group whichGroup,integer times,real speed,real speedPlus,real offsetDistance,string JEffect,string animate,integer skillModel,string heffect,real damage,string hkind,string htype,boolean isBreak,boolean isNoAvoid,string special,real specialVal,real specialDuring returns nothing
-        local timer t = null
-        local real shuttlePeriod = 0.03
-        call SetUnitTimeScale( shutter, 10 )
-        call SetUnitInvulnerable( shutter, true )
-        call SetUnitPathing( shutter, false )
-        set t = funcs_setInterval( shuttlePeriod ,method shuttleCall )
-        call funcs_setTimerParams_Integer( t , Key_Skill_During , 0 )
-        call funcs_setTimerParams_Unit( t , Key_Skill_Unit , shutter )
-        call funcs_setTimerParams_Group( t , Key_Skill_Group , whichGroup )
-        call funcs_setTimerParams_Integer( t , Key_Skill_Times , times )
-        call funcs_setTimerParams_Real( t , Key_Skill_Speed , speed )
-        call funcs_setTimerParams_Real( t , Key_Skill_SpeedPlus , speedPlus )
-        call funcs_setTimerParams_Real( t , Key_Skill_Distance , offsetDistance )
-        call funcs_setTimerParams_String( t , Key_Skill_JEffect , JEffect )
-        call funcs_setTimerParams_String( t , Key_Skill_Animate , animate )
-        call funcs_setTimerParams_Integer( t , Key_Skill_Model , skillModel )
-        call funcs_setTimerParams_String(t,Key_Skill_HEffect,heffect)
-        call funcs_setTimerParams_Real(t,Key_Skill_Damage,damage)
-        call funcs_setTimerParams_String(t,Key_Skill_Hkind,hkind)
-        call funcs_setTimerParams_String(t,Key_Skill_Htype,htype)
-        call funcs_setTimerParams_Boolean(t,Key_Skill_IsBreak,isBreak)
-        call funcs_setTimerParams_Boolean(t,Key_Skill_IsNoAvoid,isNoAvoid)
-        call funcs_setTimerParams_String(t,Key_Skill_Special,special)
-        call funcs_setTimerParams_Real(t,Key_Skill_SpecialVal,specialVal)
-        call funcs_setTimerParams_Real(t,Key_Skill_SpecialDuring,specialDuring)
-    endmethod
     */
 
 endstruct

@@ -1936,19 +1936,19 @@ struct hAttr
                 //源
                 call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
                 call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
+				//给予默认攻击距离,先判断全局有没有设定过这一个单位类型的攻击距离，大于 1 则使用，否则使用默认的近战100，远程600
+				if(hunit.getAttackRange(GetUnitTypeId(whichUnit)) > 1)then
+					call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , hunit.getAttackRange(GetUnitTypeId(whichUnit)) )
+				else
+					if(his.melee(whichUnit))then // 近战
+						call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 100 )
+					elseif(his.ranged(whichUnit))then // 远程
+						call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 600 )
+					endif
+				endif
             endif
             call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
             call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
-			//给予默认攻击距离,先判断全局有没有设定过这一个单位类型的攻击距离，大于 1 则使用，否则使用默认的近战100，远程600
-			if(hunit.getAttackRange(GetUnitTypeId(whichUnit)) > 1)then
-				call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , hunit.getAttackRange(GetUnitTypeId(whichUnit)) )
-			else
-				if(his.melee(whichUnit))then // 近战
-					call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 100 )
-				elseif(his.ranged(whichUnit))then // 远程
-					call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 600 )
-				endif
-			endif
 			return true
 		endif
 		return false
@@ -2279,8 +2279,8 @@ struct hAttr
 		local real attackPhysical = value*0.1
 		local real attackMagic = value*0.1
 		local real life = value*3
-		local real toughness = value*0.1
-		local real knocking = value*3
+		local real toughness = value*0.05
+		local real knocking = value*0.5
 		local real punish = value*1
 		local real swimOppose = value*0.01
 		local real avoid = value*2
@@ -2311,7 +2311,7 @@ struct hAttr
 		local real value = valueSet - getAgi(whichUnit)
 		local real attackPhysical = value*0.3
 		local real attackspeed = value*0.04
-		local real knocking = value*1
+		local real knocking = value*0.75
 		local real avoid = value*0.01
 		local real punish = value*2
 		local real violence = value*1
@@ -2339,7 +2339,7 @@ struct hAttr
 		local real attackMagic = value*0.3
 		local real mana = value*3
 		local real manaback = value*0.1
-		local real violence = value*8
+		local real violence = value*1.5
 		local real hemophagiaSkill = value*0.01
 		call setAttr( ATTR_FLAG_INT , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )
@@ -2364,8 +2364,8 @@ struct hAttr
 		local real attackPhysical = value*0.2
 		local real attackMagic = value*0.2
 		local real life = value*5
-		local real toughness = value*0.2
-		local real knocking = value*5
+		local real toughness = value*0.1
+		local real knocking = value*1
 		local real punish = value*2
 		local real swimOppose = value*0.03
 		call setAttr( ATTR_FLAG_STR , whichUnit , value , during )
@@ -2392,7 +2392,7 @@ struct hAttr
 		local real value = valueSet - getAgiWhite(whichUnit)
 		local real attackPhysical = value*0.6
 		local real attackspeed = value*0.05
-		local real knocking = value*3
+		local real knocking = value*1.5
 		local real avoid = value*0.02
 		call setAttr( ATTR_FLAG_AGI , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , attackPhysical , during )
@@ -2416,7 +2416,7 @@ struct hAttr
 		local real attackMagic = value*0.6
 		local real mana = value*5
 		local real manaback = value*0.2
-		local real violence = value*10
+		local real violence = value*3
 		local real hemophagiaSkill = value*0.02
 		call setAttr( ATTR_FLAG_INT , whichUnit , value , during )
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , attackMagic , during )

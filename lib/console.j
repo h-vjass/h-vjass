@@ -16,8 +16,6 @@ struct hConsole
 		set this.status = s
 		if(status == true)then
 			call DisplayTextToForce( GetPlayersAll(), "[hJass]系统log已于hSys(lib/system.j)开启" )
-			call FogEnable( false )
-			call FogMaskEnable( false )
 		endif
 	endmethod
 	//设置log颜色

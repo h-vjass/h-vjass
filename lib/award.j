@@ -37,27 +37,26 @@ struct hAward
         set realGold 	= R2I( I2R(gold) * hplayer.getGoldRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realLumber	= R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realExp		= R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )
-
-        if(realExp > 0 and his.hero(whichUnit)) then
+        if(realExp >=1 and his.hero(whichUnit)) then
             call AddHeroXPSwapped( realExp , whichUnit , true )
             set floatStr = floatStr + "|cffc4c4ff" + I2S(realExp)+"Exp" + "|r"
             set ttgColorLen = ttgColorLen + 12
         endif
-        if(realGold > 0) then
+        if(realGold >=1 ) then
             call hplayer.addGold( GetOwningPlayer( whichUnit ) , realGold )
             set floatStr = floatStr + " |cffffcc00" + I2S(realGold)+"G" + "|r"
             set ttgColorLen = ttgColorLen + 13
             call hmedia.soundPlay2Unit(gg_snd_ReceiveGold,whichUnit)
         endif
-        if(realLumber > 0) then
+        if(realLumber >=1 ) then
             call hplayer.addLumber( GetOwningPlayer( whichUnit ) , realLumber )
             set floatStr = floatStr + " |cff80ff80" + I2S(realLumber)+"L" + "|r"
             set ttgColorLen = ttgColorLen + 13
             call hmedia.soundPlay2Unit(gg_snd_BundleOfLumber,whichUnit)
         endif
-        set ttg = hmsg.ttg2Unit(whichUnit,floatStr,11,"",0,2.00,50.00)
+        set ttg = hmsg.ttg2Unit(whichUnit,floatStr,7,"",0,1.70,60.00)
         call SetTextTagPos( ttg , GetUnitX(whichUnit)-I2R(StringLength(floatStr)-ttgColorLen)*11*0.5 , GetUnitY(whichUnit) , 50 )
-        call hmsg.style(ttg,"shrink",0,0.15)
+        call hmsg.style(ttg,"toggle",0,0.23)
     endmethod
 
     /**
@@ -105,6 +104,9 @@ struct hAward
         set cutExp = R2I(I2R(exp) / I2R(gCount))
         set cutGold = R2I(I2R(gold) / I2R(gCount))
         set cutLumber = R2I(I2R(lumber) / I2R(gCount))
+        if(exp > 0 and cutExp<1)then
+            set cutExp = 1
+        endif
         loop
             exitwhen(IsUnitGroupEmptyBJ(g) == true)
                 //must do

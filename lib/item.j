@@ -870,20 +870,6 @@ struct hItem
 		endif
 	endmethod 
 
-	//使用
-	private static method use takes integer itemid returns nothing
-		local trigger tg = null
-		if(itemid==0)then
-			return
-		endif
-		set tg = LoadTriggerHandle(hash_item,itemid,hk_item_onuse_trigger)
-		if(tg==null)then
-			return
-		endif
-		call TriggerExecute(tg)
-		set tg = null
-	endmethod
-
 	//触发物品的瞬逝
 	private static method triggerMoment takes nothing returns nothing
 		local unit it = hevt.getTriggerUnit()
@@ -893,7 +879,7 @@ struct hItem
 		if(it!=null and triggerUnit!=null and his.hasSlot(triggerUnit) and his.alive(triggerUnit))then
 			set charges = GetUnitUserData(it)
 			if(charges<=0)then
-				call hunit.del(triggerUnit,0)
+				call hunit.del(it,0)
 				return
 			endif
 			set tg = LoadTriggerHandle(hash_item,GetUnitTypeId(it),hk_item_onmoment_trigger)
@@ -3059,7 +3045,13 @@ struct hItem
 		//判断物品是否自动使用，自动使用的物品不会检测叠加和合成，而是直接执行属性分析
 		if(getIsPowerup(itemid) == true)then
 			call addAttr(itemid,charges,whichUnit)
-			call use(itemid)
+			set tg = LoadTriggerHandle(hash_item,itemid,hk_item_onuse_trigger)
+			if(tg != null)then
+				call hevt.setTriggerUnit(tg,whichUnit)
+				call hevt.setId(tg,itemid)
+				call TriggerExecute(tg)
+				set tg = null
+			endif
 			return
 		endif
 		//检测重量,没空间就丢在地上
@@ -3119,6 +3111,7 @@ struct hItem
 			set it = CreateItem(itemid, GetUnitX(whichUnit),GetUnitY(whichUnit))
 			call SetItemCharges(it,remainCharges)
 			if(isMix == true)then
+				call hmsg.echoTo(GetOwningPlayer(whichUnit),"成功合成了：["+GetItemName(it)+"]",0)
 				//@触发 合成物品 事件
 				set hevtBean = hEvtBean.create()
 				set hevtBean.triggerKey = "itemMix"
@@ -3290,12 +3283,11 @@ struct hItem
 	//例如商店售卖的物品就是不由 htem.toUnit 得到的，这时要把它纳入到系统中来
 	public static method itemPickupDefault takes nothing returns nothing
 		local item it = GetManipulatedItem()
-		local integer itid = 0
-		local integer charges = 0
+		local integer itid = GetItemTypeId(it)
+		local integer charges = GetItemCharges(it)
 		if(isHjass(it) == false)then
-			call hconsole.error(GetItemName(it))
-			set itid = GetItemTypeId(it)
-			set charges = GetItemCharges(it)
+			call hconsole.warning("GetItemName=="+GetItemName(it))
+			call hconsole.warning("charges=="+I2S(charges))
 			call RemoveItem(it)
 			set it = null
 			call toUnit(itid,charges,GetTriggerUnit())
@@ -3306,6 +3298,7 @@ struct hItem
 	private static method itemDrop takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local item it = GetManipulatedItem()
+		local unit targetUnit = GetOrderTargetUnit()
 		local real weight = 0
 		local string orderid = OrderId2StringBJ(GetUnitCurrentOrder(u))
 		if(it!=null and isFormat(GetItemTypeId(it))==true and IsItemOwned(it) and orderid=="dropitem")then
@@ -3319,6 +3312,7 @@ struct hItem
 			set hevtBean.triggerItem = it
 			call hevt.triggerEvent(hevtBean)
 			call hevtBean.destroy()
+			call thistype.setIsHjass(it,false)
 		endif
 	endmethod
 
@@ -3332,7 +3326,7 @@ struct hItem
 		local integer lumber = getLumber(itid)*charges
 		local real sellRadio = hplayer.getSellRatio(GetOwningPlayer(u))
 		if(it!=null)then
-			if(isFormat(GetItemTypeId(it))==true and sellRadio > 0)then
+			if(isFormat(GetItemTypeId(it))==true and sellRadio > 0 and (gold>=1 or lumber>=1))then
 				call haward.forUnit(u,0,R2I(I2R(gold)*sellRadio*0.01),R2I(I2R(lumber)*sellRadio*0.01))
 			endif
 			//@触发 售卖物品 事件
@@ -3357,9 +3351,12 @@ struct hItem
 		local player p = GetOwningPlayer(buyer)
 		call hconsole.warning(GetUnitName(u))
 		if(it!=null)then
-			if(hplayer.getGold(p) < gold or hplayer.getLumber(p) < lumber)then
+			if(hplayer.getGold(p) < gold)then
 				call RemoveItem(it)
-				call hmsg.style(hmsg.ttg2Unit(buyer,"金币木材不足",6.00,"ffff80",0,2.50,50.00) ,"scale",0,0.05)
+				call hmsg.style(hmsg.ttg2Unit(buyer,"金币不足",6.00,"ffff80",0,2.50,50.00) ,"scale",0,0.05)
+			elseif(hplayer.getLumber(p) < lumber)then
+				call RemoveItem(it)
+				call hmsg.style(hmsg.ttg2Unit(buyer,"木材不足",6.00,"14db2b",0,2.50,50.00) ,"scale",0,0.05)
 			else
 				call hplayer.subGold(p,gold)
 				call hplayer.subGold(p,lumber)
@@ -3573,6 +3570,9 @@ struct hItem
 		local integer itid = GetItemTypeId(it)
 		local integer charges = GetItemCharges(it)
 		local string ittype = getType(itid)
+		local trigger tg = null
+		call hconsole.info("itemUse.charges=="+I2S(charges))
+		call hconsole.info("itemUse.ittype=="+ittype)
 		if(ittype == HITEM_TYPE_FOREVER)then			//永久型物品
 			set charges = charges+1
 			call SetItemCharges(it,charges)
@@ -3583,14 +3583,22 @@ struct hItem
 			endif
 		elseif(ittype == HITEM_TYPE_MOMENT)then		//瞬逝型
 		endif
-		call use(itid)
-		//@触发 使用物品 事件
-		set hevtBean = hEvtBean.create()
-		set hevtBean.triggerKey = "itemUsed"
-		set hevtBean.triggerUnit = u
-		set hevtBean.triggerItem = it
-		call hevt.triggerEvent(hevtBean)
-		call hevtBean.destroy()
+		set tg = LoadTriggerHandle(hash_item,itid,hk_item_onuse_trigger)
+		if(tg != null)then
+			call hevt.setTriggerUnit(tg,u)
+			call hevt.setTriggerItem(tg,it)
+			call hevt.setId(tg,itid)
+			call TriggerExecute(tg)
+			set tg = null
+			//@触发 使用物品 事件
+			set hevtBean = hEvtBean.create()
+			set hevtBean.triggerKey = "itemUsed"
+			set hevtBean.triggerUnit = u
+			set hevtBean.triggerItem = it
+			set hevtBean.id = itid
+			call hevt.triggerEvent(hevtBean)
+			call hevtBean.destroy()
+		endif
 		set u = null
 		set it = null
 	endmethod

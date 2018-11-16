@@ -119,6 +119,34 @@ struct hLogic
 	endmethod
 
 	/**
+	 * 获取两个点间角度，如果其中一个单位为空 返回0
+	 */
+	public static method getDegBetweenLoc takes location l1,location l2 returns real
+		if( l1 == null or l2 == null ) then
+            return 0
+        endif
+		return AngleBetweenPoints(l1, l2)
+	endmethod
+	
+	/**
+	 * 获取两个单位间角度，如果其中一个单位为空 返回0
+	 */
+	public static method getDegBetweenUnit takes unit u1,unit u2 returns real
+		local location l1 = null
+		local location l2 = null
+		local real deg = 0
+		if( u1 == null or u2 == null ) then
+            return 0
+        endif
+		set l1 = GetUnitLoc(u1)
+		set l2 = GetUnitLoc(u2)
+		set deg = thistype.getDegBetweenLoc(l1, l2)
+		call RemoveLocation(l1)
+		call RemoveLocation(l2)
+		return deg
+	endmethod
+
+	/**
      *  获取两个单位间距离，如果其中一个单位为空 返回0
      */
     public static method getDistanceBetweenUnit takes unit u1,unit u2 returns real
