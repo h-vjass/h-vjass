@@ -79,6 +79,9 @@ struct hAttrBean
 	public static real wood = 0.0
 	public static real thunder = 0.0
 	public static real poison = 0.0
+	public static real ghost = 0.0
+	public static real metal = 0.0
+	public static real dragon = 0.0
 	public static real fireOppose = 0.0
 	public static real soilOppose = 0.0
 	public static real waterOppose = 0.0
@@ -89,6 +92,9 @@ struct hAttrBean
 	public static real woodOppose = 0.0
 	public static real thunderOppose = 0.0
 	public static real poisonOppose = 0.0
+	public static real ghostOppose = 0.0
+	public static real metalOppose = 0.0
+	public static real dragonOppose = 0.0
 	public static real lifeBackVal = 0.0
 	public static real lifeBackDuring = 0.0
 	public static real manaBackVal = 0.0
@@ -252,6 +258,9 @@ struct hAttrBean
 		set x.wood = 0
 		set x.thunder = 0
 		set x.poison = 0
+		set x.ghost = 0
+		set x.metal = 0
+		set x.dragon = 0
 		set x.fireOppose = 0
 		set x.soilOppose = 0
 		set x.waterOppose = 0
@@ -262,6 +271,9 @@ struct hAttrBean
 		set x.woodOppose = 0
 		set x.thunderOppose = 0
 		set x.poisonOppose = 0
+		set x.ghostOppose = 0
+		set x.metalOppose = 0
+		set x.dragonOppose = 0
 		set x.lifeBackVal = 0.0
 		set x.lifeBackDuring = 0.0
 		set x.manaBackVal = 0.0
@@ -425,6 +437,9 @@ struct hAttrBean
 		set wood = 0
 		set thunder = 0
 		set poison = 0
+		set ghost = 0
+		set metal = 0
+		set dragon = 0
 		set fireOppose = 0
 		set soilOppose = 0
 		set waterOppose = 0
@@ -435,6 +450,9 @@ struct hAttrBean
 		set woodOppose = 0
 		set thunderOppose = 0
 		set poisonOppose = 0
+		set ghostOppose = 0
+		set metalOppose = 0
+		set dragonOppose = 0
 		set lifeBackVal = 0.0
 		set lifeBackDuring = 0.0
 		set manaBackVal = 0.0
@@ -1040,6 +1058,7 @@ struct hAttr
 		local real futureVal = 0
 		local integer level = 0
 		local real tempPercent = 0
+		local real tempCure = 0
 		local integer tempInt = 0
 		if( diff!=0 )then
 			// 生命
@@ -2012,12 +2031,40 @@ struct hAttr
 		call thistype.addDefend(whichUnit,defend,0)
 	endmethod
 
+	public static method resetAttrGroups takes unit whichUnit returns nothing
+		local integer uhid = GetHandleId(whichUnit)
+		if (hgroup.isIn(whichUnit,ATTR_GROUP_LIFE_BACK) == false and hlogic.rabs(LoadReal(hash_attr , uhid , ATTR_FLAG_UP_LIFE_BACK)) > 0.02)then
+			call GroupAddUnit(ATTR_GROUP_LIFE_BACK,whichUnit)
+		endif
+		if (hgroup.isIn(whichUnit,ATTR_GROUP_MANA_BACK) == false and  hlogic.rabs(LoadReal(hash_attr , uhid , ATTR_FLAG_UP_MANA_BACK)) > 0.02)then
+			call GroupAddUnit(ATTR_GROUP_MANA_BACK,whichUnit)
+		endif
+		if (hgroup.isIn(whichUnit,ATTR_GROUP_LIFE_SOURCE) == false and  hlogic.rabs(LoadReal(hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE)) > 1)then
+			call GroupAddUnit(ATTR_GROUP_LIFE_SOURCE,whichUnit)
+		endif
+		if (hgroup.isIn(whichUnit,ATTR_GROUP_MANA_SOURCE) == false and  hlogic.rabs(LoadReal(hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE)) > 1)then
+			call GroupAddUnit(ATTR_GROUP_MANA_SOURCE,whichUnit)
+		endif
+	endmethod
+
 	private static method setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing
 		local integer uhid = GetHandleId(whichUnit)
 		local timer t = null
+		local real tempCure = 0
 		call initAttr( whichUnit )
+		// 处理治疗增益
+		if(diff > 0 and (flag == ATTR_FLAG_UP_LIFE_BACK or flag == ATTR_FLAG_UP_MANA_BACK))then
+			set tempCure = LoadReal(hash_attr , uhid , ATTR_FLAG_UP_CURE)
+			if(tempCure < 0.01 and tempCure > -0.01)then
+				// nothing
+			elseif(tempCure < -100)then
+				set diff = 0
+			else
+				set diff = diff * ((tempCure + 100) * 0.01)
+			endif
+		endif
 		call setAttrDo( flag , whichUnit , diff )
-		if( during>0.01 ) then
+		if( during > 0.01 ) then
 			set t = htime.setTimeout( during , function thistype.setAttrDuring )
 			call htime.setInteger(t,1,flag)
 			call htime.setUnit(t,2,whichUnit)

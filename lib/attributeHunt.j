@@ -91,6 +91,9 @@ struct hAttrHunt
             wood    木
             thunder 雷
             poison  毒
+            ghost   鬼
+            metal   金
+            dragon  龙
      		real 真实
      		absolute 绝对
      * isBreak是否无视：true | false 物理伤害则无视护甲 | 魔法伤害则无视魔抗
@@ -145,6 +148,9 @@ struct hAttrHunt
         local real fromUnitNaturalWood = 0.0
         local real fromUnitNaturalThunder = 0.0
     	local real fromUnitNaturalPoison = 0.0
+    	local real fromUnitNaturalGhost = 0.0
+    	local real fromUnitNaturalMetal = 0.0
+    	local real fromUnitNaturalDragon = 0.0
         //获取攻击/伤害特效
         local real fromUnitHuntEffectLifeBackVal = 0.0
         local real fromUnitHuntEffectLifeBackDuring = 0.0
@@ -258,7 +264,6 @@ struct hAttrHunt
     	local real toUnitLuck = 0.0
     	local real toUnitInvincible = 0.0
     	local real toUnitHuntRebound = 0.0
-    	local real toUnitCure = 0.0
         local real toUnitPunishOppose = 0.0
         local real toUnitNaturalFireOppose = 0.0
         local real toUnitNaturalSoilOppose = 0.0
@@ -270,6 +275,9 @@ struct hAttrHunt
         local real toUnitNaturalWoodOppose = 0.0
         local real toUnitNaturalThunderOppose = 0.0
         local real toUnitNaturalPoisonOppose = 0.0
+        local real toUnitNaturalGhostOppose = 0.0
+    	local real toUnitNaturalMetalOppose = 0.0
+    	local real toUnitNaturalDragonOppose = 0.0
 
         if(bean.damage<0.2)then
             call hconsole.warning("伤害太小被忽略")
@@ -318,6 +326,9 @@ struct hAttrHunt
         set fromUnitNaturalWood = hattrNatural.getWood(fromUnit)
         set fromUnitNaturalThunder = hattrNatural.getThunder(fromUnit)
     	set fromUnitNaturalPoison = hattrNatural.getPoison(fromUnit)
+    	set fromUnitNaturalGhost = hattrNatural.getGhost(fromUnit)
+    	set fromUnitNaturalMetal = hattrNatural.getMetal(fromUnit)
+    	set fromUnitNaturalDragon = hattrNatural.getDragon(fromUnit)
         //获取攻击/伤害特效
 		set fromUnitHuntEffectLifeBackVal = hAttrEffect.getLifeBackVal(bean.fromUnit)
         set fromUnitHuntEffectLifeBackDuring = hAttrEffect.getLifeBackDuring(bean.fromUnit)
@@ -431,7 +442,6 @@ struct hAttrHunt
     	set toUnitLuck = hattr.getLuck(toUnit)
     	set toUnitInvincible = hattr.getInvincible(toUnit)
     	set toUnitHuntRebound = hattr.getHuntRebound(toUnit)
-    	set toUnitCure = hattr.getCure(toUnit)
         set toUnitPunishOppose = hattr.getPunishOppose(toUnit)
         set toUnitNaturalFireOppose = hattrNatural.getFireOppose(toUnit)
         set toUnitNaturalSoilOppose = hattrNatural.getSoilOppose(toUnit)
@@ -443,6 +453,9 @@ struct hAttrHunt
         set toUnitNaturalWoodOppose = hattrNatural.getWoodOppose(toUnit)
         set toUnitNaturalThunderOppose = hattrNatural.getThunderOppose(toUnit)
         set toUnitNaturalPoisonOppose = hattrNatural.getPoisonOppose(toUnit)
+        set toUnitNaturalGhostOppose = hattrNatural.getGhostOppose(toUnit)
+        set toUnitNaturalMetalOppose = hattrNatural.getMetalOppose(toUnit)
+        set toUnitNaturalDragonOppose = hattrNatural.getDragonOppose(toUnit)
 
         //计算硬直抵抗
         set punishEffectRatio = 0.99
@@ -605,6 +618,9 @@ struct hAttrHunt
         set fromUnitNaturalWood = fromUnitNaturalWood-toUnitNaturalWoodOppose
         set fromUnitNaturalThunder = fromUnitNaturalThunder-toUnitNaturalThunderOppose
         set fromUnitNaturalPoison = fromUnitNaturalPoison-toUnitNaturalPoisonOppose
+        set fromUnitNaturalGhost = fromUnitNaturalGhost-toUnitNaturalGhostOppose
+        set fromUnitNaturalMetal = fromUnitNaturalMetal-toUnitNaturalMetalOppose
+        set fromUnitNaturalDragon = fromUnitNaturalDragon-toUnitNaturalDragonOppose
         if(fromUnitNaturalFire < -100)then
             set fromUnitNaturalFire = -100
         endif
@@ -632,8 +648,17 @@ struct hAttrHunt
         if(fromUnitNaturalThunder < -100)then
             set fromUnitNaturalThunder = -100
         endif
-            if(fromUnitNaturalPoison < -100)then
+        if(fromUnitNaturalPoison < -100)then
             set fromUnitNaturalPoison = -100
+        endif
+        if(fromUnitNaturalGhost < -100)then
+            set fromUnitNaturalGhost = -100
+        endif
+        if(fromUnitNaturalMetal < -100)then
+            set fromUnitNaturalMetal = -100
+        endif
+        if(fromUnitNaturalDragon < -100)then
+            set fromUnitNaturalDragon = -100
         endif
         if( hlogic.strpos(bean.huntType,"fire")!=-1 and fromUnitNaturalFire!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalFire*0.01)
@@ -701,6 +726,21 @@ struct hAttrHunt
             set fromUnitHuntEffectWeakDuring = fromUnitHuntEffectWeakDuring * (1.0+fromUnitNaturalPoison*0.01)
             set realDamageString = realDamageString+"毒"
             set realDamageStringColor = "45f7f7"
+        endif
+        if( hlogic.strpos(bean.huntType,"ghost")!=-1 and fromUnitNaturalGhost!=0 )then
+            set realDamage = realDamage * (1.0+fromUnitNaturalGhost*0.01)
+            set realDamageString = realDamageString+"鬼"
+            set realDamageStringColor = "383434"
+        endif
+        if( hlogic.strpos(bean.huntType,"metal")!=-1 and fromUnitNaturalMetal!=0 )then
+            set realDamage = realDamage * (1.0+fromUnitNaturalMetal*0.01)
+            set realDamageString = realDamageString+"金"
+            set realDamageStringColor = "f9f99c"
+        endif
+        if( hlogic.strpos(bean.huntType,"dragon")!=-1 and fromUnitNaturalDragon!=0 )then
+            set realDamage = realDamage * (1.0+fromUnitNaturalDragon*0.01)
+            set realDamageString = realDamageString+"龙"
+            set realDamageStringColor = "7cbd60"
         endif
 
         //计算物理暴击,满30000
@@ -1043,14 +1083,6 @@ struct hAttrHunt
                 call hevt.triggerEvent(hevtBean)
                 call hevtBean.destroy()
             endif
-            //治疗
-            if( toUnitCure >0 )then
-                call hunit.addLife(toUnit,realDamage * toUnitCure * 0.01)
-                call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",toUnit,"origin",1.00)
-                set loc = GetUnitLoc( toUnit )
-                call hmsg.style(hmsg.ttg2Loc(loc,"治疗"+I2S(R2I(realDamage*toUnitCure*0.01)),10.00,"f5f89b",10,1.00,10.00)  ,"shrink",-0.05,0)
-                call RemoveLocation( loc )
-            endif
         endif
 
         //特殊效果,需要非无敌并处于效果启动状态下
@@ -1273,7 +1305,7 @@ endif
                             set huntBean.toUnit = u
                             set huntBean.damage = fromUnitHuntEffectBombVal
                             set huntBean.huntKind = "special"
-                            set huntBean.huntType = "physicalfire"
+                            set huntBean.huntType = bean.huntType
                             call thistype.huntUnit(huntBean)
                             call huntBean.destroy()
                         endif

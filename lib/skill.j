@@ -454,7 +454,7 @@ struct hSkill
                 if( during+1 >= times ) then
                     call htime.delTimer( t )
                     if(skillModel!=null) then
-                        call UnitAddAbility( shutter, skillModel)
+                        call UnitRemoveAbility( shutter, skillModel)
                     endif
                     call SetUnitPositionLoc( shutter, targetLoc)
                     call RemoveLocation(targetLoc)

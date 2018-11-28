@@ -266,7 +266,7 @@ struct hPlayer
 	private static method diffGoldRatioCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer pid = htime.getInteger(t,1)
-		local real diff = htime.getReal(t,1)
+		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_gold_ratio)
 		call htime.delTimer(t)
 		if(diff!=0)then
@@ -282,7 +282,7 @@ struct hPlayer
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffGoldRatioCall)
 				call htime.setInteger(t,1,pid)
-				call htime.setReal(t,1,diff)
+				call htime.setReal(t,2,diff)
 			endif
 		endif
 	endmethod
@@ -303,7 +303,7 @@ struct hPlayer
 	private static method diffLumberRatioCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer pid = htime.getInteger(t,1)
-		local real diff = htime.getReal(t,1)
+		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_lumber_ratio)
 		call htime.delTimer(t)
 		if(diff!=0)then
@@ -319,7 +319,7 @@ struct hPlayer
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffLumberRatioCall)
 				call htime.setInteger(t,1,pid)
-				call htime.setReal(t,1,diff)
+				call htime.setReal(t,2,diff)
 			endif
 		endif
 	endmethod
@@ -341,7 +341,7 @@ struct hPlayer
 	private static method diffExpRatioCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer pid = htime.getInteger(t,1)
-		local real diff = htime.getReal(t,1)
+		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_exp_ratio)
 		call htime.delTimer(t)
 		if(diff!=0)then
@@ -357,7 +357,7 @@ struct hPlayer
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffExpRatioCall)
 				call htime.setInteger(t,1,pid)
-				call htime.setReal(t,1,diff)
+				call htime.setReal(t,2,diff)
 			endif
 		endif
 	endmethod
@@ -379,7 +379,7 @@ struct hPlayer
 	private static method diffSellRatioCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local integer pid = htime.getInteger(t,1)
-		local real diff = htime.getReal(t,1)
+		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_sell_ratio)
 		call htime.delTimer(t)
 		if(diff!=0)then
@@ -395,7 +395,7 @@ struct hPlayer
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffSellRatioCall)
 				call htime.setInteger(t,1,pid)
-				call htime.setReal(t,1,diff)
+				call htime.setReal(t,2,diff)
 			endif
 		endif
 	endmethod
@@ -571,7 +571,7 @@ struct hPlayer
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
 	    call TriggerAddAction( triggerApmUnit, function thistype.triggerApmUnitActions )
-		call hevt.onSelectionTriple(null,function thistype.triggerSelectionUnitActions)
+		call hevt.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
 	endmethod
 
 

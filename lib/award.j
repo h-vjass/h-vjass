@@ -55,7 +55,7 @@ struct hAward
             call hmedia.soundPlay2Unit(gg_snd_BundleOfLumber,whichUnit)
         endif
         set ttg = hmsg.ttg2Unit(whichUnit,floatStr,7,"",0,1.70,60.00)
-        call SetTextTagPos( ttg , GetUnitX(whichUnit)-I2R(StringLength(floatStr)-ttgColorLen)*11*0.5 , GetUnitY(whichUnit) , 50 )
+        call SetTextTagPos( ttg , GetUnitX(whichUnit)-I2R(StringLength(floatStr)-ttgColorLen)*7*0.5 , GetUnitY(whichUnit) , 50 )
         call hmsg.style(ttg,"toggle",0,0.23)
     endmethod
 

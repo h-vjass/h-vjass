@@ -20,16 +20,22 @@ struct hAttrNatural
 	private static integer AF_WOOD = 7008
 	private static integer AF_THUNDER = 7009
 	private static integer AF_POISON = 7010
-	private static integer AF_FIRE_OPPOSE = 7011
-	private static integer AF_SOIL_OPPOSE = 7012
-	private static integer AF_WATER_OPPOSE = 7013
-	private static integer AF_ICE_OPPOSE = 7014
-	private static integer AF_WIND_OPPOSE = 7015
-	private static integer AF_LIGHT_OPPOSE = 7016
-	private static integer AF_DARK_OPPOSE = 7017
-	private static integer AF_WOOD_OPPOSE = 7018
-	private static integer AF_THUNDER_OPPOSE = 7019
-	private static integer AF_POISON_OPPOSE = 7020
+	private static integer AF_GHOST = 7011
+	private static integer AF_METAL = 7012
+	private static integer AF_DRAGON = 7013
+	private static integer AF_FIRE_OPPOSE = 7014
+	private static integer AF_SOIL_OPPOSE = 7015
+	private static integer AF_WATER_OPPOSE = 7016
+	private static integer AF_ICE_OPPOSE = 7017
+	private static integer AF_WIND_OPPOSE = 7018
+	private static integer AF_LIGHT_OPPOSE = 7019
+	private static integer AF_DARK_OPPOSE = 7020
+	private static integer AF_WOOD_OPPOSE = 7021
+	private static integer AF_THUNDER_OPPOSE = 7022
+	private static integer AF_POISON_OPPOSE = 7023
+	private static integer AF_GHOST_OPPOSE = 7024
+	private static integer AF_METAL_OPPOSE = 7025
+	private static integer AF_DRAGON_OPPOSE = 7026
 
 	static method create takes nothing returns hAttrNatural
         local hAttrNatural x = 0
@@ -55,6 +61,9 @@ struct hAttrNatural
 				call SaveReal( hash_attr_natural , uhid , AF_WOOD , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_THUNDER , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_POISON , 0 )
+				call SaveReal( hash_attr_natural , uhid , AF_GHOST , 0 )
+				call SaveReal( hash_attr_natural , uhid , AF_METAL , 0 )
+				call SaveReal( hash_attr_natural , uhid , AF_DRAGON , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_FIRE_OPPOSE , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_SOIL_OPPOSE , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_WATER_OPPOSE , 0 )
@@ -65,6 +74,9 @@ struct hAttrNatural
 				call SaveReal( hash_attr_natural , uhid , AF_WOOD_OPPOSE , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_THUNDER_OPPOSE , 0 )
 				call SaveReal( hash_attr_natural , uhid , AF_POISON_OPPOSE , 0 )
+				call SaveReal( hash_attr_natural , uhid , AF_GHOST_OPPOSE , 0 )
+				call SaveReal( hash_attr_natural , uhid , AF_METAL_OPPOSE , 0 )
+				call SaveReal( hash_attr_natural , uhid , AF_DRAGON_OPPOSE , 0 )
 
 			return true
 		endif
@@ -239,6 +251,45 @@ struct hAttrNatural
 	public static method setPoison takes unit whichUnit , real value , real during returns nothing
 	call setAttr( AF_POISON , whichUnit , value - getPoison(whichUnit) , during )
 	endmethod
+	// 自然属性[ghost]
+	public static method getGhost takes unit whichUnit returns real
+	return getAttr( AF_GHOST , whichUnit )
+	endmethod
+	public static method addGhost takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_GHOST , whichUnit , value , during )
+	endmethod
+	public static method subGhost takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_GHOST , whichUnit , -value , during )
+	endmethod
+	public static method setGhost takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_GHOST , whichUnit , value - getGhost(whichUnit) , during )
+	endmethod
+	// 自然属性[metal]
+	public static method getMetal takes unit whichUnit returns real
+	return getAttr( AF_METAL , whichUnit )
+	endmethod
+	public static method addMetal takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_METAL , whichUnit , value , during )
+	endmethod
+	public static method subMetal takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_METAL , whichUnit , -value , during )
+	endmethod
+	public static method setMetal takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_METAL , whichUnit , value - getMetal(whichUnit) , during )
+	endmethod
+	// 自然属性[dragon]
+	public static method getDragon takes unit whichUnit returns real
+	return getAttr( AF_DRAGON , whichUnit )
+	endmethod
+	public static method addDragon takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_DRAGON , whichUnit , value , during )
+	endmethod
+	public static method subDragon takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_DRAGON , whichUnit , -value , during )
+	endmethod
+	public static method setDragon takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_DRAGON , whichUnit , value - getDragon(whichUnit) , during )
+	endmethod
 	// 自然属性[fire_oppose]
 	public static method getFireOppose takes unit whichUnit returns real
 	return getAttr( AF_FIRE_OPPOSE , whichUnit )
@@ -369,6 +420,45 @@ struct hAttrNatural
 	public static method setPoisonOppose takes unit whichUnit , real value , real during returns nothing
 	call setAttr( AF_POISON_OPPOSE , whichUnit , value - getPoisonOppose(whichUnit) , during )
 	endmethod
+	// 自然属性[ghost_oppose]
+	public static method getGhostOppose takes unit whichUnit returns real
+	return getAttr( AF_GHOST_OPPOSE , whichUnit )
+	endmethod
+	public static method addGhostOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_GHOST_OPPOSE , whichUnit , value , during )
+	endmethod
+	public static method subGhostOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_GHOST_OPPOSE , whichUnit , -value , during )
+	endmethod
+	public static method setGhostOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_GHOST_OPPOSE , whichUnit , value - getGhostOppose(whichUnit) , during )
+	endmethod
+	// 自然属性[metal_oppose]
+	public static method getMetalOppose takes unit whichUnit returns real
+	return getAttr( AF_METAL_OPPOSE , whichUnit )
+	endmethod
+	public static method addMetalOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_METAL_OPPOSE , whichUnit , value , during )
+	endmethod
+	public static method subMetalOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_METAL_OPPOSE , whichUnit , -value , during )
+	endmethod
+	public static method setMetalOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_METAL_OPPOSE , whichUnit , value - getMetalOppose(whichUnit) , during )
+	endmethod
+	// 自然属性[dragon_oppose]
+	public static method getDragonOppose takes unit whichUnit returns real
+	return getAttr( AF_DRAGON_OPPOSE , whichUnit )
+	endmethod
+	public static method addDragonOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_DRAGON_OPPOSE , whichUnit , value , during )
+	endmethod
+	public static method subDragonOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_DRAGON_OPPOSE , whichUnit , -value , during )
+	endmethod
+	public static method setDragonOppose takes unit whichUnit , real value , real during returns nothing
+	call setAttr( AF_DRAGON_OPPOSE , whichUnit , value - getDragonOppose(whichUnit) , during )
+	endmethod
 
 	/**
      * 打印某个单位的攻击特效到桌面
@@ -384,6 +474,9 @@ struct hAttrNatural
 		call hconsole.info("自然属性#wood："+R2S(getWood(whichUnit)))
 		call hconsole.info("自然属性#thunder："+R2S(getThunder(whichUnit)))
 		call hconsole.info("自然属性#poison："+R2S(getPoison(whichUnit)))
+		call hconsole.info("自然属性#ghost"+R2S(getGhost(whichUnit)))
+		call hconsole.info("自然属性#metal"+R2S(getMetal(whichUnit)))
+		call hconsole.info("自然属性#dragon"+R2S(getDragon(whichUnit)))
 		call hconsole.info("自然属性#fire_oppose："+R2S(getFireOppose(whichUnit)))
 		call hconsole.info("自然属性#soil_oppose："+R2S(getSoilOppose(whichUnit)))
 		call hconsole.info("自然属性#water_oppose："+R2S(getWaterOppose(whichUnit)))
@@ -394,6 +487,9 @@ struct hAttrNatural
 		call hconsole.info("自然属性#wood_oppose："+R2S(getWoodOppose(whichUnit)))
 		call hconsole.info("自然属性#thunder_oppose："+R2S(getThunderOppose(whichUnit)))
 		call hconsole.info("自然属性#poison_oppose："+R2S(getPoisonOppose(whichUnit)))
+		call hconsole.info("自然属性#ghost_oppose"+R2S(getGhostOppose(whichUnit)))
+		call hconsole.info("自然属性#metal_oppose"+R2S(getMetalOppose(whichUnit)))
+		call hconsole.info("自然属性#dragon_oppose"+R2S(getDragonOppose(whichUnit)))
     endmethod
 
 endstruct

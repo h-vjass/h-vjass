@@ -325,6 +325,21 @@ struct hAttrUnit
 		elseif(bean.poison<0)then
 			call hattrNatural.subPoison(whichUnit,bean.poison,during)
 		endif
+		if(bean.ghost>0)then
+			call hattrNatural.addGhost(whichUnit,bean.ghost,during)
+		elseif(bean.ghost<0)then
+			call hattrNatural.subGhost(whichUnit,bean.ghost,during)
+		endif
+		if(bean.metal>0)then
+			call hattrNatural.addMetal(whichUnit,bean.metal,during)
+		elseif(bean.metal<0)then
+			call hattrNatural.subMetal(whichUnit,bean.metal,during)
+		endif
+		if(bean.dragon>0)then
+			call hattrNatural.addDragon(whichUnit,bean.dragon,during)
+		elseif(bean.dragon<0)then
+			call hattrNatural.subDragon(whichUnit,bean.dragon,during)
+		endif
 		if(bean.fireOppose>0)then
 			call hattrNatural.addFireOppose(whichUnit,bean.fireOppose,during)
 		elseif(bean.fireOppose<0)then
@@ -374,6 +389,21 @@ struct hAttrUnit
 			call hattrNatural.addPoisonOppose(whichUnit,bean.poisonOppose,during)
 		elseif(bean.poisonOppose<0)then
 			call hattrNatural.subPoisonOppose(whichUnit,bean.poisonOppose,during)
+		endif
+		if(bean.ghostOppose>0)then
+			call hattrNatural.addGhostOppose(whichUnit,bean.ghostOppose,during)
+		elseif(bean.ghostOppose<0)then
+			call hattrNatural.subGhostOppose(whichUnit,bean.ghostOppose,during)
+		endif
+		if(bean.metalOppose>0)then
+			call hattrNatural.addMetalOppose(whichUnit,bean.metalOppose,during)
+		elseif(bean.metalOppose<0)then
+			call hattrNatural.subMetalOppose(whichUnit,bean.metalOppose,during)
+		endif
+		if(bean.dragonOppose>0)then
+			call hattrNatural.addDragonOppose(whichUnit,bean.dragonOppose,during)
+		elseif(bean.dragonOppose<0)then
+			call hattrNatural.subDragonOppose(whichUnit,bean.dragonOppose,during)
 		endif
 		if(bean.lifeBackVal>0)then
 			call hattrEffect.addLifeBackVal(whichUnit,bean.lifeBackVal,during)
@@ -933,6 +963,8 @@ struct hAttrUnit
 						if(hattr.getLifeBack(tempUnit)!=0)then
 							call SetUnitLifeBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_LIFE, tempUnit) + ( hattr.getLifeBack(tempUnit) * period ) ) )
 						endif
+					else
+						call GroupRemoveUnit( ATTR_GROUP_LIFE_BACK , tempUnit )
 	                endif
 	        endloop
 	        call GroupClear( tempGroup )
@@ -960,6 +992,8 @@ struct hAttrUnit
 								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"bce43a",10,1.00,10.00)  ,"scale",0,0.2)
 							endif
 						endif
+					else
+						call GroupRemoveUnit( ATTR_GROUP_LIFE_SOURCE , tempUnit )
 	                endif
 	        endloop
 	        call GroupClear( tempGroup )
@@ -978,19 +1012,8 @@ struct hAttrUnit
 						if(hattr.getManaBack(tempUnit)!=0)then
 							call SetUnitManaBJ( tempUnit , ( GetUnitStateSwap(UNIT_STATE_MANA, tempUnit) + ( hattr.getManaBack(tempUnit) * period ) ) )
 						endif
-						//source
-						if( LoadBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"))==false and hunit.getManaPercent(tempUnit)<hplayer.getManaSourceRatio(GetOwningPlayer(tempUnit)) )then
-							set tempReal = GetUnitStateSwap(UNIT_STATE_MAX_MANA, tempUnit)-GetUnitStateSwap(UNIT_STATE_MANA, tempUnit)
-							if(tempReal<hattr.getManaSourceCurrent(tempUnit))then
-								call SaveBoolean(hash_attr_unit,GetHandleId(tempUnit),StringHash("msc"),true)
-								call hattr.subManaSourceCurrent(tempUnit,tempReal,0)
-								call hattr.addManaBack(tempUnit,tempReal/sourceTime,sourceTime)
-								set tmpt = htime.setTimeout(sourceTime,function thistype.lifemanasourceCall)
-								call htime.setUnit(tmpt,1,tempUnit)
-								call htime.setInteger(tmpt,2,2)
-								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"93d3f1",10,1.00,10.00)  ,"scale",0,0.2)
-							endif
-						endif
+					else
+						call GroupRemoveUnit( ATTR_GROUP_MANA_BACK , tempUnit )
 	                endif
 	        endloop
 	        call GroupClear( tempGroup )
@@ -1018,6 +1041,8 @@ struct hAttrUnit
 								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"93d3f1",10,1.00,10.00)  ,"scale",0,0.2)
 							endif
 						endif
+					else
+						call GroupRemoveUnit( ATTR_GROUP_MANA_SOURCE , tempUnit )
 	                endif
 	        endloop
 	        call GroupClear( tempGroup )
@@ -1208,14 +1233,6 @@ struct hAttrUnit
 	private static method triggerUnitDeathAction takes nothing returns nothing
 		local unit u = GetTriggerUnit()
 		local unit killer = hevt.getLastDamageUnit(u)
-		//自动清理group
-		if(hunit.isAutoClearAttrGroup(u) == true) then
-			call hgroup.out(u,ATTR_GROUP_LIFE_BACK)
-			call hgroup.out(u,ATTR_GROUP_MANA_BACK)
-			call hgroup.out(u,ATTR_GROUP_LIFE_SOURCE)
-			call hgroup.out(u,ATTR_GROUP_MANA_SOURCE)
-			call hgroup.out(u,ATTR_GROUP_PUNISH)
-		endif
 		if(PUNISH_SWITCH == true)then
 			call SaveTextTagHandle(hash_attr_unit, GetHandleId(u), 7896 , null)
 		endif
@@ -1433,7 +1450,6 @@ struct hAttrUnit
 				//蝗虫不做某些处理
 				call hconsole.log(GetUnitName(u)+"[蝗虫]")
 			else
-				call hunit.setAutoClearAttrGroup(u,true)
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
 				call punishTtg(u)
 				//拥有物品栏的单位绑定物品处理

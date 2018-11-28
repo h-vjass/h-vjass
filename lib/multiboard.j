@@ -622,6 +622,9 @@ struct hMultiboard
             call setContentIcon(mbid, 1, 8, "木攻击", "ReplaceableTextures\\CommandButtons\\BTNThorns.blp")
             call setContentIcon(mbid, 1, 9, "雷攻击", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp")
             call setContentIcon(mbid, 1,10, "毒攻击", "ReplaceableTextures\\CommandButtons\\BTNCorrosiveBreath.blp")
+            call setContentIcon(mbid, 1,11, "鬼攻击", "ReplaceableTextures\\CommandButtons\\BTNAnimateDead.blp")
+            call setContentIcon(mbid, 1,12, "金攻击", "ReplaceableTextures\\CommandButtons\\BTNImbuedMasonry.blp")
+            call setContentIcon(mbid, 1,13, "龙攻击", "ReplaceableTextures\\CommandButtons\\BTNAzureDragon.blp")
             call setContent(mbid, 3, 1, "火抗性")
             call setContent(mbid, 3, 2, "土抗性")
             call setContent(mbid, 3, 3, "水抗性")
@@ -632,6 +635,9 @@ struct hMultiboard
             call setContent(mbid, 3, 8, "木抗性")
             call setContent(mbid, 3, 9, "雷抗性")
             call setContent(mbid, 3,10, "毒抗性")
+            call setContent(mbid, 3,11, "鬼抗性")
+            call setContent(mbid, 3,12, "金抗性")
+            call setContent(mbid, 3,13, "龙抗性")
             set t = htime.setInterval(3.0,function thistype.hJassDefault_selection_natural)
             call htime.setInteger(t,1,i)
         endif
@@ -659,6 +665,9 @@ struct hMultiboard
                 call setContent(mbid, 2, 8, I2S(R2I(hattrNatural.getWood(hplayer.getSelection(players[i])))) +"%" )
                 call setContent(mbid, 2, 9, I2S(R2I(hattrNatural.getThunder(hplayer.getSelection(players[i])))) +"%" )
                 call setContent(mbid, 2, 10,I2S(R2I(hattrNatural.getPoison(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 2, 11,I2S(R2I(hattrNatural.getGhost(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 2, 12,I2S(R2I(hattrNatural.getMetal(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 2, 13,I2S(R2I(hattrNatural.getDragon(hplayer.getSelection(players[i])))) +"%" )
 
                 call setContent(mbid, 4, 1, I2S(R2I(hattrNatural.getFireOppose(hplayer.getSelection(players[i])))) +"%" )
                 call setContent(mbid, 4, 2, I2S(R2I(hattrNatural.getSoilOppose(hplayer.getSelection(players[i])))) +"%" )
@@ -670,6 +679,9 @@ struct hMultiboard
                 call setContent(mbid, 4, 8, I2S(R2I(hattrNatural.getWoodOppose(hplayer.getSelection(players[i])))) +"%" )
                 call setContent(mbid, 4, 9, I2S(R2I(hattrNatural.getThunderOppose(hplayer.getSelection(players[i])))) +"%" )
                 call setContent(mbid, 4,10, I2S(R2I(hattrNatural.getPoisonOppose(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 4,11, I2S(R2I(hattrNatural.getGhostOppose(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 4,12, I2S(R2I(hattrNatural.getMetalOppose(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 4,13, I2S(R2I(hattrNatural.getDragonOppose(hplayer.getSelection(players[i])))) +"%" )
 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_natural[i])
@@ -848,10 +860,10 @@ struct hMultiboard
         set txt = ""
 		set txt = txt + "-mbap 查看所有玩家统计"
 		set txt = txt + "|n-mbme 查看你的个人实时状态"
-		set txt = txt + "|n-mbsa 查看三击锁定单位的基本属性"
-		set txt = txt + "|n-mbse 查看三击锁定单位的特效属性"
-		set txt = txt + "|n-mbsn 查看三击锁定单位的自然属性"
-		set txt = txt + "|n-mbsi 查看三击锁定单位的物品"
+		set txt = txt + "|n-mbsa 查看双击锁定单位的基本属性"
+		set txt = txt + "|n-mbse 查看双击锁定单位的特效属性"
+		set txt = txt + "|n-mbsn 查看双击锁定单位的自然属性"
+		set txt = txt + "|n-mbsi 查看双击锁定单位的物品"
 		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用hJass多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
     endmethod
 

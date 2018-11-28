@@ -12,7 +12,6 @@ integer hashkey_unit_avatar = 76103
 integer hashkey_unit_attack_speed_base_space = 76104
 integer hashkey_unit_attack_range = 76105
 integer hashkey_unit_isOpenPunish = 76106
-integer hashkey_unit_isAutoClearAttrGroup = 76107
 endglobals
 
 struct hUnit
@@ -140,25 +139,6 @@ struct hUnit
      */
     public static method isOpenPunish takes unit u returns boolean
         return LoadBoolean(hash_unit,GetHandleId(u),hashkey_unit_isOpenPunish)
-    endmethod
-
-    /**
-     * 设置单位是否自动清理出属性group（不清理后期会越来越卡，设置false则可以手动清理）
-     */
-    public static method setAutoClearAttrGroup takes unit u,boolean isAuto returns nothing
-        if(isAuto == true)then
-            call SaveInteger(hash_unit,GetHandleId(u),hashkey_unit_isAutoClearAttrGroup,1)
-        elseif (isAuto == false) then
-            call SaveInteger(hash_unit,GetHandleId(u),hashkey_unit_isAutoClearAttrGroup,-1)
-        endif
-    endmethod
-
-    /**
-     * 单位是否自动清理出属性group（系统默认启用）
-     */
-    public static method isAutoClearAttrGroup takes unit u returns boolean
-        local integer i = LoadInteger(hash_unit,GetHandleId(u),hashkey_unit_isAutoClearAttrGroup)
-        return i == 1
     endmethod
 
     /**
@@ -348,6 +328,7 @@ struct hUnit
         local real invulnerable = htime.getReal(t,4)
         call htime.delTimer(t)
         call ReviveHero( u,x,y,true )
+        call hattr.resetAttrGroups(u)
         if(invulnerable > 0)then
             call hability.invulnerable(u,invulnerable)
         endif
@@ -363,6 +344,7 @@ struct hUnit
         if(his.hero(u))then
             if(delay<1)then
                 call ReviveHero( u,x,y,true )
+                call hattr.resetAttrGroups(u)
                 if(invulnerable > 0)then
                     call hability.invulnerable(u,invulnerable)
                 endif

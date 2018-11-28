@@ -35,6 +35,8 @@ globals
 	string HITEM_TYPE_FOREVER = "forever"
 	string HITEM_TYPE_CONSUME = "consume"
 	string HITEM_TYPE_MOMENT = "moment"
+	integer HITEM_IS_UNIT_INIT = 10071
+	integer HITEM_IS_SHOP_INIT = 10072
 endglobals
 
 struct hItemBean
@@ -108,6 +110,9 @@ struct hItemBean
 	public static real wood = 0.0
 	public static real thunder = 0.0
 	public static real poison = 0.0
+	public static real ghost = 0.0
+	public static real metal = 0.0
+	public static real dragon = 0.0
 	public static real fireOppose = 0.0
 	public static real soilOppose = 0.0
 	public static real waterOppose = 0.0
@@ -118,6 +123,9 @@ struct hItemBean
 	public static real woodOppose = 0.0
 	public static real thunderOppose = 0.0
 	public static real poisonOppose = 0.0
+	public static real ghostOppose = 0.0
+	public static real metalOppose = 0.0
+	public static real dragonOppose = 0.0
 	public static real lifeBackVal = 0.0
 	public static real lifeBackDuring = 0.0
 	public static real manaBackVal = 0.0
@@ -290,6 +298,9 @@ struct hItemBean
 		set x.wood = 0
 		set x.thunder = 0
 		set x.poison = 0
+		set x.ghost = 0
+		set x.metal = 0
+		set x.dragon = 0
 		set x.fireOppose = 0
 		set x.soilOppose = 0
 		set x.waterOppose = 0
@@ -300,6 +311,9 @@ struct hItemBean
 		set x.woodOppose = 0
 		set x.thunderOppose = 0
 		set x.poisonOppose = 0
+		set x.ghostOppose = 0
+		set x.metalOppose = 0
+		set x.dragonOppose = 0
 		set x.lifeBackVal = 0.0
 		set x.lifeBackDuring = 0.0
 		set x.manaBackVal = 0.0
@@ -472,6 +486,9 @@ struct hItemBean
 		set wood = 0
 		set thunder = 0
 		set poison = 0
+		set ghost = 0
+		set metal = 0
+		set dragon = 0
 		set fireOppose = 0
 		set soilOppose = 0
 		set waterOppose = 0
@@ -482,6 +499,9 @@ struct hItemBean
 		set woodOppose = 0
 		set thunderOppose = 0
 		set poisonOppose = 0
+		set ghostOppose = 0
+		set metalOppose = 0
+		set dragonOppose = 0
 		set lifeBackVal = 0.0
 		set lifeBackDuring = 0.0
 		set manaBackVal = 0.0
@@ -662,16 +682,22 @@ struct hItem
 	private static integer hk_wood = 1056
 	private static integer hk_thunder = 1057
 	private static integer hk_poison = 1058
-	private static integer hk_fireOppose = 1059
-	private static integer hk_soilOppose = 1060
-	private static integer hk_waterOppose = 1061
-	private static integer hk_iceOppose = 1062
-	private static integer hk_windOppose = 1063
-	private static integer hk_lightOppose = 1064
-	private static integer hk_darkOppose = 1065
-	private static integer hk_woodOppose = 1066
-	private static integer hk_thunderOppose = 1067
-	private static integer hk_poisonOppose = 1068
+	private static integer hk_ghost = 1059
+	private static integer hk_metal = 1060
+	private static integer hk_dragon = 1061
+	private static integer hk_fireOppose = 1062
+	private static integer hk_soilOppose = 1063
+	private static integer hk_waterOppose = 1064
+	private static integer hk_iceOppose = 1065
+	private static integer hk_windOppose = 1066
+	private static integer hk_lightOppose = 1067
+	private static integer hk_darkOppose = 1068
+	private static integer hk_woodOppose = 1069
+	private static integer hk_thunderOppose = 1070
+	private static integer hk_poisonOppose = 1071
+	private static integer hk_ghostOppose = 1072
+	private static integer hk_metalOppose = 1073
+	private static integer hk_dragonOppose = 1074
 	private static integer hk_lifeBackVal = 10000
 	private static integer hk_lifeBackDuring = 10001
 	private static integer hk_manaBackVal = 10100
@@ -991,6 +1017,9 @@ struct hItem
 			call SaveReal(hash_item, bean.item_id, hk_wood, bean.wood)
 			call SaveReal(hash_item, bean.item_id, hk_thunder, bean.thunder)
 			call SaveReal(hash_item, bean.item_id, hk_poison, bean.poison)
+			call SaveReal(hash_item, bean.item_id, hk_ghost, bean.ghost)
+			call SaveReal(hash_item, bean.item_id, hk_metal, bean.metal)
+			call SaveReal(hash_item, bean.item_id, hk_dragon, bean.dragon)
 			call SaveReal(hash_item, bean.item_id, hk_fireOppose, bean.fireOppose)
 			call SaveReal(hash_item, bean.item_id, hk_soilOppose, bean.soilOppose)
 			call SaveReal(hash_item, bean.item_id, hk_waterOppose, bean.waterOppose)
@@ -1001,6 +1030,9 @@ struct hItem
 			call SaveReal(hash_item, bean.item_id, hk_woodOppose, bean.woodOppose)
 			call SaveReal(hash_item, bean.item_id, hk_thunderOppose, bean.thunderOppose)
 			call SaveReal(hash_item, bean.item_id, hk_poisonOppose, bean.poisonOppose)
+			call SaveReal(hash_item, bean.item_id, hk_ghostOppose, bean.ghostOppose)
+			call SaveReal(hash_item, bean.item_id, hk_metalOppose, bean.metalOppose)
+			call SaveReal(hash_item, bean.item_id, hk_dragonOppose, bean.dragonOppose)
 			call SaveReal(hash_item, bean.item_id, hk_lifeBackVal, bean.lifeBackVal)
 			call SaveReal(hash_item, bean.item_id, hk_lifeBackDuring, bean.lifeBackDuring)
 			call SaveReal(hash_item, bean.item_id, hk_manaBackVal, bean.manaBackVal)
@@ -1266,6 +1298,15 @@ struct hItem
 			if(bean.poison!=0)then
 				set score = score + R2I(bean.poison)*5
 			endif
+			if(bean.ghost!=0)then
+				set score = score + R2I(bean.ghost)*5
+			endif
+			if(bean.metal!=0)then
+				set score = score + R2I(bean.metal)*5
+			endif
+			if(bean.dragon!=0)then
+				set score = score + R2I(bean.dragon)*5
+			endif
 			if(bean.fireOppose!=0)then
 				set score = score + R2I(bean.fireOppose)*4
 			endif
@@ -1295,6 +1336,15 @@ struct hItem
 			endif
 			if(bean.poisonOppose!=0)then
 				set score = score + R2I(bean.poisonOppose)*4
+			endif
+			if(bean.ghostOppose!=0)then
+				set score = score + R2I(bean.ghostOppose)*4
+			endif
+			if(bean.metalOppose!=0)then
+				set score = score + R2I(bean.metalOppose)*4
+			endif
+			if(bean.dragonOppose!=0)then
+				set score = score + R2I(bean.dragonOppose)*4
 			endif
 			if(bean.lifeBackVal!=0)then
 				set score = score + R2I(bean.lifeBackVal)*3
@@ -1656,6 +1706,9 @@ struct hItem
 		local real wood = LoadReal(hash_item, item_id, hk_wood)*charges
 		local real thunder = LoadReal(hash_item, item_id, hk_thunder)*charges
 		local real poison = LoadReal(hash_item, item_id, hk_poison)*charges
+		local real ghost = LoadReal(hash_item, item_id, hk_ghost)*charges
+		local real metal = LoadReal(hash_item, item_id, hk_metal)*charges
+		local real dragon = LoadReal(hash_item, item_id, hk_dragon)*charges
 		local real fireOppose = LoadReal(hash_item, item_id, hk_fireOppose)*charges
 		local real soilOppose = LoadReal(hash_item, item_id, hk_soilOppose)*charges
 		local real waterOppose = LoadReal(hash_item, item_id, hk_waterOppose)*charges
@@ -1666,6 +1719,9 @@ struct hItem
 		local real woodOppose = LoadReal(hash_item, item_id, hk_woodOppose)*charges
 		local real thunderOppose = LoadReal(hash_item, item_id, hk_thunderOppose)*charges
 		local real poisonOppose = LoadReal(hash_item, item_id, hk_poisonOppose)*charges
+		local real ghostOppose = LoadReal(hash_item, item_id, hk_ghostOppose)*charges
+		local real metalOppose = LoadReal(hash_item, item_id, hk_metalOppose)*charges
+		local real dragonOppose = LoadReal(hash_item, item_id, hk_dragonOppose)*charges
 		local real lifeBackVal = LoadReal(hash_item, item_id, hk_lifeBackVal)*charges
 		local real lifeBackDuring = LoadReal(hash_item, item_id, hk_lifeBackDuring)*charges
 		local real manaBackVal = LoadReal(hash_item, item_id, hk_manaBackVal)*charges
@@ -1947,6 +2003,15 @@ struct hItem
 		if(poison!=0)then
 			call hattrNatural.addPoison(whichUnit,poison,0)
 		endif
+		if(ghost!=0)then
+			call hattrNatural.addGhost(whichUnit,ghost,0)
+		endif
+		if(metal!=0)then
+			call hattrNatural.addMetal(whichUnit,metal,0)
+		endif
+		if(dragon!=0)then
+			call hattrNatural.addDragon(whichUnit,dragon,0)
+		endif
 		if(fireOppose!=0)then
 			call hattrNatural.addFireOppose(whichUnit,fireOppose,0)
 		endif
@@ -1976,6 +2041,15 @@ struct hItem
 		endif
 		if(poisonOppose!=0)then
 			call hattrNatural.addPoisonOppose(whichUnit,poisonOppose,0)
+		endif
+		if(ghostOppose!=0)then
+			call hattrNatural.addGhostOppose(whichUnit,ghostOppose,0)
+		endif
+		if(metalOppose!=0)then
+			call hattrNatural.addMetalOppose(whichUnit,metalOppose,0)
+		endif
+		if(dragonOppose!=0)then
+			call hattrNatural.addDragonOppose(whichUnit,dragonOppose,0)
 		endif
 		if(lifeBackVal!=0)then
 			call hattrEffect.addLifeBackVal(whichUnit,lifeBackVal,0)
@@ -2342,6 +2416,9 @@ struct hItem
 		local real wood = LoadReal(hash_item, item_id, hk_wood)*charges
 		local real thunder = LoadReal(hash_item, item_id, hk_thunder)*charges
 		local real poison = LoadReal(hash_item, item_id, hk_poison)*charges
+		local real ghost = LoadReal(hash_item, item_id, hk_ghost)*charges
+		local real metal = LoadReal(hash_item, item_id, hk_metal)*charges
+		local real dragon = LoadReal(hash_item, item_id, hk_dragon)*charges
 		local real fireOppose = LoadReal(hash_item, item_id, hk_fireOppose)*charges
 		local real soilOppose = LoadReal(hash_item, item_id, hk_soilOppose)*charges
 		local real waterOppose = LoadReal(hash_item, item_id, hk_waterOppose)*charges
@@ -2352,6 +2429,9 @@ struct hItem
 		local real woodOppose = LoadReal(hash_item, item_id, hk_woodOppose)*charges
 		local real thunderOppose = LoadReal(hash_item, item_id, hk_thunderOppose)*charges
 		local real poisonOppose = LoadReal(hash_item, item_id, hk_poisonOppose)*charges
+		local real ghostOppose = LoadReal(hash_item, item_id, hk_ghostOppose)*charges
+		local real metalOppose = LoadReal(hash_item, item_id, hk_metalOppose)*charges
+		local real dragonOppose = LoadReal(hash_item, item_id, hk_dragonOppose)*charges
 		local real lifeBackVal = LoadReal(hash_item, item_id, hk_lifeBackVal)*charges
 		local real lifeBackDuring = LoadReal(hash_item, item_id, hk_lifeBackDuring)*charges
 		local real manaBackVal = LoadReal(hash_item, item_id, hk_manaBackVal)*charges
@@ -2633,6 +2713,15 @@ struct hItem
 		if(poison!=0)then
 			call hattrNatural.subPoison(whichUnit,poison,0)
 		endif
+		if(ghost!=0)then
+			call hattrNatural.subGhost(whichUnit,ghost,0)
+		endif
+		if(metal!=0)then
+			call hattrNatural.subMetal(whichUnit,metal,0)
+		endif
+		if(dragon!=0)then
+			call hattrNatural.subDragon(whichUnit,dragon,0)
+		endif
 		if(fireOppose!=0)then
 			call hattrNatural.subFireOppose(whichUnit,fireOppose,0)
 		endif
@@ -2662,6 +2751,15 @@ struct hItem
 		endif
 		if(poisonOppose!=0)then
 			call hattrNatural.subPoisonOppose(whichUnit,poisonOppose,0)
+		endif
+		if(ghostOppose!=0)then
+			call hattrNatural.subGhostOppose(whichUnit,ghostOppose,0)
+		endif
+		if(metalOppose!=0)then
+			call hattrNatural.subMetalOppose(whichUnit,metalOppose,0)
+		endif
+		if(dragonOppose!=0)then
+			call hattrNatural.subDragonOppose(whichUnit,dragonOppose,0)
 		endif
 		if(lifeBackVal!=0)then
 			call hattrEffect.subLifeBackVal(whichUnit,lifeBackVal,0)
@@ -3603,22 +3701,63 @@ struct hItem
 		set it = null
 	endmethod
 
+	// 复制一个单位的物品给另一个单位
+	public static method copy takes unit origin,unit target returns nothing
+		local integer i = 0
+		local item it = null
+		if(origin == null or target == null)then
+			return
+		endif
+        loop
+            exitwhen i > 5
+            set it = UnitItemInSlot(origin,i)
+            if ( it!=null) then
+            	call toUnitPrivate(GetItemTypeId(it),GetItemCharges(it),target,false)
+            endif
+            set i = i + 1
+        endloop
+	endmethod
+
+	// 令一个单位把物品全部仍在地上
+	public static method drop takes unit origin returns nothing
+		local integer i = 0
+		local item it = null
+		if(origin == null)then
+			return
+		endif
+        loop
+            exitwhen i > 5
+            set it = UnitItemInSlot(origin,i)
+            if ( it!=null) then
+            	call toXY(GetItemTypeId(it),GetItemCharges(it),GetUnitX(origin),GetUnitY(origin),-1)
+				call RemoveItem(it)
+            endif
+            set i = i + 1
+        endloop
+	endmethod
+
 	//初始化单位，绑定事件等
 	public static method initUnit takes unit whichUnit returns nothing
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP,whichUnit,EVENT_UNIT_ISSUED_TARGET_ORDER )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_DEFAULT,whichUnit,EVENT_UNIT_PICKUP_ITEM )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_ORDER )
-    	call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_POINT_ORDER )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_DROP, whichUnit, EVENT_UNIT_DROP_ITEM )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_PAWN, whichUnit, EVENT_UNIT_PAWN_ITEM )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SELL, whichUnit, EVENT_UNIT_SELL_ITEM )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SEPARATE, whichUnit, EVENT_UNIT_SPELL_EFFECT )
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_USE, whichUnit, EVENT_UNIT_USE_ITEM )
+		if(LoadInteger(hash_item,GetHandleId(whichUnit),HITEM_IS_UNIT_INIT) != 5)then
+			call SaveInteger(hash_item,GetHandleId(whichUnit),HITEM_IS_UNIT_INIT,5)
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP,whichUnit,EVENT_UNIT_ISSUED_TARGET_ORDER )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_DEFAULT,whichUnit,EVENT_UNIT_PICKUP_ITEM )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_ORDER )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_PICKUP_FALSE, whichUnit, EVENT_UNIT_ISSUED_POINT_ORDER )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_DROP, whichUnit, EVENT_UNIT_DROP_ITEM )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_PAWN, whichUnit, EVENT_UNIT_PAWN_ITEM )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_SELL, whichUnit, EVENT_UNIT_SELL_ITEM )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_SEPARATE, whichUnit, EVENT_UNIT_SPELL_EFFECT )
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_USE, whichUnit, EVENT_UNIT_USE_ITEM )
+		endif
 	endmethod
 
 	//初始化商店，绑定事件等
 	public static method initShop takes unit whichUnit returns nothing
-		call TriggerRegisterUnitEvent( ITEM_TRIGGER_SELL, whichUnit, EVENT_UNIT_SELL_ITEM )
+		if(LoadInteger(hash_item,GetHandleId(whichUnit),HITEM_IS_SHOP_INIT) != 5)then
+			call SaveInteger(hash_item,GetHandleId(whichUnit),HITEM_IS_SHOP_INIT,5)
+			call TriggerRegisterUnitEvent( ITEM_TRIGGER_SELL, whichUnit, EVENT_UNIT_SELL_ITEM )
+		endif
 	endmethod
 
 	//初始化
