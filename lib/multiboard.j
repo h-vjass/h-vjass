@@ -67,10 +67,24 @@ struct hMultiboard
      * row 行
      * content 内容
      */
+    private static method setContentCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local integer mbid = htime.getInteger(t,1)
+        local integer col = htime.getInteger(t,2)
+        local integer row = htime.getInteger(t,3)
+        local string content = htime.getString(t,4)
+        call htime.delTimer(t)
+        call SaveStr(hash_hmb,mbid,HASH_KEY_CONTENT+col*100+row,content )
+        call thistype.setRowCol(mbid,col,row)
+    endmethod
     public static method setContent takes integer mbid,integer col,integer row,string content returns nothing
+        local timer t = null
         if(mbid != 0)then
-            call SaveStr(hash_hmb,mbid,HASH_KEY_CONTENT+col*100+row,content )
-            call thistype.setRowCol(mbid,col,row)
+            set t = htime.setTimeout(0,function thistype.setContentCall)
+            call htime.setInteger(t,1,mbid)
+            call htime.setInteger(t,2,col)
+            call htime.setInteger(t,3,row)
+            call htime.setString(t,4,content)
         endif
     endmethod
 
@@ -123,7 +137,7 @@ struct hMultiboard
              * set chinaQty = hlogic.getChinaQty.evaluate(content)
              * set len = (I2R(StringLength(content))-I2R(chinaQty)*1.65)*0.40
              */
-            set len = (I2R(StringLength(content)))*0.35
+            set len = (I2R(StringLength(content)))*0.34
             call SaveReal(hash_hmb,StringHash(content),6789,len)
         endif
         if( hasIcon )then
@@ -196,7 +210,7 @@ struct hMultiboard
             set maxHeroQty = hhero.getPlayerAllowQty()
             set hmb_all_player = CreateMultiboard()
             set mbid = GetHandleId(hmb_all_player)
-            call setContentIcon( mbid , 1, 1, "玩家名称","ReplaceableTextures\\CommandButtons\\BTNVillagerMan1.blp" )
+            call setContentIcon( mbid , 1, 1, "玩家","ReplaceableTextures\\CommandButtons\\BTNVillagerMan1.blp" )
             set h = 1
             set r = 1
             loop
@@ -205,17 +219,17 @@ struct hMultiboard
                     call setContent( mbid , r, 1, "英雄"+I2S(h) )
                 set h=h+1
             endloop
-            call setContentIcon( mbid , 1+r, 1, "黄金(率)","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid , 2+r, 1, "木头(率)","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid , 1+r, 1, "黄金率","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid , 2+r, 1, "木头率","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
             call setContentIcon( mbid , 3+r, 1, "经验率","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid , 4+r, 1, "杀敌数","ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
-            call setContentIcon( mbid , 5+r, 1, "建筑数","ReplaceableTextures\\CommandButtons\\BTNHumanBuild.blp" )
+            call setContentIcon( mbid , 4+r, 1, "杀敌","ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
+            call setContentIcon( mbid , 5+r, 1, "建筑","ReplaceableTextures\\CommandButtons\\BTNHumanBuild.blp" )
             call setContentIcon( mbid , 6+r, 1, "造成伤害","ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
             call setContentIcon( mbid , 7+r, 1, "承受伤害","ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-            call setContentIcon( mbid , 8+r, 1, "获金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid , 9+r, 1, "获木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid ,10+r, 1, "耗金总量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid ,11+r, 1, "耗木总量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid , 8+r, 1, "获金量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid , 9+r, 1, "获木量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid ,10+r, 1, "耗金量","ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid ,11+r, 1, "耗木量","ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
             call setContentIcon( mbid ,12+r, 1, "状态","ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
             call setContentIcon( mbid ,13+r, 1, "APM","ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
             call htime.setInterval(2.0,function thistype.hJassDefault_allPlayer)
@@ -243,7 +257,7 @@ struct hMultiboard
         if( isDo == true)then
             call hJassFormat_allPlayer()
             set mbid = GetHandleId(hmb_all_player)
-            call setTitle( mbid , "所有玩家情报( "+I2S(player_current_qty)+" 名 )")
+            call setTitle( mbid , "玩家( "+I2S(player_current_qty)+" 名 )")
             set i = 1
             set j = 2
             loop
@@ -257,7 +271,7 @@ struct hMultiboard
                         exitwhen h>maxHeroQty
                             set r = r+1
                             set u = hhero.getPlayerUnit(players[i],h)
-                            call setContentIcon( mbid, r, j, "Lv "+I2S(GetUnitLevel(u))+"."+GetUnitName(u),hunit.getAvatar(GetUnitTypeId(u)) )
+                            call setContentIcon( mbid, r, j, "Lv"+I2S(GetUnitLevel(u)),hunit.getAvatar(GetUnitTypeId(u)) )
                         set h=h+1
                     endloop
                     call setContent( mbid , 1+r, j, I2S(hplayer.getGold(players[i]))+"("+R2S(hplayer.getGoldRatio(players[i]))+"%)" )
@@ -292,16 +306,16 @@ struct hMultiboard
             set maxHeroQty = hhero.getPlayerAllowQty()
             set hmb_me[i] = CreateMultiboard()
             set mbid = GetHandleId(hmb_me[i])
-            call setContentIcon( mbid, 1, 1, "黄金(率)", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid, 1, 2, "木头(率)", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid, 1, 1, "黄金率", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid, 1, 2, "木头率", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
             call setContentIcon( mbid, 1, 3, "经验率", "ReplaceableTextures\\CommandButtons\\BTNTomeBrown.blp" )
-            call setContentIcon( mbid, 1, 4, "杀敌数", "ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
+            call setContentIcon( mbid, 1, 4, "杀敌", "ReplaceableTextures\\CommandButtons\\BTNBattleStations.blp" )
             call setContentIcon( mbid, 1, 5, "造成伤害", "ReplaceableTextures\\CommandButtons\\BTNHardenedSkin.blp" )
             call setContentIcon( mbid, 1, 6, "承受伤害", "ReplaceableTextures\\CommandButtons\\BTNImprovedMoonArmor.blp" )
-            call setContentIcon( mbid, 1, 7, "获金总量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid, 1, 8, "获木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
-            call setContentIcon( mbid, 1, 9, "耗金总量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
-            call setContentIcon( mbid, 1,10, "耗木总量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid, 1, 7, "获金量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid, 1, 8, "获木量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
+            call setContentIcon( mbid, 1, 9, "耗金量", "ReplaceableTextures\\CommandButtons\\BTNChestOfGold.blp" )
+            call setContentIcon( mbid, 1,10, "耗木量", "ReplaceableTextures\\CommandButtons\\BTNBundleOfLumber.blp" )
             call setContentIcon( mbid, 1,11, "状态", "ReplaceableTextures\\CommandButtons\\BTNPurge.blp" )
             call setContentIcon( mbid, 1,12, "APM", "ReplaceableTextures\\CommandButtons\\BTNAttackGround.blp" )
             call setContent( mbid, 3, 1, "#" )
@@ -359,7 +373,7 @@ struct hMultiboard
                 exitwhen h>maxHeroQty
                     set u = hhero.getPlayerUnit(players[i],h)
                     call setContentIcon( mbid, 3+h, 2, GetUnitName(u) , hunit.getAvatar(GetUnitTypeId(u)) )
-                    call setContent( mbid, 3+h, 3, "Lv "+I2S(GetUnitLevel(u)) )
+                    call setContent( mbid, 3+h, 3, "Lv"+I2S(GetUnitLevel(u)) )
                     call setContent( mbid, 3+h, 4, hhero.getHeroTypeLabel(GetUnitTypeId(u)) )
                     call setContent( mbid, 3+h, 5, R2S(hunit.getLife(u))+" / "+R2S(hunit.getMaxLife(u)) )
                     call setContent( mbid, 3+h, 6, R2S(hattr.getLifeSourceCurrent(u))+" / "+R2S(hattr.getLifeSource(u)) )
@@ -573,8 +587,8 @@ struct hMultiboard
                 call setContent(mbid, 2, 22, I2S(R2I(hattrEffect.getSilentOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getSilentDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 2, 23, I2S(R2I(hattrEffect.getUnarmOdds(hplayer.getSelection(players[i])))) +"%("+ hlogic.realformat(hattrEffect.getUnarmDuring(hplayer.getSelection(players[i])))+"秒)" )
 
-                call setContent(mbid, 4, 1, I2S(R2I(hattrEffect.getPoisonVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getPoisonDuring(hplayer.getSelection(players[i])))+"秒)" )
-                call setContent(mbid, 4, 2, I2S(R2I(hattrEffect.getFireVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getFireDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 1, I2S(R2I(hattrEffect.getToxicVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getToxicDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 4, 2, I2S(R2I(hattrEffect.getBurnVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getBurnDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 4, 3, I2S(R2I(hattrEffect.getDryVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDryDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 4, 4, I2S(R2I(hattrEffect.getFreezeVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getFreezeDuring(hplayer.getSelection(players[i])))+"秒)" )
                 call setContent(mbid, 4, 5, I2S(R2I(hattrEffect.getColdVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getColdDuring(hplayer.getSelection(players[i])))+"秒)" )
@@ -612,32 +626,45 @@ struct hMultiboard
         if (hmb_selection_natural[i] == null and hplayer.getStatus(players[i]) != hplayer.default_status_nil) then
             set hmb_selection_natural[i] = CreateMultiboard()
             set mbid = GetHandleId(hmb_selection_natural[i])
-            call setContentIcon(mbid, 1, 1, "火攻击", "ReplaceableTextures\\CommandButtons\\BTNFire.blp")
-            call setContentIcon(mbid, 1, 2, "土攻击", "ReplaceableTextures\\CommandButtons\\BTNEarthquake.blp")
-            call setContentIcon(mbid, 1, 3, "水攻击", "ReplaceableTextures\\CommandButtons\\BTNCrushingWave.blp")
-            call setContentIcon(mbid, 1, 4, "冰攻击", "ReplaceableTextures\\CommandButtons\\BTNGlacier.blp")
-            call setContentIcon(mbid, 1, 5, "风攻击", "ReplaceableTextures\\CommandButtons\\BTNCyclone.blp")
-            call setContentIcon(mbid, 1, 6, "光攻击", "ReplaceableTextures\\CommandButtons\\BTNHolyBolt.blp")
-            call setContentIcon(mbid, 1, 7, "暗攻击", "ReplaceableTextures\\CommandButtons\\BTNTheBlackArrow.blp")
-            call setContentIcon(mbid, 1, 8, "木攻击", "ReplaceableTextures\\CommandButtons\\BTNThorns.blp")
-            call setContentIcon(mbid, 1, 9, "雷攻击", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp")
-            call setContentIcon(mbid, 1,10, "毒攻击", "ReplaceableTextures\\CommandButtons\\BTNCorrosiveBreath.blp")
-            call setContentIcon(mbid, 1,11, "鬼攻击", "ReplaceableTextures\\CommandButtons\\BTNAnimateDead.blp")
-            call setContentIcon(mbid, 1,12, "金攻击", "ReplaceableTextures\\CommandButtons\\BTNImbuedMasonry.blp")
-            call setContentIcon(mbid, 1,13, "龙攻击", "ReplaceableTextures\\CommandButtons\\BTNAzureDragon.blp")
-            call setContent(mbid, 3, 1, "火抗性")
-            call setContent(mbid, 3, 2, "土抗性")
-            call setContent(mbid, 3, 3, "水抗性")
-            call setContent(mbid, 3, 4, "冰抗性")
-            call setContent(mbid, 3, 5, "风抗性")
-            call setContent(mbid, 3, 6, "光抗性")
-            call setContent(mbid, 3, 7, "暗抗性")
-            call setContent(mbid, 3, 8, "木抗性")
-            call setContent(mbid, 3, 9, "雷抗性")
-            call setContent(mbid, 3,10, "毒抗性")
-            call setContent(mbid, 3,11, "鬼抗性")
-            call setContent(mbid, 3,12, "金抗性")
-            call setContent(mbid, 3,13, "龙抗性")
+            call setContentIcon(mbid, 1, 1, "火攻%", "ReplaceableTextures\\CommandButtons\\BTNFire.blp")
+            call setContentIcon(mbid, 1, 2, "土攻%", "ReplaceableTextures\\CommandButtons\\BTNEarthquake.blp")
+            call setContentIcon(mbid, 1, 3, "水攻%", "ReplaceableTextures\\CommandButtons\\BTNCrushingWave.blp")
+            call setContentIcon(mbid, 1, 4, "冰攻%", "ReplaceableTextures\\CommandButtons\\BTNGlacier.blp")
+            call setContentIcon(mbid, 1, 5, "风攻%", "ReplaceableTextures\\CommandButtons\\BTNCyclone.blp")
+            call setContentIcon(mbid, 1, 6, "光攻%", "ReplaceableTextures\\CommandButtons\\BTNHolyBolt.blp")
+            call setContentIcon(mbid, 1, 7, "暗攻%", "ReplaceableTextures\\CommandButtons\\BTNTheBlackArrow.blp")
+            call setContentIcon(mbid, 1, 8, "木攻%", "ReplaceableTextures\\CommandButtons\\BTNThorns.blp")
+            call setContentIcon(mbid, 1, 9, "雷攻%", "ReplaceableTextures\\CommandButtons\\BTNBanish.blp")
+            call setContentIcon(mbid, 1,10, "毒攻%", "ReplaceableTextures\\CommandButtons\\BTNCorrosiveBreath.blp")
+            call setContentIcon(mbid, 1,11, "鬼攻%", "ReplaceableTextures\\CommandButtons\\BTNAnimateDead.blp")
+            call setContentIcon(mbid, 1,12, "金攻%", "ReplaceableTextures\\CommandButtons\\BTNImbuedMasonry.blp")
+            call setContentIcon(mbid, 1,13, "龙攻%", "ReplaceableTextures\\CommandButtons\\BTNAzureDragon.blp")
+            call setContent(mbid, 3, 1, "火抗%")
+            call setContent(mbid, 3, 2, "土抗%")
+            call setContent(mbid, 3, 3, "水抗%")
+            call setContent(mbid, 3, 4, "冰抗%")
+            call setContent(mbid, 3, 5, "风抗%")
+            call setContent(mbid, 3, 6, "光抗%")
+            call setContent(mbid, 3, 7, "暗抗%")
+            call setContent(mbid, 3, 8, "木抗%")
+            call setContent(mbid, 3, 9, "雷抗%")
+            call setContent(mbid, 3,10, "毒抗%")
+            call setContent(mbid, 3,11, "鬼抗%")
+            call setContent(mbid, 3,12, "金抗%")
+            call setContent(mbid, 3,13, "龙抗%")
+            call setContent(mbid, 5, 1, "火特")
+            call setContent(mbid, 5, 2, "土特")
+            call setContent(mbid, 5, 3, "水特")
+            call setContent(mbid, 5, 4, "冰特")
+            call setContent(mbid, 5, 5, "风特")
+            call setContent(mbid, 5, 6, "光特")
+            call setContent(mbid, 5, 7, "暗特")
+            call setContent(mbid, 5, 8, "木特")
+            call setContent(mbid, 5, 9, "雷特")
+            call setContent(mbid, 5,10, "毒特")
+            call setContent(mbid, 5,11, "鬼特")
+            call setContent(mbid, 5,12, "金特")
+            call setContent(mbid, 5,13, "龙特")
             set t = htime.setInterval(3.0,function thistype.hJassDefault_selection_natural)
             call htime.setInteger(t,1,i)
         endif
@@ -655,33 +682,45 @@ struct hMultiboard
             set mbid = GetHandleId(hmb_selection_natural[i])
             if(hplayer.getSelection(players[i])!=null)then
                 call setTitle(mbid, "自然( "+GetUnitName(hplayer.getSelection(players[i]))+" )")
-                call setContent(mbid, 2, 1, I2S(R2I(hattrNatural.getFire(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 2, I2S(R2I(hattrNatural.getSoil(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 3, I2S(R2I(hattrNatural.getWater(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 4, I2S(R2I(hattrNatural.getIce(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 5, I2S(R2I(hattrNatural.getWind(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 6, I2S(R2I(hattrNatural.getLight(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 7, I2S(R2I(hattrNatural.getDark(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 8, I2S(R2I(hattrNatural.getWood(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 9, I2S(R2I(hattrNatural.getThunder(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 10,I2S(R2I(hattrNatural.getPoison(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 11,I2S(R2I(hattrNatural.getGhost(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 12,I2S(R2I(hattrNatural.getMetal(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 2, 13,I2S(R2I(hattrNatural.getDragon(hplayer.getSelection(players[i])))) +"%" )
-
-                call setContent(mbid, 4, 1, I2S(R2I(hattrNatural.getFireOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 2, I2S(R2I(hattrNatural.getSoilOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 3, I2S(R2I(hattrNatural.getWaterOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 4, I2S(R2I(hattrNatural.getIceOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 5, I2S(R2I(hattrNatural.getWindOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 6, I2S(R2I(hattrNatural.getLightOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 7, I2S(R2I(hattrNatural.getDarkOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 8, I2S(R2I(hattrNatural.getWoodOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4, 9, I2S(R2I(hattrNatural.getThunderOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4,10, I2S(R2I(hattrNatural.getPoisonOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4,11, I2S(R2I(hattrNatural.getGhostOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4,12, I2S(R2I(hattrNatural.getMetalOppose(hplayer.getSelection(players[i])))) +"%" )
-                call setContent(mbid, 4,13, I2S(R2I(hattrNatural.getDragonOppose(hplayer.getSelection(players[i])))) +"%" )
+                call setContent(mbid, 2, 1, I2S(R2I(hattrNatural.getFire(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 2, I2S(R2I(hattrNatural.getSoil(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 3, I2S(R2I(hattrNatural.getWater(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 4, I2S(R2I(hattrNatural.getIce(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 5, I2S(R2I(hattrNatural.getWind(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 6, I2S(R2I(hattrNatural.getLight(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 7, I2S(R2I(hattrNatural.getDark(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 8, I2S(R2I(hattrNatural.getWood(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 9, I2S(R2I(hattrNatural.getThunder(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 10,I2S(R2I(hattrNatural.getPoison(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 11,I2S(R2I(hattrNatural.getGhost(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 12,I2S(R2I(hattrNatural.getMetal(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 2, 13,I2S(R2I(hattrNatural.getDragon(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 1, I2S(R2I(hattrNatural.getFireOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 2, I2S(R2I(hattrNatural.getSoilOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 3, I2S(R2I(hattrNatural.getWaterOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 4, I2S(R2I(hattrNatural.getIceOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 5, I2S(R2I(hattrNatural.getWindOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 6, I2S(R2I(hattrNatural.getLightOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 7, I2S(R2I(hattrNatural.getDarkOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 8, I2S(R2I(hattrNatural.getWoodOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4, 9, I2S(R2I(hattrNatural.getThunderOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4,10, I2S(R2I(hattrNatural.getPoisonOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4,11, I2S(R2I(hattrNatural.getGhostOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4,12, I2S(R2I(hattrNatural.getMetalOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 4,13, I2S(R2I(hattrNatural.getDragonOppose(hplayer.getSelection(players[i])))))
+                call setContent(mbid, 6, 1, I2S(R2I(hattrEffect.getFireVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getFireDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 2, I2S(R2I(hattrEffect.getSoilVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getSoilDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 3, I2S(R2I(hattrEffect.getWaterVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getWaterDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 4, I2S(R2I(hattrEffect.getIceVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getIceDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 5, I2S(R2I(hattrEffect.getWindVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getWindDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 6, I2S(R2I(hattrEffect.getLightVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getLightDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 7, I2S(R2I(hattrEffect.getDarkVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDarkDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 8, I2S(R2I(hattrEffect.getWoodVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getWoodDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 9, I2S(R2I(hattrEffect.getThunderVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getThunderDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 10, I2S(R2I(hattrEffect.getPoisonVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getPoisonDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 11, I2S(R2I(hattrEffect.getGhostVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getGhostDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 12, I2S(R2I(hattrEffect.getMetalVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getMetalDuring(hplayer.getSelection(players[i])))+"秒)" )
+                call setContent(mbid, 6, 13, I2S(R2I(hattrEffect.getDragonVal(hplayer.getSelection(players[i])))) +"("+ hlogic.realformat(hattrEffect.getDragonDuring(hplayer.getSelection(players[i])))+"秒)" )
 
                 set t = htime.setTimeout(0.3,function thistype.build)
                 call htime.setMultiboard(t,1,hmb_selection_natural[i])
@@ -762,7 +801,7 @@ struct hMultiboard
                         endif
                     set j = j+1
                 endloop
-                call setContent(mbid, 1, j+1, "售卖比率:"+R2S(hplayer.getSellRatio(players[i]))+"%")
+                call setContent(mbid, 1, j+1, "售卖率:"+R2S(hplayer.getSellRatio(players[i]))+"%")
                 call setContent(mbid, 3, j+1, I2S(totalGold))
                 call setContent(mbid, 4, j+1, I2S(totalLumber))
                 call setContent(mbid, 5, j+1, R2S(totalWeight)+" Kg")
@@ -815,10 +854,22 @@ struct hMultiboard
     endmethod
     private static method mbsi takes nothing returns nothing
         local integer i = GetConvertedPlayerId(GetTriggerPlayer())
-         call hJassFormat_selection_item(i)
+        call hJassFormat_selection_item(i)
         set hmb_current_type[i] = "mbsi"
         if(GetLocalPlayer()==players[i])then
             call MultiboardDisplay(hmb_selection_item[i], true)
+        endif
+    endmethod
+    private static method mbh takes nothing returns nothing
+        local integer i = GetConvertedPlayerId(GetTriggerPlayer())
+        set hmb_current_type[i] = "mbh"
+        if(GetLocalPlayer()==players[i])then
+            call MultiboardDisplay(hmb_all_player, false)
+            call MultiboardDisplay(hmb_me[i], false)
+            call MultiboardDisplay(hmb_selection_attr[i], false)
+            call MultiboardDisplay(hmb_selection_effect[i], false)
+            call MultiboardDisplay(hmb_selection_natural[i], false)
+            call MultiboardDisplay(hmb_selection_item[i], false)
         endif
     endmethod
 
@@ -830,7 +881,7 @@ struct hMultiboard
         local trigger mbseTrigger = null
         local trigger mbsnTrigger = null
         local trigger mbsiTrigger = null
-        local string txt = null
+        local trigger mbhTrigger = null
 
         set mbapTrigger = CreateTrigger()
         set mbmeTrigger = CreateTrigger()
@@ -838,6 +889,7 @@ struct hMultiboard
         set mbseTrigger = CreateTrigger()
         set mbsnTrigger = CreateTrigger()
         set mbsiTrigger = CreateTrigger()
+        set mbhTrigger = CreateTrigger()
 
         set i = 1
         loop
@@ -854,17 +906,10 @@ struct hMultiboard
                 call TriggerAddAction(mbsnTrigger, function thistype.mbsn)
                 call TriggerRegisterPlayerChatEvent( mbsiTrigger, players[i], "-mbsi", true )
                 call TriggerAddAction(mbsiTrigger, function thistype.mbsi)
+                call TriggerRegisterPlayerChatEvent( mbhTrigger, players[i], "-mbh", true )
+                call TriggerAddAction(mbhTrigger, function thistype.mbh)
             set i = i + 1
         endloop
-        // 任务F9提醒
-        set txt = ""
-		set txt = txt + "-mbap 查看所有玩家统计"
-		set txt = txt + "|n-mbme 查看你的个人实时状态"
-		set txt = txt + "|n-mbsa 查看双击锁定单位的基本属性"
-		set txt = txt + "|n-mbse 查看双击锁定单位的特效属性"
-		set txt = txt + "|n-mbsn 查看双击锁定单位的自然属性"
-		set txt = txt + "|n-mbsi 查看双击锁定单位的物品"
-		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用hJass多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
     endmethod
 
 endstruct

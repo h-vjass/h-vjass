@@ -301,19 +301,19 @@ struct hItemMix
                                 if(slot_charges > 0) then
                                     call SetItemCharges(it,slot_charges)
                                     set flagmentItemNeedQty = 0
-                                    call hitem.subAttr(flagmentItemId,flagmentItemNeedQty,whichUnit)
+                                    call hitem.addAttr(flagmentItemId,flagmentItemNeedQty,whichUnit,false)
                                     set weight = hattr.getWeightCurrent(whichUnit) - hitem.getWeight(flagmentItemId) * I2R(flagmentItemNeedQty)
 			                        call hattr.setWeightCurrent(whichUnit,weight,0)
                                 elseif(slot_charges == 0) then
                                     call RemoveItem(it)
                                     set flagmentItemNeedQty = 0
-                                    call hitem.subAttr(flagmentItemId,tempCharge,whichUnit)
+                                    call hitem.addAttr(flagmentItemId,tempCharge,whichUnit,false)
                                     set weight = hattr.getWeightCurrent(whichUnit) - hitem.getWeight(flagmentItemId) * I2R(tempCharge)
 			                        call hattr.setWeightCurrent(whichUnit,weight,0)
                                 else
                                     call RemoveItem(it)
                                     set flagmentItemNeedQty = -slot_charges
-                                    call hitem.subAttr(flagmentItemId,tempCharge,whichUnit)
+                                    call hitem.addAttr(flagmentItemId,tempCharge,whichUnit,false)
                                     set weight = hattr.getWeightCurrent(whichUnit) - hitem.getWeight(flagmentItemId) * I2R(tempCharge)
 			                        call hattr.setWeightCurrent(whichUnit,weight,0)
                                 endif

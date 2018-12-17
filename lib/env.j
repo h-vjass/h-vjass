@@ -166,6 +166,18 @@ struct hEnv
 		call GroupClear( env_u_group )
 	endmethod
 
+	public static method removeInRect takes rect whichRect returns nothing
+		if(whichRect != null)then
+			call EnumDestructablesInRectAll(whichRect, function thistype.removeEnumDestructable )
+		endif
+	endmethod
+
+	public static method removeInRange takes real x,real y,real width,real height returns nothing
+		local rect whichRect = hrect.createInLoc(x,y,width,height)
+		call EnumDestructablesInRectAll(whichRect, function thistype.removeEnumDestructable )
+		call hrect.del(whichRect)
+	endmethod
+
 	public static method random takes rect whichRect,EnvUnit whichUnit,EnvDestructable whichDestructable,integer whichGround,real excludeX,real excludeY,boolean clear returns nothing
 		local integer i = 0
 		local real rectStartX = hrect.getStartX(whichRect)

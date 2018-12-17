@@ -99,6 +99,7 @@ struct hAttrHunt
      * isBreak是否无视：true | false 物理伤害则无视护甲 | 魔法伤害则无视魔抗
      * isNoAvoid是否无法回避：true | false
      * isEffect是否触发伤害特效：true | false 攻击默认强制设为true
+     * 沉默时，爆炸、闪电链、击飞会失效，其他不受影响
      */
     public static method huntUnit takes hAttrHuntBean bean returns nothing
     	
@@ -190,10 +191,62 @@ struct hAttrHunt
         local real fromUnitHuntEffectLuckDuring = 0.0
         local real fromUnitHuntEffectHuntAmplitudeVal = 0.0
         local real fromUnitHuntEffectHuntAmplitudeDuring = 0.0
-        local real fromUnitHuntEffectPoisonVal = 0.0
-        local real fromUnitHuntEffectPoisonDuring = 0.0
         local real fromUnitHuntEffectFireVal = 0.0
         local real fromUnitHuntEffectFireDuring = 0.0
+        local real fromUnitHuntEffectSoilVal = 0.0
+        local real fromUnitHuntEffectSoilDuring = 0.0
+        local real fromUnitHuntEffectWaterVal = 0.0
+        local real fromUnitHuntEffectWaterDuring = 0.0
+        local real fromUnitHuntEffectIceVal = 0.0
+        local real fromUnitHuntEffectIceDuring = 0.0
+        local real fromUnitHuntEffectWindVal = 0.0
+        local real fromUnitHuntEffectWindDuring = 0.0
+        local real fromUnitHuntEffectLightVal = 0.0
+        local real fromUnitHuntEffectLightDuring = 0.0
+        local real fromUnitHuntEffectDarkVal = 0.0
+        local real fromUnitHuntEffectDarkDuring = 0.0
+        local real fromUnitHuntEffectWoodVal = 0.0
+        local real fromUnitHuntEffectWoodDuring = 0.0
+        local real fromUnitHuntEffectThunderVal = 0.0
+        local real fromUnitHuntEffectThunderDuring = 0.0
+        local real fromUnitHuntEffectPoisonVal = 0.0
+        local real fromUnitHuntEffectPoisonDuring = 0.0
+        local real fromUnitHuntEffectGhostVal = 0.0
+        local real fromUnitHuntEffectGhostDuring = 0.0
+        local real fromUnitHuntEffectMetalVal = 0.0
+        local real fromUnitHuntEffectMetalDuring = 0.0
+        local real fromUnitHuntEffectDragonVal = 0.0
+        local real fromUnitHuntEffectDragonDuring = 0.0
+        local real fromUnitHuntEffectFireOpposeVal = 0.0
+        local real fromUnitHuntEffectFireOpposeDuring = 0.0
+        local real fromUnitHuntEffectSoilOpposeVal = 0.0
+        local real fromUnitHuntEffectSoilOpposeDuring = 0.0
+        local real fromUnitHuntEffectWaterOpposeVal = 0.0
+        local real fromUnitHuntEffectWaterOpposeDuring = 0.0
+        local real fromUnitHuntEffectIceOpposeVal = 0.0
+        local real fromUnitHuntEffectIceOpposeDuring = 0.0
+        local real fromUnitHuntEffectWindOpposeVal = 0.0
+        local real fromUnitHuntEffectWindOpposeDuring = 0.0
+        local real fromUnitHuntEffectLightOpposeVal = 0.0
+        local real fromUnitHuntEffectLightOpposeDuring = 0.0
+        local real fromUnitHuntEffectDarkOpposeVal = 0.0
+        local real fromUnitHuntEffectDarkOpposeDuring = 0.0
+        local real fromUnitHuntEffectWoodOpposeVal = 0.0
+        local real fromUnitHuntEffectWoodOpposeDuring = 0.0
+        local real fromUnitHuntEffectThunderOpposeVal = 0.0
+        local real fromUnitHuntEffectThunderOpposeDuring = 0.0
+        local real fromUnitHuntEffectPoisonOpposeVal = 0.0
+        local real fromUnitHuntEffectPoisonOpposeDuring = 0.0
+        local real fromUnitHuntEffectGhostOpposeVal = 0.0
+        local real fromUnitHuntEffectGhostOpposeDuring = 0.0
+        local real fromUnitHuntEffectMetalOpposeVal = 0.0
+        local real fromUnitHuntEffectMetalOpposeDuring = 0.0
+        local real fromUnitHuntEffectDragonOpposeVal = 0.0
+        local real fromUnitHuntEffectDragonOpposeDuring = 0.0
+        local real fromUnitHuntEffectToxicVal = 0.0
+        local real fromUnitHuntEffectToxicDuring = 0.0
+        local real fromUnitHuntEffectBurnVal = 0.0
+        local real fromUnitHuntEffectBurnDuring = 0.0
         local real fromUnitHuntEffectDryVal = 0.0
         local real fromUnitHuntEffectDryDuring = 0.0
         local real fromUnitHuntEffectFreezeVal = 0.0
@@ -368,10 +421,62 @@ struct hAttrHunt
         set fromUnitHuntEffectLuckDuring = hAttrEffect.getLuckDuring(bean.fromUnit)
         set fromUnitHuntEffectHuntAmplitudeVal = hAttrEffect.getHuntAmplitudeVal(bean.fromUnit)
         set fromUnitHuntEffectHuntAmplitudeDuring = hAttrEffect.getHuntAmplitudeDuring(bean.fromUnit)
-        set fromUnitHuntEffectPoisonVal = hAttrEffect.getPoisonVal(bean.fromUnit)
-        set fromUnitHuntEffectPoisonDuring = hAttrEffect.getPoisonDuring(bean.fromUnit)
         set fromUnitHuntEffectFireVal = hAttrEffect.getFireVal(bean.fromUnit)
         set fromUnitHuntEffectFireDuring = hAttrEffect.getFireDuring(bean.fromUnit)
+        set fromUnitHuntEffectSoilVal = hAttrEffect.getSoilVal(bean.fromUnit)
+        set fromUnitHuntEffectSoilDuring = hAttrEffect.getSoilDuring(bean.fromUnit)
+        set fromUnitHuntEffectWaterVal = hAttrEffect.getWaterVal(bean.fromUnit)
+        set fromUnitHuntEffectWaterDuring = hAttrEffect.getWaterDuring(bean.fromUnit)
+        set fromUnitHuntEffectIceVal = hAttrEffect.getIceVal(bean.fromUnit)
+        set fromUnitHuntEffectIceDuring = hAttrEffect.getIceDuring(bean.fromUnit)
+        set fromUnitHuntEffectWindVal = hAttrEffect.getWindVal(bean.fromUnit)
+        set fromUnitHuntEffectWindDuring = hAttrEffect.getWindDuring(bean.fromUnit)
+        set fromUnitHuntEffectLightVal = hAttrEffect.getLightVal(bean.fromUnit)
+        set fromUnitHuntEffectLightDuring = hAttrEffect.getLightDuring(bean.fromUnit)
+        set fromUnitHuntEffectDarkVal = hAttrEffect.getDarkVal(bean.fromUnit)
+        set fromUnitHuntEffectDarkDuring = hAttrEffect.getDarkDuring(bean.fromUnit)
+        set fromUnitHuntEffectWoodVal = hAttrEffect.getWoodVal(bean.fromUnit)
+        set fromUnitHuntEffectWoodDuring = hAttrEffect.getWoodDuring(bean.fromUnit)
+        set fromUnitHuntEffectThunderVal = hAttrEffect.getThunderVal(bean.fromUnit)
+        set fromUnitHuntEffectThunderDuring = hAttrEffect.getThunderDuring(bean.fromUnit)
+        set fromUnitHuntEffectPoisonVal = hAttrEffect.getPoisonVal(bean.fromUnit)
+        set fromUnitHuntEffectPoisonDuring = hAttrEffect.getPoisonDuring(bean.fromUnit)
+        set fromUnitHuntEffectGhostVal = hAttrEffect.getGhostVal(bean.fromUnit)
+        set fromUnitHuntEffectGhostDuring = hAttrEffect.getGhostDuring(bean.fromUnit)
+        set fromUnitHuntEffectMetalVal = hAttrEffect.getMetalVal(bean.fromUnit)
+        set fromUnitHuntEffectMetalDuring = hAttrEffect.getMetalDuring(bean.fromUnit)
+        set fromUnitHuntEffectDragonVal = hAttrEffect.getDragonVal(bean.fromUnit)
+        set fromUnitHuntEffectDragonDuring = hAttrEffect.getDragonDuring(bean.fromUnit)
+        set fromUnitHuntEffectFireOpposeVal = hAttrEffect.getFireOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectFireOpposeDuring = hAttrEffect.getFireOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectSoilOpposeVal = hAttrEffect.getSoilOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectSoilOpposeDuring = hAttrEffect.getSoilOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectWaterOpposeVal = hAttrEffect.getWaterOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectWaterOpposeDuring = hAttrEffect.getWaterOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectIceOpposeVal = hAttrEffect.getIceOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectIceOpposeDuring = hAttrEffect.getIceOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectWindOpposeVal = hAttrEffect.getWindOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectWindOpposeDuring = hAttrEffect.getWindOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectLightOpposeVal = hAttrEffect.getLightOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectLightOpposeDuring = hAttrEffect.getLightOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectDarkOpposeVal = hAttrEffect.getDarkOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectDarkOpposeDuring = hAttrEffect.getDarkOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectWoodOpposeVal = hAttrEffect.getWoodOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectWoodOpposeDuring = hAttrEffect.getWoodOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectThunderOpposeVal = hAttrEffect.getThunderOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectThunderOpposeDuring = hAttrEffect.getThunderOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectPoisonOpposeVal = hAttrEffect.getPoisonOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectPoisonOpposeDuring = hAttrEffect.getPoisonOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectGhostOpposeVal = hAttrEffect.getGhostOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectGhostOpposeDuring = hAttrEffect.getGhostOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectMetalOpposeVal = hAttrEffect.getMetalOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectMetalOpposeDuring = hAttrEffect.getMetalOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectDragonOpposeVal = hAttrEffect.getDragonOpposeVal(bean.fromUnit)
+        set fromUnitHuntEffectDragonOpposeDuring = hAttrEffect.getDragonOpposeDuring(bean.fromUnit)
+        set fromUnitHuntEffectToxicVal = hAttrEffect.getToxicVal(bean.fromUnit)
+        set fromUnitHuntEffectToxicDuring = hAttrEffect.getToxicDuring(bean.fromUnit)
+        set fromUnitHuntEffectBurnVal = hAttrEffect.getBurnVal(bean.fromUnit)
+        set fromUnitHuntEffectBurnDuring = hAttrEffect.getBurnDuring(bean.fromUnit)
         set fromUnitHuntEffectDryVal = hAttrEffect.getDryVal(bean.fromUnit)
         set fromUnitHuntEffectDryDuring = hAttrEffect.getDryDuring(bean.fromUnit)
         set fromUnitHuntEffectFreezeVal = hAttrEffect.getFreezeVal(bean.fromUnit)
@@ -663,7 +768,6 @@ struct hAttrHunt
         if( hlogic.strpos(bean.huntType,"fire")!=-1 and fromUnitNaturalFire!=0 )then
             set realDamage = realDamage * (1.0+fromUnitNaturalFire*0.01)
             set fromUnitHuntEffectFireVal = fromUnitHuntEffectFireVal * (1.0+fromUnitNaturalFire*0.01)
-            //set fromUnitHuntEffectBombVal = fromUnitHuntEffectBombVal * (1.0+fromUnitNaturalFire*0.01)
             set realDamageString = realDamageString+"火"
             set realDamageStringColor = "f45454"
         endif
@@ -913,6 +1017,32 @@ struct hAttrHunt
                 call hevtBean.destroy()
             endif
 
+            if( bean.huntKind == "attack")then
+                //@触发攻击事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "attack"
+                set hevtBean.triggerUnit = fromUnit
+                set hevtBean.attacker = fromUnit
+                set hevtBean.targetUnit = toUnit
+                set hevtBean.damage = bean.damage
+                set hevtBean.realDamage = realDamage
+                set hevtBean.damageKind = bean.huntKind
+                set hevtBean.damageType = bean.huntType
+                call hevt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+                //@触发被攻击事件
+                set hevtBean = hEvtBean.create()
+                set hevtBean.triggerKey = "beAttack"
+                set hevtBean.triggerUnit = toUnit
+                set hevtBean.attacker = fromUnit
+                set hevtBean.damage = bean.damage
+                set hevtBean.realDamage = realDamage
+                set hevtBean.damageKind = bean.huntKind
+                set hevtBean.damageType = bean.huntType
+                call hevt.triggerEvent(hevtBean)
+                call hevtBean.destroy()
+            endif
+
             //@触发伤害事件
             set hevtBean = hEvtBean.create()
             set hevtBean.triggerKey = "damage"
@@ -1145,14 +1275,92 @@ endif
 if( fromUnitHuntEffectHuntAmplitudeVal!=0 and fromUnitHuntEffectHuntAmplitudeDuring>0 ) then
     call hattr.addHuntAmplitude(bean.fromUnit,fromUnitHuntEffectHuntAmplitudeVal,fromUnitHuntEffectHuntAmplitudeDuring)
 endif
+if( fromUnitHuntEffectFireVal!=0 and fromUnitHuntEffectFireDuring>0 ) then
+    call hattrNatural.addFire(bean.fromUnit,fromUnitHuntEffectFireVal,fromUnitHuntEffectFireDuring)
+endif
+if( fromUnitHuntEffectSoilVal!=0 and fromUnitHuntEffectSoilDuring>0 ) then
+    call hattrNatural.addSoil(bean.fromUnit,fromUnitHuntEffectSoilVal,fromUnitHuntEffectSoilDuring)
+endif
+if( fromUnitHuntEffectWaterVal!=0 and fromUnitHuntEffectWaterDuring>0 ) then
+    call hattrNatural.addWater(bean.fromUnit,fromUnitHuntEffectWaterVal,fromUnitHuntEffectWaterDuring)
+endif
+if( fromUnitHuntEffectIceVal!=0 and fromUnitHuntEffectIceDuring>0 ) then
+    call hattrNatural.addIce(bean.fromUnit,fromUnitHuntEffectIceVal,fromUnitHuntEffectIceDuring)
+endif
+if( fromUnitHuntEffectWindVal!=0 and fromUnitHuntEffectWindDuring>0 ) then
+    call hattrNatural.addWind(bean.fromUnit,fromUnitHuntEffectWindVal,fromUnitHuntEffectWindDuring)
+endif
+if( fromUnitHuntEffectLightVal!=0 and fromUnitHuntEffectLightDuring>0 ) then
+    call hattrNatural.addLight(bean.fromUnit,fromUnitHuntEffectLightVal,fromUnitHuntEffectLightDuring)
+endif
+if( fromUnitHuntEffectDarkVal!=0 and fromUnitHuntEffectDarkDuring>0 ) then
+    call hattrNatural.addDark(bean.fromUnit,fromUnitHuntEffectDarkVal,fromUnitHuntEffectDarkDuring)
+endif
+if( fromUnitHuntEffectWoodVal!=0 and fromUnitHuntEffectWoodDuring>0 ) then
+    call hattrNatural.addWood(bean.fromUnit,fromUnitHuntEffectWoodVal,fromUnitHuntEffectWoodDuring)
+endif
+if( fromUnitHuntEffectThunderVal!=0 and fromUnitHuntEffectThunderDuring>0 ) then
+    call hattrNatural.addThunder(bean.fromUnit,fromUnitHuntEffectThunderVal,fromUnitHuntEffectThunderDuring)
+endif
+if( fromUnitHuntEffectPoisonVal!=0 and fromUnitHuntEffectPoisonDuring>0 ) then
+    call hattrNatural.addPoison(bean.fromUnit,fromUnitHuntEffectPoisonVal,fromUnitHuntEffectPoisonDuring)
+endif
+if( fromUnitHuntEffectGhostVal!=0 and fromUnitHuntEffectGhostDuring>0 ) then
+    call hattrNatural.addGhost(bean.fromUnit,fromUnitHuntEffectGhostVal,fromUnitHuntEffectGhostDuring)
+endif
+if( fromUnitHuntEffectMetalVal!=0 and fromUnitHuntEffectMetalDuring>0 ) then
+    call hattrNatural.addMetal(bean.fromUnit,fromUnitHuntEffectMetalVal,fromUnitHuntEffectMetalDuring)
+endif
+if( fromUnitHuntEffectDragonVal!=0 and fromUnitHuntEffectDragonDuring>0 ) then
+    call hattrNatural.addDragon(bean.fromUnit,fromUnitHuntEffectDragonVal,fromUnitHuntEffectDragonDuring)
+endif
+if( fromUnitHuntEffectFireOpposeVal!=0 and fromUnitHuntEffectFireOpposeDuring>0 ) then
+    call hattrNatural.addFireOppose(bean.fromUnit,fromUnitHuntEffectFireOpposeVal,fromUnitHuntEffectFireOpposeDuring)
+endif
+if( fromUnitHuntEffectSoilOpposeVal!=0 and fromUnitHuntEffectSoilOpposeDuring>0 ) then
+    call hattrNatural.addSoilOppose(bean.fromUnit,fromUnitHuntEffectSoilOpposeVal,fromUnitHuntEffectSoilOpposeDuring)
+endif
+if( fromUnitHuntEffectWaterOpposeVal!=0 and fromUnitHuntEffectWaterOpposeDuring>0 ) then
+    call hattrNatural.addWaterOppose(bean.fromUnit,fromUnitHuntEffectWaterOpposeVal,fromUnitHuntEffectWaterOpposeDuring)
+endif
+if( fromUnitHuntEffectIceOpposeVal!=0 and fromUnitHuntEffectIceOpposeDuring>0 ) then
+    call hattrNatural.addIceOppose(bean.fromUnit,fromUnitHuntEffectIceOpposeVal,fromUnitHuntEffectIceOpposeDuring)
+endif
+if( fromUnitHuntEffectWindOpposeVal!=0 and fromUnitHuntEffectWindOpposeDuring>0 ) then
+    call hattrNatural.addWindOppose(bean.fromUnit,fromUnitHuntEffectWindOpposeVal,fromUnitHuntEffectWindOpposeDuring)
+endif
+if( fromUnitHuntEffectLightOpposeVal!=0 and fromUnitHuntEffectLightOpposeDuring>0 ) then
+    call hattrNatural.addLightOppose(bean.fromUnit,fromUnitHuntEffectLightOpposeVal,fromUnitHuntEffectLightOpposeDuring)
+endif
+if( fromUnitHuntEffectDarkOpposeVal!=0 and fromUnitHuntEffectDarkOpposeDuring>0 ) then
+    call hattrNatural.addDarkOppose(bean.fromUnit,fromUnitHuntEffectDarkOpposeVal,fromUnitHuntEffectDarkOpposeDuring)
+endif
+if( fromUnitHuntEffectWoodOpposeVal!=0 and fromUnitHuntEffectWoodOpposeDuring>0 ) then
+    call hattrNatural.addWoodOppose(bean.fromUnit,fromUnitHuntEffectWoodOpposeVal,fromUnitHuntEffectWoodOpposeDuring)
+endif
+if( fromUnitHuntEffectThunderOpposeVal!=0 and fromUnitHuntEffectThunderOpposeDuring>0 ) then
+    call hattrNatural.addThunderOppose(bean.fromUnit,fromUnitHuntEffectThunderOpposeVal,fromUnitHuntEffectThunderOpposeDuring)
+endif
+if( fromUnitHuntEffectPoisonOpposeVal!=0 and fromUnitHuntEffectPoisonOpposeDuring>0 ) then
+    call hattrNatural.addPoisonOppose(bean.fromUnit,fromUnitHuntEffectPoisonOpposeVal,fromUnitHuntEffectPoisonOpposeDuring)
+endif
+if( fromUnitHuntEffectGhostOpposeVal!=0 and fromUnitHuntEffectGhostOpposeDuring>0 ) then
+    call hattrNatural.addGhostOppose(bean.fromUnit,fromUnitHuntEffectGhostOpposeVal,fromUnitHuntEffectGhostOpposeDuring)
+endif
+if( fromUnitHuntEffectMetalOpposeVal!=0 and fromUnitHuntEffectMetalOpposeDuring>0 ) then
+    call hattrNatural.addMetalOppose(bean.fromUnit,fromUnitHuntEffectMetalOpposeVal,fromUnitHuntEffectMetalOpposeDuring)
+endif
+if( fromUnitHuntEffectDragonOpposeVal!=0 and fromUnitHuntEffectDragonOpposeDuring>0 ) then
+    call hattrNatural.addDragonOppose(bean.fromUnit,fromUnitHuntEffectDragonOpposeVal,fromUnitHuntEffectDragonOpposeDuring)
+endif
 
-            if( fromUnitHuntEffectPoisonVal!=0 and fromUnitHuntEffectPoisonDuring>0 ) then
-                call hattr.subLifeBack(toUnit,fromUnitHuntEffectPoisonVal,fromUnitHuntEffectPoisonDuring)
-                call heffect.toUnit("Abilities\\Spells\\Other\\AcidBomb\\BottleImpact.mdl",toUnit,"origin",fromUnitHuntEffectPoisonDuring)
+            if( fromUnitHuntEffectToxicVal!=0 and fromUnitHuntEffectToxicDuring>0 ) then
+                call hattr.subLifeBack(toUnit,fromUnitHuntEffectToxicVal,fromUnitHuntEffectToxicDuring)
+                call heffect.toUnit("Abilities\\Spells\\Other\\AcidBomb\\BottleImpact.mdl",toUnit,"origin",fromUnitHuntEffectToxicDuring)
             endif
-            if( fromUnitHuntEffectFireVal!=0 and fromUnitHuntEffectFireDuring>0 ) then
-                call hattr.subLifeBack(toUnit,fromUnitHuntEffectFireVal,fromUnitHuntEffectFireDuring)
-                call heffect.toUnit("Abilities\\Spells\\Other\\ImmolationRed\\ImmolationRedDamage.mdl",toUnit,"origin",fromUnitHuntEffectFireDuring)
+            if( fromUnitHuntEffectBurnVal!=0 and fromUnitHuntEffectBurnDuring>0 ) then
+                call hattr.subLifeBack(toUnit,fromUnitHuntEffectBurnVal,fromUnitHuntEffectBurnDuring)
+                call heffect.toUnit("Abilities\\Spells\\Other\\ImmolationRed\\ImmolationRedDamage.mdl",toUnit,"origin",fromUnitHuntEffectBurnDuring)
             endif
             if( fromUnitHuntEffectDryVal!=0 and fromUnitHuntEffectDryDuring>0 ) then
                 call hattr.subManaBack(toUnit,fromUnitHuntEffectDryVal,fromUnitHuntEffectDryDuring)
@@ -1192,7 +1400,7 @@ endif
             endif
             if( fromUnitHuntEffectTwineVal!=0 and fromUnitHuntEffectTwineDuring>0 ) then
                 call hattr.subAvoid(toUnit,fromUnitHuntEffectTwineVal,fromUnitHuntEffectTwineDuring)
-                call heffect.toUnit("Abilities\\Spells\\NightElf\\EntanglingRoots\\EntanglingRootsTarget.mdl",toUnit,"origin",fromUnitHuntEffectTwineDuring)
+                call heffect.toUnit("Abilities\\Spells\\Undead\\Web\\Web_AirTarget.mdl",toUnit,"origin",fromUnitHuntEffectTwineDuring)
             endif
             if( fromUnitHuntEffectDrunkVal!=0 and fromUnitHuntEffectDrunkDuring>0 ) then
                 call hattr.subAim(toUnit,fromUnitHuntEffectDrunkVal,fromUnitHuntEffectDrunkDuring)
@@ -1285,7 +1493,7 @@ endif
                 call hattr.subMove(toUnit,1000,fromUnitHuntEffectFetterDuring)
                 call heffect.toUnit("Abilities\\Spells\\Orc\\SpiritLink\\SpiritLinkTarget.mdl",toUnit,"origin",fromUnitHuntEffectFetterDuring)
             endif
-            if( fromUnitHuntEffectBombVal!=0 and fromUnitHuntEffectBombRange>0 ) then
+            if( fromUnitHuntEffectBombVal!=0 and fromUnitHuntEffectBombRange>0 and his.silent(fromUnit) == false ) then
                 if(fromUnitHuntEffectBombModel=="")then
                     set fromUnitHuntEffectBombModel = "Abilities\\Spells\\Other\\Incinerate\\FireLordDeathExplode.mdl"
                 endif
@@ -1315,7 +1523,7 @@ endif
                 set g = null
                 set u = null
             endif
-            if( GetRandomReal(1,100)<=fromUnitHuntEffectLightningChainOdds and fromUnitHuntEffectLightningChainVal!=0 and fromUnitHuntEffectLightningChainQty>0 ) then
+            if( GetRandomReal(1,100)<=fromUnitHuntEffectLightningChainOdds and fromUnitHuntEffectLightningChainVal!=0 and fromUnitHuntEffectLightningChainQty>0 and his.silent(fromUnit) == false ) then
                 if(fromUnitHuntEffectLightningChainModel=="")then
                     set fromUnitHuntEffectLightningChainModel = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
                 endif
@@ -1329,7 +1537,7 @@ endif
                 call hskill.lightningChain(lightningCode_shandianlian_ci,R2I(fromUnitHuntEffectLightningChainQty),fromUnitHuntEffectLightningChainReduce,false,huntBean)
                 call huntBean.destroy()
             endif
-            if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal!=0 and his.building(toUnit) == false ) then
+            if( GetRandomReal(1,100)<=fromUnitHuntEffectCrackFlyOdds and fromUnitHuntEffectCrackFlyVal!=0 and his.building(toUnit) == false and his.silent(fromUnit) == false ) then
                 set huntBean = hAttrHuntBean.create()
                 set huntBean.fromUnit = fromUnit
                 set huntBean.toUnit = toUnit

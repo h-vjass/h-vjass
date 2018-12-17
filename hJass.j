@@ -75,6 +75,7 @@ library hJass initializer init needs hSync
 		set hunit = hUnit.create()
 		set hgroup = hGroup.create()
 		set hmsg = hMsg.create()
+		set hmark = hMark.create()
 		set hplayer = hPlayer.create()
 		set hweather = hWeather.create()
 		set hability = hAbility.create()
@@ -103,6 +104,20 @@ library hJass initializer init needs hSync
 		set txt = txt + "-random 随机选择"
 		set txt = txt + "|n-repick 重新选择"
 		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "hJass选择英雄指令",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		set txt = ""
+		set txt = txt + "-mbap 查看所有玩家统计"
+		set txt = txt + "|n-mbme 查看你的个人实时状态"
+		set txt = txt + "|n-mbsa 查看双击锁定单位的基本属性"
+		set txt = txt + "|n-mbse 查看双击锁定单位的特效属性"
+		set txt = txt + "|n-mbsn 查看双击锁定单位的自然属性"
+		set txt = txt + "|n-mbsi 查看双击锁定单位的物品"
+		set txt = txt + "|n-mbh 隐藏面板"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用hJass多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		set txt = ""
+		set txt = txt + "-apc 设定是否自动转换黄金为木头"
+		set txt = txt + "|n获得黄金超过100万时，自动按照比率转换多余的部分为木头"
+		set txt = txt + "|n如果超过时没有开启，会寄存下来，待开启再转换(上限1000万)"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "设定自动转金为木",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 		set txt = ""
 		set txt = txt + "-lsr 设定生命源"
 		set txt = txt + "-msr 设定魔法源"

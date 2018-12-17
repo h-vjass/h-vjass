@@ -27,29 +27,32 @@ struct hAward
         local integer index = 0
         local integer ttgColorLen = 0
         local texttag ttg = null
+        local player p = null
 
         if( whichUnit == null ) then
             return
         endif
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
-        //TODO 增益
+        // TODO 增益
         set realGold 	= R2I( I2R(gold) * hplayer.getGoldRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realLumber	= R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realExp		= R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )
+        set p = GetOwningPlayer(whichUnit)
+        
         if(realExp >=1 and his.hero(whichUnit)) then
-            call AddHeroXPSwapped( realExp , whichUnit , true )
+            call AddHeroXPSwapped(realExp,whichUnit,true )
             set floatStr = floatStr + "|cffc4c4ff" + I2S(realExp)+"Exp" + "|r"
             set ttgColorLen = ttgColorLen + 12
         endif
         if(realGold >=1 ) then
-            call hplayer.addGold( GetOwningPlayer( whichUnit ) , realGold )
+            call hplayer.addGold(p,realGold )
             set floatStr = floatStr + " |cffffcc00" + I2S(realGold)+"G" + "|r"
             set ttgColorLen = ttgColorLen + 13
             call hmedia.soundPlay2Unit(gg_snd_ReceiveGold,whichUnit)
         endif
         if(realLumber >=1 ) then
-            call hplayer.addLumber( GetOwningPlayer( whichUnit ) , realLumber )
+            call hplayer.addLumber(p,realLumber )
             set floatStr = floatStr + " |cff80ff80" + I2S(realLumber)+"L" + "|r"
             set ttgColorLen = ttgColorLen + 13
             call hmedia.soundPlay2Unit(gg_snd_BundleOfLumber,whichUnit)

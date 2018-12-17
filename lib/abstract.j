@@ -29,3 +29,4 @@
 #include "hero.j"
 #include "empty.j"
 #include "env.j"
+#include "mark.j"

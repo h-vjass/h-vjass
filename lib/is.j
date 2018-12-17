@@ -169,14 +169,14 @@ struct hIs
      * 是否被沉默
      */
     public static method silent takes unit whichUnit returns boolean
-        return LoadBoolean(hash_unit,GetHandleId(whichUnit),hashkey_unit_issilent)
+        return IsUnitInGroup(whichUnit, ABILITY_SILENT_GROUP)
     endmethod
 
     /*
      * 是否被缴械
      */
     public static method unarm takes unit whichUnit returns boolean
-        return LoadBoolean(hash_unit,GetHandleId(whichUnit),hashkey_unit_isunarm)
+        return IsUnitInGroup(whichUnit, ABILITY_UNARM_GROUP)
     endmethod
 
     /*

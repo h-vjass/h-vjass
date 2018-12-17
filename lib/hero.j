@@ -300,6 +300,7 @@ struct hHero
 	 */
 	private static method back2drunkery takes integer unitId returns nothing
 		local unit drunkery = LoadUnitHandle( hash_hero , unitId , hk_drunkery )
+        local timer t = null
         if(drunkery!=null)then
             call AddUnitToStock( drunkery,unitId , 1 , 1 )
         endif
@@ -343,8 +344,8 @@ struct hHero
         local integer uid = GetUnitTypeId(u)
         if(qty>=max)then
             call hmsg.echoTo(p,"|cffffff80你已经选够单位|r",0)
-            call back2drunkery(uid)
             call hunit.del(u,0)
+            call back2drunkery(uid)
             return
         endif
         set qty = qty+1
@@ -408,12 +409,12 @@ struct hHero
         loop
             exitwhen i<=0
                 set u = getPlayerUnit(p,i)
+                call GroupRemoveUnit(isHeroGroup,u)
                 set uid = GetUnitTypeId(u)
+                call hunit.del(u,0)
                 call back2drunkery(uid)
                 call unitReset(uid)
-                call GroupRemoveUnit(isHeroGroup,u)
                 call setPlayerUnit(p,i,null)
-                call hunit.del(u,0)
             set i = i-1
         endloop
         call setPlayerUnitQty(p,0)
@@ -477,6 +478,7 @@ struct hHero
                             set x = buildX+rowNowQty*buildDistance
                         endif
                         set u = hunit.createUnitXY( player_passive,drunkeryID,x,y )
+                        call SetUnitTypeSlots(u,drunkery_allow_qty)
                         call TriggerRegisterUnitEvent( tgr_sell, u, EVENT_UNIT_SELL )
                         set rowNowQty = rowNowQty+1
                         call hunit.del(u,during)

@@ -142,141 +142,145 @@ struct hEvt
     public static integer hashkey_onAttackGetTarget_inc = 5002
     public static integer hashkey_onAttackReady_inc = 5003
     public static integer hashkey_onBeAttackReady_inc = 5004
-    public static integer hashkey_onSkillStudy_inc = 5005
-    public static integer hashkey_onSkillReady_inc = 5006
-    public static integer hashkey_onSkillStart_inc = 5007
-    public static integer hashkey_onSkillHappen_inc = 5008
-    public static integer hashkey_onSkillStop_inc = 5009
-    public static integer hashkey_onSkillOver_inc = 5010
-    public static integer hashkey_onItemUsed_inc = 5011
-    public static integer hashkey_onItemSell_inc = 5012
-    public static integer hashkey_onItemDrop_inc = 5013
-    public static integer hashkey_onItemGet_inc = 5014
-    public static integer hashkey_onItemPawn_inc = 5015
-    public static integer hashkey_onItemDestroy_inc = 5016
-    public static integer hashkey_onItemMix_inc = 5017
-    public static integer hashkey_onItemSeparate_inc = 5018
-    public static integer hashkey_onDamage_inc = 5019
-    public static integer hashkey_onBeDamage_inc = 5020
-    public static integer hashkey_onDamageEffect_inc = 5021
-    public static integer hashkey_onBeDamageEffect_inc = 5022
-    public static integer hashkey_onAvoid_inc = 5023
-    public static integer hashkey_onBeAvoid_inc = 5024
-    public static integer hashkey_onBreakDefend_inc = 5025
-    public static integer hashkey_onBeBreakDefend_inc = 5026
-    public static integer hashkey_onBreakResistance_inc = 5027
-    public static integer hashkey_onBeBreakResistance_inc = 5028
-    public static integer hashkey_onBreakDefendAndResistance_inc = 5029
-    public static integer hashkey_onBeBreakDefendAndResistance_inc = 5030
-    public static integer hashkey_onSwim_inc = 5031
-    public static integer hashkey_onBeSwim_inc = 5032
-    public static integer hashkey_onRebound_inc = 5033
-    public static integer hashkey_onNoAvoid_inc = 5034
-    public static integer hashkey_onBeNoAvoid_inc = 5035
-    public static integer hashkey_onKnocking_inc = 5036
-    public static integer hashkey_onBeKnocking_inc = 5037
-    public static integer hashkey_onViolence_inc = 5038
-    public static integer hashkey_onBeViolence_inc = 5039
-    public static integer hashkey_onSpilt_inc = 5040
-    public static integer hashkey_onBeSpilt_inc = 5041
-    public static integer hashkey_onHemophagia_inc = 5042
-    public static integer hashkey_onBeHemophagia_inc = 5043
-    public static integer hashkey_onSkillHemophagia_inc = 5044
-    public static integer hashkey_onBeSkillHemophagia_inc = 5045
-    public static integer hashkey_onPunish_inc = 5046
-    public static integer hashkey_onDead_inc = 5047
-    public static integer hashkey_onKill_inc = 5048
-    public static integer hashkey_onReborn_inc = 5049
-    public static integer hashkey_onLevelUp_inc = 5050
-    public static integer hashkey_onSummon_inc = 5051
-    public static integer hashkey_onEnterUnitRange_inc = 5052
-    public static integer hashkey_onEnterRect_inc = 5053
-    public static integer hashkey_onLeaveRect_inc = 5054
-    public static integer hashkey_onChat_inc = 5055
-    public static integer hashkey_onChatLike_inc = 5056
-    public static integer hashkey_onEsc_inc = 5057
-    public static integer hashkey_onSelection_inc = 5058
-    public static integer hashkey_onSelectionDouble_inc = 5059
-    public static integer hashkey_onSelectionTriple_inc = 5060
-    public static integer hashkey_onUnSelection_inc = 5061
-    public static integer hashkey_onUpgradeStart_inc = 5062
-    public static integer hashkey_onUpgradeCancel_inc = 5063
-    public static integer hashkey_onUpgradeFinish_inc = 5064
-    public static integer hashkey_onConstructStart_inc = 5065
-    public static integer hashkey_onConstructCancel_inc = 5066
-    public static integer hashkey_onConstructFinish_inc = 5067
-    public static integer hashkey_onRegister_inc = 5068
-    public static integer hashkey_onPickHero_inc = 5069
+    public static integer hashkey_onAttack_inc = 5005
+    public static integer hashkey_onBeAttack_inc = 5006
+    public static integer hashkey_onSkillStudy_inc = 5007
+    public static integer hashkey_onSkillReady_inc = 5008
+    public static integer hashkey_onSkillStart_inc = 5009
+    public static integer hashkey_onSkillHappen_inc = 5010
+    public static integer hashkey_onSkillStop_inc = 5011
+    public static integer hashkey_onSkillOver_inc = 5012
+    public static integer hashkey_onItemUsed_inc = 5013
+    public static integer hashkey_onItemSell_inc = 5014
+    public static integer hashkey_onItemDrop_inc = 5015
+    public static integer hashkey_onItemGet_inc = 5016
+    public static integer hashkey_onItemPawn_inc = 5017
+    public static integer hashkey_onItemDestroy_inc = 5018
+    public static integer hashkey_onItemMix_inc = 5019
+    public static integer hashkey_onItemSeparate_inc = 5020
+    public static integer hashkey_onDamage_inc = 5021
+    public static integer hashkey_onBeDamage_inc = 5022
+    public static integer hashkey_onDamageEffect_inc = 5023
+    public static integer hashkey_onBeDamageEffect_inc = 5024
+    public static integer hashkey_onAvoid_inc = 5025
+    public static integer hashkey_onBeAvoid_inc = 5026
+    public static integer hashkey_onBreakDefend_inc = 5027
+    public static integer hashkey_onBeBreakDefend_inc = 5028
+    public static integer hashkey_onBreakResistance_inc = 5029
+    public static integer hashkey_onBeBreakResistance_inc = 5030
+    public static integer hashkey_onBreakDefendAndResistance_inc = 5031
+    public static integer hashkey_onBeBreakDefendAndResistance_inc = 5032
+    public static integer hashkey_onSwim_inc = 5033
+    public static integer hashkey_onBeSwim_inc = 5034
+    public static integer hashkey_onRebound_inc = 5035
+    public static integer hashkey_onNoAvoid_inc = 5036
+    public static integer hashkey_onBeNoAvoid_inc = 5037
+    public static integer hashkey_onKnocking_inc = 5038
+    public static integer hashkey_onBeKnocking_inc = 5039
+    public static integer hashkey_onViolence_inc = 5040
+    public static integer hashkey_onBeViolence_inc = 5041
+    public static integer hashkey_onSpilt_inc = 5042
+    public static integer hashkey_onBeSpilt_inc = 5043
+    public static integer hashkey_onHemophagia_inc = 5044
+    public static integer hashkey_onBeHemophagia_inc = 5045
+    public static integer hashkey_onSkillHemophagia_inc = 5046
+    public static integer hashkey_onBeSkillHemophagia_inc = 5047
+    public static integer hashkey_onPunish_inc = 5048
+    public static integer hashkey_onDead_inc = 5049
+    public static integer hashkey_onKill_inc = 5050
+    public static integer hashkey_onReborn_inc = 5051
+    public static integer hashkey_onLevelUp_inc = 5052
+    public static integer hashkey_onSummon_inc = 5053
+    public static integer hashkey_onEnterUnitRange_inc = 5054
+    public static integer hashkey_onEnterRect_inc = 5055
+    public static integer hashkey_onLeaveRect_inc = 5056
+    public static integer hashkey_onChat_inc = 5057
+    public static integer hashkey_onChatLike_inc = 5058
+    public static integer hashkey_onEsc_inc = 5059
+    public static integer hashkey_onSelection_inc = 5060
+    public static integer hashkey_onSelectionDouble_inc = 5061
+    public static integer hashkey_onSelectionTriple_inc = 5062
+    public static integer hashkey_onUnSelection_inc = 5063
+    public static integer hashkey_onUpgradeStart_inc = 5064
+    public static integer hashkey_onUpgradeCancel_inc = 5065
+    public static integer hashkey_onUpgradeFinish_inc = 5066
+    public static integer hashkey_onConstructStart_inc = 5067
+    public static integer hashkey_onConstructCancel_inc = 5068
+    public static integer hashkey_onConstructFinish_inc = 5069
+    public static integer hashkey_onRegister_inc = 5070
+    public static integer hashkey_onPickHero_inc = 5071
 
     private static integer hashkey_trigger_onAttackDetect = 10000
     private static integer hashkey_trigger_onAttackGetTarget = 20000
     private static integer hashkey_trigger_onAttackReady = 30000
     private static integer hashkey_trigger_onBeAttackReady = 40000
-    private static integer hashkey_trigger_onSkillStudy = 50000
-    private static integer hashkey_trigger_onSkillReady = 60000
-    private static integer hashkey_trigger_onSkillStart = 70000
-    private static integer hashkey_trigger_onSkillHappen = 80000
-    private static integer hashkey_trigger_onSkillStop = 90000
-    private static integer hashkey_trigger_onSkillOver = 100000
-    private static integer hashkey_trigger_onItemUsed = 110000
-    private static integer hashkey_trigger_onItemSell = 120000
-    private static integer hashkey_trigger_onItemDrop = 130000
-    private static integer hashkey_trigger_onItemGet = 140000
-    private static integer hashkey_trigger_onItemPawn = 150000
-    private static integer hashkey_trigger_onItemDestroy = 160000
-    private static integer hashkey_trigger_onItemMix = 170000
-    private static integer hashkey_trigger_onItemSeparate = 180000
-    private static integer hashkey_trigger_onDamage = 190000
-    private static integer hashkey_trigger_onBeDamage = 200000
-    private static integer hashkey_trigger_onDamageEffect = 210000
-    private static integer hashkey_trigger_onBeDamageEffect = 220000
-    private static integer hashkey_trigger_onAvoid = 230000
-    private static integer hashkey_trigger_onBeAvoid = 240000
-    private static integer hashkey_trigger_onBreakDefend = 250000
-    private static integer hashkey_trigger_onBeBreakDefend = 260000
-    private static integer hashkey_trigger_onBreakResistance = 270000
-    private static integer hashkey_trigger_onBeBreakResistance = 280000
-    private static integer hashkey_trigger_onBreakDefendAndResistance = 290000
-    private static integer hashkey_trigger_onBeBreakDefendAndResistance = 300000
-    private static integer hashkey_trigger_onSwim = 310000
-    private static integer hashkey_trigger_onBeSwim = 320000
-    private static integer hashkey_trigger_onRebound = 330000
-    private static integer hashkey_trigger_onNoAvoid = 340000
-    private static integer hashkey_trigger_onBeNoAvoid = 350000
-    private static integer hashkey_trigger_onKnocking = 360000
-    private static integer hashkey_trigger_onBeKnocking = 370000
-    private static integer hashkey_trigger_onViolence = 380000
-    private static integer hashkey_trigger_onBeViolence = 390000
-    private static integer hashkey_trigger_onSpilt = 400000
-    private static integer hashkey_trigger_onBeSpilt = 410000
-    private static integer hashkey_trigger_onHemophagia = 420000
-    private static integer hashkey_trigger_onBeHemophagia = 430000
-    private static integer hashkey_trigger_onSkillHemophagia = 440000
-    private static integer hashkey_trigger_onBeSkillHemophagia = 450000
-    private static integer hashkey_trigger_onPunish = 460000
-    private static integer hashkey_trigger_onDead = 470000
-    private static integer hashkey_trigger_onKill = 480000
-    private static integer hashkey_trigger_onReborn = 490000
-    private static integer hashkey_trigger_onLevelUp = 500000
-    private static integer hashkey_trigger_onSummon = 510000
-    private static integer hashkey_trigger_onEnterUnitRange = 520000
-    private static integer hashkey_trigger_onEnterRect = 530000
-    private static integer hashkey_trigger_onLeaveRect = 540000
-    private static integer hashkey_trigger_onChat = 550000
-    private static integer hashkey_trigger_onChatLike = 560000
-    private static integer hashkey_trigger_onEsc = 570000
-    private static integer hashkey_trigger_onSelection = 580000
-    private static integer hashkey_trigger_onSelectionDouble = 590000
-    private static integer hashkey_trigger_onSelectionTriple = 600000
-    private static integer hashkey_trigger_onUnSelection = 610000
-    private static integer hashkey_trigger_onUpgradeStart = 620000
-    private static integer hashkey_trigger_onUpgradeCancel = 630000
-    private static integer hashkey_trigger_onUpgradeFinish = 640000
-    private static integer hashkey_trigger_onConstructStart = 650000
-    private static integer hashkey_trigger_onConstructCancel = 660000
-    private static integer hashkey_trigger_onConstructFinish = 670000
-    private static integer hashkey_trigger_onRegister = 680000
-    private static integer hashkey_trigger_onPickHero = 690000
+    private static integer hashkey_trigger_onAttack = 50000
+    private static integer hashkey_trigger_onBeAttack = 60000
+    private static integer hashkey_trigger_onSkillStudy = 70000
+    private static integer hashkey_trigger_onSkillReady = 80000
+    private static integer hashkey_trigger_onSkillStart = 90000
+    private static integer hashkey_trigger_onSkillHappen = 100000
+    private static integer hashkey_trigger_onSkillStop = 110000
+    private static integer hashkey_trigger_onSkillOver = 120000
+    private static integer hashkey_trigger_onItemUsed = 130000
+    private static integer hashkey_trigger_onItemSell = 140000
+    private static integer hashkey_trigger_onItemDrop = 150000
+    private static integer hashkey_trigger_onItemGet = 160000
+    private static integer hashkey_trigger_onItemPawn = 170000
+    private static integer hashkey_trigger_onItemDestroy = 180000
+    private static integer hashkey_trigger_onItemMix = 190000
+    private static integer hashkey_trigger_onItemSeparate = 200000
+    private static integer hashkey_trigger_onDamage = 210000
+    private static integer hashkey_trigger_onBeDamage = 220000
+    private static integer hashkey_trigger_onDamageEffect = 230000
+    private static integer hashkey_trigger_onBeDamageEffect = 240000
+    private static integer hashkey_trigger_onAvoid = 250000
+    private static integer hashkey_trigger_onBeAvoid = 260000
+    private static integer hashkey_trigger_onBreakDefend = 270000
+    private static integer hashkey_trigger_onBeBreakDefend = 280000
+    private static integer hashkey_trigger_onBreakResistance = 290000
+    private static integer hashkey_trigger_onBeBreakResistance = 300000
+    private static integer hashkey_trigger_onBreakDefendAndResistance = 310000
+    private static integer hashkey_trigger_onBeBreakDefendAndResistance = 320000
+    private static integer hashkey_trigger_onSwim = 330000
+    private static integer hashkey_trigger_onBeSwim = 340000
+    private static integer hashkey_trigger_onRebound = 350000
+    private static integer hashkey_trigger_onNoAvoid = 360000
+    private static integer hashkey_trigger_onBeNoAvoid = 370000
+    private static integer hashkey_trigger_onKnocking = 380000
+    private static integer hashkey_trigger_onBeKnocking = 390000
+    private static integer hashkey_trigger_onViolence = 400000
+    private static integer hashkey_trigger_onBeViolence = 410000
+    private static integer hashkey_trigger_onSpilt = 420000
+    private static integer hashkey_trigger_onBeSpilt = 430000
+    private static integer hashkey_trigger_onHemophagia = 440000
+    private static integer hashkey_trigger_onBeHemophagia = 450000
+    private static integer hashkey_trigger_onSkillHemophagia = 460000
+    private static integer hashkey_trigger_onBeSkillHemophagia = 470000
+    private static integer hashkey_trigger_onPunish = 480000
+    private static integer hashkey_trigger_onDead = 490000
+    private static integer hashkey_trigger_onKill = 500000
+    private static integer hashkey_trigger_onReborn = 510000
+    private static integer hashkey_trigger_onLevelUp = 520000
+    private static integer hashkey_trigger_onSummon = 530000
+    private static integer hashkey_trigger_onEnterUnitRange = 540000
+    private static integer hashkey_trigger_onEnterRect = 550000
+    private static integer hashkey_trigger_onLeaveRect = 560000
+    private static integer hashkey_trigger_onChat = 570000
+    private static integer hashkey_trigger_onChatLike = 580000
+    private static integer hashkey_trigger_onEsc = 590000
+    private static integer hashkey_trigger_onSelection = 600000
+    private static integer hashkey_trigger_onSelectionDouble = 610000
+    private static integer hashkey_trigger_onSelectionTriple = 620000
+    private static integer hashkey_trigger_onUnSelection = 630000
+    private static integer hashkey_trigger_onUpgradeStart = 640000
+    private static integer hashkey_trigger_onUpgradeCancel = 650000
+    private static integer hashkey_trigger_onUpgradeFinish = 660000
+    private static integer hashkey_trigger_onConstructStart = 670000
+    private static integer hashkey_trigger_onConstructCancel = 680000
+    private static integer hashkey_trigger_onConstructFinish = 690000
+    private static integer hashkey_trigger_onRegister = 700000
+    private static integer hashkey_trigger_onPickHero = 710000
 
     private static integer hashkey_type_TriggerHandle = 1
     private static integer hashkey_type_TriggerUnit = 2
@@ -326,6 +330,8 @@ struct hEvt
         //! runtextmacro getTriggerKeyByStringInc("attackGetTarget","AttackGetTarget")
         //! runtextmacro getTriggerKeyByStringInc("attackReady","AttackReady")
         //! runtextmacro getTriggerKeyByStringInc("beAttackReady","BeAttackReady")
+        //! runtextmacro getTriggerKeyByStringInc("attack","Attack")
+        //! runtextmacro getTriggerKeyByStringInc("beAttack","BeAttack")
         //! runtextmacro getTriggerKeyByStringInc("skillStudy","SkillStudy")
         //! runtextmacro getTriggerKeyByStringInc("skillReady","SkillReady")
         //! runtextmacro getTriggerKeyByStringInc("skillStart","SkillStart")
@@ -879,6 +885,29 @@ struct hEvt
         return onEventByHandle("beAttackReady",whichUnit,action)
     endmethod
 
+    //on - 造成攻击
+    //@getTriggerUnit 获取攻击来源
+    //@getTargetUnit 获取被攻击单位
+    //@getAttacker 获取攻击来源
+    //@getDamage 获取初始伤害
+    //@getRealDamage 获取实际伤害
+    //@getDamageKind 获取伤害方式
+    //@getDamageType 获取伤害类型
+    public static method onAttack takes unit whichUnit,code action returns trigger
+        return onEventByHandle("attack",whichUnit,action)
+    endmethod
+
+    //on - 承受攻击
+    //@getTriggerUnit 获取被攻击单位
+    //@getAttacker 获取攻击来源
+    //@getDamage 获取初始伤害
+    //@getRealDamage 获取实际伤害
+    //@getDamageKind 获取伤害方式
+    //@getDamageType 获取伤害类型
+    public static method onBeAttack takes unit whichUnit,code action returns trigger
+        return onEventByHandle("beAttack",whichUnit,action)
+    endmethod
+
     //on - 学习技能
     //@getTriggerUnit 获取学习单位
     //@getTriggerSkill 获取学习技能ID
@@ -979,6 +1008,10 @@ struct hEvt
         set bean.targetUnit = GetSpellTargetUnit()
         set bean.triggerSkill = GetSpellAbilityId()
         set bean.targetLoc = GetSpellTargetLoc()
+        call hconsole.warning("bean.triggerUnit="+GetUnitName(GetTriggerUnit()))
+        call hconsole.warning("bean.triggerUnitid="+I2S(GetHandleId(bean.triggerUnit)))
+        call hconsole.warning("bean.targetUnit="+GetUnitName(GetSpellTargetUnit()))
+        call hconsole.warning("bean.triggerSkill="+I2S(GetSpellAbilityId()))
         call triggerEvent(bean)
         call bean.destroy()
     endmethod

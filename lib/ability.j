@@ -20,6 +20,12 @@ globals
 	integer ABILITY_AVOID_PLUS = 'A00B'
 	integer ABILITY_AVOID_MIUNS = 'A00C'
 
+	// 
+	trigger ABILITY_UNARM_TRG = null
+	group ABILITY_UNARM_GROUP = CreateGroup()
+	trigger ABILITY_SILENT_TRG = null
+	group ABILITY_SILENT_GROUP = CreateGroup()
+
 endglobals
 
 struct hAbility
@@ -90,54 +96,54 @@ struct hAbility
 	private static method silentCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local unit u = htime.getUnit(t,1)
-		local effect eff = htime.getEffect(t,2)
-		local trigger tgr = htime.getTrigger(t,3)
-		call heffect.del(eff)
-		call DisableTrigger( tgr )
-    	call DestroyTrigger( tgr )
+		local integer uid = GetHandleId(u)
+		local integer level = LoadInteger(hash_ability,uid, 54550)
+		set level = level-1
+		call SaveInteger(hash_ability,uid, 54550,level)
+		if(level <= 0)then
+			call heffect.del(LoadEffectHandle(hash_ability,uid, 54551))
+			if(IsUnitInGroup(u, ABILITY_SILENT_GROUP) == true)then
+				call GroupRemoveUnit(ABILITY_SILENT_GROUP,u)
+			endif
+		endif
 		call htime.delTimer(t)
-		set eff = null
-		set tgr = null
-		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_issilent,false)
 	endmethod
 	/**
 	 * 沉默执行
 	 */
 	private static method silentDo takes nothing returns nothing
-		local unit u = hevt.getTriggerUnit()
-		call IssueImmediateOrder( u , "stop" )
+		local unit u = GetTriggerUnit()
+		if(IsUnitInGroup(u, ABILITY_SILENT_GROUP) == true)then
+			call IssueImmediateOrder( u , "stop" )
+		endif
 	endmethod
 	/**
 	 * 沉默
 	 */
 	public static method silent takes unit u,real during returns nothing
-	    local location loc = null
-	    local timer t = LoadTimerHandle(hash_ability, GetHandleId(u), 5242)
+		local location loc = null
+	    local timer t = null
 		local effect eff = null
-		local trigger tgr = null
-	    if(t!=null and TimerGetRemaining(t)>0)then
-	    	if(during <= TimerGetRemaining(t))then
-				return
-			else
-				set eff = htime.getEffect(t,2)
-				set tgr = htime.getTrigger(t,3)
-				call heffect.del(eff)
-				call DisableTrigger( tgr )
-    			call DestroyTrigger( tgr )
-				call htime.delTimer(t)
-				set eff = null
-				set tgr = null
-				call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_issilent,false)
-	    	endif
-	    endif
-		set tgr = hevt.onSkillReady(u,function thistype.silentDo)
+		local integer level = LoadInteger(hash_ability, GetHandleId(u), 54550)
+		if(ABILITY_SILENT_TRG == null)then
+			set ABILITY_SILENT_TRG = CreateTrigger()
+			call TriggerRegisterAnyUnitEventBJ( ABILITY_SILENT_TRG, EVENT_PLAYER_UNIT_SPELL_CHANNEL )
+			call TriggerAddAction(ABILITY_SILENT_TRG, function thistype.silentDo)
+		endif
+		set level = level+1
+		if(level <= 1)then
+			call hmsg.style(hmsg.ttg2Unit(u,"沉默",6.00,"ee82ee",10,1.00,10.00)  ,"scale",0,0.2)
+		else
+			call hmsg.style(hmsg.ttg2Unit(u,I2S(level)+"重沉默",6.00,"ee82ee",10,1.00,10.00)  ,"scale",0,0.2)
+		endif
+		call SaveInteger(hash_ability, GetHandleId(u), 54550, level)
+		if(IsUnitInGroup(u, ABILITY_SILENT_GROUP) == false)then
+			call GroupAddUnit(ABILITY_SILENT_GROUP,u)
+			set eff = heffect.toUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl",u,"head",-1)
+			call SaveEffectHandle(hash_ability, GetHandleId(u), 54551, eff)
+		endif
 	    set t = htime.setTimeout(during,function thistype.silentCall)
-		set eff = heffect.toUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl",u,"head",-1)
 	    call htime.setUnit(t,1,u)
-	    call htime.setEffect(t,2,eff)
-	    call htime.setTrigger(t,3,tgr)
-	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5242, t)
-		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_issilent,true)
 	endmethod
 
 	/**
@@ -146,54 +152,56 @@ struct hAbility
 	private static method unarmCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		local unit u = htime.getUnit(t,1)
-		local effect eff = htime.getEffect(t,2)
-		local trigger tgr = htime.getTrigger(t,3)
-		call heffect.del(eff)
-		call DisableTrigger( tgr )
-    	call DestroyTrigger( tgr )
+		local integer uid = GetHandleId(u)
+		local effect eff = null
+		local integer level = LoadInteger(hash_ability,uid, 55550)
+		set level = level-1
+		call SaveInteger(hash_ability,uid, 55550,level)
+		if(level <= 0)then
+			set eff = LoadEffectHandle(hash_ability,uid, 55551)
+			call heffect.del(eff)
+			if(IsUnitInGroup(u, ABILITY_UNARM_GROUP) == true)then
+				call GroupRemoveUnit(ABILITY_UNARM_GROUP,u)
+			endif
+		endif
 		call htime.delTimer(t)
-		set eff = null
-		set tgr = null
-		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isunarm,false)
 	endmethod
 	/**
 	 * 缴械执行
 	 */
 	private static method unarmDo takes nothing returns nothing
-		local unit u = hevt.getTriggerUnit()
-		call IssueImmediateOrder( u , "stop" )
+		local unit u = GetAttacker()
+		if(IsUnitInGroup(u, ABILITY_UNARM_GROUP) == true)then
+			call IssueImmediateOrder( u , "stop" )
+		endif
 	endmethod
 	/**
 	 * 缴械
 	 */
 	public static method unarm takes unit u,real during returns nothing
 	    local location loc = null
-	    local timer t = LoadTimerHandle(hash_ability, GetHandleId(u), 5243)
+	    local timer t = null
 		local effect eff = null
-		local trigger tgr = null
-	    if(t!=null and TimerGetRemaining(t)>0)then
-	    	if(during <= TimerGetRemaining(t))then
-				return
-			else
-				set eff = htime.getEffect(t,2)
-				set tgr = htime.getTrigger(t,3)
-				call heffect.del(eff)
-				call DisableTrigger( tgr )
-    			call DestroyTrigger( tgr )
-				call htime.delTimer(t)
-				set eff = null
-				set tgr = null
-				call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isunarm,false)
-	    	endif
-	    endif
-		set tgr = hevt.onAttackReady(u,function thistype.unarmDo)
+		local integer level = LoadInteger(hash_ability, GetHandleId(u), 55550)
+		if(ABILITY_UNARM_TRG == null)then
+			set ABILITY_UNARM_TRG = CreateTrigger()
+			call TriggerRegisterAnyUnitEventBJ( ABILITY_UNARM_TRG, EVENT_PLAYER_UNIT_ATTACKED )
+			call TriggerAddAction(ABILITY_UNARM_TRG, function thistype.unarmDo)
+		endif
+		set level = level+1
+		if(level <= 1)then
+			call hmsg.style(hmsg.ttg2Unit(u,"缴械",6.00,"ffe4e1",10,1.00,10.00)  ,"scale",0,0.2)
+		else
+			call hmsg.style(hmsg.ttg2Unit(u,I2S(level)+"重缴械",6.00,"ffe4e1",10,1.00,10.00)  ,"scale",0,0.2)
+		endif
+		call SaveInteger(hash_ability, GetHandleId(u), 55550, level)
+		if(IsUnitInGroup(u, ABILITY_UNARM_GROUP) == false)then
+			call GroupAddUnit(ABILITY_UNARM_GROUP,u)
+			set eff = heffect.toUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl",u,"weapon",-1)
+			call SaveEffectHandle(hash_ability, GetHandleId(u), 55551, eff)
+		endif
 	    set t = htime.setTimeout(during,function thistype.unarmCall)
-		set eff = heffect.toUnit("Abilities\\Spells\\Other\\Silence\\SilenceTarget.mdl",u,"weapon",-1)
 	    call htime.setUnit(t,1,u)
-	    call htime.setEffect(t,2,eff)
-	    call htime.setTrigger(t,3,tgr)
-	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5243, t)
-		call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isunarm,true)
 	endmethod
 
 	/**
@@ -261,8 +269,8 @@ struct hAbility
 	    if(whichUnit==null) then
 	        return
 	    endif
-	    if( during == null ) then
-	        set during = 0.00       //如果没有设置持续时间，则0秒无敌，跟回避效果相同
+	    if( during < 0 ) then
+	        set during = 0.00       //如果设置持续时间错误，则0秒无敌，跟回避效果相同
 	    endif
 	    call SetUnitInvulnerable( whichUnit, true )
 	    set t = htime.setTimeout( during ,function thistype.invulnerableCallBack)

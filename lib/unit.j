@@ -5,8 +5,6 @@
 globals
 hUnit hunit
 hashtable hash_unit = null
-integer hashkey_unit_issilent = 76100
-integer hashkey_unit_isunarm = 76101
 integer hashkey_unit_crackfly = 76102
 integer hashkey_unit_avatar = 76103
 integer hashkey_unit_attack_speed_base_space = 76104
@@ -326,7 +324,6 @@ struct hUnit
         local real x = htime.getReal(t,2)
         local real y = htime.getReal(t,3)
         local real invulnerable = htime.getReal(t,4)
-        call htime.delTimer(t)
         call ReviveHero( u,x,y,true )
         call hattr.resetAttrGroups(u)
         if(invulnerable > 0)then
@@ -338,11 +335,12 @@ struct hUnit
         set hevtBean.triggerUnit = u
         call hevt.triggerEvent(hevtBean)
         call hevtBean.destroy()
+        call htime.delTimer(t)
     endmethod
     public static method rebornAtXY takes unit u,real x,real y,real delay,real invulnerable returns nothing
         local timer t = null
         if(his.hero(u))then
-            if(delay<1)then
+            if(delay<0.3)then
                 call ReviveHero( u,x,y,true )
                 call hattr.resetAttrGroups(u)
                 if(invulnerable > 0)then
@@ -371,6 +369,26 @@ struct hUnit
      */
     public static method rebornAtLoc takes unit u,location loc,real delay,real invulnerable returns nothing
         call thistype.rebornAtXY(u,GetLocationX(loc),GetLocationY(loc),delay,invulnerable)
+    endmethod
+
+    /**
+     * 创建一个单位的影子
+     * 影子是无敌蝗虫且无法行动
+     * 用于标识
+     */
+    public static method shadow takes integer uid,real x,real y,real facing,real speed,real high,real scale,integer opacity,real during returns unit
+        local unit u = null
+        set u = hunit.createUnitXYFacing(player_passive,uid,x,y,facing)
+        call hunit.del(u,during)
+        call hunit.setUnitFly(u)
+        call SetUnitFlyHeight(u,high,10000)
+        call UnitAddAbility(u,'Aloc')
+        call SetUnitTimeScalePercent(u,speed)
+        call PauseUnit(u,true)
+        call SetUnitScalePercent(u,scale,scale,scale)
+        call SetUnitVertexColor(u,255,255,255,opacity)
+        call SetUnitInvulnerable(u,true)
+        return u
     endmethod
 
     /**
