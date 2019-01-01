@@ -36,18 +36,18 @@ struct hEmpty
         local integer i = 0
         local integer temp = 99999
         local integer count = 0
-        local player whichPlayer = null
+        local integer whichi = 1
         set i = emptyPlayerQty
         loop
             exitwhen i<=0
                 set count = hgroup.count(emptyGroup[i])
                 if(temp > count)then
-                    set whichPlayer = emptyPlayer[i]
+                    set whichi = i
                     set temp = count
                 endif
             set i = i-1
         endloop
-        return whichPlayer
+        return emptyPlayer[whichi]
     endmethod
 
     /**

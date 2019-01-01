@@ -48,10 +48,8 @@ public static real avoid = 0.0
 public static real aim = 0.0
 public static real knocking = 0.0
 public static real violence = 0.0
-public static real mortalOppose = 0.0
 public static real punish = 0.0
 public static real punishCurrent = 0.0
-public static real punishOppose = 0.0
 public static real meditative = 0.0
 public static real help = 0.0
 public static real hemophagia = 0.0
@@ -61,7 +59,6 @@ public static real splitRange = 0.0
 public static real goldRatio = 0.0
 public static real lumberRatio = 0.0
 public static real expRatio = 0.0
-public static real swimOppose = 0.0
 public static real luck = 0.0
 public static real invincible = 0.0
 public static real weight = 0.0
@@ -69,6 +66,22 @@ public static real weightCurrent = 0.0
 public static real huntAmplitude = 0.0
 public static real huntRebound = 0.0
 public static real cure = 0.0
+public static real knockingOppose = 0.0
+public static real violenceOppose = 0.0
+public static real hemophagiaOppose = 0.0
+public static real splitOppose = 0.0
+public static real punishOppose = 0.0
+public static real huntReboundOppose = 0.0
+public static real swimOppose = 0.0
+public static real heavyOppose = 0.0
+public static real breakOppose = 0.0
+public static real unluckOppose = 0.0
+public static real silentOppose = 0.0
+public static real unarmOppose = 0.0
+public static real fetterOppose = 0.0
+public static real bombOppose = 0.0
+public static real lightningChainOppose = 0.0
+public static real crackFlyOppose = 0.0
 public static real fire = 0.0
 public static real soil = 0.0
 public static real water = 0.0
@@ -238,6 +251,7 @@ public static real dragonOppose = 0.0
  public static real fetterOdds = 0.0
  public static real fetterDuring = 0.0
  public static real bombVal = 0.0
+ public static real bombOdds = 0.0
  public static string bombModel = ""
  public static real lightningChainVal = 0.0
  public static real lightningChainOdds = 0.0
@@ -250,7 +264,7 @@ public static real dragonOppose = 0.0
  public static real crackFlyHigh = 0.0
 	
 	static method create takes nothing returns hAttrBean
-        local hAttrBean x = 0
+        local hAttrBean x
         set x = hAttrBean.allocate()
         
 set x.life = 0
@@ -281,10 +295,8 @@ set x.avoid = 0
 set x.aim = 0
 set x.knocking = 0
 set x.violence = 0
-set x.mortalOppose = 0
 set x.punish = 0
 set x.punishCurrent = 0
-set x.punishOppose = 0
 set x.meditative = 0
 set x.help = 0
 set x.hemophagia = 0
@@ -294,7 +306,6 @@ set x.splitRange = 0
 set x.goldRatio = 0
 set x.lumberRatio = 0
 set x.expRatio = 0
-set x.swimOppose = 0
 set x.luck = 0
 set x.invincible = 0
 set x.weight = 0
@@ -302,6 +313,22 @@ set x.weightCurrent = 0
 set x.huntAmplitude = 0
 set x.huntRebound = 0
 set x.cure = 0
+set x.knockingOppose = 0
+set x.violenceOppose = 0
+set x.hemophagiaOppose = 0
+set x.splitOppose = 0
+set x.punishOppose = 0
+set x.huntReboundOppose = 0
+set x.swimOppose = 0
+set x.heavyOppose = 0
+set x.breakOppose = 0
+set x.unluckOppose = 0
+set x.silentOppose = 0
+set x.unarmOppose = 0
+set x.fetterOppose = 0
+set x.bombOppose = 0
+set x.lightningChainOppose = 0
+set x.crackFlyOppose = 0
 set x.fire = 0
 set x.soil = 0
 set x.water = 0
@@ -471,6 +498,7 @@ set x.dragonOppose = 0
  set x.fetterOdds = 0.0
  set x.fetterDuring = 0.0
  set x.bombVal = 0.0
+ set x.bombOdds = 0.0
  set x.bombModel = ""
  set x.lightningChainVal = 0.0
  set x.lightningChainOdds = 0.0
@@ -512,10 +540,8 @@ set avoid = 0
 set aim = 0
 set knocking = 0
 set violence = 0
-set mortalOppose = 0
 set punish = 0
 set punishCurrent = 0
-set punishOppose = 0
 set meditative = 0
 set help = 0
 set hemophagia = 0
@@ -525,7 +551,6 @@ set splitRange = 0
 set goldRatio = 0
 set lumberRatio = 0
 set expRatio = 0
-set swimOppose = 0
 set luck = 0
 set invincible = 0
 set weight = 0
@@ -533,6 +558,22 @@ set weightCurrent = 0
 set huntAmplitude = 0
 set huntRebound = 0
 set cure = 0
+set knockingOppose = 0
+set violenceOppose = 0
+set hemophagiaOppose = 0
+set splitOppose = 0
+set punishOppose = 0
+set huntReboundOppose = 0
+set swimOppose = 0
+set heavyOppose = 0
+set breakOppose = 0
+set unluckOppose = 0
+set silentOppose = 0
+set unarmOppose = 0
+set fetterOppose = 0
+set bombOppose = 0
+set lightningChainOppose = 0
+set crackFlyOppose = 0
 set fire = 0
 set soil = 0
 set water = 0
@@ -702,6 +743,7 @@ set dragonOppose = 0
  set fetterOdds = 0.0
  set fetterDuring = 0.0
  set bombVal = 0.0
+ set bombOdds = 0.0
  set bombModel = ""
  set lightningChainVal = 0.0
  set lightningChainOdds = 0.0
@@ -750,27 +792,40 @@ struct hAttr
 	private static integer ATTR_FLAG_UP_AIM = 1010
 	private static integer ATTR_FLAG_UP_KNOCKING = 1011
 	private static integer ATTR_FLAG_UP_VIOLENCE = 1012
-	private static integer ATTR_FLAG_UP_MORTAL_OPPOSE = 1013
-	private static integer ATTR_FLAG_UP_PUNISH = 1014
-	private static integer ATTR_FLAG_UP_PUNISH_CURRENT = 1015
-	private static integer ATTR_FLAG_UP_PUNISH_OPPOSE = 1016
-	private static integer ATTR_FLAG_UP_MEDITATIVE = 1017
-	private static integer ATTR_FLAG_UP_HELP = 1018
-	private static integer ATTR_FLAG_UP_HEMOPHAGIA = 1019
-	private static integer ATTR_FLAG_UP_HEMOPHAGIA_SKILL = 1020
-	private static integer ATTR_FLAG_UP_SPLIT = 1021
-	private static integer ATTR_FLAG_UP_SPLIT_RANGE = 1022
-	private static integer ATTR_FLAG_UP_SWIM_OPPOSE = 1023
-	private static integer ATTR_FLAG_UP_LUCK = 1024
-	private static integer ATTR_FLAG_UP_INVINCIBLE = 1025
-	private static integer ATTR_FLAG_UP_WEIGHT = 1026
-	private static integer ATTR_FLAG_UP_WEIGHT_CURRENT = 1027
-	private static integer ATTR_FLAG_UP_HUNT_AMPLITUDE = 1028
-	private static integer ATTR_FLAG_UP_HUNT_REBOUND = 1029
-	private static integer ATTR_FLAG_UP_CURE = 1030
+	private static integer ATTR_FLAG_UP_PUNISH = 1013
+	private static integer ATTR_FLAG_UP_PUNISH_CURRENT = 1014
+	private static integer ATTR_FLAG_UP_MEDITATIVE = 1015
+	private static integer ATTR_FLAG_UP_HELP = 1016
+	private static integer ATTR_FLAG_UP_HEMOPHAGIA = 1017
+	private static integer ATTR_FLAG_UP_HEMOPHAGIA_SKILL = 1018
+	private static integer ATTR_FLAG_UP_SPLIT = 1019
+	private static integer ATTR_FLAG_UP_SPLIT_RANGE = 1020
+	private static integer ATTR_FLAG_UP_LUCK = 1021
+	private static integer ATTR_FLAG_UP_INVINCIBLE = 1022
+	private static integer ATTR_FLAG_UP_WEIGHT = 1023
+	private static integer ATTR_FLAG_UP_WEIGHT_CURRENT = 1024
+	private static integer ATTR_FLAG_UP_HUNT_AMPLITUDE = 1025
+	private static integer ATTR_FLAG_UP_HUNT_REBOUND = 1026
+	private static integer ATTR_FLAG_UP_CURE = 1027
+	private static integer ATTR_FLAG_UP_KNOCKING_OPPOSE = 1028
+	private static integer ATTR_FLAG_UP_VIOLENCE_OPPOSE = 1029
+	private static integer ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE = 1030
+	private static integer ATTR_FLAG_UP_SPLIT_OPPOSE = 1031
+	private static integer ATTR_FLAG_UP_PUNISH_OPPOSE = 1032
+	private static integer ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE = 1033
+	private static integer ATTR_FLAG_UP_SWIM_OPPOSE = 1034
+	private static integer ATTR_FLAG_UP_HEAVY_OPPOSE = 1035
+	private static integer ATTR_FLAG_UP_BREAK_OPPOSE = 1036
+	private static integer ATTR_FLAG_UP_UNLUCK_OPPOSE = 1037
+	private static integer ATTR_FLAG_UP_SILENT_OPPOSE = 1038
+	private static integer ATTR_FLAG_UP_UNARM_OPPOSE = 1039
+	private static integer ATTR_FLAG_UP_FETTER_OPPOSE = 1040
+	private static integer ATTR_FLAG_UP_BOMB_OPPOSE = 1041
+	private static integer ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE = 1042
+	private static integer ATTR_FLAG_UP_CRACK_FLY_OPPOSE = 1043
 
 	static method create takes nothing returns hAttr
-        local hAttr x = 0
+        local hAttr x
         set x = hAttr.allocate()
         return x
     endmethod
@@ -1132,7 +1187,6 @@ struct hAttr
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_100000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_1000000,     1 )
         call SetUnitAbilityLevel( whichUnit , Attr_Ability_int_FU_10000000,     1 )
-
 		if(his.hero(whichUnit)==true)then
 			call UnitAddAbility( whichUnit , ITEM_ABILITY_SEPARATE)
 			call UnitMakeAbilityPermanent( whichUnit , true, ITEM_ABILITY_SEPARATE)
@@ -1189,8 +1243,9 @@ struct hAttr
 	    	exitwhen i > qty
 		    	set it = CreateItem( itemId , 0, 0)
 				call hitem.setIsHjass(it,true)
-		    	call UnitAddItem( u , it )
-		    	call RemoveItem(it)
+		    	call UnitAddItem(u,it)
+		    	call hitem.del(it,0)
+				set it = null
 	    	set i = i+1
     	endloop
     	if(itemBox < 1)then
@@ -2011,6 +2066,8 @@ struct hAttr
 		local real diff = htime.getReal(t,3)
 		call htime.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
+		set t = null
+		set whichUnit = null
 	endmethod
 
 	//验证单位是否初始化过参数
@@ -2074,17 +2131,14 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_AIM , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_KNOCKING , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_VIOLENCE , 0 )
-			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_MORTAL_OPPOSE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , 0 )
-			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_OPPOSE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_MEDITATIVE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HELP , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HEMOPHAGIA , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HEMOPHAGIA_SKILL , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SPLIT , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SPLIT_RANGE , 0 )
-			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SWIM_OPPOSE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_LUCK , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_INVINCIBLE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_WEIGHT , 0 )
@@ -2092,6 +2146,22 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HUNT_AMPLITUDE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HUNT_REBOUND , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_CURE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_KNOCKING_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_VIOLENCE_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SPLIT_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SWIM_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_HEAVY_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_BREAK_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_UNLUCK_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_SILENT_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_UNARM_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_FETTER_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_BOMB_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_CRACK_FLY_OPPOSE , 0 )
             //todo 设定默认值
             if( his.hero(whichUnit) ) then
                 //白字
@@ -2227,6 +2297,7 @@ struct hAttr
 			call htime.setInteger(t,1,flag)
 			call htime.setUnit(t,2,whichUnit)
 			call htime.setReal(t,3, -diff )
+			set t = null
 		endif
 	endmethod
 
@@ -2241,6 +2312,7 @@ struct hAttr
 		local integer id = htime.getInteger(t,1)
 		call htime.delTimer(t)
 		call SaveBoolean( hash_attr, id , ATTR_FLAG_IS_PUNISH , false)
+		set t = null
 	endmethod
 	public static method setPunishing takes unit whichUnit, real during returns nothing
 		local boolean isPunish = LoadBoolean( hash_attr, GetHandleId(whichUnit) , ATTR_FLAG_IS_PUNISH )
@@ -2249,6 +2321,7 @@ struct hAttr
 			call SaveBoolean( hash_attr, GetHandleId(whichUnit) , ATTR_FLAG_IS_PUNISH , true)
 			set t = htime.setTimeout(during,function thistype.setPunishingOver)
 			call htime.setInteger(t,1,GetHandleId(whichUnit))
+			set t = null
 		endif
 	endmethod
 	public static method isPunishing takes unit whichUnit returns boolean
@@ -2344,6 +2417,9 @@ struct hAttr
 		call initAttr(whichUnit)
         call htime.delTimer(t)
         call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)+value)
+		set t = null
+		set whichUnit = null
+		set value = null
     endmethod
     private static method subAttackHuntTypeCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
@@ -2353,12 +2429,18 @@ struct hAttr
         local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
         local integer valueIndex = hlogic.strpos(old,value)
         call htime.delTimer(t)
+		set t = null
 		call initAttr(whichUnit)
-        if(valueIndex==-1 or value==null or value=="")then
+		set whichUnit = null
+        if(valueIndex==-1 or value==null)then
+			set value = null
+			set old = null
             return
         else
             call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
-        endif
+			set value = null
+			set old = null
+		endif
     endmethod
     private static method setAttackHuntTypeCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
@@ -2366,11 +2448,14 @@ struct hAttr
         local string value = htime.getString(t,2)
         local integer hid = GetHandleId(whichUnit)
         call htime.delTimer(t)
+		set t = null
 		call initAttr(whichUnit)
-        if(value==null or value=="")then
+		set whichUnit = null
+        if(value==null)then
             return
         else
             call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,value)
+			set value = null
         endif
     endmethod
     public static method addAttackHuntType takes unit whichUnit , string value , real during returns nothing
@@ -2382,6 +2467,7 @@ struct hAttr
             set t = htime.setTimeout(during,function thistype.subAttackHuntTypeCall)
             call htime.setUnit(t,1,whichUnit)
             call htime.setString(t,2,value)
+			set t = null
         endif
     endmethod
     public static method subAttackHuntType takes unit whichUnit , string value , real during returns nothing
@@ -2390,7 +2476,8 @@ struct hAttr
         local integer valueIndex = hlogic.strpos(old,value)
         local timer t = null
 		call initAttr(whichUnit)
-        if(valueIndex==-1 or value==null or value=="")then
+        if(valueIndex==-1 or value==null)then
+			set old = null
             return
         else
             call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
@@ -2398,15 +2485,17 @@ struct hAttr
                 set t = htime.setTimeout(during,function thistype.addAttackHuntTypeCall)
                 call htime.setUnit(t,1,whichUnit)
                 call htime.setString(t,2,value)
+				set t = null
             endif
+			set old = null
         endif
     endmethod
     public static method setAttackHuntType takes unit whichUnit , string value, real during returns nothing
-		local string old = ""
+		local string old = null
 		local integer hid = GetHandleId(whichUnit)
 		local timer t = null
 		call initAttr(whichUnit)
-        if(value==null or value=="")then
+        if(value==null)then
             return
         else
 			if(during > 0)then
@@ -2414,6 +2503,8 @@ struct hAttr
                 set t = htime.setTimeout(during,function thistype.setAttackHuntTypeCall)
                 call htime.setUnit(t,1,whichUnit)
                 call htime.setString(t,2,old)
+				set t = null
+				set old = null
             endif
 			call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,value)
         endif
@@ -2797,19 +2888,6 @@ endmethod
 public static method setViolence takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE , whichUnit , value - getViolence(whichUnit) , during )
 endmethod
-// 高级属性[mortal_oppose]
-public static method getMortalOppose takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_UP_MORTAL_OPPOSE , whichUnit )
-endmethod
-public static method addMortalOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_MORTAL_OPPOSE , whichUnit , value , during )
-endmethod
-public static method subMortalOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_MORTAL_OPPOSE , whichUnit , -value , during )
-endmethod
-public static method setMortalOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_MORTAL_OPPOSE , whichUnit , value - getMortalOppose(whichUnit) , during )
-endmethod
 // 高级属性[punish]
 public static method getPunish takes unit whichUnit returns real
    return getAttr( ATTR_FLAG_UP_PUNISH , whichUnit )
@@ -2835,19 +2913,6 @@ public static method subPunishCurrent takes unit whichUnit , real value , real d
 endmethod
 public static method setPunishCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_CURRENT , whichUnit , value - getPunishCurrent(whichUnit) , during )
-endmethod
-// 高级属性[punish_oppose]
-public static method getPunishOppose takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit )
-endmethod
-public static method addPunishOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value , during )
-endmethod
-public static method subPunishOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , -value , during )
-endmethod
-public static method setPunishOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value - getPunishOppose(whichUnit) , during )
 endmethod
 // 高级属性[meditative]
 public static method getMeditative takes unit whichUnit returns real
@@ -2926,19 +2991,6 @@ public static method subSplitRange takes unit whichUnit , real value , real duri
 endmethod
 public static method setSplitRange takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_RANGE , whichUnit , value - getSplitRange(whichUnit) , during )
-endmethod
-// 高级属性[swim_oppose]
-public static method getSwimOppose takes unit whichUnit returns real
-   return getAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit )
-endmethod
-public static method addSwimOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , value , during )
-endmethod
-public static method subSwimOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , -value , during )
-endmethod
-public static method setSwimOppose takes unit whichUnit , real value , real during returns nothing
-   call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , value - getSwimOppose(whichUnit) , during )
 endmethod
 // 高级属性[luck]
 public static method getLuck takes unit whichUnit returns real
@@ -3030,6 +3082,214 @@ public static method subCure takes unit whichUnit , real value , real during ret
 endmethod
 public static method setCure takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CURE , whichUnit , value - getCure(whichUnit) , during )
+endmethod
+// 高级属性[knocking_oppose]
+public static method getKnockingOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit )
+endmethod
+public static method addKnockingOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subKnockingOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setKnockingOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit , value - getKnockingOppose(whichUnit) , during )
+endmethod
+// 高级属性[violence_oppose]
+public static method getViolenceOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit )
+endmethod
+public static method addViolenceOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subViolenceOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setViolenceOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit , value - getViolenceOppose(whichUnit) , during )
+endmethod
+// 高级属性[hemophagia_oppose]
+public static method getHemophagiaOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit )
+endmethod
+public static method addHemophagiaOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subHemophagiaOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setHemophagiaOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit , value - getHemophagiaOppose(whichUnit) , during )
+endmethod
+// 高级属性[split_oppose]
+public static method getSplitOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit )
+endmethod
+public static method addSplitOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subSplitOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setSplitOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit , value - getSplitOppose(whichUnit) , during )
+endmethod
+// 高级属性[punish_oppose]
+public static method getPunishOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit )
+endmethod
+public static method addPunishOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subPunishOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setPunishOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value - getPunishOppose(whichUnit) , during )
+endmethod
+// 高级属性[hunt_rebound_oppose]
+public static method getHuntReboundOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit )
+endmethod
+public static method addHuntReboundOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subHuntReboundOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setHuntReboundOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit , value - getHuntReboundOppose(whichUnit) , during )
+endmethod
+// 高级属性[swim_oppose]
+public static method getSwimOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit )
+endmethod
+public static method addSwimOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subSwimOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setSwimOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , value - getSwimOppose(whichUnit) , during )
+endmethod
+// 高级属性[heavy_oppose]
+public static method getHeavyOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit )
+endmethod
+public static method addHeavyOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subHeavyOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setHeavyOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit , value - getHeavyOppose(whichUnit) , during )
+endmethod
+// 高级属性[break_oppose]
+public static method getBreakOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit )
+endmethod
+public static method addBreakOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subBreakOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setBreakOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit , value - getBreakOppose(whichUnit) , during )
+endmethod
+// 高级属性[unluck_oppose]
+public static method getUnluckOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit )
+endmethod
+public static method addUnluckOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subUnluckOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setUnluckOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit , value - getUnluckOppose(whichUnit) , during )
+endmethod
+// 高级属性[silent_oppose]
+public static method getSilentOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit )
+endmethod
+public static method addSilentOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subSilentOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setSilentOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit , value - getSilentOppose(whichUnit) , during )
+endmethod
+// 高级属性[unarm_oppose]
+public static method getUnarmOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit )
+endmethod
+public static method addUnarmOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subUnarmOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setUnarmOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit , value - getUnarmOppose(whichUnit) , during )
+endmethod
+// 高级属性[fetter_oppose]
+public static method getFetterOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit )
+endmethod
+public static method addFetterOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subFetterOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setFetterOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit , value - getFetterOppose(whichUnit) , during )
+endmethod
+// 高级属性[bomb_oppose]
+public static method getBombOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit )
+endmethod
+public static method addBombOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subBombOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setBombOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit , value - getBombOppose(whichUnit) , during )
+endmethod
+// 高级属性[lightning_chain_oppose]
+public static method getLightningChainOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit )
+endmethod
+public static method addLightningChainOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subLightningChainOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setLightningChainOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit , value - getLightningChainOppose(whichUnit) , during )
+endmethod
+// 高级属性[crack_fly_oppose]
+public static method getCrackFlyOppose takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit )
+endmethod
+public static method addCrackFlyOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit , value , during )
+endmethod
+public static method subCrackFlyOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit , -value , during )
+endmethod
+public static method setCrackFlyOppose takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit , value - getCrackFlyOppose(whichUnit) , during )
 endmethod
 
 endstruct

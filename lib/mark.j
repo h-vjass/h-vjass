@@ -31,9 +31,9 @@ struct hMark
 
     private static method displayCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local player whichPlayer = htime.getPlayer(t,1)
+        call thistype.hide(htime.getPlayer(t,1))
         call htime.delTimer(t)
-        call thistype.hide(whichPlayer)
+        set t = null
     endmethod
     // 展示
     public static method display takes player whichPlayer,string path,real through,real during,real startPercent,real endPercent returns nothing
@@ -48,6 +48,7 @@ struct hMark
         endif
         set t = htime.setTimeout(during,function thistype.displayCall)
         call htime.setPlayer(t,1,whichPlayer)
+        set t = null
     endmethod
 
 endstruct

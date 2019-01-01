@@ -190,8 +190,9 @@ struct hIs
      * 判断是否处在水面
      */
     public static method water takes unit whichUnit returns boolean
+        local boolean status = false
         local location loc = GetUnitLoc(whichUnit)
-        local boolean status = IsTerrainPathableBJ(loc, PATHING_TYPE_FLOATABILITY) == false
+        set status = IsTerrainPathableBJ(loc, PATHING_TYPE_FLOATABILITY) == false
         call RemoveLocation(loc)
         set loc = null
         return status
@@ -200,8 +201,9 @@ struct hIs
      * 判断是否处于地面
      */
     public static method floor takes unit whichUnit returns boolean
+        local boolean status = false
         local location loc = GetUnitLoc(whichUnit)
-        local boolean status = IsTerrainPathableBJ(loc, PATHING_TYPE_FLOATABILITY) == true
+        set status = IsTerrainPathableBJ(loc, PATHING_TYPE_FLOATABILITY) == true
         call RemoveLocation(loc)
         set loc = null
         return status

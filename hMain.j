@@ -69,6 +69,7 @@ library Main initializer init needs hJass
 		set startTrigger = CreateTrigger()
 	    call TriggerRegisterTimerEventSingle( startTrigger, 0.01 )
 	    call TriggerAddAction(startTrigger, function start)
+		set startTrigger = null
     endfunction
 
 endlibrary

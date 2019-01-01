@@ -22,6 +22,7 @@
 globals
     hItem hitem
     hashtable hash_item = null
+    item hjass_global_item
     integer ITEM_ABILITY = 'AInv' //默认物品栏技能（英雄6格那个）hjass默认全部认定这个技能为物品栏，如有需要自行更改
 	integer ITEM_ABILITY_SEPARATE = 'A039'
 	trigger ITEM_TRIGGER_PICKUP = null
@@ -79,10 +80,8 @@ public static real avoid = 0.0
 public static real aim = 0.0
 public static real knocking = 0.0
 public static real violence = 0.0
-public static real mortalOppose = 0.0
 public static real punish = 0.0
 public static real punishCurrent = 0.0
-public static real punishOppose = 0.0
 public static real meditative = 0.0
 public static real help = 0.0
 public static real hemophagia = 0.0
@@ -92,7 +91,6 @@ public static real splitRange = 0.0
 public static real goldRatio = 0.0
 public static real lumberRatio = 0.0
 public static real expRatio = 0.0
-public static real swimOppose = 0.0
 public static real luck = 0.0
 public static real invincible = 0.0
 public static real weight = 0.0
@@ -100,6 +98,22 @@ public static real weightCurrent = 0.0
 public static real huntAmplitude = 0.0
 public static real huntRebound = 0.0
 public static real cure = 0.0
+public static real knockingOppose = 0.0
+public static real violenceOppose = 0.0
+public static real hemophagiaOppose = 0.0
+public static real splitOppose = 0.0
+public static real punishOppose = 0.0
+public static real huntReboundOppose = 0.0
+public static real swimOppose = 0.0
+public static real heavyOppose = 0.0
+public static real breakOppose = 0.0
+public static real unluckOppose = 0.0
+public static real silentOppose = 0.0
+public static real unarmOppose = 0.0
+public static real fetterOppose = 0.0
+public static real bombOppose = 0.0
+public static real lightningChainOppose = 0.0
+public static real crackFlyOppose = 0.0
 public static real fire = 0.0
 public static real soil = 0.0
 public static real water = 0.0
@@ -269,6 +283,7 @@ public static real dragonOppose = 0.0
  public static real fetterOdds = 0.0
  public static real fetterDuring = 0.0
  public static real bombVal = 0.0
+ public static real bombOdds = 0.0
  public static string bombModel = ""
  public static real lightningChainVal = 0.0
  public static real lightningChainOdds = 0.0
@@ -320,10 +335,8 @@ set x.avoid = 0
 set x.aim = 0
 set x.knocking = 0
 set x.violence = 0
-set x.mortalOppose = 0
 set x.punish = 0
 set x.punishCurrent = 0
-set x.punishOppose = 0
 set x.meditative = 0
 set x.help = 0
 set x.hemophagia = 0
@@ -333,7 +346,6 @@ set x.splitRange = 0
 set x.goldRatio = 0
 set x.lumberRatio = 0
 set x.expRatio = 0
-set x.swimOppose = 0
 set x.luck = 0
 set x.invincible = 0
 set x.weight = 0
@@ -341,6 +353,22 @@ set x.weightCurrent = 0
 set x.huntAmplitude = 0
 set x.huntRebound = 0
 set x.cure = 0
+set x.knockingOppose = 0
+set x.violenceOppose = 0
+set x.hemophagiaOppose = 0
+set x.splitOppose = 0
+set x.punishOppose = 0
+set x.huntReboundOppose = 0
+set x.swimOppose = 0
+set x.heavyOppose = 0
+set x.breakOppose = 0
+set x.unluckOppose = 0
+set x.silentOppose = 0
+set x.unarmOppose = 0
+set x.fetterOppose = 0
+set x.bombOppose = 0
+set x.lightningChainOppose = 0
+set x.crackFlyOppose = 0
 set x.fire = 0
 set x.soil = 0
 set x.water = 0
@@ -510,6 +538,7 @@ set x.dragonOppose = 0
  set x.fetterOdds = 0.0
  set x.fetterDuring = 0.0
  set x.bombVal = 0.0
+ set x.bombOdds = 0.0
  set x.bombModel = ""
  set x.lightningChainVal = 0.0
  set x.lightningChainOdds = 0.0
@@ -561,10 +590,8 @@ set avoid = 0
 set aim = 0
 set knocking = 0
 set violence = 0
-set mortalOppose = 0
 set punish = 0
 set punishCurrent = 0
-set punishOppose = 0
 set meditative = 0
 set help = 0
 set hemophagia = 0
@@ -574,7 +601,6 @@ set splitRange = 0
 set goldRatio = 0
 set lumberRatio = 0
 set expRatio = 0
-set swimOppose = 0
 set luck = 0
 set invincible = 0
 set weight = 0
@@ -582,6 +608,22 @@ set weightCurrent = 0
 set huntAmplitude = 0
 set huntRebound = 0
 set cure = 0
+set knockingOppose = 0
+set violenceOppose = 0
+set hemophagiaOppose = 0
+set splitOppose = 0
+set punishOppose = 0
+set huntReboundOppose = 0
+set swimOppose = 0
+set heavyOppose = 0
+set breakOppose = 0
+set unluckOppose = 0
+set silentOppose = 0
+set unarmOppose = 0
+set fetterOppose = 0
+set bombOppose = 0
+set lightningChainOppose = 0
+set crackFlyOppose = 0
 set fire = 0
 set soil = 0
 set water = 0
@@ -751,6 +793,7 @@ set dragonOppose = 0
  set fetterOdds = 0.0
  set fetterDuring = 0.0
  set bombVal = 0.0
+ set bombOdds = 0.0
  set bombModel = ""
  set lightningChainVal = 0.0
  set lightningChainOdds = 0.0
@@ -810,53 +853,66 @@ private static integer hk_avoid = 1024
 private static integer hk_aim = 1025
 private static integer hk_knocking = 1026
 private static integer hk_violence = 1027
-private static integer hk_mortalOppose = 1028
-private static integer hk_punish = 1029
-private static integer hk_punishCurrent = 1030
-private static integer hk_punishOppose = 1031
-private static integer hk_meditative = 1032
-private static integer hk_help = 1033
-private static integer hk_hemophagia = 1034
-private static integer hk_hemophagiaSkill = 1035
-private static integer hk_split = 1036
-private static integer hk_splitRange = 1037
-private static integer hk_goldRatio = 1038
-private static integer hk_lumberRatio = 1039
-private static integer hk_expRatio = 1040
-private static integer hk_swimOppose = 1041
-private static integer hk_luck = 1042
-private static integer hk_invincible = 1043
-private static integer hk_weight = 1044
-private static integer hk_weightCurrent = 1045
-private static integer hk_huntAmplitude = 1046
-private static integer hk_huntRebound = 1047
-private static integer hk_cure = 1048
-private static integer hk_fire = 1049
-private static integer hk_soil = 1050
-private static integer hk_water = 1051
-private static integer hk_ice = 1052
-private static integer hk_wind = 1053
-private static integer hk_light = 1054
-private static integer hk_dark = 1055
-private static integer hk_wood = 1056
-private static integer hk_thunder = 1057
-private static integer hk_poison = 1058
-private static integer hk_ghost = 1059
-private static integer hk_metal = 1060
-private static integer hk_dragon = 1061
-private static integer hk_fireOppose = 1062
-private static integer hk_soilOppose = 1063
-private static integer hk_waterOppose = 1064
-private static integer hk_iceOppose = 1065
-private static integer hk_windOppose = 1066
-private static integer hk_lightOppose = 1067
-private static integer hk_darkOppose = 1068
-private static integer hk_woodOppose = 1069
-private static integer hk_thunderOppose = 1070
-private static integer hk_poisonOppose = 1071
-private static integer hk_ghostOppose = 1072
-private static integer hk_metalOppose = 1073
-private static integer hk_dragonOppose = 1074
+private static integer hk_punish = 1028
+private static integer hk_punishCurrent = 1029
+private static integer hk_meditative = 1030
+private static integer hk_help = 1031
+private static integer hk_hemophagia = 1032
+private static integer hk_hemophagiaSkill = 1033
+private static integer hk_split = 1034
+private static integer hk_splitRange = 1035
+private static integer hk_goldRatio = 1036
+private static integer hk_lumberRatio = 1037
+private static integer hk_expRatio = 1038
+private static integer hk_luck = 1039
+private static integer hk_invincible = 1040
+private static integer hk_weight = 1041
+private static integer hk_weightCurrent = 1042
+private static integer hk_huntAmplitude = 1043
+private static integer hk_huntRebound = 1044
+private static integer hk_cure = 1045
+private static integer hk_knockingOppose = 1046
+private static integer hk_violenceOppose = 1047
+private static integer hk_hemophagiaOppose = 1048
+private static integer hk_splitOppose = 1049
+private static integer hk_punishOppose = 1050
+private static integer hk_huntReboundOppose = 1051
+private static integer hk_swimOppose = 1052
+private static integer hk_heavyOppose = 1053
+private static integer hk_breakOppose = 1054
+private static integer hk_unluckOppose = 1055
+private static integer hk_silentOppose = 1056
+private static integer hk_unarmOppose = 1057
+private static integer hk_fetterOppose = 1058
+private static integer hk_bombOppose = 1059
+private static integer hk_lightningChainOppose = 1060
+private static integer hk_crackFlyOppose = 1061
+private static integer hk_fire = 1062
+private static integer hk_soil = 1063
+private static integer hk_water = 1064
+private static integer hk_ice = 1065
+private static integer hk_wind = 1066
+private static integer hk_light = 1067
+private static integer hk_dark = 1068
+private static integer hk_wood = 1069
+private static integer hk_thunder = 1070
+private static integer hk_poison = 1071
+private static integer hk_ghost = 1072
+private static integer hk_metal = 1073
+private static integer hk_dragon = 1074
+private static integer hk_fireOppose = 1075
+private static integer hk_soilOppose = 1076
+private static integer hk_waterOppose = 1077
+private static integer hk_iceOppose = 1078
+private static integer hk_windOppose = 1079
+private static integer hk_lightOppose = 1080
+private static integer hk_darkOppose = 1081
+private static integer hk_woodOppose = 1082
+private static integer hk_thunderOppose = 1083
+private static integer hk_poisonOppose = 1084
+private static integer hk_ghostOppose = 1085
+private static integer hk_metalOppose = 1086
+private static integer hk_dragonOppose = 1087
  private static integer hk_lifeBackVal = 10000
  private static integer hk_lifeBackDuring = 10001
  private static integer hk_manaBackVal = 10100
@@ -1000,8 +1056,9 @@ private static integer hk_dragonOppose = 1074
  private static integer hk_fetterOdds = 17000
  private static integer hk_fetterDuring = 17001
  private static integer hk_bombVal = 17100
- private static integer hk_bombRange = 17101
- private static integer hk_bombModel = 17102
+ private static integer hk_bombOdds = 17101
+ private static integer hk_bombRange = 17102
+ private static integer hk_bombModel = 17103
  private static integer hk_lightningChainVal = 17200
  private static integer hk_lightningChainOdds = 17201
  private static integer hk_lightningChainQty = 17202
@@ -1017,10 +1074,15 @@ private static integer hk_dragonOppose = 1074
      */
     private static method delCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local item it = htime.getItem( t, 1 )
+        local item it = htime.getItem(t, 1 )
         call htime.delTimer(t)
+        set t = null
         if( it != null ) then
-	        call RemoveItem( it )
+            call FlushChildHashtable(hash_item, GetHandleId(it))
+            call FlushChildHashtable(hash_trigger,GetHandleId(it))
+		    call FlushChildHashtable(hash_trigger_register,GetHandleId(it))
+            call SetWidgetLife(it,1.00)
+	        call RemoveItem(it)
             set it = null
     	endif
     endmethod
@@ -1028,23 +1090,28 @@ private static integer hk_dragonOppose = 1074
 	 * 删除物品，可延时
 	 */
 	public static method del takes item it,real during returns nothing
-		local timer t = null
+        local timer t = null
         if( during <= 0 ) then
-            call RemoveItem( it )
+            call FlushChildHashtable(hash_item, GetHandleId(it))
+            call FlushChildHashtable(hash_trigger,GetHandleId(it))
+		    call FlushChildHashtable(hash_trigger_register,GetHandleId(it))
+            call SetWidgetLife(it,1.00)
+            call RemoveItem(it)
             set it = null
         else
             set t = htime.setTimeout( during , function thistype.delCall)
             call htime.setItem( t, 1 ,it )
+            set t = null
         endif
 	endmethod
 
     //获取注册的物品数量
     public static method getTotalQty takes nothing returns integer
-        local integer qty = LoadInteger(hash_item,0,StringHash("_TOTAL_QTY_"))
-        if(qty<=0)then
-            set qty = 0
+        local integer i = LoadInteger(hash_item,0,StringHash("_TOTAL_QTY_"))
+        if(i<=0)then
+            set i = 0
         endif
-        return qty
+        return i
     endmethod
 	//设定注册的物品数量
     public static method setTotalQty takes integer qty returns nothing
@@ -1064,16 +1131,16 @@ private static integer hk_dragonOppose = 1074
 
 	//获取某单位身上空格物品栏数量
     public static method getEmptySlot takes unit u returns integer
-        local integer i
-        local item it = null
         local integer qty = UnitInventorySize(u)
-        set i = 0
+        local item it = null
+        local integer i = 0
         loop
             exitwhen i > 5
             set it = UnitItemInSlot(u, i)
             if(it != null and GetItemCharges(it) > 0) then
                 set qty = qty - 1
             endif
+            set it = null
             set i=i+1
         endloop
         return qty
@@ -1081,42 +1148,44 @@ private static integer hk_dragonOppose = 1074
 
 	//获取某单位身上某种物品的使用总次数
     public static method getCharges takes integer itemId,unit u returns integer
-        local integer i
         local integer charges = 0
+        local integer i = 0
         local item it = null
-        set i = 0
         loop
             exitwhen i > 5
             set it = UnitItemInSlot(u, i)
             if(it != null and GetItemTypeId(it) == itemId and GetItemCharges(it) > 0) then
                 set charges = charges + GetItemCharges(it)
             endif
+            set it = null
             set i=i+1
         endloop
-        set it = null
         return charges
     endmethod
 
 	//绑定使用操作
 	public static method onUse takes integer itemid,code func returns nothing
-		local trigger tg = null
+        local trigger tg = null
 		if(itemid>0 and func!=null)then
 			set tg = CreateTrigger()
 			call TriggerAddAction(tg,func)
 			call SaveTriggerHandle(hash_item,itemid,hk_item_onuse_trigger,tg)
+            set tg = null
 		endif
 	endmethod 
 
 	//触发物品的瞬逝
 	private static method triggerMoment takes nothing returns nothing
+        local trigger tg = null
 		local unit it = hevt.getTriggerUnit()
 		local unit triggerUnit = hevt.getTriggerEnterUnit()
-		local trigger tg = null
 		local integer charges = 0
 		if(it!=null and triggerUnit!=null and his.hasSlot(triggerUnit) and his.alive(triggerUnit))then
 			set charges = GetUnitUserData(it)
 			if(charges<=0)then
 				call hunit.del(it,0)
+                set it = null
+                set triggerUnit = null
 				return
 			endif
 			set tg = LoadTriggerHandle(hash_item,GetUnitTypeId(it),hk_item_onmoment_trigger)
@@ -1125,27 +1194,31 @@ private static integer hk_dragonOppose = 1074
 				call hevt.setId(tg,GetUnitTypeId(it))
 				call hevt.setValue(tg,charges)
 				call TriggerExecute(tg)
+                set tg = null
 			endif
 			call SetUnitUserData(it,0)
 			call hunit.del(it,0)
 		endif
+        set it = null
+        set triggerUnit = null
 	endmethod
 
 	//绑定物品的瞬逝
 	public static method onMoment takes integer itid,code func returns nothing
-		local trigger tg = null
+        local trigger tg = null
 		if(itid>0)then
 			set tg = CreateTrigger()
 			call TriggerAddAction(tg,func)
 			call SaveTriggerHandle(hash_item,itid,hk_item_onmoment_trigger,tg)
+            set tg = null
 		endif
 	endmethod
 
 	//绑定物品到系统截断调用
     private static method formatEval takes hItemBean bean returns nothing
-		local item it = null
 		local integer score = 0
-		local string tp = HITEM_TYPE_FOREVER
+        local item it = null
+		local string itype = HITEM_TYPE_FOREVER
         if(bean.item_id!=0)then
 			call setTotalQty(1+getTotalQty())
 			set it = CreateItem(bean.item_id,0,0)
@@ -1154,13 +1227,14 @@ private static integer hk_dragonOppose = 1074
 			else
 				call SaveBoolean(hash_item, bean.item_id, hk_item_is_powerup,false)
 			endif
-			call RemoveItem(it)
+			call del(it,0)
 			set it = null
 			if(StringLength(bean.item_type)>0)then
-				set tp = bean.item_type
+				set itype = bean.item_type
 			endif
             call SaveBoolean(hash_item, bean.item_id, hk_item_init, true)
-            call SaveStr(hash_item, bean.item_id, hk_item_type, tp)
+            call SaveStr(hash_item, bean.item_id, hk_item_type, itype)
+            set itype = null
             call SaveInteger(hash_item, bean.item_id, hk_item_overlay, bean.item_overlay)
             call SaveInteger(hash_item, bean.item_id, hk_item_level, bean.item_level)
             call SaveInteger(hash_item, bean.item_id, hk_item_gold, bean.item_gold)
@@ -1200,17 +1274,14 @@ call SaveReal(hash_item, bean.item_id, hk_avoid, bean.avoid)
 call SaveReal(hash_item, bean.item_id, hk_aim, bean.aim)
 call SaveReal(hash_item, bean.item_id, hk_knocking, bean.knocking)
 call SaveReal(hash_item, bean.item_id, hk_violence, bean.violence)
-call SaveReal(hash_item, bean.item_id, hk_mortalOppose, bean.mortalOppose)
 call SaveReal(hash_item, bean.item_id, hk_punish, bean.punish)
 call SaveReal(hash_item, bean.item_id, hk_punishCurrent, bean.punishCurrent)
-call SaveReal(hash_item, bean.item_id, hk_punishOppose, bean.punishOppose)
 call SaveReal(hash_item, bean.item_id, hk_meditative, bean.meditative)
 call SaveReal(hash_item, bean.item_id, hk_help, bean.help)
 call SaveReal(hash_item, bean.item_id, hk_hemophagia, bean.hemophagia)
 call SaveReal(hash_item, bean.item_id, hk_hemophagiaSkill, bean.hemophagiaSkill)
 call SaveReal(hash_item, bean.item_id, hk_split, bean.split)
 call SaveReal(hash_item, bean.item_id, hk_splitRange, bean.splitRange)
-call SaveReal(hash_item, bean.item_id, hk_swimOppose, bean.swimOppose)
 call SaveReal(hash_item, bean.item_id, hk_luck, bean.luck)
 call SaveReal(hash_item, bean.item_id, hk_invincible, bean.invincible)
 call SaveReal(hash_item, bean.item_id, hk_weight, bean.weight)
@@ -1218,6 +1289,22 @@ call SaveReal(hash_item, bean.item_id, hk_weightCurrent, bean.weightCurrent)
 call SaveReal(hash_item, bean.item_id, hk_huntAmplitude, bean.huntAmplitude)
 call SaveReal(hash_item, bean.item_id, hk_huntRebound, bean.huntRebound)
 call SaveReal(hash_item, bean.item_id, hk_cure, bean.cure)
+call SaveReal(hash_item, bean.item_id, hk_knockingOppose, bean.knockingOppose)
+call SaveReal(hash_item, bean.item_id, hk_violenceOppose, bean.violenceOppose)
+call SaveReal(hash_item, bean.item_id, hk_hemophagiaOppose, bean.hemophagiaOppose)
+call SaveReal(hash_item, bean.item_id, hk_splitOppose, bean.splitOppose)
+call SaveReal(hash_item, bean.item_id, hk_punishOppose, bean.punishOppose)
+call SaveReal(hash_item, bean.item_id, hk_huntReboundOppose, bean.huntReboundOppose)
+call SaveReal(hash_item, bean.item_id, hk_swimOppose, bean.swimOppose)
+call SaveReal(hash_item, bean.item_id, hk_heavyOppose, bean.heavyOppose)
+call SaveReal(hash_item, bean.item_id, hk_breakOppose, bean.breakOppose)
+call SaveReal(hash_item, bean.item_id, hk_unluckOppose, bean.unluckOppose)
+call SaveReal(hash_item, bean.item_id, hk_silentOppose, bean.silentOppose)
+call SaveReal(hash_item, bean.item_id, hk_unarmOppose, bean.unarmOppose)
+call SaveReal(hash_item, bean.item_id, hk_fetterOppose, bean.fetterOppose)
+call SaveReal(hash_item, bean.item_id, hk_bombOppose, bean.bombOppose)
+call SaveReal(hash_item, bean.item_id, hk_lightningChainOppose, bean.lightningChainOppose)
+call SaveReal(hash_item, bean.item_id, hk_crackFlyOppose, bean.crackFlyOppose)
 call SaveReal(hash_item, bean.item_id, hk_fire, bean.fire)
 call SaveReal(hash_item, bean.item_id, hk_soil, bean.soil)
 call SaveReal(hash_item, bean.item_id, hk_water, bean.water)
@@ -1387,6 +1474,7 @@ call SaveReal(hash_item, bean.item_id, hk_dragonOppose, bean.dragonOppose)
  call SaveReal(hash_item, bean.item_id, hk_fetterOdds, bean.fetterOdds)
  call SaveReal(hash_item, bean.item_id, hk_fetterDuring, bean.fetterDuring)
  call SaveReal(hash_item, bean.item_id, hk_bombVal, bean.bombVal)
+ call SaveReal(hash_item, bean.item_id, hk_bombOdds, bean.bombOdds)
  call SaveStr(hash_item, bean.item_id, hk_bombModel, bean.bombModel)
  call SaveReal(hash_item, bean.item_id, hk_lightningChainVal, bean.lightningChainVal)
  call SaveReal(hash_item, bean.item_id, hk_lightningChainOdds, bean.lightningChainOdds)
@@ -1477,14 +1565,8 @@ endif
 if(bean.violence!=0)then
     set score = score + R2I(bean.violence)*4
 endif
-if(bean.mortalOppose!=0)then
-    set score = score + R2I(bean.mortalOppose)*1
-endif
 if(bean.punish!=0)then
     set score = score + R2I(bean.punish)*3
-endif
-if(bean.punishOppose!=0)then
-    set score = score + R2I(bean.punishOppose)*3
 endif
 if(bean.meditative!=0)then
     set score = score + R2I(bean.meditative)*1
@@ -1513,9 +1595,6 @@ endif
 if(bean.expRatio!=0)then
     set score = score + R2I(bean.expRatio)*1
 endif
-if(bean.swimOppose!=0)then
-    set score = score + R2I(bean.swimOppose)*2
-endif
 if(bean.luck!=0)then
     set score = score + R2I(bean.luck)*2
 endif
@@ -1523,13 +1602,66 @@ if(bean.invincible!=0)then
     set score = score + R2I(bean.invincible)*2
 endif
 if(bean.huntAmplitude!=0)then
-    set score = score + R2I(bean.huntAmplitude)*10
+    set score = score + R2I(bean.huntAmplitude)*8
 endif
 if(bean.huntRebound!=0)then
     set score = score + R2I(bean.huntRebound)*5
 endif
 if(bean.cure!=0)then
-    set score = score + R2I(bean.cure)*1
+    set score = score + R2I(bean.cure)*2
+endif
+if(bean.knockingOppose!=0)then
+    set score = score + R2I(bean.knockingOppose)*3
+endif
+if(bean.violenceOppose!=0)then
+    set score = score + R2I(bean.violenceOppose)*3
+endif
+if(bean.hemophagiaOppose!=0)then
+    set score = score + R2I(bean.hemophagiaOppose)*3
+endif
+/*
+if(bean.hemophagiaSkillOppose!=0)then
+    set score = score + R2I(bean.hemophagiaSkillOppose)*3
+endif
+*/
+if(bean.splitOppose!=0)then
+    set score = score + R2I(bean.splitOppose)*3
+endif
+if(bean.punishOppose!=0)then
+    set score = score + R2I(bean.punishOppose)*3
+endif
+if(bean.huntReboundOppose!=0)then
+    set score = score + R2I(bean.huntReboundOppose)*3
+endif
+if(bean.swimOppose!=0)then
+    set score = score + R2I(bean.swimOppose)*3
+endif
+if(bean.heavyOppose!=0)then
+    set score = score + R2I(bean.heavyOppose)*3
+endif
+if(bean.breakOppose!=0)then
+    set score = score + R2I(bean.breakOppose)*3
+endif
+if(bean.unluckOppose!=0)then
+    set score = score + R2I(bean.unluckOppose)*3
+endif
+if(bean.silentOppose!=0)then
+    set score = score + R2I(bean.silentOppose)*3
+endif
+if(bean.unarmOppose!=0)then
+    set score = score + R2I(bean.unarmOppose)*3
+endif
+if(bean.fetterOppose!=0)then
+    set score = score + R2I(bean.fetterOppose)*3
+endif
+if(bean.bombOppose!=0)then
+    set score = score + R2I(bean.bombOppose)*3
+endif
+if(bean.lightningChainOppose!=0)then
+    set score = score + R2I(bean.lightningChainOppose)*3
+endif
+if(bean.crackFlyOppose!=0)then
+    set score = score + R2I(bean.crackFlyOppose)*3
 endif
 if(bean.fire!=0)then
     set score = score + R2I(bean.fire)*5
@@ -2026,6 +2158,9 @@ endif
  if(bean.bombVal!=0)then
     set score = score + R2I(bean.bombVal)*3
 endif
+ if(bean.bombOdds!=0)then
+    set score = score + R2I(bean.bombOdds)*3
+endif
  if(bean.lightningChainVal!=0)then
     set score = score + R2I(bean.lightningChainVal)*3
 endif
@@ -2065,8 +2200,12 @@ endif
         return LoadBoolean(hash_item, itemId, hk_item_init)
     endmethod
 
-	//增加物品属性
-	public static method addAttr takes integer item_id,real charges,unit whichUnit,boolean isPlus returns nothing
+	private static method addAttrCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local integer item_id = htime.getInteger(t,1)
+        local real charges = htime.getReal(t,2)
+        local boolean isPlus = htime.getBoolean(t,4)
+        //
 local real goldRatio = LoadReal(hash_item, item_id, hk_goldRatio)*charges
 local real lumberRatio = LoadReal(hash_item, item_id, hk_lumberRatio)*charges
 local real expRatio = LoadReal(hash_item, item_id, hk_expRatio)*charges
@@ -2097,17 +2236,14 @@ local real avoid = LoadReal(hash_item, item_id, hk_avoid)*charges
 local real aim = LoadReal(hash_item, item_id, hk_aim)*charges
 local real knocking = LoadReal(hash_item, item_id, hk_knocking)*charges
 local real violence = LoadReal(hash_item, item_id, hk_violence)*charges
-local real mortalOppose = LoadReal(hash_item, item_id, hk_mortalOppose)*charges
 local real punish = LoadReal(hash_item, item_id, hk_punish)*charges
 local real punishCurrent = LoadReal(hash_item, item_id, hk_punishCurrent)*charges
-local real punishOppose = LoadReal(hash_item, item_id, hk_punishOppose)*charges
 local real meditative = LoadReal(hash_item, item_id, hk_meditative)*charges
 local real help = LoadReal(hash_item, item_id, hk_help)*charges
 local real hemophagia = LoadReal(hash_item, item_id, hk_hemophagia)*charges
 local real hemophagiaSkill = LoadReal(hash_item, item_id, hk_hemophagiaSkill)*charges
 local real split = LoadReal(hash_item, item_id, hk_split)*charges
 local real splitRange = LoadReal(hash_item, item_id, hk_splitRange)*charges
-local real swimOppose = LoadReal(hash_item, item_id, hk_swimOppose)*charges
 local real luck = LoadReal(hash_item, item_id, hk_luck)*charges
 local real invincible = LoadReal(hash_item, item_id, hk_invincible)*charges
 local real weight = LoadReal(hash_item, item_id, hk_weight)*charges
@@ -2115,6 +2251,22 @@ local real weightCurrent = LoadReal(hash_item, item_id, hk_weightCurrent)*charge
 local real huntAmplitude = LoadReal(hash_item, item_id, hk_huntAmplitude)*charges
 local real huntRebound = LoadReal(hash_item, item_id, hk_huntRebound)*charges
 local real cure = LoadReal(hash_item, item_id, hk_cure)*charges
+local real knockingOppose = LoadReal(hash_item, item_id, hk_knockingOppose)*charges
+local real violenceOppose = LoadReal(hash_item, item_id, hk_violenceOppose)*charges
+local real hemophagiaOppose = LoadReal(hash_item, item_id, hk_hemophagiaOppose)*charges
+local real splitOppose = LoadReal(hash_item, item_id, hk_splitOppose)*charges
+local real punishOppose = LoadReal(hash_item, item_id, hk_punishOppose)*charges
+local real huntReboundOppose = LoadReal(hash_item, item_id, hk_huntReboundOppose)*charges
+local real swimOppose = LoadReal(hash_item, item_id, hk_swimOppose)*charges
+local real heavyOppose = LoadReal(hash_item, item_id, hk_heavyOppose)*charges
+local real breakOppose = LoadReal(hash_item, item_id, hk_breakOppose)*charges
+local real unluckOppose = LoadReal(hash_item, item_id, hk_unluckOppose)*charges
+local real silentOppose = LoadReal(hash_item, item_id, hk_silentOppose)*charges
+local real unarmOppose = LoadReal(hash_item, item_id, hk_unarmOppose)*charges
+local real fetterOppose = LoadReal(hash_item, item_id, hk_fetterOppose)*charges
+local real bombOppose = LoadReal(hash_item, item_id, hk_bombOppose)*charges
+local real lightningChainOppose = LoadReal(hash_item, item_id, hk_lightningChainOppose)*charges
+local real crackFlyOppose = LoadReal(hash_item, item_id, hk_crackFlyOppose)*charges
 local real fire = LoadReal(hash_item, item_id, hk_fire)*charges
 local real soil = LoadReal(hash_item, item_id, hk_soil)*charges
 local real water = LoadReal(hash_item, item_id, hk_water)*charges
@@ -2284,6 +2436,7 @@ local real dragonOppose = LoadReal(hash_item, item_id, hk_dragonOppose)*charges
  local real fetterOdds = LoadReal(hash_item, item_id, hk_fetterOdds)*charges
  local real fetterDuring = LoadReal(hash_item, item_id, hk_fetterDuring)*charges
  local real bombVal = LoadReal(hash_item, item_id, hk_bombVal)*charges
+ local real bombOdds = LoadReal(hash_item, item_id, hk_bombOdds)*charges
  local string bombModel = LoadStr(hash_item, item_id, hk_bombModel)
  local real lightningChainVal = LoadReal(hash_item, item_id, hk_lightningChainVal)*charges
  local real lightningChainOdds = LoadReal(hash_item, item_id, hk_lightningChainOdds)*charges
@@ -2296,6 +2449,9 @@ local real dragonOppose = LoadReal(hash_item, item_id, hk_dragonOppose)*charges
  local real crackFlyHigh = LoadReal(hash_item, item_id, hk_crackFlyHigh)*charges
 		//
 		local string attackHuntType = LoadStr(hash_item, item_id, hk_attackHuntType)
+        local unit whichUnit = htime.getUnit(t,3)
+        call htime.delTimer(t)
+        set t = null
 		if(attackHuntType!="")then
             if(isPlus == true)then
                 call hattr.addAttackHuntType(whichUnit,attackHuntType,0)
@@ -2514,13 +2670,6 @@ if(violence!=0)then
         call hattr.subViolence(whichUnit,violence,0)
     endif
 endif
-if(mortalOppose!=0)then
-    if(isPlus == true)then
-        call hattr.addMortalOppose(whichUnit,mortalOppose,0)
-    else
-        call hattr.subMortalOppose(whichUnit,mortalOppose,0)
-    endif
-endif
 if(punish!=0)then
     if(isPlus == true)then
         call hattr.addPunish(whichUnit,punish,0)
@@ -2533,13 +2682,6 @@ if(punishCurrent!=0)then
         call hattr.addPunishCurrent(whichUnit,punishCurrent,0)
     else
         call hattr.subPunishCurrent(whichUnit,punishCurrent,0)
-    endif
-endif
-if(punishOppose!=0)then
-    if(isPlus == true)then
-        call hattr.addPunishOppose(whichUnit,punishOppose,0)
-    else
-        call hattr.subPunishOppose(whichUnit,punishOppose,0)
     endif
 endif
 if(meditative!=0)then
@@ -2582,13 +2724,6 @@ if(splitRange!=0)then
         call hattr.addSplitRange(whichUnit,splitRange,0)
     else
         call hattr.subSplitRange(whichUnit,splitRange,0)
-    endif
-endif
-if(swimOppose!=0)then
-    if(isPlus == true)then
-        call hattr.addSwimOppose(whichUnit,swimOppose,0)
-    else
-        call hattr.subSwimOppose(whichUnit,swimOppose,0)
     endif
 endif
 if(luck!=0)then
@@ -2638,6 +2773,118 @@ if(cure!=0)then
         call hattr.addCure(whichUnit,cure,0)
     else
         call hattr.subCure(whichUnit,cure,0)
+    endif
+endif
+if(knockingOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addKnockingOppose(whichUnit,knockingOppose,0)
+    else
+        call hattr.subKnockingOppose(whichUnit,knockingOppose,0)
+    endif
+endif
+if(violenceOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addViolenceOppose(whichUnit,violenceOppose,0)
+    else
+        call hattr.subViolenceOppose(whichUnit,violenceOppose,0)
+    endif
+endif
+if(hemophagiaOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addHemophagiaOppose(whichUnit,hemophagiaOppose,0)
+    else
+        call hattr.subHemophagiaOppose(whichUnit,hemophagiaOppose,0)
+    endif
+endif
+if(splitOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addSplitOppose(whichUnit,splitOppose,0)
+    else
+        call hattr.subSplitOppose(whichUnit,splitOppose,0)
+    endif
+endif
+if(punishOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addPunishOppose(whichUnit,punishOppose,0)
+    else
+        call hattr.subPunishOppose(whichUnit,punishOppose,0)
+    endif
+endif
+if(huntReboundOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addHuntReboundOppose(whichUnit,huntReboundOppose,0)
+    else
+        call hattr.subHuntReboundOppose(whichUnit,huntReboundOppose,0)
+    endif
+endif
+if(swimOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addSwimOppose(whichUnit,swimOppose,0)
+    else
+        call hattr.subSwimOppose(whichUnit,swimOppose,0)
+    endif
+endif
+if(heavyOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addHeavyOppose(whichUnit,heavyOppose,0)
+    else
+        call hattr.subHeavyOppose(whichUnit,heavyOppose,0)
+    endif
+endif
+if(breakOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addBreakOppose(whichUnit,breakOppose,0)
+    else
+        call hattr.subBreakOppose(whichUnit,breakOppose,0)
+    endif
+endif
+if(unluckOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addUnluckOppose(whichUnit,unluckOppose,0)
+    else
+        call hattr.subUnluckOppose(whichUnit,unluckOppose,0)
+    endif
+endif
+if(silentOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addSilentOppose(whichUnit,silentOppose,0)
+    else
+        call hattr.subSilentOppose(whichUnit,silentOppose,0)
+    endif
+endif
+if(unarmOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addUnarmOppose(whichUnit,unarmOppose,0)
+    else
+        call hattr.subUnarmOppose(whichUnit,unarmOppose,0)
+    endif
+endif
+if(fetterOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addFetterOppose(whichUnit,fetterOppose,0)
+    else
+        call hattr.subFetterOppose(whichUnit,fetterOppose,0)
+    endif
+endif
+if(bombOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addBombOppose(whichUnit,bombOppose,0)
+    else
+        call hattr.subBombOppose(whichUnit,bombOppose,0)
+    endif
+endif
+if(lightningChainOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addLightningChainOppose(whichUnit,lightningChainOppose,0)
+    else
+        call hattr.subLightningChainOppose(whichUnit,lightningChainOppose,0)
+    endif
+endif
+if(crackFlyOppose!=0)then
+    if(isPlus == true)then
+        call hattr.addCrackFlyOppose(whichUnit,crackFlyOppose,0)
+    else
+        call hattr.subCrackFlyOppose(whichUnit,crackFlyOppose,0)
     endif
 endif
 if(fire!=0)then
@@ -3823,6 +4070,13 @@ endif
         call hattrEffect.subBombVal(whichUnit,bombVal,0)
     endif
 endif
+ if(bombOdds!=0)then
+    if(isPlus == true)then
+        call hattrEffect.addBombOdds(whichUnit,bombOdds,0)
+    else
+        call hattrEffect.subBombOdds(whichUnit,bombOdds,0)
+    endif
+endif
  if(bombModel!="" and isPlus == true)then
     call hattrEffect.setBombModel(whichUnit,bombModel)
 endif
@@ -3885,7 +4139,16 @@ endif
         call hattrEffect.subCrackFlyHigh(whichUnit,crackFlyHigh,0)
     endif
 endif
-
+        set whichUnit = null
+    endmethod
+	//增加物品属性
+	public static method addAttr takes integer item_id,real charges,unit whichUnit,boolean isPlus returns nothing
+        local timer t = htime.setTimeout(0,function thistype.addAttrCall)
+        call htime.setInteger(t,1,item_id)
+        call htime.setReal(t,2,charges)
+        call htime.setUnit(t,3,whichUnit)
+        call htime.setBoolean(t,4,isPlus)
+        set t = null
 	endmethod
 
 	//获取物品ID名字
@@ -3946,15 +4209,14 @@ endif
 	 * isMix 设定是否合成（true则触发事件）
 	 */
 	private static method toUnitPrivate takes integer itemid,integer charges,unit whichUnit,boolean isMix returns nothing
+        local trigger tg = null
 		local integer remainCharges = charges
 		local integer i = 0
-		local item it = null
 		local integer itCharges = 0
 		local integer overlay = getOverlay(itemid)
 		local real weight = 0
 		local integer canGetQty = 0
 		local integer notGetQty = 0
-		local trigger tg = null
 		if(charges<1)then
 			set charges = 1
 		endif
@@ -3966,6 +4228,7 @@ endif
 				call hevt.setTriggerUnit(tg,whichUnit)
 				call hevt.setValue(tg,charges)
 				call TriggerExecute(tg)
+                set tg = null
 			endif
 			return
 		endif
@@ -3983,8 +4246,8 @@ endif
 			endif
 			//拿不到的扔在地上
 			if(notGetQty>0)then
-				set it = CreateItem(itemid, GetUnitX(whichUnit),GetUnitY(whichUnit))
-				call SetItemCharges(it,notGetQty)
+				set hjass_global_item = CreateItem(itemid, GetUnitX(whichUnit),GetUnitY(whichUnit))
+				call SetItemCharges(hjass_global_item,notGetQty)
 				call hmsg.style(hmsg.ttg2Unit(whichUnit,"背包负重不足",6.00,"ffff80",0,2.50,50.00) ,"scale",0,0.05)
 				//如果一件都拿不到，后面不执行
 				if(notGetQty>=charges)then
@@ -3996,22 +4259,22 @@ endif
 		set i = 5
         loop
             exitwhen i < 0
-            set it = UnitItemInSlot(whichUnit,i)
-            if ( it!=null and itemid == GetItemTypeId(it)) then
+            set hjass_global_item = UnitItemInSlot(whichUnit,i)
+            if ( hjass_global_item!=null and itemid == GetItemTypeId(hjass_global_item)) then
                 //如果第i格物品和获得的一致
                 //如果有极限值 并且原有的物品未达上限
-                if(overlay>0 and GetItemCharges(it) != overlay) then
-                    if((remainCharges+GetItemCharges(it))<= overlay) then
+                if(overlay>0 and GetItemCharges(hjass_global_item) != overlay) then
+                    if((remainCharges+GetItemCharges(hjass_global_item))<= overlay) then
                         //条件：如果新物品加旧物品使用次数不大于极限值
                         //使旧物品使用次数增加，新物品数量清0
 						call addAttr(itemid,remainCharges,whichUnit,true)
-                        call SetItemCharges(it,GetItemCharges(it)+remainCharges) 
+                        call SetItemCharges(hjass_global_item,GetItemCharges(hjass_global_item)+remainCharges) 
                         set remainCharges = 0
                     else
                         //否则，如果使用次数大于极限值,旧物品次数满载，新物品数量减少
-						call addAttr(itemid,overlay-GetItemCharges(it),whichUnit,true)
-                        set remainCharges = GetItemCharges(it)+remainCharges-overlay
-						call SetItemCharges(it,overlay)
+						call addAttr(itemid,overlay-GetItemCharges(hjass_global_item),whichUnit,true)
+                        set remainCharges = GetItemCharges(hjass_global_item)+remainCharges-overlay
+						call SetItemCharges(hjass_global_item,overlay)
                     endif
                     call DoNothing() YDNL exitwhen true//(  )
                 endif
@@ -4023,28 +4286,28 @@ endif
 		//end处理
 		if(remainCharges>0)then
 			//建在地上
-			set it = CreateItem(itemid, GetUnitX(whichUnit),GetUnitY(whichUnit))
-			call SetItemCharges(it,remainCharges)
+			set hjass_global_item = CreateItem(itemid, GetUnitX(whichUnit),GetUnitY(whichUnit))
+			call SetItemCharges(hjass_global_item,remainCharges)
 			if(isMix == true)then
-				call hmsg.echoTo(GetOwningPlayer(whichUnit),"成功合成了：["+GetItemName(it)+"]",0)
+				call hmsg.echoTo(GetOwningPlayer(whichUnit),"成功合成了：["+GetItemName(hjass_global_item)+"]",0)
 				//@触发 合成物品 事件
 				set hevtBean = hEvtBean.create()
 				set hevtBean.triggerKey = "itemMix"
 				set hevtBean.triggerUnit = whichUnit
-				set hevtBean.triggerItem = it
+				set hevtBean.triggerItem = hjass_global_item
 				call hevt.triggerEvent(hevtBean)
 				call hevtBean.destroy()
 			endif
 			if(getEmptySlot(whichUnit)>=1)then
 				//有格子则扔到单位上，并分析属性
-				call setIsHjass(it,true)
-				call UnitAddItem(whichUnit,it)
+				call setIsHjass(hjass_global_item,true)
+				call UnitAddItem(whichUnit,hjass_global_item)
 				call addAttr(itemid,remainCharges,whichUnit,true)
 				//@触发 获得物品 事件
 				set hevtBean = hEvtBean.create()
 				set hevtBean.triggerKey = "itemGet"
 				set hevtBean.triggerUnit = whichUnit
-				set hevtBean.triggerItem = it
+				set hevtBean.triggerItem = hjass_global_item
 				call hevt.triggerEvent(hevtBean)
 				call hevtBean.destroy()
 			endif
@@ -4078,32 +4341,35 @@ endif
 	 * x y 坐标
 	 */
 	public static method toXY takes integer itemid,integer charges,real x,real y,real during returns nothing
-		local string ittype = getType(itemid)
 		local real range = 0
-		local item it = null
-		local unit itMoment = null
+        local unit u = null
+        local string itype = getType(itemid)
 		if(charges<1)then
 			set charges = 1
 		endif
-		if(ittype == HITEM_TYPE_MOMENT)then
-			set itMoment = hunit.createUnitXY(Player(PLAYER_NEUTRAL_PASSIVE),itemid,x,y)
-			call SetUnitUserData(itMoment,charges)
+		if(itype == HITEM_TYPE_MOMENT)then
+			set u = hunit.createUnitXY(Player(PLAYER_NEUTRAL_PASSIVE),itemid,x,y)
+			call SetUnitUserData(u,charges)
 			if(hcamera.model=="zoomin")then
 				set range = 50
 			else
 				set range = 100
 			endif
-			call hevt.onEnterUnitRange(itMoment,range,function thistype.triggerMoment)
+			call hevt.onEnterUnitRange(u,range,function thistype.triggerMoment)
 			if(during > 0)then
-				call hunit.del(itMoment,during)
+				call hunit.del(u,during)
 			endif
+            set u = null
 		else
-			set it = CreateItem(itemid, x, y)
-			call SetItemCharges(it,charges)
+			set hjass_global_item = CreateItem(itemid, x, y)
+			call SetItemCharges(hjass_global_item,charges)
 			if(during > 0)then
-				call hitem.del(it,during)
+				call hitem.del(hjass_global_item,during)
 			endif
+            set hjass_global_item = null
 		endif
+        set u = null
+        set itype = null
 	endmethod
 
 	/*
@@ -4120,184 +4386,202 @@ endif
 
 	//捡起物品(检测)
 	private static method itemPickupCheck takes nothing returns nothing
-		local timer t = GetExpiredTimer()
+        local timer t = GetExpiredTimer()
+        local unit u = htime.getUnit(t,2)
 		local integer during = htime.getInteger(t,0)
-		local item it = htime.getItem(t,1)
-		local unit u = htime.getUnit(t,2)
 		local integer itid = 0
 		local integer charges = 0
-		if(during>200 or it==null or his.death(u) or LoadInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"))!=GetHandleId(it))then
+		set hjass_global_item = htime.getItem(t,1)
+		if(during>200 or hjass_global_item==null or his.death(u) or LoadInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"))!=GetHandleId(hjass_global_item))then
 			call htime.delTimer(t)
-			set it = null
+            set t = null
+			set hjass_global_item = null
 			set u = null
 			return
 		endif
 		call htime.setInteger(t,0,during+1)
 		if(hcamera.model=="zoomin")then
-			if(hlogic.getDistanceBetweenXY(GetItemX(it),GetItemY(it),GetUnitX(u),GetUnitY(u))>125)then
+			if(hlogic.getDistanceBetweenXY(GetItemX(hjass_global_item),GetItemY(hjass_global_item),GetUnitX(u),GetUnitY(u))>125)then
 				return
 			endif
-		elseif(hlogic.getDistanceBetweenXY(GetItemX(it),GetItemY(it),GetUnitX(u),GetUnitY(u))>250)then
+		elseif(hlogic.getDistanceBetweenXY(GetItemX(hjass_global_item),GetItemY(hjass_global_item),GetUnitX(u),GetUnitY(u))>250)then
 			return
 		endif
 		call htime.delTimer(t)
+        set t = null
 		//先删除物品,在创建
-		set itid = GetItemTypeId(it)
-		set charges = GetItemCharges(it)
-		call RemoveItem(it)
-		set it = null
+		set itid = GetItemTypeId(hjass_global_item)
+		set charges = GetItemCharges(hjass_global_item)
+		call del(hjass_global_item,0)
 		call toUnit(itid,charges,u)
+        set hjass_global_item = null
 		set u = null
 	endmethod
 
 	//捡起物品
 	private static method itemPickupFalse takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		call SaveInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"),0)
-		set u = null
+		call SaveInteger(hash_item,GetHandleId(GetTriggerUnit()),StringHash("_ITEMPICKUPCHECK_"),0)
 	endmethod
 
 	//捡起物品
 	private static method itemPickup takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local item it = GetOrderTargetItem()
-		local integer itid = GetItemTypeId(it)
+        local unit u = GetTriggerUnit()
+		local integer itid = 0
 		local integer charges = 0
-		local timer t = null
+        local timer t = null
+		set hjass_global_item = GetOrderTargetItem()
+        set itid = GetItemTypeId(hjass_global_item)
 		if(isFormat(itid)!=true)then
+            set u = null
 			return
 		endif
 		call SaveInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"),0)
-		if(it!=null and GetIssuedOrderId() == OrderId("smart"))then
-			set charges = GetItemCharges(it)
+		if(hjass_global_item!=null and GetIssuedOrderId() == OrderId("smart"))then
+			set charges = GetItemCharges(hjass_global_item)
 			if(hcamera.model=="zoomin")then
-				if(hlogic.getDistanceBetweenXY(GetItemX(it),GetItemY(it),GetUnitX(u),GetUnitY(u))>75)then
-					call SaveInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"),GetHandleId(it))
+				if(hlogic.getDistanceBetweenXY(GetItemX(hjass_global_item),GetItemY(hjass_global_item),GetUnitX(u),GetUnitY(u))>75)then
+					call SaveInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"),GetHandleId(hjass_global_item))
 					set t = htime.setInterval(0.10,function thistype.itemPickupCheck)
 					call htime.setInteger(t,0,0)
-					call htime.setItem(t,1,it)
+					call htime.setItem(t,1,hjass_global_item)
 					call htime.setUnit(t,2,u)
+                    set t = null
+                    set u = null
 					return
 				endif
-			elseif(hlogic.getDistanceBetweenXY(GetItemX(it),GetItemY(it),GetUnitX(u),GetUnitY(u))>150)then
-				call SaveInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"),GetHandleId(it))
+			elseif(hlogic.getDistanceBetweenXY(GetItemX(hjass_global_item),GetItemY(hjass_global_item),GetUnitX(u),GetUnitY(u))>150)then
+				call SaveInteger(hash_item,GetHandleId(u),StringHash("_ITEMPICKUPCHECK_"),GetHandleId(hjass_global_item))
 				set t = htime.setInterval(0.1,function thistype.itemPickupCheck)
 				call htime.setInteger(t,0,0)
-				call htime.setItem(t,1,it)
+				call htime.setItem(t,1,hjass_global_item)
 				call htime.setUnit(t,2,u)
+                set t = null
+                set u = null
 				return
 			endif
 			//先删除物品,在创建
-			call RemoveItem(it)
-			set it = null
+			call del(hjass_global_item,0)
+			set hjass_global_item = null
 			call toUnit(itid,charges,u)
 		endif
+        set u = null
 	endmethod
 
 	//单位获得物品（默认模式）
 	//例如商店售卖的物品就是不由 htem.toUnit 得到的，这时要把它纳入到系统中来
 	public static method itemPickupDefault takes nothing returns nothing
-        local unit whichUnit = GetTriggerUnit()
-		local item it = GetManipulatedItem()
-		local integer itid = GetItemTypeId(it)
-		local integer charges = GetItemCharges(it)
         local trigger tg = null
+        local unit u = GetTriggerUnit()
+		local integer itid =0
+		local integer charges = 0
+		set hjass_global_item = GetManipulatedItem()
+		set itid = GetItemTypeId(hjass_global_item)
+		set charges = GetItemCharges(hjass_global_item)
         //检测物品类型,是否瞬逝型
         // or 判断物品是否自动使用，自动使用的物品不会检测叠加和合成，而是直接执行属性分析
-		if(getType(itid)==HITEM_TYPE_MOMENT or getIsPowerup(itid) == true or GetItemType(it) == ITEM_TYPE_POWERUP)then
-            call hconsole.error("itemPickupDefault.itemName->"+GetItemName(it))
+		if(getType(itid)==HITEM_TYPE_MOMENT or getIsPowerup(itid) == true or GetItemType(hjass_global_item) == ITEM_TYPE_POWERUP)then
 			set tg = LoadTriggerHandle(hash_item,itid,hk_item_onmoment_trigger)
 			if(tg!=null)then
-				call hevt.setTriggerUnit(tg,whichUnit)
+				call hevt.setTriggerUnit(tg,u)
 				call hevt.setValue(tg,charges)
 				call TriggerExecute(tg)
+                set tg = null
 			endif
 			return
 		endif
-		if(isHjass(it) == false)then
-            call hconsole.error("itemPickupDefault.itemName2->"+GetItemName(it))
-			call RemoveItem(it)
-			set it = null
-			call toUnit(itid,charges,whichUnit)
+		if(isHjass(hjass_global_item) == false)then
+			call del(hjass_global_item,0)
+			set hjass_global_item = null
+			call toUnit(itid,charges,u)
 		endif
+        set u = null
 	endmethod
 
 	//丢弃物品
 	private static method itemDrop takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local item it = GetManipulatedItem()
-		local unit targetUnit = GetOrderTargetUnit()
 		local real weight = 0
-		local string orderid = OrderId2StringBJ(GetUnitCurrentOrder(u))
-		if(it!=null and isFormat(GetItemTypeId(it))==true and IsItemOwned(it) and orderid=="dropitem")then
-			call addAttr(GetItemTypeId(it),GetItemCharges(it),u,false)
-			set weight = hattr.getWeightCurrent(u) - getWeight(GetItemTypeId(it)) * I2R(GetItemCharges(it))
+        local unit u = GetTriggerUnit()
+		set hjass_global_item = GetManipulatedItem()
+		if(hjass_global_item!=null and isFormat(GetItemTypeId(hjass_global_item))==true and IsItemOwned(hjass_global_item) and OrderId2StringBJ(GetUnitCurrentOrder(u))=="dropitem")then
+			call addAttr(GetItemTypeId(hjass_global_item),GetItemCharges(hjass_global_item),u,false)
+			set weight = hattr.getWeightCurrent(u) - getWeight(GetItemTypeId(hjass_global_item)) * I2R(GetItemCharges(hjass_global_item))
 			call hattr.setWeightCurrent(u,weight,0)
 			//@触发 丢弃物品 事件
 			set hevtBean = hEvtBean.create()
 			set hevtBean.triggerKey = "itemDrop"
 			set hevtBean.triggerUnit = u
-			set hevtBean.triggerItem = it
+			set hevtBean.triggerItem = hjass_global_item
 			call hevt.triggerEvent(hevtBean)
 			call hevtBean.destroy()
-			call thistype.setIsHjass(it,false)
+			call thistype.setIsHjass(hjass_global_item,false)
 		endif
+        set u = null
 	endmethod
 
 	//单位售卖物品给商店
 	private static method itemPawn takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local item it = GetSoldItem()
-		local integer itid = GetItemTypeId(it)
-		local integer charges = GetItemCharges(it)
-		local integer gold = getGold(itid)*charges
-		local integer lumber = getLumber(itid)*charges
-		local real sellRadio = hplayer.getSellRatio(GetOwningPlayer(u))
-		if(it!=null)then
-			if(isFormat(GetItemTypeId(it))==true and sellRadio > 0 and (gold>=1 or lumber>=1))then
+		local integer itid = 0
+		local integer charges = 0
+		local integer gold = 0
+		local integer lumber = 0
+		local real sellRadio = 0
+        local unit u = GetTriggerUnit()
+		set hjass_global_item = GetSoldItem()
+        set itid = GetItemTypeId(hjass_global_item)
+        set charges = GetItemCharges(hjass_global_item)
+        set gold = getGold(itid)*charges
+        set lumber = getLumber(itid)*charges
+        set sellRadio = hplayer.getSellRatio(GetOwningPlayer(u))
+		if(hjass_global_item!=null)then
+			if(isFormat(GetItemTypeId(hjass_global_item))==true and sellRadio > 0 and (gold>=1 or lumber>=1))then
 				call haward.forUnit(u,0,R2I(I2R(gold)*sellRadio*0.01),R2I(I2R(lumber)*sellRadio*0.01))
 			endif
 			//@触发 售卖物品 事件
 			set hevtBean = hEvtBean.create()
 			set hevtBean.triggerKey = "itemPawn"
 			set hevtBean.triggerUnit = u
-			set hevtBean.triggerItem = it
+			set hevtBean.triggerItem = hjass_global_item
 			call hevt.triggerEvent(hevtBean)
 			call hevtBean.destroy()
 		endif
+        set u = null
 	endmethod
 
 	//商店卖出物品
 	private static method itemSell takes nothing returns nothing
-		local unit u = GetSellingUnit()
-		local unit buyer = GetBuyingUnit()
-		local item it = GetSoldItem()
-		local integer itid = GetItemTypeId(it)
-		local integer charges = GetItemCharges(it)
-		local integer gold = getGold(itid)*charges
-		local integer lumber = getLumber(itid)*charges
-		local player p = GetOwningPlayer(buyer)
-		call hconsole.warning(GetUnitName(u))
-		if(it!=null)then
+        local player p = null
+		local integer itid = 0
+		local integer charges = 0
+		local integer gold = 0
+		local integer lumber = 0
+        set hjass_global_item = GetSoldItem()
+		if(hjass_global_item!=null)then
+            set itid = GetItemTypeId(hjass_global_item)
+            set charges = GetItemCharges(hjass_global_item)
+            set gold = getGold(itid)*charges
+            set lumber = getLumber(itid)*charges
+            set p = GetOwningPlayer(GetBuyingUnit())
 			if(hplayer.getGold(p) < gold)then
-				call RemoveItem(it)
-				call hmsg.style(hmsg.ttg2Unit(buyer,"金币不足",6.00,"ffff80",0,2.50,50.00) ,"scale",0,0.05)
+				call del(hjass_global_item,0)
+				call hmsg.style(hmsg.ttg2Unit(GetBuyingUnit(),"金币不足",6.00,"ffff80",0,2.50,50.00) ,"scale",0,0.05)
 			elseif(hplayer.getLumber(p) < lumber)then
-				call RemoveItem(it)
-				call hmsg.style(hmsg.ttg2Unit(buyer,"木材不足",6.00,"14db2b",0,2.50,50.00) ,"scale",0,0.05)
+				call del(hjass_global_item,0)
+				call hmsg.style(hmsg.ttg2Unit(GetBuyingUnit(),"木材不足",6.00,"14db2b",0,2.50,50.00) ,"scale",0,0.05)
 			else
 				call hplayer.subGold(p,gold)
-				call hplayer.subGold(p,lumber)
+				call hplayer.subLumber(p,lumber)
 				//@触发 售卖物品 事件
 				set hevtBean = hEvtBean.create()
 				set hevtBean.triggerKey = "itemSell"
-				set hevtBean.triggerUnit = u
-				set hevtBean.targetUnit = buyer
-				set hevtBean.triggerItem = it
+				set hevtBean.triggerUnit = GetSellingUnit()
+				set hevtBean.targetUnit = GetBuyingUnit()
+				set hevtBean.triggerItem = hjass_global_item
 				call hevt.triggerEvent(hevtBean)
 				call hevtBean.destroy()
 			endif
+            set hjass_global_item = null
 		endif
+        set p = null
 	endmethod
 
 	//拆成单品
@@ -4307,7 +4591,6 @@ endif
 		local real x = 0
 		local real y = 0
 		local real weight = 0
-		local item it = null
 		local integer i = 0
 		if(IsItemOwned(itSeparate) == true)then
 			set x = GetUnitX(u)
@@ -4330,29 +4613,26 @@ endif
 			set weight = hattr.getWeightCurrent(u) - getWeight(itid)*I2R(charges)
 			call hattr.setWeightCurrent(u,weight,0)
 		endif
-		call RemoveItem(itSeparate)
+		call del(itSeparate,0)
 		set i = charges
 		loop
 			exitwhen i <= 0
-				set it = CreateItem(itid,x,y)
-				call SetItemCharges(it,1)
+				call SetItemCharges(CreateItem(itid,x,y),1)
 			set i = i-1
 		endloop
 		call hmsg.echoTo(GetOwningPlayer(u),"已拆分成 |cffffff80"+I2S(charges)+" 件单品|r",0)
-		set it = null
 	endmethod
 
 	//合成品拆分
 	private static method itemSeparateMulti takes item itSeparate,integer formula,unit u returns nothing
+        local string txt = null
 		local integer itid = 0
-		local string msg = ""
 		local integer formulaFlagmentQty = 0
 		local integer i = 0
 		local real x = 0
 		local real y = 0
 		local integer formulaNeedType = 0
 		local integer formulaNeedQty = 0
-		local item it = null
 		local real weight = 0
 		if(formula>0 and itSeparate!=null and u!=null)then
 			set itid = GetItemTypeId(itSeparate)
@@ -4376,49 +4656,52 @@ endif
 			endif
 			set formulaFlagmentQty = hitemMix.getFormulaFlagmentQty(itid,formula)
 			set i = formulaFlagmentQty
-			set msg = "已拆分成 "
+			set txt = "已拆分成 "
 			loop
 				exitwhen i <= 0
 					set formulaNeedType = hitemMix.getFormulaFlagmentNeedType(itid,formula,i)
 					set formulaNeedQty = hitemMix.getFormulaFlagmentNeedQty(itid,formula,i)
 					if(formulaNeedQty>0)then
-						set it = CreateItem(formulaNeedType,x,y)
-						call SetItemCharges(it,formulaNeedQty)
+						set hjass_global_item = CreateItem(formulaNeedType,x,y)
+						call SetItemCharges(hjass_global_item,formulaNeedQty)
 						if(i == 1)then
-							set msg = msg+"|cffffff80 "+GetItemName(it)+"x"+I2S(formulaNeedQty)+" |r"
+							set txt = txt+"|cffffff80 "+GetItemName(hjass_global_item)+"x"+I2S(formulaNeedQty)+" |r"
 						else
-							set msg = msg+"|cffffff80 "+GetItemName(it)+"x"+I2S(formulaNeedQty)+" |r + "
+							set txt = txt+"|cffffff80 "+GetItemName(hjass_global_item)+"x"+I2S(formulaNeedQty)+" |r + "
 						endif
 					endif
 				set i = i-1
 			endloop
 			if(formulaFlagmentQty == 1)then
-				call itemSeparateSimple(it,u)
+				call itemSeparateSimple(hjass_global_item,u)
 			endif
-			call RemoveItem(itSeparate)
-			call hmsg.echoTo(GetOwningPlayer(u),msg,0)
+			call del(itSeparate,0)
+			call hmsg.echoTo(GetOwningPlayer(u),txt,0)
 		endif
 	endmethod
 
 	//对话框拆分物品
 	private static method itemSeparateDialog takes nothing returns nothing
-		local dialog d = GetClickedDialog()
-		local button b = GetClickedButton()
-		local item it = LoadItemHandle(hash_item,GetHandleId(b),1)
-		local integer formula = LoadInteger(hash_item,GetHandleId(b),2)
-		local unit u = LoadUnitHandle(hash_item,GetHandleId(b),3)
-		call itemSeparateMulti(it,formula,u)
-		call DialogClear( d )
-		call DialogDestroy( d )
+		local unit u = LoadUnitHandle(hash_item,GetHandleId(GetClickedButton()),3)
+        call RemoveSavedHandle(hash_item,GetHandleId(GetClickedButton()),1)
+        call RemoveSavedInteger(hash_item,GetHandleId(GetClickedButton()),2)
+        call RemoveSavedHandle(hash_item,GetHandleId(GetClickedButton()),3)
+		call itemSeparateMulti(LoadItemHandle(hash_item,GetHandleId(GetClickedButton()),1),LoadInteger(hash_item,GetHandleId(GetClickedButton()),2),u)
+		call DialogClear(GetClickedDialog())
+		call DialogDestroy(GetClickedDialog())
 		call DisableTrigger(GetTriggeringTrigger())
 		call DestroyTrigger(GetTriggeringTrigger())
-		set d = null
+        set u = null
 	endmethod
 
 	//拆分物品
 	private static method itemSeparate takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local item it = GetSpellTargetItem()
+        local trigger tg = null
+        local unit u = GetTriggerUnit()
+        local item it = GetSpellTargetItem()
+        local string txt = null
+        local dialog d = null
+        local button b = null
 		local integer itid = 0
 		local integer charges = 0
 		local integer formulaQty = 0
@@ -4427,14 +4710,12 @@ endif
 		local integer formulaNeedQty = 0
 		local integer i = 0
 		local integer j = 0
-		local string msg = ""
-		local dialog d = null
-		local button b = null
-		local trigger dtg = null
 		local real weight = 0
 		if(it!=null and GetSpellAbilityId()==ITEM_ABILITY_SEPARATE )then
 			if(isFormat(GetItemTypeId(it))!=true)then
 				call hmsg.echoTo(GetOwningPlayer(u),"|cffff8080物品不在hJass系统内|r",0)
+                set u = null
+                set it = null
 				return
 			endif
 			call IssueImmediateOrder(u,"stop")
@@ -4447,69 +4728,74 @@ endif
 				if(formulaQty == 1)then
 					call itemSeparateMulti(it,1,u)
 				elseif(formulaQty > 1)then
-					set msg = "拆分："+GetItemName(it)
 					set d = DialogCreate()
-					call DialogSetMessage( d, msg )
+					call DialogSetMessage(d, "拆分："+GetItemName(it) )
 					set j = formulaQty
 					loop
 						exitwhen j <= 0
 							set formulaFlagmentQty = hitemMix.getFormulaFlagmentQty(itid,j)
 							set i = formulaFlagmentQty
-							set msg = ""
+							set txt = ""
 							loop
 								exitwhen i <= 0
 									set formulaNeedType = hitemMix.getFormulaFlagmentNeedType(itid,j,i)
 									set formulaNeedQty = hitemMix.getFormulaFlagmentNeedQty(itid,j,i)
 									if(formulaNeedType>=1)then
 										if(i == 1)then
-											set msg = msg+getNameById(formulaNeedType)+" x"+I2S(formulaNeedQty)
+											set txt = txt+getNameById(formulaNeedType)+" x"+I2S(formulaNeedQty)
 										else
-											set msg = msg+getNameById(formulaNeedType)+" x"+I2S(formulaNeedQty)+"+"
+											set txt = txt+getNameById(formulaNeedType)+" x"+I2S(formulaNeedQty)+"+"
 										endif
 									endif
 								set i = i-1
 							endloop
-							set b = DialogAddButton(d,msg,0)
+							set b = DialogAddButton(d,txt,0)
 							call SaveItemHandle(hash_item,GetHandleId(b),1,it)
 							call SaveInteger(hash_item,GetHandleId(b),2,j)
 							call SaveUnitHandle(hash_item,GetHandleId(b),3,u)
+                            set b = null
 						set j = j-1
 					endloop
 					set b = DialogAddButton(d,"取消 ( ESC )",512)
 					call SaveItemHandle(hash_item,GetHandleId(b),1,null)
 					call SaveInteger(hash_item,GetHandleId(b),2,0)
 					call SaveUnitHandle(hash_item,GetHandleId(b),3,null)
-					set dtg = CreateTrigger()
-					call TriggerAddAction(dtg, function thistype.itemSeparateDialog)
-					call TriggerRegisterDialogEvent( dtg , d )
+                    set b = null
+					set tg = CreateTrigger()
+					call TriggerAddAction(tg, function thistype.itemSeparateDialog)
+					call TriggerRegisterDialogEvent( tg , d )
+                    set tg = null
 					call DialogDisplay( GetOwningPlayer(u),d, true )
+                    set d = null
 				else
 					call hmsg.echoTo(GetOwningPlayer(u),"|cffff8080已不可拆分|r",0)
 				endif
 			endif
 		endif
 		set it = null
+        set u = null
+        set d = null
+        set b = null
+        set txt = null
 	endmethod
 
 	//单位使用物品
 	public static method itemUse takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local item it = GetManipulatedItem()
+        local unit u = GetTriggerUnit()
+        local item it = GetManipulatedItem()
+        local trigger tg = null
 		local integer itid = GetItemTypeId(it)
 		local integer charges = GetItemCharges(it)
-		local string ittype = getType(itid)
-		local trigger tg = null
-		call hconsole.info("itemUse.charges=="+I2S(charges))
-		call hconsole.info("itemUse.ittype=="+ittype)
-		if(ittype == HITEM_TYPE_FOREVER)then			//永久型物品
+		local string itype = getType(itid)
+		if(itype == HITEM_TYPE_FOREVER)then			//永久型物品
 			set charges = charges+1
 			call SetItemCharges(it,charges)
-		elseif(ittype == HITEM_TYPE_CONSUME)then		//消耗型物品
+		elseif(itype == HITEM_TYPE_CONSUME)then		//消耗型物品
 			call addAttr(itid,1,u,false)
 			if(charges<=0)then
-				call RemoveItem(it)
+				call del(it,0)
 			endif
-		elseif(ittype == HITEM_TYPE_MOMENT)then		//瞬逝型
+		elseif(itype == HITEM_TYPE_MOMENT)then		//瞬逝型
 		endif
 		set tg = LoadTriggerHandle(hash_item,itid,hk_item_onuse_trigger)
 		if(tg != null)then
@@ -4525,15 +4811,14 @@ endif
 			set hevtBean.id = itid
 			call hevt.triggerEvent(hevtBean)
 			call hevtBean.destroy()
+            set tg = null
 		endif
-		set u = null
-		set it = null
 	endmethod
 
 	// 复制一个单位的物品给另一个单位
 	public static method copy takes unit origin,unit target returns nothing
 		local integer i = 0
-		local item it = null
+        local item it = null
 		if(origin == null or target == null)then
 			return
 		endif
@@ -4543,6 +4828,7 @@ endif
             if ( it!=null) then
             	call toUnitPrivate(GetItemTypeId(it),GetItemCharges(it),target,false)
             endif
+            set it = null
             set i = i + 1
         endloop
 	endmethod
@@ -4550,7 +4836,7 @@ endif
 	// 令一个单位把物品全部仍在地上
 	public static method drop takes unit origin returns nothing
 		local integer i = 0
-		local item it = null
+        local item it = null
 		if(origin == null)then
 			return
 		endif
@@ -4559,8 +4845,9 @@ endif
             set it = UnitItemInSlot(origin,i)
             if ( it!=null) then
             	call toXY(GetItemTypeId(it),GetItemCharges(it),GetUnitX(origin),GetUnitY(origin),-1)
-				call RemoveItem(it)
+				call del(it,0)
             endif
+            set it = null
             set i = i + 1
         endloop
 	endmethod

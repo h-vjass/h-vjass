@@ -57,6 +57,8 @@ struct hCamera
         endif
 		call SaveBoolean( hash_player, GetHandleId(whichPlayer) , 15222 ,false )
         call htime.delTimer(t)
+		set t = null
+		set whichPlayer = null
     endmethod
 
     /**
@@ -64,7 +66,7 @@ struct hCamera
      * @param scale 振幅 - 摇晃
      */
     public static method shake takes player whichPlayer,real during,real scale returns nothing
-        local timer t
+        local timer t = null
         if(whichPlayer==null) then
             return
         endif
@@ -83,6 +85,7 @@ struct hCamera
         call CameraSetTargetNoiseForPlayer( whichPlayer , scale , 1.00 )    //0.50为速率
         set t = htime.setTimeout( during ,function thistype.shakeCall)
         call htime.setPlayer(t,1,whichPlayer)
+		set t = null
     endmethod
 
     /**
@@ -94,6 +97,8 @@ struct hCamera
         call CameraClearNoiseForPlayer( whichPlayer )
         call SaveBoolean( hash_player, GetHandleId(whichPlayer) , 15222 ,false )
         call htime.delTimer(t)
+		set t = null
+		set whichPlayer = null
     endmethod
 
     /**
@@ -120,6 +125,7 @@ struct hCamera
         call CameraSetEQNoiseForPlayer( whichPlayer , scale )
         set t = htime.setTimeout( during ,function thistype.quakeCall)
         call htime.setPlayer(t,1,whichPlayer)
+		set t = null
     endmethod
 
 	//镜头模式集
@@ -149,6 +155,7 @@ struct hCamera
 	private static method zoomModel takes nothing returns nothing
 		local timer t = GetExpiredTimer()
 		call SetCameraField( CAMERA_FIELD_TARGET_DISTANCE, htime.getReal(t,1), 0 )
+		set t=null
 	endmethod
 	//镜头模式
 	public static method setModel takes string model returns nothing
@@ -157,13 +164,16 @@ struct hCamera
 			//nothing
 		elseif(model=="lock")then
 			set t = htime.setInterval(0.1,function thistype.modelLock)
+			set t=null
 		elseif(model=="zoomin")then
 			set t = htime.setInterval(0.1,function thistype.zoomModel)
 			call htime.setReal(t,1,825)
+			set t=null
 			set MAX_MOVE_SPEED = MAX_MOVE_SPEED*2
 		elseif(model=="zoomout")then
 			set t = htime.setInterval(0.1,function thistype.zoomModel)
 			call htime.setReal(t,1,3300)
+			set t=null
 		else
 			return
 		endif

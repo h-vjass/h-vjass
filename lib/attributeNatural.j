@@ -98,6 +98,8 @@ struct hAttrNatural
 		local real diff =  htime.getReal(t,3)
 		call htime.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
+		set t = null
+		set whichUnit = null
 	endmethod
 
 	private static method setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing
@@ -110,6 +112,7 @@ struct hAttrNatural
 			call htime.setInteger(t,1,flag)
 			call htime.setUnit(t,2,whichUnit)
 			call htime.setReal(t,3, -diff )
+			set t = null
 		endif
 	endmethod
 

@@ -201,8 +201,9 @@ private static integer ATTR_FLAG_EFFECT_UNARM_DURING = 2691
 private static integer ATTR_FLAG_EFFECT_FETTER_ODDS = 2700
 private static integer ATTR_FLAG_EFFECT_FETTER_DURING = 2701
 private static integer ATTR_FLAG_EFFECT_BOMB_VAL = 2710
-private static integer ATTR_FLAG_EFFECT_BOMB_RANGE = 2711
-private static integer ATTR_FLAG_EFFECT_BOMB_MODEL = 2712
+private static integer ATTR_FLAG_EFFECT_BOMB_ODDS = 2711
+private static integer ATTR_FLAG_EFFECT_BOMB_RANGE = 2712
+private static integer ATTR_FLAG_EFFECT_BOMB_MODEL = 2713
 private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL = 2720
 private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_ODDS = 2721
 private static integer ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_QTY = 2722
@@ -372,6 +373,7 @@ call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_LIFE_BACK_VAL , 0 )
  call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_FETTER_ODDS , 0 )
  call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_FETTER_DURING , 0 )
  call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BOMB_VAL , 0 )
+ call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BOMB_ODDS , 0 )
  call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BOMB_RANGE , 0 )
  call SaveStr( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_BOMB_MODEL , "" )
  call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_LIGHTNING_CHAIN_VAL , 0 )
@@ -406,6 +408,8 @@ call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_LIFE_BACK_VAL , 0 )
 		local real diff = htime.getReal(t,3)
 		call htime.delTimer( t )
 		call setAttrDo( flag , whichUnit , diff )
+      set t = null
+      set whichUnit = null
 	endmethod
 
 	private static method setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing
@@ -419,6 +423,7 @@ call SaveReal( hash_attr_effect , uhid , ATTR_FLAG_EFFECT_LIFE_BACK_VAL , 0 )
 			call htime.setUnit(t,2,whichUnit)
 			call htime.setReal(t,3, -diff )
 		endif
+      set t = null
 	endmethod
 
 	private static method getAttr takes integer flag , unit whichUnit returns real
@@ -2716,6 +2721,22 @@ public static method coverBombVal takes unit whichUnit , real value , real durin
 endmethod
 public static method setBombVal takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_EFFECT_BOMB_VAL , whichUnit , value - getBombVal(whichUnit) , during )
+endmethod
+ // 攻击|伤害特效[bomb][odds]
+public static method getBombOdds takes unit whichUnit returns real
+   return getAttr( ATTR_FLAG_EFFECT_BOMB_ODDS , whichUnit )
+endmethod
+public static method addBombOdds takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BOMB_ODDS , whichUnit , value , during )
+endmethod
+public static method subBombOdds takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BOMB_ODDS , whichUnit , -value, during )
+endmethod
+public static method coverBombOdds takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BOMB_ODDS , whichUnit , hlogic.coverAttrEffectVal(getBombOdds(whichUnit),value)-getBombOdds(whichUnit) , during )
+endmethod
+public static method setBombOdds takes unit whichUnit , real value , real during returns nothing
+   call setAttr( ATTR_FLAG_EFFECT_BOMB_ODDS , whichUnit , value - getBombOdds(whichUnit) , during )
 endmethod
  // 攻击|伤害特效[bomb][range]
 public static method getBombRange takes unit whichUnit returns real

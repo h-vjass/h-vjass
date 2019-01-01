@@ -20,7 +20,7 @@ struct hAward
      * 奖励单位（经验黄金木头）
      */
     public method forUnit takes unit whichUnit,integer exp,integer gold,integer lumber returns nothing
-        local string floatStr = ""
+        local string floatStr = null
         local integer realExp = exp
         local integer realGold = gold
         local integer realLumber = lumber
@@ -32,6 +32,7 @@ struct hAward
         if( whichUnit == null ) then
             return
         endif
+        set floatStr = ""
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
         // TODO 增益
@@ -60,13 +61,15 @@ struct hAward
         set ttg = hmsg.ttg2Unit(whichUnit,floatStr,7,"",0,1.70,60.00)
         call SetTextTagPos( ttg , GetUnitX(whichUnit)-I2R(StringLength(floatStr)-ttgColorLen)*7*0.5 , GetUnitY(whichUnit) , 50 )
         call hmsg.style(ttg,"toggle",0,0.23)
+        set floatStr = null
+        set ttg = null
+        set p = null
     endmethod
 
     /**
      * 奖励单位黄金
      */
     public method forUnitGold takes unit whichUnit,integer gold returns nothing
-        call hconsole.warning("gold="+I2S(gold))
         call forUnit(whichUnit,0,gold,0)
     endmethod
     /**
@@ -117,10 +120,29 @@ struct hAward
                 call GroupRemoveUnit( g , u )
                 //
                 call forUnit(u,cutExp,cutGold,cutLumber)
+                set u = null
         endloop
         call GroupClear(g)
         call DestroyGroup(g)
         set g = null
+    endmethod
+
+    /**
+     * 平分奖励玩家组（黄金木头）
+     */
+    public method forPlayer takes integer gold,integer lumber returns nothing
+        local integer i = 0
+        local integer cutGold = R2I(I2R(gold) / I2R(player_current_qty))
+        local integer cutLumber = R2I(I2R(lumber) / I2R(player_current_qty))
+        set i = player_max_qty
+        loop
+            exitwhen(i<=0)
+                if(hplayer.getStatus(players[i])==hplayer.default_status_gaming)then
+                    call hplayer.addGold(players[i],cutGold)
+                    call hplayer.addLumber(players[i],cutLumber)
+                endif
+            set i=i-1
+        endloop
     endmethod
 
     /**
@@ -140,6 +162,19 @@ struct hAward
      */
     public method forGroupExp takes unit whichUnit,integer exp returns nothing
         call forGroup(whichUnit,exp,0,0)
+    endmethod
+
+    /**
+     * 平分奖励玩家组黄金
+     */
+    public method forPlayerGold takes unit whichUnit,integer gold returns nothing
+        call forPlayer(gold,0)
+    endmethod
+    /**
+     * 平分奖励玩家组木头
+     */
+    public method forPlayerLumber takes unit whichUnit,integer lumber returns nothing
+        call forPlayer(0,lumber)
     endmethod
 
 endstruct

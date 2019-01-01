@@ -3,6 +3,7 @@ globals
 	
 	hPlayer hplayer
 	hashtable hash_player = null
+	player array hjass_global_players
 	integer hp_isComputer = 10001
 	integer hp_apm = 10002
 	integer hp_battle_status = 10003
@@ -53,24 +54,23 @@ struct hPlayer
 
 	//getDandomUnit
 	public static method getDandomUnit takes nothing returns unit
-		local player p = null
 		local integer i = 0
 		local integer j = 0
-		local player array rannum
+		local integer pi = 0
 		set i = 1
 		loop
 			exitwhen i>player_max_qty
 				if(thistype.getStatus(players[i]) == default_status_gaming)then
 					set j = j+1
-					set rannum[j] = players[i]
+					set hjass_global_players[j] = players[i]
 				endif
 			set i=i+1
 		endloop
-		set p = rannum[GetRandomInt(1,j)]
-		if(p==null)then
+		set pi = index(hjass_global_players[GetRandomInt(1,j)])
+		if(pi<=0)then
 			return null
 		endif
-		return hhero.getPlayerUnit(p,GetRandomInt(1,hhero.getPlayerUnitQty(p)))
+		return hhero.getPlayerUnit(players[pi],GetRandomInt(1,hhero.getPlayerUnitQty(players[pi])))
 	endmethod
 
 	//apm
@@ -93,6 +93,32 @@ struct hPlayer
 	private static method triggerApmUnitActions takes nothing returns nothing
 		call addApm(GetOwningPlayer(GetTriggerUnit()))
 	endmethod
+	private static method triggerLeaveActions takes nothing returns nothing
+		local player p = GetTriggerPlayer()
+		local hFilter filter
+		local group g = null
+		local unit u = null
+		call FlushChildHashtable(hash_trigger,GetHandleId(p))
+		call FlushChildHashtable(hash_trigger_register,GetHandleId(p))
+		call setStatus(p,default_status_leave)
+		call hmsg.echo(GetPlayerName(p)+"离开了～")
+		set filter = hFilter.create()
+		call filter.isOwnerPlayer(true,p)
+		set g = hgroup.createByRect(GetEntireMapRect(),function hFilter.get)
+		call filter.destroy()
+		loop
+			exitwhen(IsUnitGroupEmptyBJ(g) == true)
+	            set u = FirstOfGroup(g)
+	            call GroupRemoveUnit( g , u )
+	            call RemoveUnit(u)
+				set u = null
+		endloop
+		call GroupClear(g)
+		call DestroyGroup(g)
+		set g = null
+		set p = null
+		set player_current_qty = player_current_qty-1
+	endmethod
 
 	//selection
 	private static method triggerSelectionUnitActions takes nothing returns nothing
@@ -107,12 +133,12 @@ struct hPlayer
 		endif
 	endmethod
 	public static method getSelection takes player whichPlayer returns unit
-		local unit u = LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection)
-		if(his.death(u))then
-			set u = null
+		set hjass_global_unit = LoadUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection)
+		if(his.death(hjass_global_unit))then
+			set hjass_global_unit= null
 			call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection, null)
 		endif
-		return u
+		return hjass_global_unit
 	endmethod
 
 	//设置玩家状态
@@ -138,6 +164,7 @@ struct hPlayer
 	            set u = FirstOfGroup(g)
 	            call GroupRemoveUnit( g , u )
 	            call RemoveUnit(u)
+				set u = null
 		endloop
 		call GroupClear(g)
 		call DestroyGroup(g)
@@ -244,38 +271,43 @@ struct hPlayer
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_life_source_ratio, val)
 	endmethod
 	private static method triggerLSRDialog takes nothing returns nothing
+		local real radio = 0
 		local dialog d = GetClickedDialog()
 		local button b = GetClickedButton()
 		local player p = LoadPlayerHandle(hash_player,GetHandleId(d),666)
-		local real radio = LoadReal(hash_player,GetHandleId(b),666)
+		set radio = LoadReal(hash_player,GetHandleId(b),666)
 		call hmsg.echoTo(p,"已设定生命源触发比例为：|cffffff80"+I2S(R2I(radio))+"%|r",0)
 		call setLifeSourceRatio(p,radio)
 		call DialogClear( d )
 		call DialogDestroy( d )
 		call DisableTrigger(GetTriggeringTrigger())
 		call DestroyTrigger(GetTriggeringTrigger())
-		set p = null
 		set d = null
+		set b = null
+		set p = null
 	endmethod
 	private static method triggerLSRActions takes nothing returns nothing
-		local player p = GetTriggerPlayer()
-		local dialog d = null
-		local button b = null
 		local integer i = 100
-		local trigger dtg = null
-		set d = DialogCreate()
+		local player p = GetTriggerPlayer()
+		local dialog d = DialogCreate()
+		local button b = null
+		local trigger tg = null
 		call DialogSetMessage( d, "设定少于比例触发生命源恢复" )
 		call SavePlayerHandle(hash_player,GetHandleId(d),666,p)
 		loop
 			exitwhen i<10
 				set b = DialogAddButton(d,I2S(i)+"%",0)
 				call SaveReal(hash_player,GetHandleId(b),666,I2R(i))
+				set b = null
 			set i = i-10
 		endloop
-		set dtg = CreateTrigger()
-		call TriggerAddAction(dtg, function thistype.triggerLSRDialog)
-		call TriggerRegisterDialogEvent( dtg , d )
-		call DialogDisplay( p,d, true )
+		set tg = CreateTrigger()
+		call TriggerAddAction(tg, function thistype.triggerLSRDialog)
+		call TriggerRegisterDialogEvent(tg, d )
+		call DialogDisplay(p,d, true )
+		set d = null
+		set tg = null
+		set p = null
 	endmethod
 	//获取玩家魔法源设定百分比
 	public static method getManaSourceRatio takes player whichPlayer returns real
@@ -286,51 +318,57 @@ struct hPlayer
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_mana_source_ratio, val)
 	endmethod
 	private static method triggerMSRDialog takes nothing returns nothing
+		local real radio = 0
 		local dialog d = GetClickedDialog()
 		local button b = GetClickedButton()
 		local player p = LoadPlayerHandle(hash_player,GetHandleId(d),667)
-		local real radio = LoadReal(hash_player,GetHandleId(b),667)
+		set radio = LoadReal(hash_player,GetHandleId(b),667)
 		call hmsg.echoTo(p,"已设定魔法源触发比例为：|cffffff80"+I2S(R2I(radio))+"%|r",0)
 		call setManaSourceRatio(p,radio)
 		call DialogClear( d )
 		call DialogDestroy( d )
 		call DisableTrigger(GetTriggeringTrigger())
 		call DestroyTrigger(GetTriggeringTrigger())
-		set p = null
 		set d = null
+		set b = null
+		set p = null
 	endmethod
 	private static method triggerMSRActions takes nothing returns nothing
-		local player p = GetTriggerPlayer()
-		local dialog d = null
-		local button b = null
 		local integer i = 100
-		local trigger dtg = null
-		set d = DialogCreate()
-		call DialogSetMessage( d, "设定少于比例触发魔法源恢复" )
+		local player p = GetTriggerPlayer()
+		local dialog d = DialogCreate()
+		local button b = null
+		local trigger tg = null
+		call DialogSetMessage(d, "设定少于比例触发魔法源恢复" )
 		call SavePlayerHandle(hash_player,GetHandleId(d),667,p)
 		loop
 			exitwhen i<10
 				set b = DialogAddButton(d,I2S(i)+"%",0)
 				call SaveReal(hash_player,GetHandleId(b),667,I2R(i))
+				set b = null
 			set i = i-10
 		endloop
-		set dtg = CreateTrigger()
-		call TriggerAddAction(dtg, function thistype.triggerMSRDialog)
-		call TriggerRegisterDialogEvent( dtg , d )
-		call DialogDisplay( p,d, true )
+		set tg = CreateTrigger()
+		call TriggerAddAction(tg, function thistype.triggerMSRDialog)
+		call TriggerRegisterDialogEvent( tg ,d )
+		call DialogDisplay(GetTriggerPlayer(),d, true )
+		set d = null
+		set tg = null
+		set p = null
 	endmethod
 	private static method triggerConvertActions takes nothing returns nothing
-		local player p = GetTriggerPlayer()
-		local boolean b = getIsAutoConvert(p)
-		if(b == true)then
-			call setIsAutoConvert(p,false)
-			call hmsg.echoTo(p,"|cffffcc00关闭|r自动换算",0)
+		if(getIsAutoConvert(GetTriggerPlayer()) == true)then
+			call setIsAutoConvert(GetTriggerPlayer(),false)
+			call hmsg.echoTo(GetTriggerPlayer(),"|cffffcc00关闭|r自动换算",0)
 		else
-			call setIsAutoConvert(p,true)
-			call hmsg.echoTo(p,"|cffffcc00开启|r自动换算",0)
+			call setIsAutoConvert(GetTriggerPlayer(),true)
+			call hmsg.echoTo(GetTriggerPlayer(),"|cffffcc00开启|r自动换算",0)
 		endif
 	endmethod
 
+	private static method triggerRamActions takes nothing returns nothing
+		call YDWEMemoryLeakHelperDisplayLeaks()
+	endmethod
 
 	//黄金比率
 	private static method diffGoldRatioCall takes nothing returns nothing
@@ -339,20 +377,22 @@ struct hPlayer
 		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_gold_ratio)
 		call htime.delTimer(t)
+		set t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, pid, hp_gold_ratio, old+diff)
 		endif
 	endmethod
 	private static method diffGoldRatio takes player whichPlayer,real diff,real during returns nothing
+		local timer t = null
 		local integer pid = GetHandleId(whichPlayer)
 		local real old = LoadReal(hash_player, pid, hp_gold_ratio)
-		local timer t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_gold_ratio, old+diff)
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffGoldRatioCall)
 				call htime.setInteger(t,1,pid)
 				call htime.setReal(t,2,-diff)
+				set t = null
 			endif
 		endif
 	endmethod
@@ -376,20 +416,22 @@ struct hPlayer
 		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_lumber_ratio)
 		call htime.delTimer(t)
+		set t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, pid, hp_lumber_ratio, old+diff)
 		endif
 	endmethod
 	private static method diffLumberRatio takes player whichPlayer,real diff,real during returns nothing
+		local timer t = null
 		local integer pid = GetHandleId(whichPlayer)
 		local real old = LoadReal(hash_player, pid, hp_lumber_ratio)
-		local timer t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_lumber_ratio, old+diff)
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffLumberRatioCall)
 				call htime.setInteger(t,1,pid)
 				call htime.setReal(t,2,-diff)
+				set t = null
 			endif
 		endif
 	endmethod
@@ -414,20 +456,22 @@ struct hPlayer
 		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_exp_ratio)
 		call htime.delTimer(t)
+		set t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, pid, hp_exp_ratio, old+diff)
 		endif
 	endmethod
 	private static method diffExpRatio takes player whichPlayer,real diff,real during returns nothing
+		local timer t = null
 		local integer pid = GetHandleId(whichPlayer)
 		local real old = LoadReal(hash_player, pid, hp_exp_ratio)
-		local timer t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_exp_ratio, old+diff)
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffExpRatioCall)
 				call htime.setInteger(t,1,pid)
 				call htime.setReal(t,2,-diff)
+				set t = null
 			endif
 		endif
 	endmethod
@@ -452,20 +496,22 @@ struct hPlayer
 		local real diff = htime.getReal(t,2)
 		local real old = LoadReal(hash_player, pid, hp_sell_ratio)
 		call htime.delTimer(t)
+		set t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, pid, hp_sell_ratio, old+diff)
 		endif
 	endmethod
 	private static method diffSellRatio takes player whichPlayer,real diff,real during returns nothing
+		local timer t = null
 		local integer pid = GetHandleId(whichPlayer)
 		local real old = LoadReal(hash_player, pid, hp_sell_ratio)
-		local timer t = null
 		if(diff!=0)then
 			call SaveReal(hash_player, GetHandleId(whichPlayer), hp_sell_ratio, old+diff)
 			if(during>0)then
 				set t = htime.setTimeout(during,function thistype.diffSellRatioCall)
 				call htime.setInteger(t,1,pid)
 				call htime.setReal(t,2,-diff)
+				set t = null
 			endif
 		endif
 	endmethod
@@ -618,16 +664,20 @@ struct hPlayer
 		local integer pid = 0
 		local trigger triggerApm = CreateTrigger()
 		local trigger triggerApmUnit = CreateTrigger()
+		local trigger triggerLeave = CreateTrigger()
 		local trigger triggerDeSelection = CreateTrigger()
 		local trigger triggerLSR = CreateTrigger()
 		local trigger triggerMSR = CreateTrigger()
 		local trigger triggerConvert = CreateTrigger()
+		local trigger triggerRam = CreateTrigger()
 		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
 		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
+		call TriggerAddAction(triggerLeave , function thistype.triggerLeaveActions)
 		call TriggerAddAction(triggerDeSelection , function thistype.triggerDeSelectionUnitActions)
 		call TriggerAddAction(triggerLSR , function thistype.triggerLSRActions)
 		call TriggerAddAction(triggerMSR , function thistype.triggerMSRActions)
 		call TriggerAddAction(triggerConvert , function thistype.triggerConvertActions)
+		call TriggerAddAction(triggerRam , function thistype.triggerRamActions)
 		loop
 			exitwhen i > 16
 				set players[i] = Player(i-1)
@@ -648,6 +698,7 @@ struct hPlayer
 					call SaveBoolean(hash_player, pid, hp_isComputer, false)
 					call SaveStr(hash_player, pid, hp_battle_status, default_status_gaming)
 	                call TriggerRegisterPlayerSelectionEventBJ( triggerApm , players[i] , true )
+					call TriggerRegisterPlayerEventLeave( triggerLeave, players[i] )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_LEFT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_RIGHT )
 		            call TriggerRegisterPlayerKeyEventBJ( triggerApm , players[i] , bj_KEYEVENTTYPE_DEPRESS, bj_KEYEVENTKEY_DOWN )
@@ -656,6 +707,7 @@ struct hPlayer
 					call TriggerRegisterPlayerChatEvent( triggerLSR , players[i] , "-lsr" , true)
 					call TriggerRegisterPlayerChatEvent( triggerMSR , players[i] , "-msr" , true)
 					call TriggerRegisterPlayerChatEvent( triggerConvert , players[i] , "-apc" , true)
+					call TriggerRegisterPlayerChatEvent( triggerRam , players[i] , "-ram" , true)
 	            else
 	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
 	            	call SaveStr(hash_player, pid, hp_battle_status, default_status_nil)
@@ -667,6 +719,14 @@ struct hPlayer
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
 	    call TriggerAddAction( triggerApmUnit, function thistype.triggerApmUnitActions )
 		call hevt.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
+		set triggerApm = null
+		set triggerApmUnit = null
+		set triggerLeave = null
+		set triggerDeSelection = null
+		set triggerLSR = null
+		set triggerMSR = null
+		set triggerConvert = null
+		set triggerRam = null
 	endmethod
 
 

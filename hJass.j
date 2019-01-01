@@ -13,7 +13,7 @@
 library hJass initializer init needs hSync
 
 	private function init takes nothing returns nothing
-		local string txt = ""
+		local string txt = null
 		//哈希表初始化
 		call FlushParentHashtable( hash_ability )
 		call FlushParentHashtable( hash_skill )
@@ -125,7 +125,8 @@ library hJass initializer init needs hSync
 		set txt = txt + "|n输入即可选择生命、魔法源的自动恢复触发比例 如 -lsr 10、-msr 10"
 		set txt = txt + "|n当源耗尽时，可以选择物品补充，而源力本身每隔 25秒 恢复 300点 能量"
 		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "设定生命、魔法源自动比例",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
-
+		
+		set txt = null
     endfunction
 
 endlibrary

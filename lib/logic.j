@@ -3,6 +3,7 @@ globals
 	hashtable hash_hlogic = null
     hLogic hlogic
     hXY hxy
+	string hjass_global_logic_txt
 endglobals
 struct hXY
 	public real x = 0
@@ -23,14 +24,13 @@ struct hLogic
 	static method create takes nothing returns hLogic
         local hLogic x = 0
 		local integer i = 1
-		local string objname = GetObjectName('A038')
 		local string str = ""
         set x = hLogic.allocate()
 		call SaveStr(hash_hlogic,HASH_KEY_CHAR,0,"")
 		call SaveInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(str),0)
 		loop
 			exitwhen i>255
-			set str = SubString(objname,i-1,i)
+			set str = SubString(GetObjectName('A038'),i-1,i)
 			call SaveStr(hash_hlogic,HASH_KEY_CHAR,i,str)
 			call SaveInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(str),i)
 			set i=i+1
@@ -94,28 +94,28 @@ struct hLogic
 
 	//实数格式化
 	public method realformat takes real value returns string
-		local string s = ""
+		set hjass_global_logic_txt = ""
 		if(value>100000000)then
-			set s = R2SW(value/100000000, 1, 3)+"Y"
+			set hjass_global_logic_txt = R2SW(value/100000000, 1, 3)+"Y"
 		elseif(value>10000)then
-			set s = R2SW(value/10000, 1, 3)+"W"
+			set hjass_global_logic_txt = R2SW(value/10000, 1, 3)+"W"
 		else
-			set s = R2S(value)
+			set hjass_global_logic_txt = R2S(value)
 		endif
-		return s
+		return hjass_global_logic_txt
 	endmethod
 
 	//整型格式化
 	public static method integerformat takes integer value returns string
-		local string s = ""
+		set hjass_global_logic_txt = ""
 		if(value>100000000)then
-			set s = I2S(value/100000000)+"Y"
+			set hjass_global_logic_txt = I2S(value/100000000)+"Y"
 		elseif(value>10000)then
-			set s = I2S(value/10000)+"W"
+			set hjass_global_logic_txt = I2S(value/10000)+"W"
 		else
-			set s = I2S(value)
+			set hjass_global_logic_txt = I2S(value)
 		endif
-		return s
+		return hjass_global_logic_txt
 	endmethod
 
 	/**
@@ -131,39 +131,15 @@ struct hLogic
 	/**
 	 * 获取两个单位间角度，如果其中一个单位为空 返回0
 	 */
-	public static method getDegBetweenUnit takes unit u1,unit u2 returns real
-		local location l1 = null
-		local location l2 = null
-		local real deg = 0
-		if( u1 == null or u2 == null ) then
-            return 0
-        endif
-		set l1 = GetUnitLoc(u1)
-		set l2 = GetUnitLoc(u2)
-		set deg = thistype.getDegBetweenLoc(l1, l2)
-		call RemoveLocation(l1)
-		call RemoveLocation(l2)
-		return deg
+	public static method getDegBetweenUnit takes unit fromUnit,unit toUnit returns real
+		return bj_RADTODEG * Atan2(GetUnitY(toUnit) - GetUnitY(fromUnit), GetUnitX(toUnit) - GetUnitX(fromUnit))
 	endmethod
 
 	/**
      *  获取两个单位间距离，如果其中一个单位为空 返回0
      */
     public static method getDistanceBetweenUnit takes unit u1,unit u2 returns real
-        local location loc1 = null
-        local location loc2 = null
-        local real distance = 0
-        if( u1 == null or u2 == null ) then
-            return 0
-        endif
-        set loc1 = GetUnitLoc(u1)
-        set loc2 = GetUnitLoc(u2)
-        set distance = DistanceBetweenPoints(loc1, loc2)
-        call RemoveLocation( loc1 )
-        call RemoveLocation( loc2 )
-        set loc1 = null
-        set loc2 = null
-        return distance
+		return SquareRoot((GetUnitX(u1)-GetUnitX(u2))*(GetUnitX(u1)-GetUnitX(u2))+(GetUnitY(u1)-GetUnitY(u2))*(GetUnitY(u1)-GetUnitY(u2)))
     endmethod
 
 	/**
@@ -242,14 +218,14 @@ struct hLogic
 	//按进制map 将整数转换成字符串
 	private static method int2strByMap takes integer m,string map returns string
 		local integer i = m
-		local string s = ""
 		local integer n = StringLength(map)
+		set hjass_global_logic_txt = ""
 		loop
 			exitwhen i == 0
-			set s = thistype.substr.evaluate(map, ModuloInteger(i, n), 1) + s
+			set hjass_global_logic_txt = thistype.substr.evaluate(map, ModuloInteger(i, n), 1) + hjass_global_logic_txt
 			set i = i / n
 		endloop
-		return s
+		return hjass_global_logic_txt
 	endmethod
 
 	private static method asc takes string s returns integer
@@ -266,211 +242,70 @@ struct hLogic
 		return LoadStr(hash_hlogic,HASH_KEY_CHAR,i)
 	endmethod
 
-	public static method getChinaQty takes string s returns integer 
+	public static method getChinaQty takes string s returns integer
+		local string txt = null
+		local string char = null
 		local integer chinaQty = LoadInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s))
 		local integer i = 0   
 		local integer l = 0
-		local string ss = null
-		local string Echar = null
 		if(chinaQty<=0)then
 		    set chinaQty = 0
-			set ss = LoadStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s))
-			if(ss == null)then
+			set txt = LoadStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s))
+			if(txt == null)then
 				set l = StringLength(s)
 				loop
 					exitwhen i >= l
-					set Echar = thistype.int2strByMap.evaluate(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
-					set ss = ss + Echar
-					if(Echar == "E1" or Echar == "E2" or Echar == "E3" or Echar == "E4" or Echar == "E5" or Echar == "E6" or Echar == "E7" or Echar == "E8" or Echar == "E9")then
+					set char = thistype.int2strByMap.evaluate(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
+					set txt = txt + char
+					if(char == "E1" or char == "E2" or char == "E3" or char == "E4" or char == "E5" or char == "E6" or char == "E7" or char == "E8" or char == "E9")then
 						set chinaQty = chinaQty + 1
 					endif
 					set i = i+1
 				endloop
 				call SaveInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s),chinaQty)
-				call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),ss)
+				call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),txt)
 			endif
 		endif
 		return chinaQty
 	endmethod
 
-	public static method hex2str takes string s returns string 
+	public static method hex2str takes string s returns string
+		local string char = null
 		local integer i = 0   
 		local integer l = 0
-		local string ss = LoadStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s))
-		local string Echar = null
 		local integer chinaQty = 0
-		if(ss == null)then
+		set hjass_global_logic_txt = LoadStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s))
+		if(hjass_global_logic_txt == null)then
 			set l = StringLength(s)
 			loop
 				exitwhen i >= l
-				set Echar = thistype.int2strByMap(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
-				set ss = ss + Echar
-				if(Echar == "E1" or Echar == "E2" or Echar == "E3" or Echar == "E4" or Echar == "E5" or Echar == "E6" or Echar == "E7" or Echar == "E8" or Echar == "E9")then
+				set char = thistype.int2strByMap(thistype.asc(thistype.substr(s,i,1)),hexcharmap)
+				set hjass_global_logic_txt = hjass_global_logic_txt + char
+				if(char == "E1" or char == "E2" or char == "E3" or char == "E4" or char == "E5" or char == "E6" or char == "E7" or char == "E8" or char == "E9")then
 					set chinaQty = chinaQty + 1
 				endif
 				set i = i+1
 			endloop
 			call SaveInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s),chinaQty)
-			call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),ss)
+			call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),hjass_global_logic_txt)
 		endif
-		return ss
+		return hjass_global_logic_txt
 	endmethod
 
 	public static method str2hex takes string s returns string
 		local integer i = 0   
 		local integer l = StringLength(s)
-		local string ss = LoadStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s))
-		if(ss == null)then
+		set hjass_global_logic_txt = LoadStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s))
+		if(hjass_global_logic_txt == null)then
 			set l = StringLength(s)
 			loop
 				exitwhen i >= l        
-				set ss = ss + thistype.chr(thistype.str2intByMap(thistype.substr(s,i,2),hexcharmap))
+				set hjass_global_logic_txt = hjass_global_logic_txt + thistype.chr(thistype.str2intByMap(thistype.substr(s,i,2),hexcharmap))
 				set i = i + 2
 			endloop
-			call SaveStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s),ss)
+			call SaveStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s),hjass_global_logic_txt)
 		endif
-		return ss
+		return hjass_global_logic_txt
 	endmethod
 
 endstruct
-
-/**
-* IsTerrainWalkable snippet for estimating the walkability status of a co-ordinate pair, credits 
-* to Anitarf and Vexorian.
-* 
-* API: boolean IsTerrainWalkable(real x, real y) - returns the walkability of (x,y)
-*/ 
-/*
-library IsTerrainWalkable initializer init
-    globals
-    
-        // this value is how far from a point the item may end up for the point to be considered pathable
-        private constant real MAX_RANGE=10.
-        
-        // the following two variables are set to the position of the item after each pathing check
-        // that way, if a point isn't pathable, these will be the coordinates of the nearest point that is
-        public real X=0.
-        public real Y=0.
-        private rect r
-        private item check
-        private item array hidden
-        private integer hiddenMax=0
-    endglobals
-
-    private function init takes nothing returns nothing
-        set check=CreateItem('ciri',0.,0.)
-        call SetItemVisible(check,false)
-        set r=Rect(0.0,0.0,128.0,128.0)
-    endfunction
-
-    private function hideBothersomeItem takes nothing returns nothing
-        if IsItemVisible(GetEnumItem()) then
-            set hidden[hiddenMax=GetEnumItem()
-            call SetItemVisible(hidden[hiddenMax,false)
-            set hiddenMax=hiddenMax+1
-        endif
-    endfunction
-
-    function IsTerrainWalkable takes real x, real y returns boolean
-    
-        // first, hide any items in the area so they don't get in the way of our item
-        call MoveRectTo(r,x,y)
-        call EnumItemsInRect(r,null,function hideBothersomeItem)
-        
-        // try to move the check item and get its coordinates
-        // this unhides the item...
-        call SetItemPosition(check,x,y)
-        set X=GetItemX(check)
-        set Y=GetItemY(check)
-        
-        //...so we must hide it again
-        call SetItemVisible(check,false)
-        
-        // before returning, unhide any items that got hidden at the start
-        loop
-            exitwhen hiddenMax==0
-            set hiddenMax=hiddenMax-1
-            call SetItemVisible(hidden[hiddenMax,true)
-        endloop
-        
-        // return pathability status
-        return (x-X)*(x-X)+(y-Y)*(y-Y)<MAX_RANGE*MAX_RANGE
-    endfunction
-endlibrary
-
-library gezi2 uses gezi 
-
-	function gezig takes unit u returns nothing
-		local integer a=0
-		local integer xx=0
-		local integer yy=0
-		local integer z=z0
-		local integer ii=0
-		set i=0
-		set x[0]=R2I(GetUnitX(u))
-		set y[0]=R2I(GetUnitY(u))
-		call FlushParentHashtable(BH)
-		set BH=InitHashtable()
-		call FlushParentHashtable(BS)
-		set BS=InitHashtable()
-		loop
-			exitwhen z<=0
-			set a=ii
-			set ii=i
-			loop
-				exitwhen a>ii
-				if LoadInteger(HT,StringHash("way"),a)<z then
-					set xx=x[a]+200
-					set yy=y[a]
-				if LoadInteger(BH,xx,yy)==0 and IsTerrainWalkable(xx,yy) then
-					set i=i+1
-					set x[i]=xx
-					set y[i]=yy
-					call SaveInteger(BH,xx,yy,1)
-					call SaveInteger(BS,xx,yy,a)
-				endif
-				set xx=x[a]
-				set yy=y[a]+200
-				if LoadInteger(BH,xx,yy)==0 and IsTerrainWalkable(xx,yy)then
-					set i=i+1
-					set x[i]=xx
-					set y[i]=yy
-					call SaveInteger(BH,xx,yy,1)
-					call SaveInteger(BS,xx,yy,a)
-				endif
-				set xx=x[a]-200
-				set yy=y[a]
-				if LoadInteger(BH,xx,yy)==0 and IsTerrainWalkable(xx,yy)then
-					set i=i+1
-					set x[i]=xx
-					set y[i]=yy
-					call SaveInteger(BH,xx,yy,1)
-					call SaveInteger(BS,xx,yy,a)
-				endif
-				set xx=x[a]
-				set yy=y[a]-200
-				if LoadInteger(BH,xx,yy)==0 and IsTerrainWalkable(xx,yy)then
-					set i=i+1
-					set x[i]=xx
-					set y[i]=yy
-					call SaveInteger(BH,xx,yy,1)
-					call SaveInteger(BS,xx,yy,a)
-				endif
-				endif
-				set a=a+1
-			endloop
-			set z=z-1
-		endloop
-		loop
-			exitwhen i<0
-			set mj=CreateUnit(Player(15),'n000',x[i],y[i],0)
-			call SetUnitX(mj,x[i])
-			call SetUnitY(mj,y[i])
-			call GroupAddUnit(g,mj)
-			call SaveInteger(HT,GetHandleId(mj),1,i)
-			set i=i-1
-		endloop
-		call SaveGroupHandle(HT,GetHandleId(u),1,g)
-	endfunction
-endlibrary 
-*/

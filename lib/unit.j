@@ -4,6 +4,8 @@
 
 globals
 hUnit hunit
+string hjass_global_unit_txt = null
+unit hjass_global_unit = null
 hashtable hash_unit = null
 integer hashkey_unit_crackfly = 76102
 integer hashkey_unit_avatar = 76103
@@ -143,11 +145,11 @@ struct hUnit
      * 获取单位类型的头像
      */
     public static method getAvatar takes integer uid returns string
-        local string avatar = LoadStr(hash_unit,uid,hashkey_unit_avatar)
-        if(StringLength(avatar)<=0)then
-            set avatar = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+        set hjass_global_unit_txt = LoadStr(hash_unit,uid,hashkey_unit_avatar)
+        if(StringLength(hjass_global_unit_txt)<=0)then
+            set hjass_global_unit_txt = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
         endif
-        return avatar
+        return hjass_global_unit_txt
     endmethod
 
     /**
@@ -195,16 +197,54 @@ struct hUnit
 	endmethod
 
     /**
+     * 设置单位自定义值
+     */
+    public static method setUserDataCall takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        call SetUnitUserData(htime.getUnit(t,1),0)
+        call htime.delTimer(t)
+        set t = null
+    endmethod
+
+    public static method setUserData takes unit u,integer value,real during returns nothing
+        local timer t = null
+        if(during>0)then
+            set t = htime.setTimeout(during,function thistype.setUserDataCall)
+            call htime.setUnit(t,1,u)
+            set t = null
+        endif
+        call SetUnitUserData(u,value)
+    endmethod
+
+    public static method getUserData takes unit u returns integer
+        return GetUnitUserData(u)
+    endmethod
+
+    /**
      * 删除单位回调
      */
     private static method delCall takes nothing returns nothing
+        local integer uid = 0
         local timer t = GetExpiredTimer()
-        local unit targetUnit = htime.getUnit( t, -1 )
-        if( targetUnit != null ) then
-            call RemoveUnit( targetUnit )
-            set targetUnit = null
+        local unit u = htime.getUnit(t, 1)
+        set uid = GetHandleId(u)
+        if( u != null ) then
+            call FlushChildHashtable(hash_ability,uid)
+            call FlushChildHashtable(hash_skill,uid)
+            call FlushChildHashtable(hash_attr,uid)
+            call FlushChildHashtable(hash_attr_effect,uid)
+            call FlushChildHashtable(hash_attr_natural,uid)
+            call FlushChildHashtable(hash_attr_unit,uid)
+            call FlushChildHashtable(hash_trigger_register,uid)
+            call FlushChildHashtable(hash_trigger,uid)
+            call FlushChildHashtable(hash_item,uid)
+            call FlushChildHashtable(hash_unit,uid)
+            call FlushChildHashtable(hash_hero,uid)
+            call RemoveUnit( u )
+            set u = null
         endif
         call htime.delTimer(t)
+        set t = null
     endmethod
 
     /**
@@ -212,12 +252,25 @@ struct hUnit
      */
     public static method del takes unit targetUnit , real during returns nothing
         local timer t = null
+        local integer uid = GetHandleId(targetUnit)
         if( during <= 0 ) then
+            call FlushChildHashtable(hash_ability,uid)
+            call FlushChildHashtable(hash_skill,uid)
+            call FlushChildHashtable(hash_attr,uid)
+            call FlushChildHashtable(hash_attr_effect,uid)
+            call FlushChildHashtable(hash_attr_natural,uid)
+            call FlushChildHashtable(hash_attr_unit,uid)
+            call FlushChildHashtable(hash_trigger_register,uid)
+            call FlushChildHashtable(hash_trigger,uid)
+            call FlushChildHashtable(hash_item,uid)
+            call FlushChildHashtable(hash_unit,uid)
+            call FlushChildHashtable(hash_hero,uid)
             call RemoveUnit( targetUnit )
             set targetUnit = null
         else
             set t = htime.setTimeout( during , function thistype.delCall)
-            call htime.setUnit( t, -1 ,targetUnit )
+            call htime.setUnit(t, 1 ,targetUnit )
+            set t = null
         endif
     endmethod
 
@@ -226,12 +279,13 @@ struct hUnit
      */
     private static method killCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local unit targetUnit = htime.getUnit( t, -1 )
-        if( targetUnit != null ) then
-            call KillUnit( targetUnit )
-            set targetUnit = null
+        local unit u = htime.getUnit( t, -1 )
+        if( u != null ) then
+            call KillUnit( u )
+            set u = null
         endif
         call htime.delTimer(t)
+        set t = null
     endmethod
 
     /**
@@ -245,6 +299,7 @@ struct hUnit
         else
             set t = htime.setTimeout( during , function thistype.killCall)
             call htime.setUnit( t, -1 ,targetUnit )
+            set t = null
         endif
     endmethod
 
@@ -253,13 +308,14 @@ struct hUnit
      */
     private static method explodedCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
-        local unit targetUnit = htime.getUnit( t, -1 )
-        if( targetUnit != null ) then
-            call SetUnitExploded(targetUnit, true)
-            call KillUnit(targetUnit)
-            set targetUnit = null
+        local unit u = htime.getUnit( t, -1 )
+        if( u != null ) then
+            call SetUnitExploded(u, true)
+            call KillUnit(u)
+            set u = null
         endif
         call htime.delTimer(t)
+        set t = null
     endmethod
 
     /**
@@ -274,6 +330,7 @@ struct hUnit
         else
             set t = htime.setTimeout( during , function thistype.explodedCall)
             call htime.setUnit( t, -1 ,targetUnit )
+            set t = null
         endif
     endmethod
 
@@ -308,9 +365,8 @@ struct hUnit
      * 设置单位可飞，用于设置单位飞行高度之前
      */
     public static method setUnitFly takes unit u returns nothing
-        local integer Storm = 'Arav'    //风暴之鸦
-        call UnitAddAbility( u , Storm )
-        call UnitRemoveAbility( u , Storm )
+        call UnitAddAbility( u , 'Amrf' ) 
+        call UnitRemoveAbility( u , 'Amrf' )
     endmethod
 
     /**
@@ -324,7 +380,7 @@ struct hUnit
         local real x = htime.getReal(t,2)
         local real y = htime.getReal(t,3)
         local real invulnerable = htime.getReal(t,4)
-        call ReviveHero( u,x,y,true )
+        call ReviveHero(u,x,y,true )
         call hattr.resetAttrGroups(u)
         if(invulnerable > 0)then
             call hability.invulnerable(u,invulnerable)
@@ -336,6 +392,8 @@ struct hUnit
         call hevt.triggerEvent(hevtBean)
         call hevtBean.destroy()
         call htime.delTimer(t)
+        set t = null
+        set u = null
     endmethod
     public static method rebornAtXY takes unit u,real x,real y,real delay,real invulnerable returns nothing
         local timer t = null
@@ -358,6 +416,7 @@ struct hUnit
                 call htime.setReal(t,2,x)
                 call htime.setReal(t,3,y)
                 call htime.setReal(t,4,invulnerable)
+                set t = null
             endif
         endif
     endmethod
@@ -377,18 +436,19 @@ struct hUnit
      * 用于标识
      */
     public static method shadow takes integer uid,real x,real y,real facing,real speed,real high,real scale,integer opacity,real during returns unit
-        local unit u = null
-        set u = hunit.createUnitXYFacing(player_passive,uid,x,y,facing)
-        call hunit.del(u,during)
-        call hunit.setUnitFly(u)
-        call SetUnitFlyHeight(u,high,10000)
-        call UnitAddAbility(u,'Aloc')
-        call SetUnitTimeScalePercent(u,speed)
-        call PauseUnit(u,true)
-        call SetUnitScalePercent(u,scale,scale,scale)
-        call SetUnitVertexColor(u,255,255,255,opacity)
-        call SetUnitInvulnerable(u,true)
-        return u
+        set hjass_global_unit = hunit.createUnitXYFacing(player_passive,uid,x,y,facing)
+        call hunit.del(hjass_global_unit,during)
+        if(high>0)then
+            call hunit.setUnitFly(hjass_global_unit)
+            call SetUnitFlyHeight(hjass_global_unit,high,10000)
+        endif
+        call UnitAddAbility(hjass_global_unit,'Aloc')
+        call SetUnitTimeScalePercent(hjass_global_unit,speed)
+        call PauseUnit(hjass_global_unit,true)
+        call SetUnitScalePercent(hjass_global_unit,scale,scale,scale)
+        call SetUnitVertexColor(hjass_global_unit,255,255,255,opacity)
+        call SetUnitInvulnerable(hjass_global_unit,true)
+        return hjass_global_unit
     endmethod
 
     /**
@@ -444,9 +504,9 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnitAttackToLoc takes player whichPlayer, integer unitid , location loc, location attackLoc returns unit
-        local unit u = createUnitLookAt( whichPlayer , unitid , loc , attackLoc)
-        call  IssuePointOrderLoc( u, "attack", attackLoc )
-        return u
+        set hjass_global_unit = createUnitLookAt( whichPlayer , unitid , loc , attackLoc)
+        call IssuePointOrderLoc( hjass_global_unit, "attack", attackLoc )
+        return hjass_global_unit
     endmethod
 
     /**
@@ -454,12 +514,12 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnitAttackToUnit takes player whichPlayer, integer unitid, location loc, unit targetUnit returns unit
-        local location lookat = GetUnitLoc(targetUnit)
-        local unit u = createUnitLookAt( whichPlayer , unitid , loc , lookat)
-        call IssueTargetOrder( u , "attack", targetUnit )
-        call RemoveLocation(lookat)
-        set lookat = null
-        return u
+        local location locTo = GetUnitLoc(targetUnit)
+        set hjass_global_unit = createUnitLookAt( whichPlayer , unitid , loc , locTo)
+        call IssueTargetOrder( hjass_global_unit , "attack", targetUnit )
+        call RemoveLocation(locTo)
+        set locTo = null
+        return hjass_global_unit
     endmethod
 
 
@@ -468,13 +528,13 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnits takes player whichPlayer, integer unitid, integer qty, location loc returns group
-        local group g = CreateGroup()
+        set hjass_global_group = CreateGroup()
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call GroupAddUnit(g, createUnit(whichPlayer, unitid, loc))
+                call GroupAddUnit(hjass_global_group, createUnit(whichPlayer, unitid, loc))
         endloop
-        return g
+        return hjass_global_group
     endmethod
 
     /**
@@ -482,13 +542,13 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnitsFacing takes player whichPlayer, integer unitid,integer qty, location loc, real facing returns group
-        local group g = CreateGroup()
+        set hjass_global_group = CreateGroup()
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call GroupAddUnit(g, createUnitFacing(whichPlayer, unitid, loc, facing))
+                call GroupAddUnit(hjass_global_group, createUnitFacing(whichPlayer, unitid, loc, facing))
         endloop
-        return g
+        return hjass_global_group
     endmethod
 
     /**
@@ -496,13 +556,13 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnitsXY takes player whichPlayer, integer unitid, integer qty, real x,real y returns group
-        local group g = CreateGroup()
+        set hjass_global_group = CreateGroup()
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call GroupAddUnit(g, createUnitXY(whichPlayer, unitid, x, y))
+                call GroupAddUnit(hjass_global_group, createUnitXY(whichPlayer, unitid, x, y))
         endloop
-        return g
+        return hjass_global_group
     endmethod
 
     /**
@@ -510,13 +570,13 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnitsXYFacing takes player whichPlayer, integer unitid, integer qty, real x,real y returns group
-        local group g = CreateGroup()
+        set hjass_global_group = CreateGroup()
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call GroupAddUnit(g, createUnitXYFacing(whichPlayer, unitid, x, y, GetRandomReal(0,360)))
+                call GroupAddUnit(hjass_global_group, createUnitXYFacing(whichPlayer, unitid, x, y, GetRandomReal(0,360)))
         endloop
-        return g
+        return hjass_global_group
     endmethod
 
     /**
@@ -524,13 +584,13 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnitsLookAt takes player whichPlayer, integer unitid,integer qty, location loc, location lookAt returns group
-        local group g = CreateGroup()
+        set hjass_global_group = CreateGroup()
         loop
             set qty = qty - 1
             exitwhen qty < 0
-                call GroupAddUnit(g, createUnitLookAt(whichPlayer, unitid, loc, lookAt))
+                call GroupAddUnit(hjass_global_group, createUnitLookAt(whichPlayer, unitid, loc, lookAt))
         endloop
-        return g
+        return hjass_global_group
     endmethod
 
     /**
@@ -538,9 +598,9 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnitsAttackToLoc takes player whichPlayer, integer unitid,integer qty, location loc, location attackLoc returns group
-        local group g = createUnitsLookAt( whichPlayer , unitid , qty, loc , attackLoc )
-        call GroupPointOrderLoc( g , "attack", attackLoc )
-        return g
+        set hjass_global_group = createUnitsLookAt( whichPlayer , unitid , qty, loc , attackLoc )
+        call GroupPointOrderLoc( hjass_global_group , "attack", attackLoc )
+        return hjass_global_group
     endmethod
 
     /**
@@ -548,12 +608,12 @@ struct hUnit
      * @return 最后创建单位组
      */
     public static method createUnitsAttackToUnit takes player whichPlayer, integer unitid,integer qty, location loc, unit targetUnit returns group
-        local location lookat = GetUnitLoc(targetUnit)
-        local group g = createUnitsLookAt( whichPlayer , unitid , qty , loc , lookat )
-        call GroupTargetOrder( g , "attack", targetUnit )
-        call RemoveLocation(lookat)
-        set lookat = null
-        return g
+        local location locTo = GetUnitLoc(targetUnit)
+        set hjass_global_group = createUnitsLookAt( whichPlayer , unitid , qty , loc , locTo )
+        call GroupTargetOrder(hjass_global_group , "attack", targetUnit )
+        call RemoveLocation(locTo)
+        set locTo = null
+        return hjass_global_group
     endmethod
 
 

@@ -49,6 +49,7 @@ struct hAbility
 	    call SetUnitAbilityLevel( cu , ABILITY_BREAK , 1 )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
 	    call hunit.del(cu,0.3)
+		set cu = null
 	endmethod
 
 	/**
@@ -58,6 +59,7 @@ struct hAbility
 		local timer t = GetExpiredTimer()
 		call UnitRemoveAbility(htime.getUnit(t,1), 'BPSE' )
 		call htime.delTimer(t)
+		set t = null
 	endmethod
 
 	/**
@@ -80,7 +82,6 @@ struct hAbility
 	    set loc = GetUnitLoc( u )
 	    set cu = hunit.createUnit( Player(PLAYER_NEUTRAL_PASSIVE) , ABILITY_TOKEN , loc)
 	    call RemoveLocation( loc )
-	    set loc = null
 	    call UnitAddAbility( cu, ABILITY_SWIM)
 	    call SetUnitAbilityLevel( cu , ABILITY_SWIM , 1 )
 	    call IssueTargetOrder( cu , "thunderbolt", u )
@@ -88,6 +89,9 @@ struct hAbility
 	    set t = htime.setTimeout(during,function thistype.swimCall)
 	    call htime.setUnit(t,1,u)
 	    call SaveTimerHandle(hash_ability, GetHandleId(u), 5241, t)
+		set loc = null
+		set cu = null
+		set t = null
 	endmethod
 
 	/**
@@ -107,6 +111,8 @@ struct hAbility
 			endif
 		endif
 		call htime.delTimer(t)
+		set t = null
+		set u = null
 	endmethod
 	/**
 	 * 沉默执行
@@ -116,12 +122,12 @@ struct hAbility
 		if(IsUnitInGroup(u, ABILITY_SILENT_GROUP) == true)then
 			call IssueImmediateOrder( u , "stop" )
 		endif
+		set u = null
 	endmethod
 	/**
 	 * 沉默
 	 */
 	public static method silent takes unit u,real during returns nothing
-		local location loc = null
 	    local timer t = null
 		local effect eff = null
 		local integer level = LoadInteger(hash_ability, GetHandleId(u), 54550)
@@ -144,6 +150,8 @@ struct hAbility
 		endif
 	    set t = htime.setTimeout(during,function thistype.silentCall)
 	    call htime.setUnit(t,1,u)
+		set t = null
+		set eff = null
 	endmethod
 
 	/**
@@ -158,13 +166,15 @@ struct hAbility
 		set level = level-1
 		call SaveInteger(hash_ability,uid, 55550,level)
 		if(level <= 0)then
-			set eff = LoadEffectHandle(hash_ability,uid, 55551)
-			call heffect.del(eff)
+			call heffect.del(LoadEffectHandle(hash_ability,uid, 55551))
 			if(IsUnitInGroup(u, ABILITY_UNARM_GROUP) == true)then
 				call GroupRemoveUnit(ABILITY_UNARM_GROUP,u)
 			endif
 		endif
 		call htime.delTimer(t)
+		set t = null
+		set u = null
+		set eff = null
 	endmethod
 	/**
 	 * 缴械执行
@@ -174,12 +184,12 @@ struct hAbility
 		if(IsUnitInGroup(u, ABILITY_UNARM_GROUP) == true)then
 			call IssueImmediateOrder( u , "stop" )
 		endif
+		set u = null
 	endmethod
 	/**
 	 * 缴械
 	 */
 	public static method unarm takes unit u,real during returns nothing
-	    local location loc = null
 	    local timer t = null
 		local effect eff = null
 		local integer level = LoadInteger(hash_ability, GetHandleId(u), 55550)
@@ -202,6 +212,8 @@ struct hAbility
 		endif
 	    set t = htime.setTimeout(during,function thistype.unarmCall)
 	    call htime.setUnit(t,1,u)
+		set t = null
+		set eff = null
 	endmethod
 
 	/**
@@ -214,12 +226,14 @@ struct hAbility
 		call SetUnitAbilityLevel( whichUnit, ABILITY_AVOID_MIUNS, 2 )
 		call UnitRemoveAbility( whichUnit, ABILITY_AVOID_MIUNS )
 	    call htime.delTimer(t)
+		set t = null
+		set whichUnit = null
 	endmethod
 	/**
 	 * 回避
 	 */
 	public static method avoid takes unit whichUnit returns nothing
-	    local timer t
+	    local timer t = null
 	    if(whichUnit==null) then
 	        return
 	    endif
@@ -228,6 +242,7 @@ struct hAbility
 		call UnitRemoveAbility( whichUnit, ABILITY_AVOID_PLUS )
 	    set t = htime.setTimeout( 0.00 ,function thistype.avoidCallBack)
 	    call htime.setUnit(t,1,whichUnit)
+		set t = null
 	endmethod
 
 	/**
@@ -238,18 +253,20 @@ struct hAbility
 	    local unit whichUnit = htime.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
 	    call htime.delTimer(t)
+		set t = null
 	endmethod
 	/**
 	 * 0秒无敌
 	 */
 	public static method zeroInvulnerable takes unit whichUnit returns nothing
-	    local timer t
+	    local timer t = null
 	    if(whichUnit==null) then
 	        return
 	    endif
 	    call SetUnitInvulnerable( whichUnit, true )
 	    set t = htime.setTimeout( 0.00 ,function thistype.zeroInvulnerableCallBack)
 	    call htime.setUnit(t,1,whichUnit)
+		set t = null
 	endmethod
 
 	/**
@@ -260,6 +277,8 @@ struct hAbility
 	    local unit whichUnit = htime.getUnit(t,1)
 	    call SetUnitInvulnerable( whichUnit , false )
 	    call htime.delTimer(t)
+		set t = null
+		set whichUnit = null
 	endmethod
 	/**
 	 * 无敌
@@ -275,6 +294,7 @@ struct hAbility
 	    call SetUnitInvulnerable( whichUnit, true )
 	    set t = htime.setTimeout( during ,function thistype.invulnerableCallBack)
 	    call htime.setUnit(t,1,whichUnit)
+		set t = null
 	endmethod
 
 	/**
@@ -294,10 +314,13 @@ struct hAbility
 	 */
 	private static method invulnerableGroupCallBackT takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
-	    local group whichGroup = htime.getGroup( t,1 )
+	    local group whichGroup = htime.getGroup(t,1)
+		call htime.delTimer(t)
 	    call ForGroup(whichGroup, function thistype.invulnerableGroupCallBack2)
 	    call GroupClear(whichGroup)
 	    call DestroyGroup(whichGroup)
+		set t = null
+		set whichGroup = null
 	endmethod
 
 	/**
@@ -311,6 +334,7 @@ struct hAbility
 	    call ForGroup(whichGroup, function thistype.invulnerableGroupCallBack1)
 	    set t = htime.setTimeout( during ,function thistype.invulnerableGroupCallBackT)
 	    call htime.setGroup(t,1,whichGroup)
+		set t = null
 	endmethod
 
 	/**
@@ -326,6 +350,8 @@ struct hAbility
 	    endif
 	    call SetUnitTimeScalePercent( whichUnit , 100.00 )
 	    call htime.delTimer(t)
+		set t = null
+		set whichUnit = null
 	endmethod
 	/**
 	 * 暂停效果
@@ -358,6 +384,8 @@ struct hAbility
 	    call htime.setUnit(t,1,whichUnit)
 	    call htime.setInteger(t,2, pauseType )
 	    call SaveTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 , t )
+		set t = null
+		set prevTimer = null
 	endmethod
 
 	//为单位添加效果只限技能类一段时间 回调
@@ -367,6 +395,8 @@ struct hAbility
 	    local integer whichAbility = htime.getInteger(t,2)
 	    call UnitRemoveAbility(whichUnit, whichAbility)
 	    call htime.delTimer(t)
+		set t = null
+		set whichUnit = null
 	endmethod
 	//为单位添加效果只限技能类一段时间
 	public static method addAbilityEffect takes unit whichUnit,integer whichAbility,integer abilityLevel,real during returns nothing
@@ -381,6 +411,7 @@ struct hAbility
 	        call htime.setUnit(t,1,whichUnit)
 	        call htime.setInteger(t,2,whichAbility)
 	    endif
+		set t = null
 	endmethod
 
 	/**
@@ -392,6 +423,7 @@ struct hAbility
 	    call UnitAddAbility( token, skillId)
 	    call IssuePointOrderLoc( token , orderString , targetLoc )
 	    call hunit.del(token,2.00)
+		set token = null
 	endmethod
 
 	/**
@@ -403,6 +435,7 @@ struct hAbility
 	    call UnitAddAbility( token, skillId)
 	    call IssueImmediateOrder( token , orderString )
 	    call hunit.del(token,2.00)
+		set token = null
 	endmethod
 
 	/**
@@ -414,6 +447,7 @@ struct hAbility
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrder( token , orderString , targetUnit )
 	    call hunit.del(token,2.00)
+		set token = null
 	endmethod
 
 	/**
@@ -425,6 +459,7 @@ struct hAbility
 	    call UnitAddAbility( token, skillId)
 	    call IssueTargetOrderById( token , orderId , targetUnit )
 	    call hunit.del(token,2.00)
+		set token = null
 	endmethod
 
 endstruct

@@ -3,6 +3,7 @@
  */
 globals
 hGroup hgroup
+group hjass_global_group = null
 endglobals
 
 struct hGroup
@@ -61,17 +62,17 @@ struct hGroup
 	 * filter 条件适配器
 	 */
 	public static method createByLoc takes location loc,real radius,code filter returns group
-	    local group g = null
-	    local boolexpr bx = Condition(filter)
+		local boolexpr bx = Condition(filter)
 		//镜头放大模式下，范围缩小一半
 		if(hcamera.model=="zoomin")then
 			set radius = radius * 0.5
 		endif
-	    set g = CreateGroup()
-	    call GroupEnumUnitsInRangeOfLoc(g, loc , radius, bx)
+		set bx = Condition(filter)
+	    set hjass_global_group = CreateGroup()
+	    call GroupEnumUnitsInRangeOfLoc(hjass_global_group, loc , radius, bx)
 	    call DestroyBoolExpr(bx)
 	    set bx = null
-	    return g
+	    return hjass_global_group
 	endmethod
 
 	/**
@@ -81,10 +82,10 @@ struct hGroup
 	 */
 	public static method createByUnit takes unit u,real radius,code filter returns group
 	    local location loc = GetUnitLoc( u )
-	    local group g = createByLoc(loc,radius,filter)
-	    call RemoveLocation( loc )
+	    set hjass_global_group = createByLoc(loc,radius,filter)
+	    call RemoveLocation(loc)
 	    set loc = null
-	    return g
+	    return hjass_global_group
 	endmethod
 	
 	 /**
@@ -93,22 +94,20 @@ struct hGroup
 	 * filter 条件适配器
 	 */
 	public static method createByRect takes rect r,code filter returns group
-	    local group g = null
-	    local boolexpr bx = Condition(filter)
-	    set g = CreateGroup()
-	    call GroupEnumUnitsInRect(g, r, bx)
+		local boolexpr bx = Condition(filter)
+	    set hjass_global_group = CreateGroup()
+	    call GroupEnumUnitsInRect(hjass_global_group, r, bx)
 	    call DestroyBoolExpr(bx)
 	    set bx = null
-	    return g
+	    return hjass_global_group
 	endmethod
 
 	/**
 	 * 瞬间移动单位组
 	 */
 	public static method move takes group whichGroup,location loc,string meffect,boolean isFollow returns nothing
-	    local boolean canMove = false
-	    local group g = null
-	    local unit u = null
+		local group g = null
+		local unit u = null
 		if(whichGroup == null or loc == null)then
 			return
 		endif
@@ -116,18 +115,17 @@ struct hGroup
 	    call GroupAddGroup(g, whichGroup)
 	    loop
 	        exitwhen(IsUnitGroupEmptyBJ(g) == true)
-	            set canMove = true
 	            set u = FirstOfGroup(g)
-	            call GroupRemoveUnit( g , u )
-	            call SetUnitPositionLoc( u , loc )
+	            call GroupRemoveUnit(g,u)
+	            call SetUnitPositionLoc(u,loc)
 	            if(isFollow == true)then
-	                call PanCameraToTimedLocForPlayer( GetOwningPlayer(u), loc, 0.00 )
+	                call PanCameraToTimedLocForPlayer(GetOwningPlayer(u), loc, 0.00)
 	            endif
+				set u = null
 	    endloop
 	    if(meffect != null) then
 	        call heffect.toLoc(meffect,loc,0)
 	    endif
-	    set u = null
 	    call GroupClear(g)
 	    call DestroyGroup(g)
 	    set g = null
@@ -137,9 +135,8 @@ struct hGroup
 	  * 指挥单位组所有单位做动作
 	  */
 	public static method animate takes group whichGroup,string animateno returns nothing
-	    local boolean canAction = false
-	    local group g = null
-	    local unit u = null
+		local group g = null
+		local unit u = null
 		if(whichGroup == null or animateno == null or animateno == "")then
 			return
 		endif
@@ -147,17 +144,13 @@ struct hGroup
 	    call GroupAddGroup(g, whichGroup)
 	    loop
 	        exitwhen(IsUnitGroupEmptyBJ(g) == true)
-	            set canAction = true
 	            set u = FirstOfGroup(g)
-	            call GroupRemoveUnit( g , u )
-	            if( IsUnitDeadBJ(u) ) then
-	                set canAction = false
+	            call GroupRemoveUnit(g,u)
+	            if(IsUnitDeadBJ(u) == false) then
+	                call SetUnitAnimation(u, animateno)
 	            endif
-	            if( canAction == true ) then
-	                call SetUnitAnimation( u , animateno )
-	            endif
+				set u = null
 	    endloop
-	    set u = null
 	    call GroupClear(g)
 	    call DestroyGroup(g)
 	    set g = null
@@ -165,10 +158,10 @@ struct hGroup
 
 	/**
 	  * 清空单位组
-	  * synconly 是否同时删除单位组
-	  * realdelunit 是否同时删除单位组里面的单位
+	  * isDestroy 是否同时删除单位组
+	  * isDestroyUnit 是否同时删除单位组里面的单位
 	  */
-	public static method clear takes group whichGroup,boolean synconly,boolean realdelunit returns nothing
+	public static method clear takes group whichGroup,boolean isDestroy,boolean isDestroyUnit returns nothing
 		local unit u = null
 		if (whichGroup == null) then
 			return
@@ -176,13 +169,13 @@ struct hGroup
 	    loop
 	        exitwhen(IsUnitGroupEmptyBJ(whichGroup) == true)
 	            set u = FirstOfGroup(whichGroup)
-	            call GroupRemoveUnit( whichGroup , u )
-	            if( realdelunit == true ) then
-	                call RemoveUnit( u )
+	            call GroupRemoveUnit(whichGroup,u)
+	            if( isDestroyUnit == true ) then
+	                call RemoveUnit(u)
 	            endif
 				set u = null
 	    endloop
-		if(synconly == true)then
+		if(isDestroy == true)then
 			call DestroyGroup(whichGroup)
 	    	set whichGroup = null
 		endif

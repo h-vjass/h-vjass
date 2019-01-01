@@ -4,6 +4,7 @@ globals
     hashtable hash_weather = null
     integer weatherHashCacheIndex = 0
     integer weatherHashCacheMax = 100
+    weathereffect hjass_global_weathereffect
     weathereffect array weatherHashCache
     integer hweather_id_sun = 'LRaa' //日光
     integer hweather_id_moon = 'LRma' //月光
@@ -77,34 +78,33 @@ struct hWeather
     private static method delCall takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer i = LoadInteger(hash_weather, GetHandleId(t), 0)
-        local weathereffect w = weatherHashCache[i]
-        call del(w)
+        call RemoveSavedInteger(hash_weather, GetHandleId(t), 0)
+        call del(weatherHashCache[i])
         call htime.delTimer(t)
+        set t = null
         set weatherHashCache[i] = null
     endmethod
 
 	//创建天气
 	private static method build takes hWeatherBean bean returns weathereffect
-		local weathereffect w = null
-        local rect area = null
         local timer t = null
-        
+        local rect r = null
         if(bean.width<=0 or bean.height<=0)then
             call hconsole.error("hWeather.build -w-h")
             return null
         else
-            set area = hrect.createInLoc(bean.x,bean.y,bean.width,bean.height)
-            set w = AddWeatherEffect( area , bean.id )
+            set r = hrect.createInLoc(bean.x,bean.y,bean.width,bean.height)
+            set hjass_global_weathereffect = AddWeatherEffect(r, bean.id )
             if(bean.during>0)then
                 set t = htime.setTimeout(bean.during,function thistype.delCall)
-                call saveWatherHashCache(t,w)
+                call saveWatherHashCache(t,hjass_global_weathereffect)
+                set t = null
             endif
-            call RemoveRect(area)
-            set area = null
+            call RemoveRect(r)
+            set r = null
         endif
-
-		call EnableWeatherEffect( w , true )
-		return w
+		call EnableWeatherEffect(hjass_global_weathereffect,true)
+		return hjass_global_weathereffect
 	endmethod
 
     public static method sun takes hWeatherBean bean returns weathereffect

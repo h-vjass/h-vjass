@@ -96,7 +96,6 @@ struct hEnv
 		local integer indexX = htime.getInteger(t,9)
 		local integer indexY = htime.getInteger(t,10)
 		local boolean clear = htime.getBoolean(t,11)
-		local rect whichRect = htime.getRect(t,12)
 		local integer whichGround = htime.getInteger(t,13)
 		local integer uid = htime.getInteger(t,100+GetRandomInt(1,euQty))
 		local integer did = htime.getInteger(t,200+GetRandomInt(1,edQty))
@@ -108,17 +107,17 @@ struct hEnv
 
 		if(x >= rectEndX and y >= rectEndY) then
 			call htime.delTimer(t)
+			set t = null
 			if (clear) then
-				call RemoveRect( whichRect )
-				set whichRect = null
+				call RemoveRect( htime.getRect(t,12) )
 			endif
 			return
 		endif
 		if(uid <= 0 and did <= 0) then
 			call htime.delTimer(t)
+			set t = null
 			if (clear) then
-				call RemoveRect( whichRect )
-				set whichRect = null
+				call RemoveRect( htime.getRect(t,12) )
 			endif
 			return
 		endif
@@ -131,6 +130,7 @@ struct hEnv
 			set indexY = -1
 		endif
 		call htime.setInteger(t,9,1+indexX)
+		set t = null
 		if(hlogic.rabs(x-midX) < (excludeX*0.5) and hlogic.rabs(y-midY) < (excludeY*0.5))then
 			return
 		endif
@@ -162,6 +162,7 @@ struct hEnv
 				set tempUnit = FirstOfGroup(env_u_group)
 				call hunit.del(tempUnit,0)
 				call GroupRemoveUnit( env_u_group , tempUnit )
+				set tempUnit = null
 		endloop
 		call GroupClear( env_u_group )
 	endmethod
@@ -176,6 +177,7 @@ struct hEnv
 		local rect whichRect = hrect.createInLoc(x,y,width,height)
 		call EnumDestructablesInRectAll(whichRect, function thistype.removeEnumDestructable )
 		call hrect.del(whichRect)
+		set whichRect = null
 	endmethod
 
 	public static method random takes rect whichRect,EnvUnit whichUnit,EnvDestructable whichDestructable,integer whichGround,real excludeX,real excludeY,boolean clear returns nothing
@@ -235,6 +237,7 @@ struct hEnv
 					call htime.setInteger(t,200+i,whichDestructable[i])
 				set i = i - 1
 			endloop
+			set t = null
 		endif
 		call whichUnit.destroy()
 		call whichDestructable.destroy()

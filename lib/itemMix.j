@@ -228,6 +228,7 @@ struct hItemMix
      * 执行合成 by 物品
      */
     public static method execByItem takes integer itemid,integer charges,unit whichUnit returns integer
+        local item it = null
         local integer formulaQty = getFlagmentQty(itemid)
         local integer i = 0
         local integer j = 0
@@ -246,8 +247,6 @@ struct hItemMix
         local integer slot_index = 1
         local integer slot_charges = 0
         local real weight = 0
-        local item it = null
-
         if(formulaQty>0)then
             set i = formulaQty
             loop
@@ -305,18 +304,19 @@ struct hItemMix
                                     set weight = hattr.getWeightCurrent(whichUnit) - hitem.getWeight(flagmentItemId) * I2R(flagmentItemNeedQty)
 			                        call hattr.setWeightCurrent(whichUnit,weight,0)
                                 elseif(slot_charges == 0) then
-                                    call RemoveItem(it)
+                                    call hitem.del(it,0)
                                     set flagmentItemNeedQty = 0
                                     call hitem.addAttr(flagmentItemId,tempCharge,whichUnit,false)
                                     set weight = hattr.getWeightCurrent(whichUnit) - hitem.getWeight(flagmentItemId) * I2R(tempCharge)
 			                        call hattr.setWeightCurrent(whichUnit,weight,0)
                                 else
-                                    call RemoveItem(it)
+                                    call hitem.del(it,0)
                                     set flagmentItemNeedQty = -slot_charges
                                     call hitem.addAttr(flagmentItemId,tempCharge,whichUnit,false)
                                     set weight = hattr.getWeightCurrent(whichUnit) - hitem.getWeight(flagmentItemId) * I2R(tempCharge)
 			                        call hattr.setWeightCurrent(whichUnit,weight,0)
                                 endif
+                                set it = null
                         endloop
                         if(flagmentItemId == itemid)then
                             if(flagmentItemNeedQty < charges)then

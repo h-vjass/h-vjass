@@ -23,21 +23,16 @@ struct hSkill
         local timer t = GetExpiredTimer()
         local unit prevUnit = htime.getUnit(t,1)
         local unit nextUnit = null
-        local integer qty = htime.getInteger(t,2)
-        local real reduce = htime.getReal(t,3)
-        local real damage = htime.getReal(t,4)
-        local string huntKind = htime.getString(t,5)
-        local string huntType = htime.getString(t,6)
-        local string codename = htime.getString(t,97)
-        local string huntEff = htime.getString(t,98)
-        local unit fromUnit = htime.getUnit(t,99)
         local group repeatGroup = htime.getGroup(t,100)
         local group g = null
         local unit u = null
+        local integer qty = htime.getInteger(t,2)
+        local real reduce = htime.getReal(t,3)
+        local real damage = htime.getReal(t,4)
         local hAttrHuntBean bean
         local hFilter filter
         set filter = hFilter.create()
-        call filter.isEnemy(true,fromUnit)
+        call filter.isEnemy(true,htime.getUnit(t,99))
         call filter.isBuilding(false)
         call filter.isAlive(true)
         set g = hgroup.createByUnit(prevUnit,400,function hFilter.get)
@@ -62,28 +57,33 @@ struct hSkill
         set u = null
         if(nextUnit!=null)then
             call htime.setUnit(t,1,nextUnit)
-            call hlightning.unit2unit(codename,prevUnit,nextUnit,0.2*qty)
+            call hlightning.unit2unit(htime.getString(t,97),prevUnit,nextUnit,0.2*qty)
             set bean = hAttrHuntBean.create()
-            set bean.fromUnit = fromUnit
+            set bean.fromUnit = htime.getUnit(t,99)
             set bean.toUnit = prevUnit
             set bean.damage = damage
-            set bean.huntEff = huntEff
-            set bean.huntKind = huntKind
-            set bean.huntType = huntType
+            set bean.huntEff = htime.getString(t,98)
+            set bean.huntKind = htime.getString(t,5)
+            set bean.huntType = htime.getString(t,6)
             call hattrHunt.huntUnit(bean)
             call bean.destroy()
-        else
-            call htime.delTimer(t)
-            return
         endif
         set qty = qty-1
         set damage = damage*(1.00+reduce*0.01)
-        if(qty<=0 or damage<=2)then
-            call htime.delTimer(t)
-            return
-        endif
         call htime.setInteger(t,2,qty)
         call htime.setReal(t,4,damage)
+        if(nextUnit==null or qty<=0 or damage<=2)then
+            set repeatGroup = null
+            set prevUnit = null
+            set nextUnit = null
+            call htime.delTimer(t)
+            set t = null
+            return
+        endif
+        set repeatGroup = null
+        set prevUnit = null
+        set nextUnit = null
+        set t = null
     endmethod
     /**
 	 * 闪电链
@@ -118,6 +118,7 @@ struct hSkill
             else
                 call htime.setGroup(t,100,null)
             endif
+            set t = null
         endif
 	endmethod
 
@@ -125,16 +126,15 @@ struct hSkill
 	 * 变身回调
 	 */
     private static method shapeshiftCall takes nothing returns nothing
-    	local timer t = GetExpiredTimer()
-    	local unit u = htime.getUnit( t , 1 )
-    	local integer modelFrom = htime.getInteger( t ,2 )
-    	local string eff = htime.getString( t , 3 )
-    	local integer index = GetConvertedPlayerId(GetOwningPlayer(u))
-    	local location loc = null
-		call heffect.toUnitLoc( eff , u , 1.5 )
-    	call UnitAddAbility( u , modelFrom )
-		call UnitRemoveAbility( u , modelFrom )
+        local timer t = GetExpiredTimer()
+        local unit u = htime.getUnit(t,1)
+		call heffect.toUnitLoc( htime.getString(t,3) , u , 1.5 )
+    	call UnitAddAbility( u , htime.getInteger(t,2) )
+		call UnitRemoveAbility( u , htime.getInteger(t,2) )
         call hAttr.resetSkill(u)
+        call htime.delTimer(t)
+        set t = null
+        set u = null
     endmethod
 	/**
 	 * 变身[参考 hJass变身技能模板]
@@ -142,8 +142,8 @@ struct hSkill
      * modelTo 技能模板 参考 'A00E'
 	 */
     public static method shapeshift takes unit u, real during, integer modelFrom,integer modelTo,string eff,hAttrBean bean returns nothing
-    	local timer t = null
     	local integer index = GetConvertedPlayerId(GetOwningPlayer(u))
+        local timer t = null
 		call heffect.toUnitLoc( eff , u , 1.5 )
     	call UnitAddAbility( u , modelTo )
 		call UnitRemoveAbility( u , modelTo )
@@ -152,6 +152,7 @@ struct hSkill
 	    call htime.setUnit( t , 1 , u )
 	    call htime.setInteger( t , 2 , modelFrom )
 	    call htime.setString( t , 3 , eff )
+        set t = null
         //根据bean影响属性
         call hAttrUnit.modifyAttrByBean(u,bean,during)
     endmethod
@@ -160,16 +161,13 @@ struct hSkill
 	 * 击飞回调
 	 */
     private static method crackFlyCall takes nothing returns nothing
-    	local timer t = GetExpiredTimer()
+        local timer t = GetExpiredTimer()
+        local unit fromUnit = htime.getUnit(t, 2 )
+        local unit toUnit = htime.getUnit(t, 1)
         local real cost = htime.getReal( t , 0 )
-    	local unit toUnit = htime.getUnit( t , 1 )
-	    local unit fromUnit = htime.getUnit( t , 2 )
 	    local real distance = htime.getReal( t , 3 )
 	    local real high = htime.getReal( t , 4 )
 	    local real damage = htime.getReal( t , 5 )
-        local string huntKind = htime.getString(t, 10)
-        local string huntType = htime.getString(t, 11)
-        local string huntEff = htime.getString(t, 12)
         local real during = htime.getReal( t , 13 )
         local real originHigh = htime.getReal( t , 14 )
         local real originFacing = htime.getReal( t , 15 )
@@ -179,14 +177,13 @@ struct hSkill
         local real timerSetTime = htime.getSetTime(t)
         local hAttrHuntBean bean
         if(cost>during)then
-            call htime.delTimer(t)
             set bean = hAttrHuntBean.create()
             set bean.fromUnit = fromUnit
             set bean.toUnit = toUnit
             set bean.damage = damage
-            set bean.huntEff = huntEff
-            set bean.huntKind = huntKind
-            set bean.huntType = huntType
+            set bean.huntEff = htime.getString(t, 12)
+            set bean.huntKind = htime.getString(t, 10)
+            set bean.huntType = htime.getString(t, 11)
             call hattrHunt.huntUnit(bean)
             call bean.destroy()
             call SetUnitFlyHeight( toUnit , originHigh , 10000 )
@@ -197,6 +194,10 @@ struct hSkill
             else                                                //如果是地面，创建沙尘
                 call heffect.toUnitLoc("Objects\\Spawnmodels\\Undead\\ImpaleTargetDust\\ImpaleTargetDust.mdl",toUnit,0)
             endif
+            call htime.delTimer(t)
+            set fromUnit = null
+            set toUnit = null
+            set t = null
             return
         endif
         call htime.setReal( t , 0 , cost+timerSetTime )
@@ -227,6 +228,9 @@ struct hSkill
                 call SetUnitFlyHeight( toUnit , GetUnitFlyHeight(toUnit)-z, z/timerSetTime )
             endif
         endif
+        set fromUnit = null
+        set toUnit = null
+        set t = null
     endmethod
     /**
 	 * 击飞
@@ -269,6 +273,7 @@ struct hSkill
         call htime.setReal(t, 14,GetUnitFlyHeight(bean.toUnit))
         call htime.setReal(t, 15,hunit.getFacing(bean.toUnit))
         call htime.setReal(t, 16,hunit.getFacingBetween(bean.fromUnit,bean.toUnit))
+        set t = null
     endmethod
 
     //剃回调
@@ -277,81 +282,77 @@ struct hSkill
         local real duringInc = htime.getReal(t,1)
         local real speed = htime.getReal(t,2)
         local real range = htime.getReal(t,3)
-        local unit mover = htime.getUnit(t,4)
+        local unit u = htime.getUnit(t,4)
+        local location loc = GetUnitLoc(u)
         local location targetLoc = htime.getLoc(t,6)
-        local string MEffect = htime.getString(t,5)
-        local group remove_group = htime.getGroup(t,7)
         local unit fromUnit = htime.getUnit(t,8)
-        local string huntEff = htime.getString(t,9)
+        local group g = null
         local real damage = htime.getReal(t,10)
-        local string hkind = htime.getString(t,11)
-        local string htype = htime.getString(t,12)
-        local string isBreak = htime.getString(t,13)
-        local boolean isNoAvoid = htime.getBoolean(t,14)
         local real distance = 0
-        local location loc = null
-        local location loc2 = null
-        local group tmp_group = null
-        local unit u = null
         local hFilter hf = 0
         local hAttrHuntBean bean
         call htime.setReal(t,1,duringInc+TimerGetTimeout(t))
-        set loc =  GetUnitLoc(mover)
         set hxy.x = GetLocationX(loc)
         set hxy.y = GetLocationY(loc)
         set hxy = hlogic.polarProjection(hxy, speed, hlogic.getDegBetweenLoc(loc, targetLoc))
-        call SetUnitPosition( mover, hxy.x, hxy.y )
-        if(MEffect != null)then
-            call heffect.toLoc(MEffect,loc,0.5)
+        call SetUnitPosition( u, hxy.x, hxy.y )
+        if(htime.getString(t,5) != null)then
+            call heffect.toLoc(htime.getString(t,5),loc,0.5)
         endif
         if(damage > 0) then
             set hf = hFilter.create()
             call hf.isAlive(true)
             call hf.isBuilding(false)
             call hf.isEnemy(true,fromUnit)
-            set tmp_group = hgroup.createByLoc(loc,range,function hFilter.get)
+            set g = hgroup.createByLoc(loc,range,function hFilter.get)
             call hf.destroy()
             set bean = hAttrHuntBean.create()
-            set bean.whichGroup = tmp_group
-            set bean.whichGroupRepeat = remove_group
+            set bean.whichGroup = g
+            set bean.whichGroupRepeat = htime.getGroup(t,7)
             set bean.damage = damage
             set bean.fromUnit = fromUnit
-            set bean.huntEff = huntEff
-            set bean.huntKind = hkind
-            set bean.huntType = htype
-            set bean.isBreak = isBreak
-            set bean.isNoAvoid = isNoAvoid
+            set bean.huntEff = htime.getString(t,9)
+            set bean.huntKind = htime.getString(t,11)
+            set bean.huntType = htime.getString(t,12)
+            set bean.isBreak = htime.getString(t,13)
+            set bean.isNoAvoid = htime.getBoolean(t,14)
             call hattrHunt.huntGroup(bean)
             call bean.destroy()
-            call GroupClear(tmp_group)
-            call DestroyGroup(tmp_group)
-            set tmp_group = null
+            call GroupClear(g)
+            call DestroyGroup(g)
+            set g = null
         endif
         set distance = hlogic.getDistanceBetweenLoc(loc, targetLoc)
         call RemoveLocation(loc)
-        if(distance<speed or distance<=0 or speed<=0 or IsUnitDeadBJ(mover)==true or duringInc>5) then
-            call htime.delTimer(t)
-            call SetUnitInvulnerable( mover, false )
-            call SetUnitPathing( mover, true )
-            call SetUnitPositionLoc( mover, targetLoc)
-            call SetUnitVertexColorBJ( mover, 100, 100, 100, 0 )
-            call DestroyGroup(remove_group)
+        if(distance<speed or distance<=0 or speed<=0 or IsUnitDeadBJ(u)==true or duringInc>5) then
+            call SetUnitInvulnerable( u, false )
+            call SetUnitPathing( u, true )
+            call SetUnitPositionLoc( u, targetLoc)
+            call SetUnitVertexColorBJ( u, 100, 100, 100, 0 )
+            call GroupClear(htime.getGroup(t,7))
+            call DestroyGroup(htime.getGroup(t,7))
             call RemoveLocation(targetLoc)
+            call htime.delTimer(t)
         endif
+        set t = null
+        set u = null
+        set fromUnit = null
+        set loc = null
+        set targetLoc = null
     endmethod
 
     //剃
     public static method leap takes unit mover,location targetLoc,real speed,string Meffect,real range,boolean isRepeat,hAttrHuntBean bean returns nothing
         local real lock_var_period = 0.02
         local timer t = null
-        local group remove_group = null
+        local group g = null
         if(mover==null or targetLoc==null) then
             return
         endif
         if( isRepeat == false ) then
-            set remove_group = CreateGroup()
+            set g = CreateGroup()
         else
-            set remove_group = null
+            set g = null
         endif
         if(speed>150) then
             set speed = 150   //最大速度
@@ -367,7 +368,7 @@ struct hSkill
         call htime.setUnit(t,4,mover)
         call htime.setString(t,5,Meffect)
         call htime.setLoc(t,6,targetLoc)
-        call htime.setGroup(t,7,remove_group)
+        call htime.setGroup(t,7,g)
         call htime.setUnit(t,8,bean.fromUnit)
         call htime.setString(t,9,bean.huntEff)
         call htime.setReal(t,10,bean.damage)
@@ -375,6 +376,8 @@ struct hSkill
         call htime.setString(t,12,bean.huntType)
         call htime.setString(t,13,bean.isBreak)
         call htime.setBoolean(t,14,bean.isNoAvoid)
+        set t = null
+        set g = null
     endmethod
 
     //穿梭回调
@@ -382,110 +385,109 @@ struct hSkill
         local timer t = GetExpiredTimer()
         local integer during = htime.getInteger( t , 1 )
         local unit shutter = htime.getUnit( t , 2  )
-        local group whichGroup = htime.getGroup( t , 3 )
+        local group g = htime.getGroup(t, 3 )
         local integer times = htime.getInteger( t , 4 )
         local real speed = htime.getReal( t , 5  )
         local real speedPlus = htime.getReal( t , 6 )
         local real offsetDistance = htime.getReal( t , 7 )
-        local string JEffect = htime.getString( t , 8 )
-        local string animate = htime.getString( t , 9 )
         local integer skillModel = htime.getInteger( t , 10  )
-        local string huntEff = htime.getString(t,11)
         local real damage = htime.getReal(t,12)
-        local string hkind = htime.getString(t,13)
-        local string htype = htime.getString(t,14)
-        local string isBreak = htime.getString(t,15)
-        local boolean isNoAvoid = htime.getBoolean(t,16)
-        local unit targetUnit = htime.getUnit( t , 17 )
-        local location targetLoc = htime.getLoc( t , 18 )
+        local unit targetUnit = htime.getUnit(t, 17 )
+        local location targetLoc = htime.getLoc(t, 18 )
         //--------------------
         local integer playerIndex = GetConvertedPlayerId(GetOwningPlayer(shutter))
         local real distance = 0
         local location loc = null
-        local location tempLoc = null
+        local location loc2 = null
+        local unit u = null
         local integer i = 0
-        local unit tempUnit = null
-        local group crashGroup = null
         local hAttrHuntBean bean
-        if( shutter !=null and IsUnitAliveBJ(shutter) == true and CountUnitsInGroup(whichGroup)>0 ) then
+        if( shutter !=null and IsUnitAliveBJ(shutter) == true and CountUnitsInGroup(g)>0 ) then
             if( during <1 ) then
-                call UnitAddAbility( shutter, skillModel)
+                call UnitAddAbility( shutter, htime.getInteger(t, 10) )
             endif
             //TODO
             set loc = GetUnitLoc(shutter)
             //向一个单位进行目标穿梭,如果没有，从单位组取一个(需要进行缓存)
             if( targetUnit == null ) then
-                set targetUnit = GroupPickRandomUnit(whichGroup)
-                set tempLoc = GetUnitLoc(targetUnit)
-                set targetLoc = PolarProjectionBJ( tempLoc , offsetDistance , hlogic.getDegBetweenLoc(loc, tempLoc) )
+                set targetUnit = GroupPickRandomUnit(g)
                 call htime.setUnit( t , 17 , targetUnit ) //save
+            endif
+            if(targetLoc==null)then
+                set loc2 = GetUnitLoc(targetUnit)
+                set targetLoc = PolarProjectionBJ( loc , offsetDistance , hlogic.getDegBetweenLoc(loc, loc2) )
+                call RemoveLocation(loc2)
+                set loc2 = null
                 call htime.setLoc( t , 18 , targetLoc ) //save
-                call RemoveLocation(tempLoc)
             endif
             //移动
             call SetUnitFacing(shutter, hlogic.getDegBetweenLoc(loc, targetLoc))
-            call SetUnitPositionLoc( shutter, PolarProjectionBJ(loc, speed, hlogic.getDegBetweenLoc(loc, targetLoc)) )
+            set loc2 = PolarProjectionBJ(loc, speed, hlogic.getDegBetweenLoc(loc, targetLoc))
+            call SetUnitPositionLoc( shutter, loc2 )
+            call RemoveLocation(loc2)
+            set loc2 = null
             //移动特效
-            if( JEffect != null )then
-                call heffect.toLoc( JEffect , loc, 0.5 )
+            if( htime.getString(t, 8 ) != null )then
+                call heffect.toLoc( htime.getString(t, 8 ) , loc, 0.5 )
             endif
             //计算单轮距离是否到终点
             set distance = hlogic.getDistanceBetweenLoc( loc, targetLoc )
             call RemoveLocation(loc)
+            set loc = null
             //
-            if( distance < speed ) then //单轮结束
-                call SetUnitAnimation( shutter, animate )
-                call SetUnitPositionLoc( shutter, targetLoc)
+            call hconsole.log("distance="+R2S(distance))
+            call hconsole.log("speed="+R2S(speed))
+            if( distance < speed*1.5 ) then //单轮结束
+                call SetUnitPositionLoc( shutter, targetLoc )
                 call RemoveLocation(targetLoc)
+                set targetLoc = null
+                call SetUnitAnimation( shutter, htime.getString(t,9) )
                 //伤害
                 if( IsUnitAliveBJ(targetUnit) == true and damage > 0 ) then
                     set bean = hAttrHuntBean.create()
                     set bean.damage = damage
                     set bean.fromUnit = shutter
                     set bean.toUnit = targetUnit
-                    set bean.huntEff = huntEff
-                    set bean.huntKind = hkind
-                    set bean.huntType = htype
-                    set bean.isBreak = isBreak
-                    set bean.isNoAvoid = isNoAvoid
+                    set bean.huntEff = htime.getString(t,11)
+                    set bean.huntKind = htime.getString(t,13)
+                    set bean.huntType = htime.getString(t,14)
+                    set bean.isBreak = htime.getString(t,15)
+                    set bean.isNoAvoid = htime.getBoolean(t,16)
                     call hattrHunt.huntUnit(bean)
                     call bean.destroy()
                 endif
                 if( during+1 >= times ) then
                     call htime.delTimer( t )
+                    set t = null
                     if(skillModel!=null) then
                         call UnitRemoveAbility( shutter, skillModel)
                     endif
-                    call SetUnitPositionLoc( shutter, targetLoc)
-                    call RemoveLocation(targetLoc)
                     call SetUnitTimeScale( shutter, 1 )
                     call SetUnitInvulnerable( shutter, false )
                     call SetUnitPathing( shutter, true )
                     call SetUnitVertexColorBJ( shutter, 100, 100, 100, 0.00 )
-                    call GroupClear(whichGroup)
-                    call DestroyGroup(whichGroup)
+                    call GroupClear(g)
+                    call DestroyGroup(g)
+                    set g = null
                 else
                     //选定下一个
                     set i = 1
-                    set tempUnit = GroupPickRandomUnit(whichGroup)
+                    set u = GroupPickRandomUnit(g)
                     loop
-                        exitwhen( (IsUnitAliveBJ(targetUnit) ==true and tempUnit != targetUnit) or i>5 )
-                        set tempUnit = GroupPickRandomUnit(whichGroup)
+                        exitwhen( (IsUnitAliveBJ(targetUnit) ==true and u != targetUnit) or i>5 )
+                        set u = GroupPickRandomUnit(g)
                         set i = i + 1
                     endloop
-                    set loc = GetUnitLoc(shutter)
-                    set tempLoc = GetUnitLoc(tempUnit)
-                    set targetLoc = PolarProjectionBJ( tempLoc , offsetDistance , hlogic.getDegBetweenLoc(loc, targetLoc) )
-                    call RemoveLocation(tempLoc)
-                    call RemoveLocation(loc)
                     call htime.setInteger( t , 1 ,(during + 1))
-                    call htime.setUnit( t , 17 , tempUnit )
-                    call htime.setLoc( t , 18 , targetLoc )
+                    call htime.setUnit( t , 17 , u )
+                    call htime.setLoc( t , 18 , null )
                     call htime.setReal( t , 5 , speed+speedPlus )
+                    set u = null
                 endif
             endif
         else
             call htime.delTimer( t )
+            set t = null
             if(shutter !=null ) then
                 if(skillModel!=null) then
                     call UnitRemoveAbility( shutter, skillModel)
@@ -495,12 +497,15 @@ struct hSkill
                 call SetUnitPathing( shutter, true )
                 call SetUnitVertexColorBJ( shutter, 100, 100, 100, 0.00 )
             endif
-            if( targetLoc !=null )then
-                call RemoveLocation(targetLoc)
-            endif
-            call GroupClear(whichGroup)
-            call DestroyGroup(whichGroup)
+            call GroupClear(g)
+            call DestroyGroup(g)
+            set g = null
         endif
+        set t = null
+        set loc = null
+        set loc2 = null
+        set targetLoc = null
+        set shutter = null
     endmethod
 
     /**
@@ -510,8 +515,8 @@ struct hSkill
      * isAttack 是否触发普通攻击判定
      */
     public static method shuttleToGroup takes unit shutter,group whichGroup,integer times,real speed,real speedPlus,real offsetDistance,string JEffect,string animate,integer skillModel,hAttrHuntBean bean returns nothing
-        local timer t = null
         local real shuttlePeriod = 0.03
+        local timer t = null
         call SetUnitTimeScale( shutter, 10 )
         call SetUnitInvulnerable( shutter, true )
         call SetUnitPathing( shutter, false )
@@ -532,6 +537,7 @@ struct hSkill
         call htime.setString(t,14,bean.huntType)
         call htime.setString(t,15,bean.isBreak)
         call htime.setBoolean(t,16,bean.isNoAvoid)
+        set t = null
     endmethod
 
     /**
@@ -541,14 +547,14 @@ struct hSkill
      * isAttack 是否触发普通攻击判定
      */
     public static method shuttleToUnit takes unit shutter,unit whichUnit,real range,integer times,real speed,real speedPlus,real offsetDistance,string JEffect,string animate,integer skillModel,hAttrHuntBean bean returns nothing
-        local group whichGroup = null
         local hFilter hf
+        local group g = null
         set hf = hFilter.create()
         call hf.isAlive(true)
         call hf.isBuilding(false)
         call hf.isEnemy(true,shutter)
-        set whichGroup = hgroup.createByUnit(whichUnit,range,function hFilter.get)
-        call thistype.shuttleToGroup(shutter,whichGroup,times,speed,speedPlus,offsetDistance,JEffect,animate,skillModel,bean)
+        set g = hgroup.createByUnit(whichUnit,range,function hFilter.get)
+        call thistype.shuttleToGroup(shutter,g,times,speed,speedPlus,offsetDistance,JEffect,animate,skillModel,bean)
         call hf.destroy()
     endmethod
 

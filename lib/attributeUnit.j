@@ -8,8 +8,6 @@ globals
 	real PUNISH_TEXTTAG_HEIGHT = 0
 	trigger ATTR_TRIGGER_UNIT_BEHUNT = null
 	trigger ATTR_TRIGGER_UNIT_DEATH = null
-	trigger ATTR_TRIGGER_UNIT_ATTACK_RANGE = null
-	trigger ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = null
 	boolean allowDenied = false
 endglobals
 
@@ -185,11 +183,6 @@ if(bean.violence>0)then
 elseif(bean.violence<0)then
     call hattr.subViolence(whichUnit,bean.violence,during)
 endif
-if(bean.mortalOppose>0)then
-    call hattr.addMortalOppose(whichUnit,bean.mortalOppose,during)
-elseif(bean.mortalOppose<0)then
-    call hattr.subMortalOppose(whichUnit,bean.mortalOppose,during)
-endif
 if(bean.punish>0)then
     call hattr.addPunish(whichUnit,bean.punish,during)
 elseif(bean.punish<0)then
@@ -199,11 +192,6 @@ if(bean.punishCurrent>0)then
     call hattr.addPunishCurrent(whichUnit,bean.punishCurrent,during)
 elseif(bean.punishCurrent<0)then
     call hattr.subPunishCurrent(whichUnit,bean.punishCurrent,during)
-endif
-if(bean.punishOppose>0)then
-    call hattr.addPunishOppose(whichUnit,bean.punishOppose,during)
-elseif(bean.punishOppose<0)then
-    call hattr.subPunishOppose(whichUnit,bean.punishOppose,during)
 endif
 if(bean.meditative>0)then
     call hattr.addMeditative(whichUnit,bean.meditative,during)
@@ -234,11 +222,6 @@ if(bean.splitRange>0)then
     call hattr.addSplitRange(whichUnit,bean.splitRange,during)
 elseif(bean.splitRange<0)then
     call hattr.subSplitRange(whichUnit,bean.splitRange,during)
-endif
-if(bean.swimOppose>0)then
-    call hattr.addSwimOppose(whichUnit,bean.swimOppose,during)
-elseif(bean.swimOppose<0)then
-    call hattr.subSwimOppose(whichUnit,bean.swimOppose,during)
 endif
 if(bean.luck>0)then
     call hattr.addLuck(whichUnit,bean.luck,during)
@@ -274,6 +257,86 @@ if(bean.cure>0)then
     call hattr.addCure(whichUnit,bean.cure,during)
 elseif(bean.cure<0)then
     call hattr.subCure(whichUnit,bean.cure,during)
+endif
+if(bean.knockingOppose>0)then
+    call hattr.addKnockingOppose(whichUnit,bean.knockingOppose,during)
+elseif(bean.knockingOppose<0)then
+    call hattr.subKnockingOppose(whichUnit,bean.knockingOppose,during)
+endif
+if(bean.violenceOppose>0)then
+    call hattr.addViolenceOppose(whichUnit,bean.violenceOppose,during)
+elseif(bean.violenceOppose<0)then
+    call hattr.subViolenceOppose(whichUnit,bean.violenceOppose,during)
+endif
+if(bean.hemophagiaOppose>0)then
+    call hattr.addHemophagiaOppose(whichUnit,bean.hemophagiaOppose,during)
+elseif(bean.hemophagiaOppose<0)then
+    call hattr.subHemophagiaOppose(whichUnit,bean.hemophagiaOppose,during)
+endif
+if(bean.splitOppose>0)then
+    call hattr.addSplitOppose(whichUnit,bean.splitOppose,during)
+elseif(bean.splitOppose<0)then
+    call hattr.subSplitOppose(whichUnit,bean.splitOppose,during)
+endif
+if(bean.punishOppose>0)then
+    call hattr.addPunishOppose(whichUnit,bean.punishOppose,during)
+elseif(bean.punishOppose<0)then
+    call hattr.subPunishOppose(whichUnit,bean.punishOppose,during)
+endif
+if(bean.huntReboundOppose>0)then
+    call hattr.addHuntReboundOppose(whichUnit,bean.huntReboundOppose,during)
+elseif(bean.huntReboundOppose<0)then
+    call hattr.subHuntReboundOppose(whichUnit,bean.huntReboundOppose,during)
+endif
+if(bean.swimOppose>0)then
+    call hattr.addSwimOppose(whichUnit,bean.swimOppose,during)
+elseif(bean.swimOppose<0)then
+    call hattr.subSwimOppose(whichUnit,bean.swimOppose,during)
+endif
+if(bean.heavyOppose>0)then
+    call hattr.addHeavyOppose(whichUnit,bean.heavyOppose,during)
+elseif(bean.heavyOppose<0)then
+    call hattr.subHeavyOppose(whichUnit,bean.heavyOppose,during)
+endif
+if(bean.breakOppose>0)then
+    call hattr.addBreakOppose(whichUnit,bean.breakOppose,during)
+elseif(bean.breakOppose<0)then
+    call hattr.subBreakOppose(whichUnit,bean.breakOppose,during)
+endif
+if(bean.unluckOppose>0)then
+    call hattr.addUnluckOppose(whichUnit,bean.unluckOppose,during)
+elseif(bean.unluckOppose<0)then
+    call hattr.subUnluckOppose(whichUnit,bean.unluckOppose,during)
+endif
+if(bean.silentOppose>0)then
+    call hattr.addSilentOppose(whichUnit,bean.silentOppose,during)
+elseif(bean.silentOppose<0)then
+    call hattr.subSilentOppose(whichUnit,bean.silentOppose,during)
+endif
+if(bean.unarmOppose>0)then
+    call hattr.addUnarmOppose(whichUnit,bean.unarmOppose,during)
+elseif(bean.unarmOppose<0)then
+    call hattr.subUnarmOppose(whichUnit,bean.unarmOppose,during)
+endif
+if(bean.fetterOppose>0)then
+    call hattr.addFetterOppose(whichUnit,bean.fetterOppose,during)
+elseif(bean.fetterOppose<0)then
+    call hattr.subFetterOppose(whichUnit,bean.fetterOppose,during)
+endif
+if(bean.bombOppose>0)then
+    call hattr.addBombOppose(whichUnit,bean.bombOppose,during)
+elseif(bean.bombOppose<0)then
+    call hattr.subBombOppose(whichUnit,bean.bombOppose,during)
+endif
+if(bean.lightningChainOppose>0)then
+    call hattr.addLightningChainOppose(whichUnit,bean.lightningChainOppose,during)
+elseif(bean.lightningChainOppose<0)then
+    call hattr.subLightningChainOppose(whichUnit,bean.lightningChainOppose,during)
+endif
+if(bean.crackFlyOppose>0)then
+    call hattr.addCrackFlyOppose(whichUnit,bean.crackFlyOppose,during)
+elseif(bean.crackFlyOppose<0)then
+    call hattr.subCrackFlyOppose(whichUnit,bean.crackFlyOppose,during)
 endif
 if(bean.fire>0)then
     call hattrNatural.addFire(whichUnit,bean.fire,during)
@@ -1090,6 +1153,11 @@ endif
 elseif(bean.bombVal<0)then
     call hattrEffect.subBombVal(whichUnit,bean.bombVal,during)
 endif
+ if(bean.bombOdds>0)then
+    call hattrEffect.addBombOdds(whichUnit,bean.bombOdds,during)
+elseif(bean.bombOdds<0)then
+    call hattrEffect.subBombOdds(whichUnit,bean.bombOdds,during)
+endif
  if(bean.bombModel!="")then
     call hattrEffect.setBombModel(whichUnit,bean.bombModel)
 endif
@@ -1172,6 +1240,8 @@ endif
 				call SaveBoolean(hash_attr_unit,GetHandleId(u),StringHash("msc"),false)
 			endif
 		endif
+		set t = null
+		set u = null
 	endmethod
 	private static method lifemanaback takes nothing returns nothing
 	    local timer t = GetExpiredTimer()
@@ -1196,6 +1266,7 @@ endif
 					else
 						call GroupRemoveUnit( ATTR_GROUP_LIFE_BACK , tempUnit )
 	                endif
+					set tempUnit = null
 	        endloop
 	        call GroupClear( tempGroup )
 	        call DestroyGroup( tempGroup )
@@ -1220,11 +1291,13 @@ endif
 								call htime.setUnit(tmpt,1,tempUnit)
 								call htime.setInteger(tmpt,2,1)
 								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"bce43a",10,1.00,10.00)  ,"scale",0,0.2)
+								set tmpt = null
 							endif
 						endif
 					else
 						call GroupRemoveUnit( ATTR_GROUP_LIFE_SOURCE , tempUnit )
 	                endif
+					set tempUnit = null
 	        endloop
 	        call GroupClear( tempGroup )
 	        call DestroyGroup( tempGroup )
@@ -1245,6 +1318,7 @@ endif
 					else
 						call GroupRemoveUnit( ATTR_GROUP_MANA_BACK , tempUnit )
 	                endif
+					set tempUnit = null
 	        endloop
 	        call GroupClear( tempGroup )
 	        call DestroyGroup( tempGroup )
@@ -1269,20 +1343,23 @@ endif
 								call htime.setUnit(tmpt,1,tempUnit)
 								call htime.setInteger(tmpt,2,2)
 								call hmsg.style(  hmsg.ttg2Unit(tempUnit,"源力加持",6.00,"93d3f1",10,1.00,10.00)  ,"scale",0,0.2)
+								set tmpt = null
 							endif
 						endif
 					else
 						call GroupRemoveUnit( ATTR_GROUP_MANA_SOURCE , tempUnit )
 	                endif
+					set tempUnit = null
 	        endloop
 	        call GroupClear( tempGroup )
 	        call DestroyGroup( tempGroup )
 	        set tempGroup = null
 		endif
+		set t = null
 	endmethod
 
 	public static method createBlockText takes real current,real all,integer blockMax,string colorFt,string colorBg returns string
-		local string str = ""
+		local string str = null
 		local string font = "■"
 		local real percent = 0
 		local integer block = 0
@@ -1304,6 +1381,7 @@ endif
                 set i = i + 1
             endloop
         endif
+		set font = null
         return str
 	endmethod
 
@@ -1338,12 +1416,16 @@ endif
 	        call hmsg.setTtgMsg(ttg,ttgStr,size)
 	        call SetTextTagVisibility( ttg , true )
         endif
+		set t = null
+		set ttgStr = null
+		set whichUnit = null
+		set ttg = null
 	endmethod
 
 	//硬直条
 	public static method punishTtg takes unit whichUnit returns nothing
 		local timer t = null
-		local texttag = ttg = null
+		local texttag ttg = null
 		local real size = 5
 		if(PUNISH_SWITCH == true and (PUNISH_SWITCH_ONLYHERO==false or (PUNISH_SWITCH_ONLYHERO==true and his.hero(whichUnit))))then
 			set ttg = hmsg.ttg2Unit(whichUnit,"",size,"",10,0,PUNISH_TEXTTAG_HEIGHT)
@@ -1352,12 +1434,14 @@ endif
 	        call htime.setTexttag( t , 2 , ttg )
 	        call htime.setReal( t , 3 , PUNISH_TEXTTAG_HEIGHT )
 	        call htime.setReal( t , 4 , size )
+			set t = null
+			set ttg = null
 		endif
 	endmethod
 
 	//硬直恢复器(+100/5s)
 	private static method punishback takes nothing returns nothing
-	    local integer i
+	    local integer i = 0
 	    local integer addPunish = 0
 	    local group tempGroup = null
 		local unit tempUnit = null
@@ -1379,7 +1463,7 @@ endif
 
 	//源恢复器(L +300/25s | M +200/25s)
 	private static method sourceback takes nothing returns nothing
-	    local integer i
+	    local integer i = 0
 	    local integer addPunish = 0
 	    local group tempGroup = null
 		local unit tempUnit = null
@@ -1438,7 +1522,9 @@ endif
 		set bean.huntType = hattr.getAttackHuntType(fromUnit)
 		call hattrHunt.huntUnit( bean )
 		call bean.destroy()
-		//call thistype.triggerUnitAttackRangeDo(fromUnit,toUnit,null,-1)
+		set t = null
+		set fromUnit = null
+		set toUnit = null
 	endmethod
 
 	private static method triggerUnitbeHuntAction takes nothing returns nothing
@@ -1483,182 +1569,7 @@ endif
         call hevt.triggerEvent(hevtBean)
         call hevtBean.destroy()
 		set u = null
-	endmethod
-
-	//单位攻击距离
-	private static method triggerUnitAttackRangeTimer takes nothing returns nothing
-		local timer t = GetExpiredTimer()
-		local integer during = htime.getInteger(t,1)
-		local unit u = htime.getUnit(t,2)
-		local unit target = htime.getUnit(t,3)
-		local real distance = 0
-		if(during<=0)then
-			call htime.delTimer( t )
-			call SaveUnitHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_TARGET_"),null)
-			return
-		endif
-		if(hattr.getAttackRange(u)<=0)then
-			call htime.delTimer( t )
-			call SaveUnitHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_TARGET_"),null)
-			return
-		endif
-		call htime.setInteger(t,1,during-1)
-		set distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetUnitX(target),GetUnitY(target)) - 60
-		//镜头放大模式下，范围增倍
-		if(hcamera.model=="zoomin")then
-			set distance = distance * 2
-		endif
-		if(hattr.getAttackRange(u) >= distance)then
-			if(thistype.getAllowDenied() == true or his.enemy(u, target))then
-				call IssueTargetOrder( u, "attack", target )
-			else
-				call IssueTargetOrder( u, "smart", target )
-			endif
-			call htime.delTimer( t )
-			call SaveUnitHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_TARGET_"),null)
-		endif
-	endmethod
-	private static method triggerUnitAttackRangeTimer2 takes nothing returns nothing
-		local timer t = GetExpiredTimer()
-		local integer during = htime.getInteger(t,1)
-		local unit u = htime.getUnit(t,2)
-		local destructable target = htime.getDestructable(t,3)
-		local real distance = 0
-		if(during<=0)then
-			call htime.delTimer( t )
-			call SaveDestructableHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_DESTRUCTABLE_"),null)
-			return
-		endif
-		if(hattr.getAttackRange(u)<=0)then
-			call htime.delTimer( t )
-			call SaveDestructableHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_DESTRUCTABLE_"),null)
-			return
-		endif
-		call htime.setInteger(t,1,during-1)
-		set distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetDestructableX(target),GetDestructableY(target)) - 80
-		//镜头放大模式下，范围增倍
-		if(hcamera.model=="zoomin")then
-			set distance = distance * 2
-		endif
-		if(hattr.getAttackRange(u) >= distance)then
-			call IssueTargetOrder( u, "attack", target )
-			call htime.delTimer( t )
-			call SaveDestructableHandle(hash_hero,GetHandleId(u),StringHash("_UNIT_ATTACK_DESTRUCTABLE_"),null)
-		endif
-	endmethod
-
-	private static method triggerUnitAttackRangeGo takes nothing returns nothing
-		local timer t = GetExpiredTimer()
-		local unit u = htime.getUnit(t,1)
-		local unit target = htime.getUnit(t,2)
-		local destructable dest = htime.getDestructable(t,3)
-		local location loc = null
-		call htime.delTimer( t )
-		if(target!=null)then
-			set loc = GetUnitLoc(target)
-			call IssuePointOrderLoc( u, "move", loc )
-			call RemoveLocation(loc)
-			set loc = null
-		elseif(dest!=null)then
-			set loc = Location(GetDestructableX(dest),GetDestructableY(dest))
-			call IssuePointOrderLoc( u, "move", loc )
-			call RemoveLocation(loc)
-			set loc = null
-		endif
-	endmethod
-	private static method triggerUnitAttackRangeDo takes unit u,unit targetUnit,destructable targetDestructable,integer orderid returns nothing
-		local integer uid = GetHandleId(u)
-		local real distance = 0
-		local timer t = null
-		local unit prevUnit = null
-		local destructable prevDestructable = null
-		local boolean isdo = false
-		set t = LoadTimerHandle(hash_attr_unit,uid,1562)
-		if(t!=null)then
-			call htime.delTimer( t )
-		endif
-		if(orderid == OrderId("smart") or orderid == OrderId("attack"))then
-			set isdo = true
-		elseif(orderid == -1)then
-			set isdo = true
-			call SaveUnitHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_TARGET_"),null)
-			call SaveDestructableHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_DESTRUCTABLE_"),null)
-		endif
-		if(u!=null)then
-			// 目标为单位
-			if(targetUnit!=null and his.alive(u) and isdo == true)then
-				// 算距离
-				set distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetUnitX(targetUnit),GetUnitY(targetUnit)) - 60
-				// 镜头放大模式下，范围增倍
-				if(hcamera.model=="zoomin")then
-					set distance = distance * 2
-				endif
-				// 检查这一次的命令作用单位是不是与上一次一致
-				set prevUnit = LoadUnitHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_TARGET_"))
-				if(prevUnit==targetUnit)then
-					if(hattr.getAttackRange(u) >= distance)then
-						call SaveUnitHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_TARGET_"),null)
-						return
-					endif
-				endif
-				call SaveUnitHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_TARGET_"),targetUnit)
-				if(hattr.getAttackRange(u) < distance)then
-					call IssueTargetOrderById( u, 851986, u )
-					set t = htime.setTimeout(0.01,function thistype.triggerUnitAttackRangeGo)
-					call htime.setUnit(t,1,u)
-					call htime.setUnit(t,2,targetUnit)
-					set t = htime.setInterval(0.15,function thistype.triggerUnitAttackRangeTimer)
-					call SaveTimerHandle(hash_attr_unit,uid,1562,t)
-					call htime.setInteger(t,1,50)
-					call htime.setUnit(t,2,u)
-					call htime.setUnit(t,3,targetUnit)
-				endif
-			// 目标为可破坏物
-			elseif(targetDestructable!=null and isdo == true)then
-				// 算距离
-				set distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetDestructableX(targetDestructable),GetDestructableY(targetDestructable)) - 80
-				// 镜头放大模式下，范围增倍
-				if(hcamera.model=="zoomin")then
-					set distance = distance * 2
-				endif
-				// 检查这一次的命令作用破坏物是不是与上一次一致
-				set prevDestructable = LoadDestructableHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_DESTRUCTABLE_"))
-				if(prevDestructable==targetDestructable)then
-					if(hattr.getAttackRange(u) >= distance)then
-						call SaveDestructableHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_DESTRUCTABLE_"),null)
-						return
-					endif
-				endif
-				call SaveDestructableHandle(hash_hero,uid,StringHash("_UNIT_ATTACK_DESTRUCTABLE_"),targetDestructable)
-				if(hattr.getAttackRange(u) < distance)then
-					call IssueTargetOrderById( u, 851986, u )
-					set t = htime.setTimeout(0.01,function thistype.triggerUnitAttackRangeGo)
-					call htime.setUnit(t,1,u)
-					call htime.setDestructable(t,3,targetDestructable)
-					set t = htime.setInterval(0.15,function thistype.triggerUnitAttackRangeTimer2)
-					call SaveTimerHandle(hash_attr_unit,uid,1562,t)
-					call htime.setInteger(t,1,50)
-					call htime.setUnit(t,2,u)
-					call htime.setDestructable(t,3,targetDestructable)
-				endif
-			endif
-		endif
-	endmethod
-	private static method triggerUnitAttackRangeAction takes nothing returns nothing
-		local unit u = GetTriggerUnit()
-		local unit targetUnit = GetOrderTargetUnit()
-		local destructable targetDestructable = GetOrderTargetDestructable()
-		call hconsole.warning(OrderId2StringBJ(GetUnitCurrentOrder(u)))
-		call thistype.triggerUnitAttackRangeDo(u,targetUnit,targetDestructable,GetIssuedOrderId())
-	endmethod
-	private static method triggerUnitAttackRangeAttack takes nothing returns nothing
-		local unit u = GetAttacker()
-		local unit targetUnit = GetTriggerUnit()
-		local real distance = hlogic.getDistanceBetweenXY(GetUnitX(u),GetUnitY(u),GetUnitX(targetUnit),GetUnitY(targetUnit)) - 80
-		call hconsole.warning(I2S(GetUnitCurrentOrder(u))) // 851993
-		if(hattr.getAttackRange(u) < distance)then
-			call thistype.triggerUnitAttackRangeDo(u,targetUnit,null,-1)
-		endif
+		set killer = null
 	endmethod
 
 	//注册单位
@@ -1669,17 +1580,16 @@ endif
 		local boolean isBind = false
 		//排除单位类型
 		if(utid==ABILITY_TOKEN or utid==ABILITY_BREAK or utid==ABILITY_SWIM or utid==HERO_SELECTION_TOKEN)then
+			set u = null
 			return
 		endif
 		//注册事件
 		set isBind = LoadBoolean( hash_attr_unit , uhid , 1 )
 		if(isBind != true)then
-			// call hconsole.log(GetUnitName(u)+"[进图]")
 			call SaveBoolean( hash_attr_unit , uhid , 1 , true )
 			call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_BEHUNT , u , EVENT_UNIT_DAMAGED )
 			if(GetUnitAbilityLevel(u,'Aloc')>0)then
 				//蝗虫不做某些处理
-				// call hconsole.log(GetUnitName(u)+"[蝗虫]")
 			else
 				call TriggerRegisterUnitEvent( ATTR_TRIGGER_UNIT_DEATH , u , EVENT_UNIT_DEATH )
 				call punishTtg(u)
@@ -1705,12 +1615,8 @@ endif
 		//触发设定
 		set ATTR_TRIGGER_UNIT_BEHUNT = CreateTrigger()
 		set ATTR_TRIGGER_UNIT_DEATH = CreateTrigger()
-		//set ATTR_TRIGGER_UNIT_ATTACK_RANGE = CreateTrigger()
-		//set ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED = CreateTrigger()
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_BEHUNT,function thistype.triggerUnitbeHuntAction)
 		call TriggerAddAction(ATTR_TRIGGER_UNIT_DEATH, function thistype.triggerUnitDeathAction)
-		//call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE, function thistype.triggerUnitAttackRangeAction)
-		//call TriggerAddAction(ATTR_TRIGGER_UNIT_ATTACK_RANGE_ATTACKED, function thistype.triggerUnitAttackRangeAttack)
 
 		//单位进入区域注册
 		call TriggerRegisterEnterRectSimple( triggerIn , GetPlayableMapRect() )
@@ -1719,6 +1625,8 @@ endif
 		call htime.setInterval( 0.50 , function thistype.lifemanaback )
 		call htime.setInterval( 5.00 , function thistype.punishback )
 		call htime.setInterval(25.00 , function thistype.sourceback )
+
+		set triggerIn = null
 
 	endmethod
 

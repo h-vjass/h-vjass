@@ -2,6 +2,7 @@
 globals
     hEvt hevt
     hEvtBean hevtBean
+    trigger hjass_global_triegger = null
     hashtable hash_trigger_register = null
     hashtable hash_trigger = null
     
@@ -400,7 +401,7 @@ struct hEvt
         return inc
     endmethod
 
-    //检查该handle是否绑定过单位事件
+    //检查该handle是否绑定过事件
     private static method isHandleRegister takes handle which,integer k returns integer
         if(which==null)then
             return 0
@@ -1418,14 +1419,15 @@ struct hEvt
     endmethod
     public static method onEnterUnitRange takes unit whichUnit,real range,code action returns trigger
         local boolean isInit = LoadBoolean(hash_trigger,GetHandleId(whichUnit),hashkey_unit_range+R2I(range))
-        local trigger tgr = null
+        local trigger tg = null
         if(isInit != true)then
             call SaveBoolean(hash_trigger,GetHandleId(whichUnit),hashkey_unit_range+R2I(range),true)
-            set tgr = CreateTrigger()
-            call TriggerRegisterUnitInRangeSimple( tgr,range, whichUnit )
-            call TriggerAddAction(tgr, function thistype.onEnterUnitRangeAction)
-            call setTriggerUnit(tgr,whichUnit)
-            call setRange(tgr,range)
+            set tg = CreateTrigger()
+            call TriggerRegisterUnitInRangeSimple( tg,range, whichUnit )
+            call TriggerAddAction(tg, function thistype.onEnterUnitRangeAction)
+            call setTriggerUnit(tg,whichUnit)
+            call setRange(tg,range)
+            set tg = null
         endif
         return onEventByHandle("enterUnitRange",whichUnit,action)
     endmethod
@@ -1443,13 +1445,14 @@ struct hEvt
     endmethod
     public static method onEnterRect takes rect whichRect,code action returns trigger
         local boolean isInit = LoadBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_enter)
-        local trigger tgr = null
+        local trigger tg = null
         if(isInit != true)then
             call SaveBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_enter,true)
-            set tgr = CreateTrigger()
-            call TriggerRegisterEnterRectSimple( tgr, whichRect )
-            call TriggerAddAction(tgr, function thistype.onEnterRectAction)
-            call setTriggerRect(tgr,whichRect)
+            set tg = CreateTrigger()
+            call TriggerRegisterEnterRectSimple( tg, whichRect )
+            call TriggerAddAction(tg, function thistype.onEnterRectAction)
+            call setTriggerRect(tg,whichRect)
+            set tg = null
         endif
         return onEventByHandle("enterRect",whichRect,action)
     endmethod
@@ -1467,13 +1470,14 @@ struct hEvt
     endmethod
     public static method onLeaveRect takes rect whichRect,code action returns trigger
         local boolean isInit = LoadBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_leave)
-        local trigger tgr = null
+        local trigger tg = null
         if(isInit != true)then
             call SaveBoolean(hash_trigger,GetHandleId(whichRect),hashkey_rect_leave,true)
-            set tgr = CreateTrigger()
-            call TriggerRegisterLeaveRectSimple( tgr, whichRect )
-            call TriggerAddAction(tgr, function thistype.onLeaveRectAction)
-            call setTriggerRect(tgr,whichRect)
+            set tg = CreateTrigger()
+            call TriggerRegisterLeaveRectSimple( tg, whichRect )
+            call TriggerAddAction(tg, function thistype.onLeaveRectAction)
+            call setTriggerRect(tg,whichRect)
+            set tg = null
         endif
         return onEventByHandle("leaveRect",whichRect,action)
     endmethod
@@ -1492,22 +1496,23 @@ struct hEvt
         call bean.destroy()
     endmethod
     public static method onChat takes player whichPlayer,string chatStr,code action returns nothing
-        local trigger tgr = CreateTrigger()
         local integer i = 0
+        local trigger tg = CreateTrigger()
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
                 exitwhen i<=0
-                call TriggerRegisterPlayerChatEvent( tgr,players[i],chatStr,true)
-                call TriggerAddAction(tgr, function thistype.onChatAction)
+                call TriggerRegisterPlayerChatEvent( tg,players[i],chatStr,true)
+                call TriggerAddAction(tg, function thistype.onChatAction)
                 call onEventByHandle("chat",players[i],action)
                 set i=i-1
             endloop
         else
-            call TriggerRegisterPlayerChatEvent( tgr,whichPlayer,chatStr,true)
-            call TriggerAddAction(tgr, function thistype.onChatAction)
+            call TriggerRegisterPlayerChatEvent( tg,whichPlayer,chatStr,true)
+            call TriggerAddAction(tg, function thistype.onChatAction)
             call onEventByHandle("chat",whichPlayer,action)
         endif
+        set tg = null
     endmethod
 
     //on - 聊天时（like匹配）
@@ -1524,22 +1529,23 @@ struct hEvt
         call bean.destroy()
     endmethod
     public static method onChatLike takes player whichPlayer,string chatStr,code action returns nothing
-        local trigger tgr = CreateTrigger()
         local integer i = 0
+        local trigger tg = CreateTrigger()
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
                 exitwhen i<=0
-                call TriggerRegisterPlayerChatEvent( tgr,players[i],chatStr,false)
-                call TriggerAddAction(tgr, function thistype.onChatAction)
+                call TriggerRegisterPlayerChatEvent( tg,players[i],chatStr,false)
+                call TriggerAddAction(tg, function thistype.onChatAction)
                 call onEventByHandle("chatLike",players[i],action)
                 set i=i-1
             endloop
         else
-            call TriggerRegisterPlayerChatEvent( tgr,whichPlayer,chatStr,false)
-            call TriggerAddAction(tgr, function thistype.onChatAction)
+            call TriggerRegisterPlayerChatEvent( tg,whichPlayer,chatStr,false)
+            call TriggerAddAction(tg, function thistype.onChatAction)
             call onEventByHandle("chatLike",whichPlayer,action)
         endif
+        set tg = null
     endmethod
 
     //on - 按ESC
@@ -1553,8 +1559,8 @@ struct hEvt
     endmethod
     public static method onEsc takes player whichPlayer,code action returns nothing
         local boolean isInit = false
-        local trigger tgr = null
         local integer i = 0
+        local trigger tg = null
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
@@ -1562,9 +1568,9 @@ struct hEvt
                     set isInit = LoadBoolean(hash_trigger,GetHandleId(players[i]),hashkey_esc)
                     if(isInit != true)then
                         call SaveBoolean(hash_trigger,GetHandleId(players[i]),hashkey_esc,true)
-                        set tgr = CreateTrigger()
-                        call TriggerRegisterPlayerEventEndCinematic( tgr, players[i] )
-                        call TriggerAddAction(tgr, function thistype.onEscAction)
+                        set tg = CreateTrigger()
+                        call TriggerRegisterPlayerEventEndCinematic( tg, players[i] )
+                        call TriggerAddAction(tg, function thistype.onEscAction)
                         call onEventByHandle("esc",players[i],action)
                     endif
                 set i=i-1
@@ -1573,12 +1579,13 @@ struct hEvt
             set isInit = LoadBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_esc)
             if(isInit != true)then
                 call SaveBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_esc,true)
-                set tgr = CreateTrigger()
-                call TriggerRegisterPlayerEventEndCinematic( tgr, whichPlayer )
-                call TriggerAddAction(tgr, function thistype.onEscAction)
+                set tg = CreateTrigger()
+                call TriggerRegisterPlayerEventEndCinematic( tg, whichPlayer )
+                call TriggerAddAction(tg, function thistype.onEscAction)
                 call onEventByHandle("esc",whichPlayer,action)
             endif
         endif
+        set tg = null
     endmethod
 
     //TODO 选择单位
@@ -1587,6 +1594,8 @@ struct hEvt
         local integer pid = htime.getInteger(t,1)
         local integer uid = htime.getInteger(t,2)
         call SaveInteger(hash_trigger,pid,uid,0)
+        call htime.delTimer(t)
+        set t = null
     endmethod
     private static method onSelectionAction takes nothing returns nothing
         local player triggerPlayer = GetTriggerPlayer()
@@ -1596,6 +1605,7 @@ struct hEvt
         local timer t = LoadTimerHandle(hash_trigger,GetHandleId(triggerPlayer),hashkey_selection_timer)
         if(t != null)then
             call htime.delTimer(t)
+            set t = null
         endif
         if(qty<1)then
             set qty = 1
@@ -1629,11 +1639,14 @@ struct hEvt
         call htime.setInteger(t,1,GetHandleId(triggerPlayer))
         call htime.setInteger(t,2,GetHandleId(triggerUnit))
         call SaveTimerHandle(hash_trigger,GetHandleId(triggerPlayer),hashkey_selection_timer,t)
+        set triggerPlayer = null
+        set triggerUnit = null
+        set t = null
     endmethod
     private static method onSelectionBind takes player whichPlayer,code action,string evt returns nothing
         local boolean isInit = false
-        local trigger tgr = null
         local integer i = 0
+        local trigger tg = null
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
@@ -1641,10 +1654,11 @@ struct hEvt
                     set isInit = LoadBoolean(hash_trigger,GetHandleId(players[i]),hashkey_selection)
                     if(isInit != true)then
                         call SaveBoolean(hash_trigger,GetHandleId(players[i]),hashkey_selection,true)
-                        set tgr = CreateTrigger()
-                        call TriggerRegisterPlayerSelectionEventBJ( tgr, players[i], true )
-                        call TriggerAddAction(tgr, function thistype.onSelectionAction)
+                        set tg = CreateTrigger()
+                        call TriggerRegisterPlayerSelectionEventBJ( tg, players[i], true )
+                        call TriggerAddAction(tg, function thistype.onSelectionAction)
                         call onEventByHandle(evt,players[i],action)
+                        set tg = null
                     endif
                 set i=i-1
             endloop
@@ -1652,10 +1666,11 @@ struct hEvt
             set isInit = LoadBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_selection)
             if(isInit != true)then
                 call SaveBoolean(hash_trigger,GetHandleId(whichPlayer),hashkey_selection,true)
-                set tgr = CreateTrigger()
-                call TriggerRegisterPlayerSelectionEventBJ( tgr, whichPlayer, true )
-                call TriggerAddAction(tgr, function thistype.onSelectionAction)
+                set tg = CreateTrigger()
+                call TriggerRegisterPlayerSelectionEventBJ( tg, whichPlayer, true )
+                call TriggerAddAction(tg, function thistype.onSelectionAction)
                 call onEventByHandle(evt,whichPlayer,action)
+                set tg = null
             endif
         endif
     endmethod
@@ -1691,20 +1706,21 @@ struct hEvt
         call bean.destroy()
     endmethod
     public static method onUnSelection takes player whichPlayer,code action returns trigger
-        local trigger tgr = CreateTrigger()
         local integer i = 0
+        local trigger tg = CreateTrigger()
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
                 exitwhen i<=0
-                call TriggerRegisterPlayerSelectionEventBJ( tgr, players[i], false )
+                call TriggerRegisterPlayerSelectionEventBJ( tg, players[i], false )
                 set i=i-1
             endloop
         else
-            call TriggerRegisterPlayerSelectionEventBJ( tgr, whichPlayer, false )
+            call TriggerRegisterPlayerSelectionEventBJ( tg, whichPlayer, false )
         endif
-        call TriggerAddAction(tgr, function thistype.onUnSelectionAction)
+        call TriggerAddAction(tg, function thistype.onUnSelectionAction)
         return onEventByHandle("unSelection",whichPlayer,action)
+        set tg = null
     endmethod
 
     //on - 建筑升级开始时
@@ -1762,26 +1778,26 @@ struct hEvt
     //on - 任意建筑建造开始时
     //@使用默认的 GetTriggerUnit 获取触发单位
     public static method onConstructStart takes code action returns trigger
-        local trigger tg = CreateTrigger()
-        call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_CONSTRUCT_START )
-        call TriggerAddAction(tg, action)
-        return tg
+        set hjass_global_triegger = CreateTrigger()
+        call TriggerRegisterAnyUnitEventBJ( hjass_global_triegger, EVENT_PLAYER_UNIT_CONSTRUCT_START )
+        call TriggerAddAction(hjass_global_triegger, action)
+        return hjass_global_triegger
     endmethod
     //on - 任意建筑建造取消时
     //@使用默认的 GetCancelledStructure 获取触发单位
     public static method onConstructCancel takes code action returns trigger
-        local trigger tg = CreateTrigger()
-        call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_CONSTRUCT_CANCEL )
-        call TriggerAddAction(tg, action)
-        return tg
+        set hjass_global_triegger = CreateTrigger()
+        call TriggerRegisterAnyUnitEventBJ( hjass_global_triegger, EVENT_PLAYER_UNIT_CONSTRUCT_CANCEL )
+        call TriggerAddAction(hjass_global_triegger, action)
+        return hjass_global_triegger
     endmethod
     //on - 任意建筑建造完成时
     //@使用默认的 GetConstructedStructure 获取触发单位
     public static method onConstructFinish takes code action returns trigger
-        local trigger tg = CreateTrigger()
-        call TriggerRegisterAnyUnitEventBJ( tg, EVENT_PLAYER_UNIT_CONSTRUCT_FINISH )
-        call TriggerAddAction(tg, action)
-        return tg
+        set hjass_global_triegger = CreateTrigger()
+        call TriggerRegisterAnyUnitEventBJ( hjass_global_triegger, EVENT_PLAYER_UNIT_CONSTRUCT_FINISH )
+        call TriggerAddAction(hjass_global_triegger, action)
+        return hjass_global_triegger
     endmethod
 
     //on - 任意单位注册进hjass系统时(注意这是全局事件)
