@@ -95,4 +95,55 @@ struct hMedia
 		endif
 	endmethod
 
+	// 放烟火Call
+	private static method hanabiCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local location loc = null
+		local rect whichRect = htime.getRect(t,1)
+		local real i = htime.getReal(t,2)
+		local real during = htime.getReal(t,3)
+		local integer r = GetRandomInt(1,7)
+		set i = i+1
+		call htime.setReal(t,2,i)
+		if(i>during)then
+			call htime.delTimer(t)
+			call DisableTrigger( GetTriggeringTrigger() )
+		else
+			set loc = GetRandomLocInRect(whichRect)
+			if(r==1)then
+				call DestroyEffect( AddSpecialEffectLoc("war3mapImported\\HolyForce.mdl", loc) )
+			elseif(r==2)then
+				call DestroyEffect( AddSpecialEffectLoc("Abilities\\Spells\\Human\\Flare\\FlareCaster.mdl", loc) )
+				call PlaySoundBJ( gg_snd_audio_yanhua1 )
+			elseif(r==3)then
+				call DestroyEffect( AddSpecialEffectLoc("war3mapImported\\DivineRing.mdl", loc) )
+			elseif(r==4)then
+				call DestroyEffect( AddSpecialEffectLoc("war3mapImported\\AncientExplode.mdl", loc) )
+				call PlaySoundBJ( gg_snd_audio_yanhua2 )
+			elseif(r==5)then
+				call DestroyEffect( AddSpecialEffectLoc("war3mapImported\\Enchantment.mdl", loc) )
+			elseif(r==6)then
+				call DestroyEffect( AddSpecialEffectLoc("war3mapImported\\TheHolyBomb.mdl", loc) )
+			elseif(r==7)then
+				call DestroyEffect( AddSpecialEffectLoc("war3mapImported\\EnergyBurst.mdl", loc) )
+			endif
+			call RemoveLocation(loc)
+		endif
+		set t = null
+		set whichRect = null
+		set loc = null
+	endmethod
+	// 放烟火
+	public static method hanabi takes rect r,real during returns nothing
+		local timer t = null
+		if(r == null)then
+			set r = GetPlayableMapRect()
+		endif
+		set t = htime.setInterval(0.15,function thistype.hanabiCall)
+		call htime.setRect(t,1,r)
+		call htime.setReal(t,2,0)
+		call htime.setReal(t,3,during/0.15)
+		set t = null
+	endmethod
+
 endstruct

@@ -140,7 +140,7 @@ struct hAbility
 		if(level <= 1)then
 			call hmsg.style(hmsg.ttg2Unit(u,"沉默",6.00,"ee82ee",10,1.00,10.00)  ,"scale",0,0.2)
 		else
-			call hmsg.style(hmsg.ttg2Unit(u,I2S(level)+"重沉默",6.00,"ee82ee",10,1.00,10.00)  ,"scale",0,0.2)
+			call hmsg.style(hmsg.ttg2Unit(u,I2S(level)+"多重沉默",6.00,"ee82ee",10,1.00,10.00)  ,"scale",0,0.2)
 		endif
 		call SaveInteger(hash_ability, GetHandleId(u), 54550, level)
 		if(IsUnitInGroup(u, ABILITY_SILENT_GROUP) == false)then
@@ -317,8 +317,6 @@ struct hAbility
 	    local group whichGroup = htime.getGroup(t,1)
 		call htime.delTimer(t)
 	    call ForGroup(whichGroup, function thistype.invulnerableGroupCallBack2)
-	    call GroupClear(whichGroup)
-	    call DestroyGroup(whichGroup)
 		set t = null
 		set whichGroup = null
 	endmethod

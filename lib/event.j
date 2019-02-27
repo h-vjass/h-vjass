@@ -997,7 +997,7 @@ struct hEvt
         return onEventByHandle("skillStop",whichUnit,action)
     endmethod
 
-    //on - 发动技能
+    //on - 发动技能效果
     //@getTriggerUnit 获取施放单位
     //@getTargetUnit 获取目标单位(只对对目标施放有效)
     //@getTriggerSkill 获取施放技能ID
@@ -1009,10 +1009,6 @@ struct hEvt
         set bean.targetUnit = GetSpellTargetUnit()
         set bean.triggerSkill = GetSpellAbilityId()
         set bean.targetLoc = GetSpellTargetLoc()
-        call hconsole.warning("bean.triggerUnit="+GetUnitName(GetTriggerUnit()))
-        call hconsole.warning("bean.triggerUnitid="+I2S(GetHandleId(bean.triggerUnit)))
-        call hconsole.warning("bean.targetUnit="+GetUnitName(GetSpellTargetUnit()))
-        call hconsole.warning("bean.triggerSkill="+I2S(GetSpellAbilityId()))
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
@@ -1657,9 +1653,9 @@ struct hEvt
                         set tg = CreateTrigger()
                         call TriggerRegisterPlayerSelectionEventBJ( tg, players[i], true )
                         call TriggerAddAction(tg, function thistype.onSelectionAction)
-                        call onEventByHandle(evt,players[i],action)
                         set tg = null
                     endif
+                    call onEventByHandle(evt,players[i],action)
                 set i=i-1
             endloop
         else
@@ -1669,9 +1665,9 @@ struct hEvt
                 set tg = CreateTrigger()
                 call TriggerRegisterPlayerSelectionEventBJ( tg, whichPlayer, true )
                 call TriggerAddAction(tg, function thistype.onSelectionAction)
-                call onEventByHandle(evt,whichPlayer,action)
                 set tg = null
             endif
+            call onEventByHandle(evt,whichPlayer,action)
         endif
     endmethod
     //on - 玩家单击选择单位
@@ -1705,22 +1701,23 @@ struct hEvt
         call triggerEvent(bean)
         call bean.destroy()
     endmethod
-    public static method onUnSelection takes player whichPlayer,code action returns trigger
+    public static method onUnSelection takes player whichPlayer,code action returns nothing
         local integer i = 0
         local trigger tg = CreateTrigger()
+        call TriggerAddAction(tg, function thistype.onUnSelectionAction)
         if(whichPlayer==null)then
             set i = player_max_qty
             loop
                 exitwhen i<=0
                 call TriggerRegisterPlayerSelectionEventBJ( tg, players[i], false )
+                call onEventByHandle("unSelection",players[i],action)
                 set i=i-1
             endloop
         else
             call TriggerRegisterPlayerSelectionEventBJ( tg, whichPlayer, false )
+            call onEventByHandle("unSelection",whichPlayer,action)
         endif
-        call TriggerAddAction(tg, function thistype.onUnSelectionAction)
-        return onEventByHandle("unSelection",whichPlayer,action)
-        set tg = null
+        return
     endmethod
 
     //on - 建筑升级开始时

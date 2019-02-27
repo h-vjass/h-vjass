@@ -83,7 +83,7 @@ library hJass initializer init needs hSync
 		set hitem = hItem.create()
 		set hitemMix = hItemMix.create()
 		set hhero = hHero.create()
-		set hempty = hEmpty.create()
+		set henemy = hEnemy.create()
 		set henv = hEnv.create()
 		//initset
 		call hplayer.initSet()

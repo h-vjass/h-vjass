@@ -678,6 +678,9 @@ struct hPlayer
 		call TriggerAddAction(triggerMSR , function thistype.triggerMSRActions)
 		call TriggerAddAction(triggerConvert , function thistype.triggerConvertActions)
 		call TriggerAddAction(triggerRam , function thistype.triggerRamActions)
+		call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
+	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
+	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
 		loop
 			exitwhen i > 16
 				set players[i] = Player(i-1)
@@ -714,10 +717,6 @@ struct hPlayer
 	            endif
 			set i = i + 1
 		endloop
-	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
-	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
-	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
-	    call TriggerAddAction( triggerApmUnit, function thistype.triggerApmUnitActions )
 		call hevt.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
 		set triggerApm = null
 		set triggerApmUnit = null

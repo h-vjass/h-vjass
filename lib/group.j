@@ -62,7 +62,7 @@ struct hGroup
 	 * filter 条件适配器
 	 */
 	public static method createByLoc takes location loc,real radius,code filter returns group
-		local boolexpr bx = Condition(filter)
+		local boolexpr bx
 		//镜头放大模式下，范围缩小一半
 		if(hcamera.model=="zoomin")then
 			set radius = radius * 0.5
