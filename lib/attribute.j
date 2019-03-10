@@ -1259,19 +1259,18 @@ struct hAttr
 	//攻速 		-9999% ～ 9999%<*实际上为-80% ～ 400%>
 	//视野 		-2050 ～ 2050（视野设定以50一个间隔设定，如/-50/0/50/500/950，自动退一法归50，例如即使你设为1/21/44会归为0，151/199会归为150）
 	//射程 		0 ～ 
-    //力敏智		～
-    //力敏智(绿)	-99999999 ～ 99999999
-    //护甲		-999999 ～ 999999
-    //活力 魔法	1 ～ 9999999999
-    //硬直    	1 ～
-    //物暴 术暴 分裂 回避 移动力 力量 敏捷 智力 救助力 吸血 负重 各率 下限：0
+	//力敏智		～
+	//力敏智(绿)	-99999999 ～ 99999999
+	//护甲		-999999 ～ 999999
+	//活力 魔法	1 ～ 9999999999
+	//硬直    	1 ～
+	//物暴 术暴 分裂 回避 移动力 力量 敏捷 智力 救助力 吸血 负重 各率 下限：0
 	private static method setAttrDo takes integer flag , unit whichUnit , real diff returns nothing
 		local integer uhid = GetHandleId(whichUnit)
 		local real currentVal = 0
 		local real futureVal = 0
 		local integer level = 0
 		local real tempPercent = 0
-		local real tempCure = 0
 		local integer tempInt = 0
 		if( diff!=0 )then
 			// 生命
@@ -1459,48 +1458,48 @@ struct hAttr
 					set futureVal = ATTR_MAX_DEFEND
 				endif
 				call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1,       1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10,      1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100,     1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000,    1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10000,    1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100000,    1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1,       1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10,      1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100,     1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000,    1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10000,    1 )
-		        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100000,    1 )
-		        set tempInt = R2I(futureVal)
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10,      1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100,     1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000,    1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10000,    1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100000,    1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1,       1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10,      1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100,     1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000,    1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10000,    1 )
+		      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100000,    1 )
+		      set tempInt = R2I(futureVal)
 				if(tempInt>=0)then
 					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100000, (tempInt/100000)+1 )
-		            set tempInt = tempInt - (tempInt/100000)*100000
+		         set tempInt = tempInt - (tempInt/100000)*100000
 					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10000, (tempInt/10000)+1 )
-		            set tempInt = tempInt - (tempInt/10000)*10000
-			        call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000, (tempInt/1000)+1 )
-		            set tempInt = tempInt - (tempInt/1000)*1000
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100, (tempInt/100)+1 )
-		            set tempInt = tempInt - (tempInt/100)*100
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10, (tempInt/10)+1 )
-		            set tempInt = tempInt - (tempInt/10)*10
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1, tempInt+1 )
-		        else
-		            set tempInt = IAbsBJ(tempInt)
+		         set tempInt = tempInt - (tempInt/10000)*10000
+			      call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1000, (tempInt/1000)+1 )
+		         set tempInt = tempInt - (tempInt/1000)*1000
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_100, (tempInt/100)+1 )
+		         set tempInt = tempInt - (tempInt/100)*100
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_10, (tempInt/10)+1 )
+		         set tempInt = tempInt - (tempInt/10)*10
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_1, tempInt+1 )
+		      else
+		         set tempInt = IAbsBJ(tempInt)
 					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100000, (tempInt/100000)+1 )
-		            set tempInt = tempInt - (tempInt/100000)*100000
+		         set tempInt = tempInt - (tempInt/100000)*100000
 					call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10000, (tempInt/10000)+1 )
-		            set tempInt = tempInt - (tempInt/10000)*10000
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000, (tempInt/1000)+1 )
-		            set tempInt = tempInt - (tempInt/1000)*1000
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100, (tempInt/100)+1 )
-		            set tempInt = tempInt - (tempInt/100)*100
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10, (tempInt/10)+1 )
-		            set tempInt = tempInt - (tempInt/10)*10
-		            call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1, tempInt+1 )
+		         set tempInt = tempInt - (tempInt/10000)*10000
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1000, (tempInt/1000)+1 )
+		         set tempInt = tempInt - (tempInt/1000)*1000
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_100, (tempInt/100)+1 )
+		         set tempInt = tempInt - (tempInt/100)*100
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_10, (tempInt/10)+1 )
+		         set tempInt = tempInt - (tempInt/10)*10
+		         call SetUnitAbilityLevel( whichUnit , Attr_Ability_defend_FU_1, tempInt+1 )
 		        endif
 				return
 			endif
 			// 攻击速度
-		    if( flag == ATTR_FLAG_ATTACK_SPEED ) then
+		   if( flag == ATTR_FLAG_ATTACK_SPEED ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
@@ -1548,8 +1547,8 @@ struct hAttr
 				if(futureVal > ATTR_MAX_ATTACK_PHYSICAL or futureVal < -ATTR_MAX_ATTACK_PHYSICAL)then
 					set diff = 0
 				endif
-		        set tempInt = R2I(diff)
-		        if( tempInt>0 )then
+				set tempInt = R2I(diff)
+				if( tempInt>0 )then
 					set level = tempInt/100000000
 					set tempInt = tempInt - (tempInt/100000000)*100000000
 					call setWhiteAttack( whichUnit , Attr_Ability_attack_physical_item_100000000 , level )
@@ -2003,7 +2002,7 @@ struct hAttr
 				elseif (hlogic.rabs(futureVal) < 0.02) then
 					call hgroup.out(whichUnit, ATTR_GROUP_LIFE_BACK)
 				endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
+            call SaveReal( hash_attr , uhid , flag , futureVal )
 			elseif( flag == ATTR_FLAG_UP_MANA_BACK ) then
 				set futureVal = LoadReal( hash_attr , uhid , flag ) + diff
 				if (hlogic.rabs(futureVal) > 0.02) then
@@ -2011,51 +2010,51 @@ struct hAttr
 				elseif (hlogic.rabs(futureVal) < 0.02) then
 					call hgroup.out(whichUnit, ATTR_GROUP_MANA_BACK)
 				endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
+            call SaveReal( hash_attr , uhid , flag , futureVal )
 			elseif( flag == ATTR_FLAG_UP_LIFE_SOURCE_CURRENT ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
-                set futureVal = currentVal + diff
-                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE ) ) then
-                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE )
-                endif
+				set futureVal = currentVal + diff
+				if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE ) ) then
+					set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_LIFE_SOURCE )
+				endif
 				if (futureVal > 1 ) then
 					call hgroup.in(whichUnit, ATTR_GROUP_LIFE_SOURCE)
 				elseif (futureVal < 1 ) then
 					call hgroup.out(whichUnit, ATTR_GROUP_LIFE_SOURCE)
 				endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
+            call SaveReal( hash_attr , uhid , flag , futureVal )
 			elseif( flag == ATTR_FLAG_UP_MANA_SOURCE_CURRENT ) then
 				set currentVal = LoadReal( hash_attr , uhid , flag )
-                set futureVal = currentVal + diff
-                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE ) ) then
-                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE )
-                endif
+				set futureVal = currentVal + diff
+				if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE ) ) then
+					set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE )
+				endif
 				if (futureVal > 1 ) then
 					call hgroup.in(whichUnit, ATTR_GROUP_MANA_SOURCE)
 				elseif (futureVal < 1 ) then
 					call hgroup.out(whichUnit, ATTR_GROUP_MANA_SOURCE)
 				endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
-            elseif( flag == ATTR_FLAG_UP_PUNISH and hunit.isOpenPunish(whichUnit)) then
-                set currentVal = LoadReal( hash_attr , uhid , flag )
-                set futureVal = currentVal + diff
-                call SaveReal( hash_attr , uhid , flag , futureVal )
-                if( currentVal > 0 ) then
-                    set tempPercent = futureVal / currentVal
-                    call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , tempPercent*LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT ) )
-                else
-                    call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , futureVal )
-                endif
-            elseif( flag == ATTR_FLAG_UP_PUNISH_CURRENT and hunit.isOpenPunish(whichUnit)) then
-                set currentVal = LoadReal( hash_attr , uhid , flag )
-                set futureVal = currentVal + diff
-                if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH ) ) then
-                    set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH )
-                endif
-                call SaveReal( hash_attr , uhid , flag , futureVal )
-            else
-                call SaveReal( hash_attr , uhid , flag , LoadReal( hash_attr , uhid , flag ) + diff )
-            endif
+				call SaveReal( hash_attr , uhid , flag , futureVal )
+			elseif( flag == ATTR_FLAG_UP_PUNISH and hunit.isOpenPunish(whichUnit)) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+				set futureVal = currentVal + diff
+				call SaveReal( hash_attr , uhid , flag , futureVal )
+				if( currentVal > 0 ) then
+					set tempPercent = futureVal / currentVal
+					call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , tempPercent*LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT ) )
+				else
+					call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , futureVal )
+				endif
+			elseif( flag == ATTR_FLAG_UP_PUNISH_CURRENT and hunit.isOpenPunish(whichUnit)) then
+				set currentVal = LoadReal( hash_attr , uhid , flag )
+				set futureVal = currentVal + diff
+				if( futureVal > LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH ) ) then
+					set futureVal = LoadReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH )
+				endif
+				call SaveReal( hash_attr , uhid , flag , futureVal )
+			else
+				call SaveReal( hash_attr , uhid , flag , LoadReal( hash_attr , uhid , flag ) + diff )
+			endif
 		endif//diff
 	endmethod
 
