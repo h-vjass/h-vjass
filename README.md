@@ -1,14 +1,1 @@
-# hJass
-[点击查看教程 hjass.hunzsig.org](http://hjass.hunzsig.org) 
-
-# 使用hJass的优势？
-#### hJass拥有优秀的demo，在开源的同时引导您学习的更多，它完全独立，不依赖任何游戏平台（如JAPI、DzAPI）但并不禁止你使用。
-#### 包含多样丰富的属性系统，内置多达几十种以上的自定义事件,可以轻松做出平时难以甚至不能做出的技能效果。
-#### 强大的物品合成分拆，丰富自定义技能模板！免去自行编写！
-#### 镜头、单位组、过滤器、背景音乐、天气等也应有尽有。
-## 提醒：
-#### 调用hJass需要支持vJass的编辑器，如YDWE等
-#### 如果保存报错，请关闭YDWE——YDWE配置——智能判断注入代码，或者自行寻找冲突代码，修改解决
-### 如果hevt无法获取数据，请关闭YDWE>YDWE配置>脚本优化，由于部分YDWE版本采用外嵌触发的方式来解决内联问题，可能会引起错误
-#### 本套代码免费提供给了解Jass/vJass的作者试用，如果不了解Jass/vJass请使用T来制作地图或自行学习，此处不提供jass教学
-#### 当然即使你完全不懂jass也可以去[作者官网](https://www.hunzsig.org)学习
+<a href="https://gitlab.com/h-w3x/h-vjass">已全部转移到gitlab https://gitlab.com/h-w3x/h-vjass</a>
