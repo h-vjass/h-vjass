@@ -746,9 +746,9 @@ struct hAttrHunt
                 set isKnocking = true
             endif
 
-            //计算魔法暴击,几率75000满100%，伤害每10000点增加8%
+            //计算魔法暴击,几率75000满100%，伤害每10000点增加7%
             if( hlogic.strpos(bean.huntType,"magic")!=-1 and (fromUnitViolence-toUnitViolenceOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitViolenceOppose)/75)) then
-                set realDamagePercent = realDamagePercent + fromUnitAttackMagicPercent * (fromUnitViolence-toUnitViolenceOppose)*0.0008
+                set realDamagePercent = realDamagePercent + fromUnitAttackMagicPercent * (fromUnitViolence-toUnitViolenceOppose)*0.0007
                 set toUnitAvoid = 0 //触发暴击，无法回避
                 set isViolence = true
             endif
@@ -997,7 +997,7 @@ struct hAttrHunt
                     set hevtBean.targetUnit = toUnit
                     set hevtBean.damage = realDamage
                     set hevtBean.value = fromUnitKnocking/750
-                    set hevtBean.value2 = fromUnitKnocking*0.08
+                    set hevtBean.value2 = fromUnitKnocking*0.07
                     call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                     //@触发被魔法暴击事件
@@ -1007,20 +1007,19 @@ struct hAttrHunt
                     set hevtBean.sourceUnit = fromUnit
                     set hevtBean.damage = realDamage
                     set hevtBean.value = fromUnitKnocking/750
-                    set hevtBean.value2 = fromUnitKnocking*0.08
+                    set hevtBean.value2 = fromUnitKnocking*0.07
                     call hevt.triggerEvent(hevtBean)
                     call hevtBean.destroy()
                 endif
-
                 //暴击文本加持
                 if(isKnocking and isViolence)then
-                    set realDamageString = realDamageString+"双暴击"
+                    set realDamageString = realDamageString+"双暴"
                     set realDamageStringColor = "b054ee"
                 elseif(isKnocking)then
-                    set realDamageString = realDamageString+"暴击"
+                    set realDamageString = realDamageString+"物暴"
                     set realDamageStringColor = "ef3215"
                 elseif(isViolence)then
-                    set realDamageString = realDamageString+"暴击"
+                    set realDamageString = realDamageString+"魔爆"
                     set realDamageStringColor = "15bcef"
                 endif
                 //文本显示

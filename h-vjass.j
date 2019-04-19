@@ -91,19 +91,19 @@ library hJass initializer init needs hSync
 		call hmb.initSet()
 		call hitem.initSet()
 
-		//hJass 系统提醒（F9任务）
+		//h-vjass 系统提醒（F9任务）
 		set txt = ""
-		set txt = txt + "hJass完全独立，不依赖任何游戏平台（如YDWE、JAPI、DzApi,但支持你额外使用）"
+		set txt = txt + "h-vjass完全独立，不依赖任何游戏平台（如YDWE、JAPI、DzApi,但支持你额外使用）"
 		set txt = txt + "|n包含多样丰富的属性系统，可以轻松做出平时难以甚至不能做出的地图效果"
 		set txt = txt + "|n内置多达几十种以上的自定义事件，轻松实现神奇的主动和被动效果"
 		set txt = txt + "|n自带物品合成，免去自行编写的困惑。丰富的自定义技能模板"
 		set txt = txt + "|n镜头、单位组、过滤器、背景音乐、天气等也应有尽有"
-		set txt = txt + "|n想要了解更多，官方QQ群 325338043 官网教程 hjass.hunzsig.org"
-		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "hJass",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		set txt = txt + "|n想要了解更多，官方QQ群 325338043"
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "h-vjass",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 		set txt = ""
 		set txt = txt + "-random 随机选择"
 		set txt = txt + "|n-repick 重新选择"
-		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "hJass选择英雄指令",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "h-vjass选择英雄指令",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 		set txt = ""
 		set txt = txt + "-mbap 查看所有玩家统计"
 		set txt = txt + "|n-mbme 查看你的个人实时状态"
@@ -112,7 +112,7 @@ library hJass initializer init needs hSync
 		set txt = txt + "|n-mbsn 查看双击锁定单位的自然属性"
 		set txt = txt + "|n-mbsi 查看双击锁定单位的物品"
 		set txt = txt + "|n-mbh 隐藏面板"
-		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用hJass多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
+		call CreateQuestBJ( bj_QUESTTYPE_OPT_DISCOVERED, "如何使用h-vjass多面板",txt, "ReplaceableTextures\\CommandButtons\\BTNTomeOfRetraining.blp" )
 		set txt = ""
 		set txt = txt + "-apc 设定是否自动转换黄金为木头"
 		set txt = txt + "|n获得黄金超过100万时，自动按照比率转换多余的部分为木头"

@@ -1,6 +1,6 @@
 
 //载入 hJass
-#include "hJass.j"//实际路径以本地为准，此处例子为同一目录
+#include "h-vjass.j"//实际路径以本地为准，此处例子为同一目录
 
 //test hunzsig的测试脚本
 #include "hTest.j"
