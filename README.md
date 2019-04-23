@@ -1,17 +1,17 @@
- * [gitlab网址](https://gitlab.com/h-w3x/h-vjass)
- * [最佳实践：时空之轮TD](https://gitlab.com/h-w3x/h-war3/tree/master/w3xMaps/hyperSpaceTD)
- * author hunzsig
- * version v20190406
+# README
 
-# 使用优势？
-v-vjass拥有优秀的demo，在开源的同时引导您学习的更多。
-v-vjass完全独立，不依赖任何游戏平台（如JAPI）
-包含多样丰富的属性系统，可以轻松做出平时难以甚至不能做出的地图效果。
-内置多达50种以上的自定义事件，轻松实现神奇的主动和被动效果。
-多达12格的物品合成，免去自行编写的困惑。丰富的自定义技能模板！
-镜头、单位组、过滤器、背景音乐、天气等也应有尽有。
-#### 框架结构如下：
-```
+* [gitlab网址](https://gitlab.com/h-w3x/h-vjass)
+* [最佳实践：时空之轮TD](https://gitlab.com/h-w3x/h-war3/tree/master/w3xMaps/hyperSpaceTD)
+* author hunzsig
+* version v20190406
+
+## 使用优势？
+
+v-vjass拥有优秀的demo，在开源的同时引导您学习的更多。 v-vjass完全独立，不依赖任何游戏平台（如JAPI） 包含多样丰富的属性系统，可以轻松做出平时难以甚至不能做出的地图效果。 内置多达50种以上的自定义事件，轻松实现神奇的主动和被动效果。 多达12格的物品合成，免去自行编写的困惑。丰富的自定义技能模板！ 镜头、单位组、过滤器、背景音乐、天气等也应有尽有。
+
+**框架结构如下：**
+
+```text
     |- h-vjass.j - 入口文件，你的main文件需要包含它
     |- hSync.j - 同步方法，处理无法暂停的功能（结构体内不得暂停）
     |- hMain.j - 一个简单例子，在F4中include这个main文件。而main需要包含h-vjass.j
@@ -56,19 +56,28 @@ v-vjass完全独立，不依赖任何游戏平台（如JAPI）
 ```
 
 提醒：
-### 本套代码免费提供给了解Jass/vJass的作者试用，如果不了解Jass/vJass请使用T来制作地图或自行学习，此处不提供jass教学
-### 当然即使你完全不懂jass也可以去 [vJass教程](https://gitlab.com/h-w3x/h-war3/tree/master/learn/vJass%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B) 学习
+
+#### 本套代码免费提供给了解Jass/vJass的作者试用，如果不了解Jass/vJass请使用T来制作地图或自行学习，此处不提供jass教学
+
+#### 当然即使你完全不懂jass也可以去 [vJass教程](https://gitlab.com/h-w3x/h-war3/tree/master/learn/vJass系列教程) 学习
 
 > 以下教程以YDWE为例
-## 前期准备：
-### 关闭YWDE的 逆天触发 
+>
+> ### 前期准备：
+>
+> #### 关闭YWDE的 逆天触发
+>
 > 会使得某些原生方法胡乱添加YDWE前缀
 
-## 好了，让我们开始接入：
-### 打开YDWE 打开地图 按F4打开触发编辑器
-### 在最上方第一的位置添加一个【新触发】
-### 选中新建的触发点击菜单【编辑】将他转为自定义文本，如下：
-```
+### 好了，让我们开始接入：
+
+#### 打开YDWE 打开地图 按F4打开触发编辑器
+
+#### 在最上方第一的位置添加一个【新触发】
+
+#### 选中新建的触发点击菜单【编辑】将他转为自定义文本，如下：
+
+```text
 function Trig_[YOUR_TRIGGER]_Actions takes nothing returns nothing
 endfunction
 
@@ -79,24 +88,27 @@ call TriggerAddAction( gg_trg_[YOUR_TRIGGER], function Trig_[YOUR_TRIGGER]_Actio
 endfunction
 ```
 
-### 这些默认的function都是没有用的，将他们全部删除，留下一个[空白的文本区]
-### 在文本区顶部 *include* h-vjass的根目录文件h-vjass.j,注意相对路径要正确，以你的【YDWE.exe】相对的目录为准
-##### （不建议路径存在有中文）
-### 如果此时你已经完成上述步骤，那么文本区内现在应该是这样的：
-```
+#### 这些默认的function都是没有用的，将他们全部删除，留下一个\[空白的文本区\]
+
+#### 在文本区顶部 _include_ h-vjass的根目录文件h-vjass.j,注意相对路径要正确，以你的【YDWE.exe】相对的目录为准
+
+**（不建议路径存在有中文）**
+
+#### 如果此时你已经完成上述步骤，那么文本区内现在应该是这样的：
+
+```text
 include "[relatively_path]/h-vjass/h-vjass.j"
 ```
 
+## 保存地图查看是否出错，如果没有出错则v-vjass库添加成功
 
-# 保存地图查看是否出错，如果没有出错则v-vjass库添加成功
+以上仅为添加v-vjass，而在制作地图的实践中，你应该是建立自己的main文件来引用v-vjass（如可参考目录中的hMain.j） 那么文本区内现在应该改为这样的：
 
-以上仅为添加v-vjass，而在制作地图的实践中，你应该是建立自己的main文件来引用v-vjass（如可参考目录中的hMain.j）
-那么文本区内现在应该改为这样的：
-```
+```text
 include "[relatively_path]/h-vjass/hMain.j"
 ```
 
-```
+```text
 注意：
 h-vjass库开源，不定时更新，可访问 https://www.hunzsig.org 查看下载最新版
 h-vjass库仅仅提供一些功能函数协助做图作者更加轻松制作地图
