@@ -93,7 +93,7 @@ struct hLogic
 	endmethod
 
 	//实数格式化
-	public method realformat takes real value returns string
+	public method realFormat takes real value returns string
 		set hjass_global_logic_txt = ""
 		if(value>100000000)then
 			set hjass_global_logic_txt = R2SW(value/100000000, 1, 3)+"Y"
@@ -106,7 +106,7 @@ struct hLogic
 	endmethod
 
 	//整型格式化
-	public static method integerformat takes integer value returns string
+	public static method integerFormat takes integer value returns string
 		set hjass_global_logic_txt = ""
 		if(value>100000000)then
 			set hjass_global_logic_txt = I2S(value/100000000)+"Y"
@@ -242,6 +242,7 @@ struct hLogic
 		return LoadStr(hash_hlogic,HASH_KEY_CHAR,i)
 	endmethod
 
+    // 获取字符串中中文字数量
 	public static method getChinaQty takes string s returns integer
 		local string txt = null
 		local string char = null

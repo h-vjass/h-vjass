@@ -1,3 +1,4 @@
+//物品合成系统
 globals
     hItemMix hitemMix
     hashtable hash_item_mix = null

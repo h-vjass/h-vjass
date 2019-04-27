@@ -187,7 +187,7 @@ struct hIs
     endmethod
 
     /**
-     * 判断是否处在水面
+     * 是否处在水面
      */
     public static method water takes unit whichUnit returns boolean
         local boolean status = false
@@ -198,7 +198,7 @@ struct hIs
         return status
     endmethod
     /**
-     * 判断是否处于地面
+     * 是否处于地面
      */
     public static method floor takes unit whichUnit returns boolean
         local boolean status = false

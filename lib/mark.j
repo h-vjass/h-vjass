@@ -1,4 +1,4 @@
-//消息
+//遮罩滤镜
 globals
     hMark hmark
     hashtable hash_hmark = null

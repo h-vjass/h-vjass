@@ -33,7 +33,7 @@ struct hMsg
         call echoToXY( whichPlayer, msg , x, y, duration)
     endmethod
 
-    //在屏幕(x.y)处打印信息给某玩家
+    //在屏幕(0,0)处打印信息给某玩家
     public static method echoTo takes player whichPlayer,string msg,real duration returns nothing
         if(duration<5)then
             call DisplayTextToPlayer( whichPlayer, 0, 0, msg)
@@ -159,6 +159,8 @@ struct hMsg
         set t = null
         set ttg = null
     endmethod
+
+    //执行风格展示
     public static method style takes texttag ttg,string showtype,real xspeed,real yspeed returns nothing
         local timer t = null
         call SetTextTagVelocity( ttg, xspeed, yspeed )

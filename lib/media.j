@@ -1,4 +1,4 @@
-//单位组
+//多媒体
 globals
 hMedia hmedia
 endglobals

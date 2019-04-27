@@ -52,8 +52,8 @@ struct hPlayer
 		return GetConvertedPlayerId(whichPlayer) 
 	endmethod
 
-	//getDandomUnit
-	public static method getDandomUnit takes nothing returns unit
+	//getRandomUnit
+	public static method getRandomUnit takes nothing returns unit
 		local integer i = 0
 		local integer j = 0
 		local integer pi = 0

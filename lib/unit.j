@@ -500,7 +500,7 @@ struct hUnit
     endmethod
 
     /**
-     * 创建1单位面向点移动到某点
+     * 创建1单位面向点攻击移动到某点
      * @return 最后创建单位
      */
     public static method createUnitAttackToLoc takes player whichPlayer, integer unitid , location loc, location attackLoc returns unit

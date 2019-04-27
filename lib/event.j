@@ -1511,10 +1511,10 @@ struct hEvt
         set tg = null
     endmethod
 
-    //on - 聊天时（like匹配）
-    //getTriggerPlayer 获取聊天的玩家
-    //getTriggerString 获取聊天的内容
-    //getTriggerStringMatched 获取匹配命中的内容
+    //on - 聊天时（模糊匹配）
+    //@getTriggerPlayer 获取聊天的玩家
+    //@getTriggerString 获取聊天的内容
+    //@getTriggerStringMatched 获取匹配命中的内容
     private static method onChatLikeAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "chatLike"
@@ -1545,7 +1545,7 @@ struct hEvt
     endmethod
 
     //on - 按ESC
-    //getTriggerPlayer 获取触发玩家
+    //@getTriggerPlayer 获取触发玩家
     private static method onEscAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "esc"
@@ -1671,28 +1671,28 @@ struct hEvt
         endif
     endmethod
     //on - 玩家单击选择单位
-    //getTriggerPlayer 获取触发玩家
-    //getTriggerUnit 获取触发单位
+    //@getTriggerPlayer 获取触发玩家
+    //@getTriggerUnit 获取触发单位
     public static method onSelection takes player whichPlayer,code action returns nothing
         call onSelectionBind(whichPlayer,action,"selection")
     endmethod
     //on - 玩家双击选择单位
-    //getTriggerPlayer 获取触发玩家
-    //getTriggerUnit 获取触发单位
+    //@getTriggerPlayer 获取触发玩家
+    //@getTriggerUnit 获取触发单位
     public static method onSelectionDouble takes player whichPlayer,code action returns nothing
         call onSelectionBind(whichPlayer,action,"selectionDouble")
     endmethod
     //on - 玩家三击选择单位
-    //getTriggerPlayer 获取触发玩家
-    //getTriggerUnit 获取触发单位
+    //@getTriggerPlayer 获取触发玩家
+    //@getTriggerUnit 获取触发单位
     public static method onSelectionTriple takes player whichPlayer,code action returns nothing
         call onSelectionBind(whichPlayer,action,"selectionTriple")
     endmethod
 
 
     //on - 玩家取消选择单位
-    //getTriggerPlayer 获取触发玩家
-    //getTriggerUnit 获取触发单位
+    //@getTriggerPlayer 获取触发玩家
+    //@getTriggerUnit 获取触发单位
     private static method onUnSelectionAction takes nothing returns nothing
         local hEvtBean bean = hEvtBean.create()
         set bean.triggerKey = "unSelection"
@@ -1797,7 +1797,7 @@ struct hEvt
         return hjass_global_triegger
     endmethod
 
-    //on - 任意单位注册进hjass系统时(注意这是全局事件)
+    //on - 任意单位注册进h-vjass系统时(注意这是全局事件)
     //@getTriggerUnit 获取触发单位
     public static method onRegister takes code action returns trigger
         return onEventByHandle("register",getDefaultHandle(),action)

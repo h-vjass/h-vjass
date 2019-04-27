@@ -137,7 +137,7 @@ struct hSkill
         set u = null
     endmethod
 	/**
-	 * 变身[参考 hJass变身技能模板]
+	 * 变身[参考 h-vjass变身技能模板]
      * modelFrom 技能模板 参考 'A00D'
      * modelTo 技能模板 参考 'A00E'
 	 */

@@ -79,7 +79,3 @@ struct hConsole
 	endmethod
 
 endstruct
-
-<?
-	a=1
-?>
