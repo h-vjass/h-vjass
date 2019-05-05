@@ -4,7 +4,7 @@ struct hTest
 	private static method inRect takes nothing returns nothing
 		local string music = ""
 		local integer i = GetRandomInt(1, 4)
-		call hmsg.echo("getTriggerUnit=="+GetUnitName(hevt.getTriggerUnit())+"进入了"+hrect.getName(hevt.getTriggerRect()))
+		call hmsg.echo("getTriggerUnit=="+GetUnitName(hevent.getTriggerUnit())+"进入了"+hrect.getName(hevent.getTriggerRect()))
 		if(i==1)then
 			set music = gg_snd_Credits
 		elseif(i==2)then
@@ -14,34 +14,34 @@ struct hTest
 		elseif(i==4)then
 			set music = gg_snd_Credits
 		endif
-		call hmedia.bgm2Player(music,GetOwningPlayer(hevt.getTriggerUnit()))
+		call hmedia.bgm2Player(music,GetOwningPlayer(hevent.getTriggerUnit()))
 	endmethod
 	private static method outRect takes nothing returns nothing
-		call hmsg.echo("getTriggerUnit=="+GetUnitName(hevt.getTriggerUnit())+"离开了"+hrect.getName(hevt.getTriggerRect()))
+		call hmsg.echo("getTriggerUnit=="+GetUnitName(hevent.getTriggerUnit())+"离开了"+hrect.getName(hevent.getTriggerRect()))
 	endmethod
 
 	private static method onattackready takes nothing returns nothing
-		local unit u = hevt.getTriggerUnit()
+		local unit u = hevent.getTriggerUnit()
 		call hmsg.echo(GetUnitName(u)+"发动了攻击")
 	endmethod
 	private static method ondamage takes nothing returns nothing
-		call hmsg.echo(GetUnitName(hevt.getSourceUnit())+"造成了攻击伤害")
-		call hmsg.echo("对"+GetUnitName(hevt.getTargetUnit())+"进入伤害"+R2S(hevt.getDamage()))
-		call hmsg.echo("对"+GetUnitName(hevt.getTargetUnit())+"真实伤害:"+R2S(hevt.getRealDamage()))
-		call hmsg.echo(hevt.getDamageKind())
-		call hmsg.echo(hevt.getDamageType())
+		call hmsg.echo(GetUnitName(hevent.getSourceUnit())+"造成了攻击伤害")
+		call hmsg.echo("对"+GetUnitName(hevent.getTargetUnit())+"进入伤害"+R2S(hevent.getDamage()))
+		call hmsg.echo("对"+GetUnitName(hevent.getTargetUnit())+"真实伤害:"+R2S(hevent.getRealDamage()))
+		call hmsg.echo(hevent.getDamageKind())
+		call hmsg.echo(hevent.getDamageType())
 	endmethod
 	private static method enteru takes nothing returns nothing
-		local unit u = hevt.getTriggerUnit()
-		local unit eu = hevt.getTriggerEnterUnit()
-		local real range = hevt.getRange()
+		local unit u = hevent.getTriggerUnit()
+		local unit eu = hevent.getTriggerEnterUnit()
+		local real range = hevent.getRange()
 		call hmsg.echo(GetUnitName(u)+"被进去了！")
 		call hmsg.echo(GetUnitName(eu)+"进去了！")
 		call hmsg.echo("range=="+R2S(range))
 	endmethod
 	private static method momentTest takes nothing returns nothing
-		local unit u = hevt.getTriggerUnit()
-		local integer charges = R2I(hevt.getValue())
+		local unit u = hevent.getTriggerUnit()
+		local integer charges = R2I(hevent.getValue())
 		call hconsole.log(GetUnitName(u))
 		call hconsole.log("charges"+I2S(charges))
 		call haward.forUnitGold(u,100*charges)
@@ -221,8 +221,8 @@ struct hTest
 		//call hattrEffect.setColdDuring(u,10,0)
 		call hAttrNatural.setFire(u,300,0)
 
-		call hevt.onAttackReady(u,function thistype.onattackready)
-		call hevt.onDamage(u,function thistype.ondamage)
+		call hevent.onAttackReady(u,function thistype.onattackready)
+		call hevent.onDamage(u,function thistype.ondamage)
 		
 		/*
 		call hunit.createUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE),'n00F',Location(0,0))
@@ -242,7 +242,7 @@ struct hTest
 		//call hattrEffect.setUnarmOdds(u2,5,0)
 		//call hattrEffect.setUnarmDuring(u2,10.00,0)
 
-		//call hevt.onEnterUnitRange(u2,300,function thistype.enteru)
+		//call hevent.onEnterUnitRange(u2,300,function thistype.enteru)
 
 		//rect
 		set i=0
@@ -253,8 +253,8 @@ struct hTest
 					exitwhen j>=5
 						set r = hrect.createInLoc(rx+1152*j,ry-1152*i,1152,1152)
 						call hrect.setName(r,"平原"+I2S(i*j))
-						call hevt.onEnterRect(r,function thistype.inRect)
-						call hevt.onLeaveRect(r,function thistype.outRect)
+						call hevent.onEnterRect(r,function thistype.inRect)
+						call hevent.onLeaveRect(r,function thistype.outRect)
 						set wbean.loc = GetRectCenter(r)
 						set wbean.width = 1152
 						set wbean.height = 1152

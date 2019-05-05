@@ -1,5 +1,11 @@
 ### 更新日志 <a href="https://gitlab.com/h-w3x/h-vjass" target="_blank">Git</a>
 
+#### 2019/04/27
+    修改event模块的全局变量为hevent，而不再是hevt，与h-lua一致
+#### 2019/04/26
+    修复了player模块getRandomUnit的错误函数名
+    修复了logic部分格式化函数的驼峰命名
+    修正了部分注释
 #### 2019/04/06
     同步了h-lua魔法暴击的比例8%->7%
     同步了h-lua暴击的漂浮字提示

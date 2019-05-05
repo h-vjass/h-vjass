@@ -27,7 +27,7 @@
 	blunt			迟钝[减少物理攻击力]
 	muggle			麻瓜[减少魔法攻击力]
 	myopia			短视[减少攻击距离]
-   blind			致盲[减少视野]
+    blind			致盲[减少视野]
 	corrosion		腐蚀[减少护甲]
 	chaos			混乱[减少魔抗]
 	twine			缠绕[减少回避]
@@ -45,9 +45,9 @@
 	silent 			沉默[无法使用技能]
 	unarm 			缴械[无法进行攻击]
 	fetter			脚镣[无法进行移动]
-   bomb			爆破[范围伤害]
-   lightning_chain 闪电链[被动传递电击]
-   crack_fly 		击飞[上天]
+    bomb			爆破[范围伤害]
+    lightning_chain 闪电链[被动传递电击]
+    crack_fly 		击飞[上天]
 */
 globals
 	hAttrEffect hattrEffect

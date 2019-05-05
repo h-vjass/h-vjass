@@ -1,5 +1,6 @@
  * [gitlab网址](https://gitlab.com/h-w3x/h-vjass)
  * [最佳实践：时空之轮TD](https://gitlab.com/h-w3x/h-war3/tree/master/w3xMaps/hyperSpaceTD)
+ * [h-vjass技术文档](http://hvjass.book.hunzsig.org)
  * author hunzsig
  * version v20190406
 

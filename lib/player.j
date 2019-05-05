@@ -122,7 +122,7 @@ struct hPlayer
 
 	//selection
 	private static method triggerSelectionUnitActions takes nothing returns nothing
-		call setSelection(hevt.getTriggerPlayer(),hevt.getTriggerUnit())
+		call setSelection(hevent.getTriggerPlayer(),hevent.getTriggerUnit())
 	endmethod
 	private static method triggerDeSelectionUnitActions takes nothing returns nothing
 		call setSelection(GetTriggerPlayer(),null)
@@ -717,7 +717,7 @@ struct hPlayer
 	            endif
 			set i = i + 1
 		endloop
-		call hevt.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
+		call hevent.onSelectionDouble(null,function thistype.triggerSelectionUnitActions)
 		set triggerApm = null
 		set triggerApmUnit = null
 		set triggerLeave = null

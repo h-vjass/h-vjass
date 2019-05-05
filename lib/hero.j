@@ -64,11 +64,11 @@ struct hHero
 		call hattr.addLifeSource(GetTriggerUnit() , 10 * diffLv , 0 )
 		call hattr.addManaSource(GetTriggerUnit() , 10 * diffLv , 0 )
 		//@触发升级事件
-		set hevtBean = hEvtBean.create()
-        set hevtBean.triggerKey = "levelUp"
-        set hevtBean.triggerUnit = GetTriggerUnit()
-        call hevt.triggerEvent(hevtBean)
-        call hevtBean.destroy()
+		set heventBean = hEventBean.create()
+        set heventBean.triggerKey = "levelUp"
+        set heventBean.triggerUnit = GetTriggerUnit()
+        call hevent.triggerEvent(heventBean)
+        call heventBean.destroy()
         call thistype.setHeroPrevLevel(GetTriggerUnit(),GetHeroLevel(GetTriggerUnit()))
 	endmethod
     static method create takes nothing returns hHero
@@ -153,12 +153,12 @@ struct hHero
 		call SaveUnitHandle( hash_hero , GetHandleId(whichPlayer) , StringHash("hk_player_own_unit"+I2S(index)) , u )
         if(u!=null)then
             //触发英雄被选择事件(全局)
-            set hevtBean = hEvtBean.create()
-            set hevtBean.triggerKey = "pickHero"
-            set hevtBean.triggerHandle = hevt.getDefaultHandle()
-            set hevtBean.triggerUnit = u
-            call hevt.triggerEvent(hevtBean)
-            call hevtBean.destroy()
+            set heventBean = hEventBean.create()
+            set heventBean.triggerKey = "pickHero"
+            set heventBean.triggerHandle = hevent.getDefaultHandle()
+            set heventBean.triggerUnit = u
+            call hevent.triggerEvent(heventBean)
+            call heventBean.destroy()
         endif
 	endmethod
 

@@ -1,7 +1,7 @@
 //事件.j
 globals
-    hEvt hevt
-    hEvtBean hevtBean
+    hEvent hevent
+    hEventBean heventBean
     trigger hjass_global_triegger = null
     hashtable hash_trigger_register = null
     hashtable hash_trigger = null
@@ -39,7 +39,7 @@ globals
 
 endglobals
 
-struct hEvtBean
+struct hEventBean
     public static handle triggerHandle = null
     public static string triggerKey = null
     public static unit triggerUnit = null
@@ -70,8 +70,8 @@ struct hEvtBean
     public static boolean isNoAvoid = false
 
     static method create takes nothing returns thistype
-        local hEvtBean s = 0
-        set s = hEvtBean.allocate()
+        local hEventBean s = 0
+        set s = hEventBean.allocate()
         set s.triggerHandle = null
         set s.triggerKey = null
         set s.triggerUnit = null
@@ -134,7 +134,7 @@ struct hEvtBean
     endmethod
 endstruct
 
-struct hEvt
+struct hEvent
 
     private static unit trigger_default_handle = null
     private static integer trigger_limit = 9999
@@ -670,8 +670,8 @@ struct hEvt
     //------内部开放的方法------
 
     //triggerByHandle
-    public static method triggerEvent takes hEvtBean bean returns nothing
-        local integer k = getTriggerKeyByString(hEvtBean.triggerKey)
+    public static method triggerEvent takes hEventBean bean returns nothing
+        local integer k = getTriggerKeyByString(hEventBean.triggerKey)
         local trigger tempTgr = null
         local integer i = 0
         if(bean.triggerHandle==null and bean.triggerPlayer!=null)then
@@ -806,7 +806,7 @@ struct hEvt
     //@getTriggerUnit 获取触发单位
     //@getTargetUnit 获取被注意/目标单位
     private static method onAttackDetectAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "attackDetect"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.targetUnit = GetEventTargetUnit()
@@ -826,7 +826,7 @@ struct hEvt
     //@getTriggerUnit 获取触发单位
     //@getTargetUnit 获取被获取/目标单位
     private static method onAttackGetTargetAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "attackGetTarget"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.targetUnit = GetEventTargetUnit()
@@ -847,7 +847,7 @@ struct hEvt
     //@getTargetUnit 获取被攻击单位
     //@getAttacker 获取攻击单位
     private static method onAttackReadyAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "attackReady"
         set bean.triggerUnit = GetAttacker()
         set bean.targetUnit = GetTriggerUnit()
@@ -869,7 +869,7 @@ struct hEvt
     //@getTargetUnit 获取攻击单位
     //@getAttacker 获取攻击单位
     private static method onBeAttackReadyAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "beAttackReady"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.targetUnit = GetAttacker()
@@ -913,7 +913,7 @@ struct hEvt
     //@getTriggerUnit 获取学习单位
     //@getTriggerSkill 获取学习技能ID
     private static method onSkillStudyAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "skillStudy"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.triggerSkill = GetLearnedSkill()
@@ -935,7 +935,7 @@ struct hEvt
     //@getTriggerSkill 获取施放技能ID
     //@getTargetLoc 获取施放目标点
     private static method onSkillReadyAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "skillReady"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.targetUnit = GetSpellTargetUnit()
@@ -959,7 +959,7 @@ struct hEvt
     //@getTriggerSkill 获取施放技能ID
     //@getTargetLoc 获取施放目标点
     private static method onSkillStartAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "skillStart"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.targetUnit = GetSpellTargetUnit()
@@ -981,7 +981,7 @@ struct hEvt
     //@getTriggerUnit 获取施放单位
     //@getTriggerSkill 获取施放技能ID
     private static method onSkillStopAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "skillStop"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.triggerSkill = GetSpellAbilityId()
@@ -1003,7 +1003,7 @@ struct hEvt
     //@getTriggerSkill 获取施放技能ID
     //@getTargetLoc 获取施放目标点
     private static method onSkillHappenAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "skillHappen"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.targetUnit = GetSpellTargetUnit()
@@ -1025,7 +1025,7 @@ struct hEvt
     //@getTriggerUnit 获取施放单位
     //@getTriggerSkill 获取施放技能ID
     private static method onSkillOverAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "skillOver"
         set bean.triggerUnit = GetTriggerUnit()
         set bean.triggerSkill = GetSpellAbilityId()
@@ -1081,7 +1081,7 @@ struct hEvt
     //@getTriggerUnit 获取触发单位
     //@getTriggerItem 获取触发物品
     private static method onItemDestroyAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "itemDestroy"
         set bean.triggerItem = GetManipulatedItem()
         set bean.triggerUnit = GetKillingUnit()
@@ -1385,7 +1385,7 @@ struct hEvt
     //on - 被召唤时
     //@getTriggerUnit 获取被召唤单位
     private static method onSummonAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "summon"
         set bean.triggerUnit = GetTriggerUnit()
         call triggerEvent(bean)
@@ -1405,7 +1405,7 @@ struct hEvt
     //@getTriggerEnterUnit 获取进入范围的单位
     //@getRange 获取设定范围
     private static method onEnterUnitRangeAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "enterUnitRange"
         set bean.triggerUnit = getTriggerUnit()
         set bean.triggerEnterUnit = GetTriggerUnit()
@@ -1432,7 +1432,7 @@ struct hEvt
     //@getTriggerRect 获取被进入的矩形区域
     //@getTriggerUnit 获取进入矩形区域的单位
     private static method onEnterRectAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "enterRect"
         set bean.triggerRect = getTriggerRect()
         set bean.triggerUnit = GetTriggerUnit()
@@ -1457,7 +1457,7 @@ struct hEvt
     //@getTriggerRect 获取被离开的矩形区域
     //@getTriggerUnit 获取离开矩形区域的单位
     private static method onLeaveRectAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "leaveRect"
         set bean.triggerRect = getTriggerRect()
         set bean.triggerUnit = GetTriggerUnit()
@@ -1483,7 +1483,7 @@ struct hEvt
     //@getTriggerString 获取聊天的内容
     //@getTriggerStringMatched 获取匹配命中的内容
     private static method onChatAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "chat"
         set bean.triggerPlayer = GetTriggerPlayer()
         set bean.triggerString = GetEventPlayerChatString()
@@ -1516,7 +1516,7 @@ struct hEvt
     //@getTriggerString 获取聊天的内容
     //@getTriggerStringMatched 获取匹配命中的内容
     private static method onChatLikeAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "chatLike"
         set bean.triggerPlayer = GetTriggerPlayer()
         set bean.triggerString = GetEventPlayerChatString()
@@ -1547,7 +1547,7 @@ struct hEvt
     //on - 按ESC
     //@getTriggerPlayer 获取触发玩家
     private static method onEscAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "esc"
         set bean.triggerPlayer = GetTriggerPlayer()
         call triggerEvent(bean)
@@ -1597,7 +1597,7 @@ struct hEvt
         local player triggerPlayer = GetTriggerPlayer()
         local unit triggerUnit = GetTriggerUnit()
         local integer qty = 1+LoadInteger(hash_trigger,GetHandleId(triggerPlayer),GetHandleId(triggerUnit))
-        local hEvtBean bean
+        local hEventBean bean
         local timer t = LoadTimerHandle(hash_trigger,GetHandleId(triggerPlayer),hashkey_selection_timer)
         if(t != null)then
             call htime.delTimer(t)
@@ -1608,7 +1608,7 @@ struct hEvt
         endif
         call SaveInteger(hash_trigger,GetHandleId(triggerPlayer),GetHandleId(triggerUnit),qty)
         if(qty == 1)then
-            set bean = hEvtBean.create()
+            set bean = hEventBean.create()
             set bean.triggerKey = "selection"
             set bean.triggerPlayer = triggerPlayer
             set bean.triggerUnit = triggerUnit
@@ -1616,7 +1616,7 @@ struct hEvt
             call bean.destroy()
         endif
         if(qty == 2)then
-            set bean = hEvtBean.create()
+            set bean = hEventBean.create()
             set bean.triggerKey = "selectionDouble"
             set bean.triggerPlayer = triggerPlayer
             set bean.triggerUnit = triggerUnit
@@ -1624,7 +1624,7 @@ struct hEvt
             call bean.destroy()
         endif
         if(qty == 3)then
-            set bean = hEvtBean.create()
+            set bean = hEventBean.create()
             set bean.triggerKey = "selectionTriple"
             set bean.triggerPlayer = triggerPlayer
             set bean.triggerUnit = triggerUnit
@@ -1694,7 +1694,7 @@ struct hEvt
     //@getTriggerPlayer 获取触发玩家
     //@getTriggerUnit 获取触发单位
     private static method onUnSelectionAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "unSelection"
         set bean.triggerPlayer = GetTriggerPlayer()
         set bean.triggerUnit = GetTriggerUnit()
@@ -1723,7 +1723,7 @@ struct hEvt
     //on - 建筑升级开始时
     //@getTriggerUnit 获取触发单位
     private static method onUpgradeStartAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "upgradeStart"
         set bean.triggerUnit = GetTriggerUnit()
         call triggerEvent(bean)
@@ -1740,7 +1740,7 @@ struct hEvt
     //on - 建筑升级取消时
     //@getTriggerUnit 获取触发单位
     private static method onUpgradeCancelAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "upgradeCancel"
         set bean.triggerUnit = GetTriggerUnit()
         call triggerEvent(bean)
@@ -1757,7 +1757,7 @@ struct hEvt
     //on - 建筑升级完成时
     //@getTriggerUnit 获取触发单位
     private static method onUpgradeFinishAction takes nothing returns nothing
-        local hEvtBean bean = hEvtBean.create()
+        local hEventBean bean = hEventBean.create()
         set bean.triggerKey = "upgradeFinish"
         set bean.triggerUnit = GetTriggerUnit()
         call triggerEvent(bean)

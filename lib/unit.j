@@ -386,11 +386,11 @@ struct hUnit
             call hability.invulnerable(u,invulnerable)
         endif
         //@触发复活事件
-        set hevtBean = hEvtBean.create()
-        set hevtBean.triggerKey = "reborn"
-        set hevtBean.triggerUnit = u
-        call hevt.triggerEvent(hevtBean)
-        call hevtBean.destroy()
+        set heventBean = hEventBean.create()
+        set heventBean.triggerKey = "reborn"
+        set heventBean.triggerUnit = u
+        call hevent.triggerEvent(heventBean)
+        call heventBean.destroy()
         call htime.delTimer(t)
         set t = null
         set u = null
@@ -405,11 +405,11 @@ struct hUnit
                     call hability.invulnerable(u,invulnerable)
                 endif
                 //@触发复活事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "reborn"
-                set hevtBean.triggerUnit = u
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "reborn"
+                set heventBean.triggerUnit = u
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
             else
                 set t = htime.setTimeout(delay,function thistype.rebornAtXYCall)
                 call htime.setUnit(t,1,u)

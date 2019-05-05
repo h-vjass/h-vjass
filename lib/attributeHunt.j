@@ -640,23 +640,23 @@ struct hAttrHunt
             //判断无视Break 分为 null defend resistance both
             if( bean.isBreak == "defend" ) then
                 //@触发无视护甲事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "breakDefend"
-                set hevtBean.triggerUnit = fromUnit
-                set hevtBean.targetUnit = toUnit
-                set hevtBean.breakType = bean.isBreak
-                set hevtBean.value = toUnitDefend
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "breakDefend"
+                set heventBean.triggerUnit = fromUnit
+                set heventBean.targetUnit = toUnit
+                set heventBean.breakType = bean.isBreak
+                set heventBean.value = toUnitDefend
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //@触发被无视护甲事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "beBreakDefend"
-                set hevtBean.triggerUnit = toUnit
-                set hevtBean.sourceUnit = fromUnit
-                set hevtBean.breakType = bean.isBreak
-                set hevtBean.value = toUnitDefend
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "beBreakDefend"
+                set heventBean.triggerUnit = toUnit
+                set heventBean.sourceUnit = fromUnit
+                set heventBean.breakType = bean.isBreak
+                set heventBean.value = toUnitDefend
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //
                 if(toUnitDefend>0) then
                     set toUnitDefend = 0
@@ -665,23 +665,23 @@ struct hAttrHunt
                 set realDamageStringColor = "f97373"
             elseif( bean.isBreak == "resistance" ) then
                 //@触发无视魔抗事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "breakResistance"
-                set hevtBean.triggerUnit = fromUnit
-                set hevtBean.targetUnit = toUnit
-                set hevtBean.breakType = bean.isBreak
-                set hevtBean.value = toUnitResistance
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "breakResistance"
+                set heventBean.triggerUnit = fromUnit
+                set heventBean.targetUnit = toUnit
+                set heventBean.breakType = bean.isBreak
+                set heventBean.value = toUnitResistance
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //@触发被无视魔抗事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "beBreakResistance"
-                set hevtBean.triggerUnit = toUnit
-                set hevtBean.sourceUnit = fromUnit
-                set hevtBean.breakType = bean.isBreak
-                set hevtBean.value = toUnitResistance
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "beBreakResistance"
+                set heventBean.triggerUnit = toUnit
+                set heventBean.sourceUnit = fromUnit
+                set heventBean.breakType = bean.isBreak
+                set heventBean.value = toUnitResistance
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //
                 if(toUnitResistance>0) then
                     set toUnitResistance = 0
@@ -690,25 +690,25 @@ struct hAttrHunt
                 set realDamageStringColor = "6fa8dc"
             elseif( bean.isBreak == "both" ) then
                 //@触发同时无视护甲和魔抗事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "breakDefendAndResistance"
-                set hevtBean.triggerUnit = fromUnit
-                set hevtBean.targetUnit = toUnit
-                set hevtBean.breakType = bean.isBreak
-                set hevtBean.value = toUnitDefend
-                set hevtBean.value2 = toUnitResistance
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "breakDefendAndResistance"
+                set heventBean.triggerUnit = fromUnit
+                set heventBean.targetUnit = toUnit
+                set heventBean.breakType = bean.isBreak
+                set heventBean.value = toUnitDefend
+                set heventBean.value2 = toUnitResistance
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //@触发被同时无视护甲和魔抗事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "beBreakDefendAndResistance"
-                set hevtBean.triggerUnit = toUnit
-                set hevtBean.sourceUnit = fromUnit
-                set hevtBean.breakType = bean.isBreak
-                set hevtBean.value = toUnitDefend
-                set hevtBean.value2 = toUnitResistance
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "beBreakDefendAndResistance"
+                set heventBean.triggerUnit = toUnit
+                set heventBean.sourceUnit = fromUnit
+                set heventBean.breakType = bean.isBreak
+                set heventBean.value = toUnitDefend
+                set heventBean.value2 = toUnitResistance
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //
                 if(toUnitDefend>0) then
                     set toUnitDefend = 0
@@ -759,20 +759,20 @@ struct hAttrHunt
                 set realDamage = 0
                 call hmsg.style(hmsg.ttg2Unit(toUnit,"回避",6.00,"5ef78e",10,1.00,10.00)  ,"scale",0,0.2)
                 //@触发回避事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "avoid"
-                set hevtBean.triggerUnit = toUnit
-                set hevtBean.attacker = fromUnit
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "avoid"
+                set heventBean.triggerUnit = toUnit
+                set heventBean.attacker = fromUnit
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //@触发被回避事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "beAvoid"
-                set hevtBean.triggerUnit = fromUnit
-                set hevtBean.attacker = fromUnit
-                set hevtBean.targetUnit = toUnit
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "beAvoid"
+                set heventBean.triggerUnit = fromUnit
+                set heventBean.attacker = fromUnit
+                set heventBean.targetUnit = toUnit
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
             endif
 
             //计算伤害增幅
@@ -969,47 +969,47 @@ struct hAttrHunt
 
                 if(isKnocking)then
                     //@触发物理暴击事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "knocking"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = realDamage
-                    set hevtBean.value = fromUnitKnocking/500
-                    set hevtBean.value2 = fromUnitKnocking*0.05
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "knocking"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = realDamage
+                    set heventBean.value = fromUnitKnocking/500
+                    set heventBean.value2 = fromUnitKnocking*0.05
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被物理暴击事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beKnocking"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage
-                    set hevtBean.value = fromUnitKnocking/500
-                    set hevtBean.value2 = fromUnitKnocking*0.05
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beKnocking"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage
+                    set heventBean.value = fromUnitKnocking/500
+                    set heventBean.value2 = fromUnitKnocking*0.05
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
                 if(isViolence)then
                     //@触发魔法暴击事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "violence"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = realDamage
-                    set hevtBean.value = fromUnitKnocking/750
-                    set hevtBean.value2 = fromUnitKnocking*0.07
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "violence"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = realDamage
+                    set heventBean.value = fromUnitKnocking/750
+                    set heventBean.value2 = fromUnitKnocking*0.07
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被魔法暴击事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beViolence"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage
-                    set hevtBean.value = fromUnitKnocking/750
-                    set hevtBean.value2 = fromUnitKnocking*0.07
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beViolence"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage
+                    set heventBean.value = fromUnitKnocking/750
+                    set heventBean.value2 = fromUnitKnocking*0.07
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
                 //暴击文本加持
                 if(isKnocking and isViolence)then
@@ -1025,79 +1025,79 @@ struct hAttrHunt
                 //文本显示
                 call hmsg.style(  hmsg.ttg2Unit(toUnit,realDamageString+I2S(R2I(realDamage)),6.00,realDamageStringColor,10,1.1,11.00)  ,"toggle",-0.05,0)
 
-                call hevt.setLastDamageUnit(toUnit,fromUnit)
+                call hevent.setLastDamageUnit(toUnit,fromUnit)
                 call hplayer.addDamage(GetOwningPlayer(fromUnit),realDamage)
                 call hplayer.addBeDamage(GetOwningPlayer(toUnit),realDamage)
                 call hunit.subLife(toUnit,realDamage) //#
 
                 if(bean.isNoAvoid==true)then
                     //@触发造成无法回避伤害事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "noAvoid"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = realDamage
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "noAvoid"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = realDamage
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被无法回避伤害事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beNoAvoid"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beNoAvoid"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
 
                 if( bean.huntKind == "attack")then
                     //@触发攻击事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "attack"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.attacker = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = bean.damage
-                    set hevtBean.realDamage = realDamage
-                    set hevtBean.damageKind = bean.huntKind
-                    set hevtBean.damageType = bean.huntType
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "attack"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.attacker = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = bean.damage
+                    set heventBean.realDamage = realDamage
+                    set heventBean.damageKind = bean.huntKind
+                    set heventBean.damageType = bean.huntType
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被攻击事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beAttack"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.attacker = fromUnit
-                    set hevtBean.damage = bean.damage
-                    set hevtBean.realDamage = realDamage
-                    set hevtBean.damageKind = bean.huntKind
-                    set hevtBean.damageType = bean.huntType
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beAttack"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.attacker = fromUnit
+                    set heventBean.damage = bean.damage
+                    set heventBean.realDamage = realDamage
+                    set heventBean.damageKind = bean.huntKind
+                    set heventBean.damageType = bean.huntType
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
 
                 //@触发伤害事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "damage"
-                set hevtBean.triggerUnit = fromUnit
-                set hevtBean.targetUnit = toUnit
-                set hevtBean.sourceUnit = fromUnit
-                set hevtBean.damage = bean.damage
-                set hevtBean.realDamage = realDamage
-                set hevtBean.damageKind = bean.huntKind
-                set hevtBean.damageType = bean.huntType
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "damage"
+                set heventBean.triggerUnit = fromUnit
+                set heventBean.targetUnit = toUnit
+                set heventBean.sourceUnit = fromUnit
+                set heventBean.damage = bean.damage
+                set heventBean.realDamage = realDamage
+                set heventBean.damageKind = bean.huntKind
+                set heventBean.damageType = bean.huntType
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 //@触发被伤害事件
-                set hevtBean = hEvtBean.create()
-                set hevtBean.triggerKey = "beDamage"
-                set hevtBean.triggerUnit = toUnit
-                set hevtBean.sourceUnit = fromUnit
-                set hevtBean.damage = bean.damage
-                set hevtBean.realDamage = realDamage
-                set hevtBean.damageKind = bean.huntKind
-                set hevtBean.damageType = bean.huntType
-                call hevt.triggerEvent(hevtBean)
-                call hevtBean.destroy()
+                set heventBean = hEventBean.create()
+                set heventBean.triggerKey = "beDamage"
+                set heventBean.triggerUnit = toUnit
+                set heventBean.sourceUnit = fromUnit
+                set heventBean.damage = bean.damage
+                set heventBean.realDamage = realDamage
+                set heventBean.damageKind = bean.huntKind
+                set heventBean.damageType = bean.huntType
+                call hevent.triggerEvent(heventBean)
+                call heventBean.destroy()
                 
                 //分裂
                 if( bean.huntKind == "attack" and fromUnitSplit >0 )then
@@ -1132,25 +1132,25 @@ struct hAttrHunt
                     set g = null
 
                     //@触发分裂事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "spilt"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = realDamage * fromUnitSplit * 0.01
-                    set hevtBean.range = fromUnitSplitRange
-                    set hevtBean.value = fromUnitSplit
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "spilt"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = realDamage * fromUnitSplit * 0.01
+                    set heventBean.range = fromUnitSplitRange
+                    set heventBean.value = fromUnitSplit
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被分裂事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beSpilt"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage * fromUnitSplit * 0.01
-                    set hevtBean.range = fromUnitSplitRange
-                    set hevtBean.value = fromUnitSplit
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beSpilt"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage * fromUnitSplit * 0.01
+                    set heventBean.range = fromUnitSplitRange
+                    set heventBean.value = fromUnitSplit
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
                 //吸血
                 set fromUnitHemophagia = fromUnitHemophagia-toUnitHemophagiaOppose
@@ -1158,23 +1158,23 @@ struct hAttrHunt
                     call hunit.addLife(fromUnit,realDamage * fromUnitHemophagia * 0.01)
                     call heffect.toUnit("Abilities\\Spells\\Undead\\VampiricAura\\VampiricAuraTarget.mdl",fromUnit,"origin",1.00)
                     //@触发吸血事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "hemophagia"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = realDamage * fromUnitHemophagia * 0.01
-                    set hevtBean.value = fromUnitHemophagia
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "hemophagia"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = realDamage * fromUnitHemophagia * 0.01
+                    set heventBean.value = fromUnitHemophagia
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被吸血事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beHemophagia"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage * fromUnitHemophagia * 0.01
-                    set hevtBean.value = fromUnitHemophagia
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beHemophagia"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage * fromUnitHemophagia * 0.01
+                    set heventBean.value = fromUnitHemophagia
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
                 //技能吸血
                 set fromUnitHemophagiaSkill = fromUnitHemophagiaSkill-toUnitHemophagiaOppose
@@ -1182,23 +1182,23 @@ struct hAttrHunt
                     call hunit.addLife(fromUnit,realDamage * fromUnitHemophagiaSkill * 0.01)
                     call heffect.toUnit("Abilities\\Spells\\Items\\HealingSalve\\HealingSalveTarget.mdl",fromUnit,"origin",1.8)
                     //@触发技能吸血事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "skillHemophagia"
-                    set hevtBean.triggerUnit = fromUnit
-                    set hevtBean.targetUnit = toUnit
-                    set hevtBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
-                    set hevtBean.value = fromUnitHemophagiaSkill
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "skillHemophagia"
+                    set heventBean.triggerUnit = fromUnit
+                    set heventBean.targetUnit = toUnit
+                    set heventBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
+                    set heventBean.value = fromUnitHemophagiaSkill
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                     //@触发被技能吸血事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "beSkillHemophagia"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
-                    set hevtBean.value = fromUnitHemophagiaSkill
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "beSkillHemophagia"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage * fromUnitHemophagiaSkill * 0.01
+                    set heventBean.value = fromUnitHemophagiaSkill
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
                 //硬直
                 if( realDamage > 3 and his.alive(toUnit) and hattr.isPunishing(toUnit) != true and hunit.isOpenPunish(toUnit) )then
@@ -1223,14 +1223,14 @@ struct hAttrHunt
                         call hmsg.style(hmsg.ttg2Unit(toUnit,"僵硬",6.00,"c0c0c0",0,2.50,50.00)  ,"scale",0,0)
 
                         //@触发硬直事件
-                        set hevtBean = hEvtBean.create()
-                        set hevtBean.triggerKey = "punish"
-                        set hevtBean.triggerUnit = toUnit
-                        set hevtBean.sourceUnit = fromUnit
-                        set hevtBean.value = punishEffect
-                        set hevtBean.during = 5.00
-                        call hevt.triggerEvent(hevtBean)
-                        call hevtBean.destroy()
+                        set heventBean = hEventBean.create()
+                        set heventBean.triggerKey = "punish"
+                        set heventBean.triggerUnit = toUnit
+                        set heventBean.sourceUnit = fromUnit
+                        set heventBean.value = punishEffect
+                        set heventBean.during = 5.00
+                        call hevent.triggerEvent(heventBean)
+                        call heventBean.destroy()
 
                     endif
                 endif
@@ -1239,13 +1239,13 @@ struct hAttrHunt
                     call hunit.subLife(fromUnit,realDamage * toUnitHuntRebound * 0.01)
                     call hmsg.style(hmsg.ttg2Unit(fromUnit,"反伤"+R2S(realDamage*toUnitHuntRebound*0.01),10.00,"f8aaeb",10,1.00,10.00)  ,"shrink",-0.05,0)
                     //@触发反伤事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "rebound"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.damage = realDamage * toUnitHuntRebound * 0.01
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "rebound"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.damage = realDamage * toUnitHuntRebound * 0.01
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
             endif
 
@@ -1471,23 +1471,23 @@ struct hAttrHunt
                     endif
                     if(GetRandomReal(1,100)<=fromUnitHuntEffectSwimOdds and fromUnitHuntEffectSwimDuring>=0.01)then
                         //@触发眩晕事件
-                        set hevtBean = hEvtBean.create()
-                        set hevtBean.triggerKey = "swim"
-                        set hevtBean.triggerUnit = fromUnit
-                        set hevtBean.targetUnit = toUnit
-                        set hevtBean.value = fromUnitHuntEffectSwimOdds
-                        set hevtBean.during = fromUnitHuntEffectSwimDuring
-                        call hevt.triggerEvent(hevtBean)
-                        call hevtBean.destroy()
+                        set heventBean = hEventBean.create()
+                        set heventBean.triggerKey = "swim"
+                        set heventBean.triggerUnit = fromUnit
+                        set heventBean.targetUnit = toUnit
+                        set heventBean.value = fromUnitHuntEffectSwimOdds
+                        set heventBean.during = fromUnitHuntEffectSwimDuring
+                        call hevent.triggerEvent(heventBean)
+                        call heventBean.destroy()
                         //@触发被眩晕事件
-                        set hevtBean = hEvtBean.create()
-                        set hevtBean.triggerKey = "beSwim"
-                        set hevtBean.triggerUnit = toUnit
-                        set hevtBean.sourceUnit = fromUnit
-                        set hevtBean.value = fromUnitHuntEffectSwimOdds
-                        set hevtBean.during = fromUnitHuntEffectSwimDuring
-                        call hevt.triggerEvent(hevtBean)
-                        call hevtBean.destroy()
+                        set heventBean = hEventBean.create()
+                        set heventBean.triggerKey = "beSwim"
+                        set heventBean.triggerUnit = toUnit
+                        set heventBean.sourceUnit = fromUnit
+                        set heventBean.value = fromUnitHuntEffectSwimOdds
+                        set heventBean.during = fromUnitHuntEffectSwimDuring
+                        call hevent.triggerEvent(heventBean)
+                        call heventBean.destroy()
                         call hability.swim( toUnit , fromUnitHuntEffectSwimDuring )
                     endif
                 endif
@@ -1503,14 +1503,14 @@ struct hAttrHunt
                     endif
                     call hattr.subMove( toUnit , punishEffect , 5.00 )
                     //@触发硬直事件
-                    set hevtBean = hEvtBean.create()
-                    set hevtBean.triggerKey = "punish"
-                    set hevtBean.triggerUnit = toUnit
-                    set hevtBean.sourceUnit = fromUnit
-                    set hevtBean.value = punishEffect
-                    set hevtBean.during = fromUnitHuntEffectBreakDuring
-                    call hevt.triggerEvent(hevtBean)
-                    call hevtBean.destroy()
+                    set heventBean = hEventBean.create()
+                    set heventBean.triggerKey = "punish"
+                    set heventBean.triggerUnit = toUnit
+                    set heventBean.sourceUnit = fromUnit
+                    set heventBean.value = punishEffect
+                    set heventBean.during = fromUnitHuntEffectBreakDuring
+                    call hevent.triggerEvent(heventBean)
+                    call heventBean.destroy()
                 endif
                 if( fromUnitHuntEffectUnluckVal!=0 and fromUnitHuntEffectUnluckDuring>0 ) then
                     set fromUnitHuntEffectUnluckVal = fromUnitHuntEffectUnluckVal * (1 - toUnitSilentOppose * 0.01) // 不幸抵抗

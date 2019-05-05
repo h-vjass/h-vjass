@@ -23,7 +23,7 @@ globals
     hItem hitem
     hashtable hash_item = null
     item hjass_global_item
-    integer ITEM_ABILITY = 'AInv' //默认物品栏技能（英雄6格那个）hjass默认全部认定这个技能为物品栏，如有需要自行更改
+    integer ITEM_ABILITY = 'AInv' //默认物品栏技能（英雄6格那个）h-vjass默认全部认定这个技能为物品栏，如有需要自行更改
 	integer ITEM_ABILITY_SEPARATE = 'A039'
 	trigger ITEM_TRIGGER_PICKUP = null
 	trigger ITEM_TRIGGER_PICKUP_DEFAULT = null
@@ -1119,12 +1119,12 @@ private static integer hk_dragonOppose = 1087
     endmethod
 
 
-    //获取物品是否hjass内部函数创建
-    public static method isHjass takes item it returns boolean
+    //获取物品是否h-vjass内部函数创建
+    public static method isHvjass takes item it returns boolean
         return LoadBoolean(hash_item,GetHandleId(it),hk_item_is_hjass)
     endmethod
-	//设定物品是否hjass内部函数创建
-    public static method setIsHjass takes item it,boolean b returns nothing
+	//设定物品是否h-vjass内部函数创建
+    public static method setIsHvjass takes item it,boolean b returns nothing
         call SaveBoolean(hash_item,GetHandleId(it),hk_item_is_hjass, b)
     endmethod
 
@@ -1177,8 +1177,8 @@ private static integer hk_dragonOppose = 1087
 	//触发物品的瞬逝
 	private static method triggerMoment takes nothing returns nothing
         local trigger tg = null
-		local unit it = hevt.getTriggerUnit()
-		local unit triggerUnit = hevt.getTriggerEnterUnit()
+		local unit it = hevent.getTriggerUnit()
+		local unit triggerUnit = hevent.getTriggerEnterUnit()
 		local integer charges = 0
 		if(it!=null and triggerUnit!=null and his.hasSlot(triggerUnit) and his.alive(triggerUnit))then
 			set charges = GetUnitUserData(it)
@@ -1190,9 +1190,9 @@ private static integer hk_dragonOppose = 1087
 			endif
 			set tg = LoadTriggerHandle(hash_item,GetUnitTypeId(it),hk_item_onmoment_trigger)
 			if(tg!=null)then
-				call hevt.setTriggerUnit(tg,triggerUnit)
-				call hevt.setId(tg,GetUnitTypeId(it))
-				call hevt.setValue(tg,charges)
+				call hevent.setTriggerUnit(tg,triggerUnit)
+				call hevent.setId(tg,GetUnitTypeId(it))
+				call hevent.setValue(tg,charges)
 				call TriggerExecute(tg)
                 set tg = null
 			endif
@@ -4167,7 +4167,7 @@ endif
 	endmethod
 
 	//获取物品ID是否自动使用
-	public static method getIsPowerup takes integer itid returns boolean
+	public static method getIsPowerUp takes integer itid returns boolean
 		return LoadBoolean(hash_item, itid, hk_item_is_powerup)
 	endmethod
 
@@ -4222,11 +4222,11 @@ endif
 		endif
 		//检测物品类型,是否瞬逝型
         // or 判断物品是否自动使用，自动使用的物品不会检测叠加和合成，而是直接执行属性分析
-		if(getType(itemid)==HITEM_TYPE_MOMENT or getIsPowerup(itemid) == true)then
+		if(getType(itemid)==HITEM_TYPE_MOMENT or getIsPowerUp(itemid) == true)then
 			set tg = LoadTriggerHandle(hash_item,itemid,hk_item_onmoment_trigger)
 			if(tg!=null)then
-				call hevt.setTriggerUnit(tg,whichUnit)
-				call hevt.setValue(tg,charges)
+				call hevent.setTriggerUnit(tg,whichUnit)
+				call hevent.setValue(tg,charges)
 				call TriggerExecute(tg)
                 set tg = null
 			endif
@@ -4291,25 +4291,25 @@ endif
 			if(isMix == true)then
 				call hmsg.echoTo(GetOwningPlayer(whichUnit),"成功合成了：["+GetItemName(hjass_global_item)+"]",0)
 				//@触发 合成物品 事件
-				set hevtBean = hEvtBean.create()
-				set hevtBean.triggerKey = "itemMix"
-				set hevtBean.triggerUnit = whichUnit
-				set hevtBean.triggerItem = hjass_global_item
-				call hevt.triggerEvent(hevtBean)
-				call hevtBean.destroy()
+				set heventBean = hEventBean.create()
+				set heventBean.triggerKey = "itemMix"
+				set heventBean.triggerUnit = whichUnit
+				set heventBean.triggerItem = hjass_global_item
+				call hevent.triggerEvent(heventBean)
+				call heventBean.destroy()
 			endif
 			if(getEmptySlot(whichUnit)>=1)then
 				//有格子则扔到单位上，并分析属性
-				call setIsHjass(hjass_global_item,true)
+				call setIsHvjass(hjass_global_item,true)
 				call UnitAddItem(whichUnit,hjass_global_item)
 				call addAttr(itemid,remainCharges,whichUnit,true)
 				//@触发 获得物品 事件
-				set hevtBean = hEvtBean.create()
-				set hevtBean.triggerKey = "itemGet"
-				set hevtBean.triggerUnit = whichUnit
-				set hevtBean.triggerItem = hjass_global_item
-				call hevt.triggerEvent(hevtBean)
-				call hevtBean.destroy()
+				set heventBean = hEventBean.create()
+				set heventBean.triggerKey = "itemGet"
+				set heventBean.triggerUnit = whichUnit
+				set heventBean.triggerItem = hjass_global_item
+				call hevent.triggerEvent(heventBean)
+				call heventBean.destroy()
 			endif
 		endif
 	endmethod
@@ -4355,7 +4355,7 @@ endif
 			else
 				set range = 100
 			endif
-			call hevt.onEnterUnitRange(u,range,function thistype.triggerMoment)
+			call hevent.onEnterUnitRange(u,range,function thistype.triggerMoment)
 			if(during > 0)then
 				call hunit.del(u,during)
 			endif
@@ -4479,17 +4479,17 @@ endif
 		set charges = GetItemCharges(hjass_global_item)
         //检测物品类型,是否瞬逝型
         // or 判断物品是否自动使用，自动使用的物品不会检测叠加和合成，而是直接执行属性分析
-		if(getType(itid)==HITEM_TYPE_MOMENT or getIsPowerup(itid) == true or GetItemType(hjass_global_item) == ITEM_TYPE_POWERUP)then
+		if(getType(itid)==HITEM_TYPE_MOMENT or getIsPowerUp(itid) == true or GetItemType(hjass_global_item) == ITEM_TYPE_POWERUP)then
 			set tg = LoadTriggerHandle(hash_item,itid,hk_item_onmoment_trigger)
 			if(tg!=null)then
-				call hevt.setTriggerUnit(tg,u)
-				call hevt.setValue(tg,charges)
+				call hevent.setTriggerUnit(tg,u)
+				call hevent.setValue(tg,charges)
 				call TriggerExecute(tg)
                 set tg = null
 			endif
 			return
 		endif
-		if(isHjass(hjass_global_item) == false)then
+		if(isHvjass(hjass_global_item) == false)then
 			call del(hjass_global_item,0)
 			set hjass_global_item = null
 			call toUnit(itid,charges,u)
@@ -4507,13 +4507,13 @@ endif
 			set weight = hattr.getWeightCurrent(u) - getWeight(GetItemTypeId(hjass_global_item)) * I2R(GetItemCharges(hjass_global_item))
 			call hattr.setWeightCurrent(u,weight,0)
 			//@触发 丢弃物品 事件
-			set hevtBean = hEvtBean.create()
-			set hevtBean.triggerKey = "itemDrop"
-			set hevtBean.triggerUnit = u
-			set hevtBean.triggerItem = hjass_global_item
-			call hevt.triggerEvent(hevtBean)
-			call hevtBean.destroy()
-			call thistype.setIsHjass(hjass_global_item,false)
+			set heventBean = hEventBean.create()
+			set heventBean.triggerKey = "itemDrop"
+			set heventBean.triggerUnit = u
+			set heventBean.triggerItem = hjass_global_item
+			call hevent.triggerEvent(heventBean)
+			call heventBean.destroy()
+			call thistype.setIsHvjass(hjass_global_item,false)
 		endif
         set u = null
 	endmethod
@@ -4537,12 +4537,12 @@ endif
 				call haward.forUnit(u,0,R2I(I2R(gold)*sellRadio*0.01),R2I(I2R(lumber)*sellRadio*0.01))
 			endif
 			//@触发 售卖物品 事件
-			set hevtBean = hEvtBean.create()
-			set hevtBean.triggerKey = "itemPawn"
-			set hevtBean.triggerUnit = u
-			set hevtBean.triggerItem = hjass_global_item
-			call hevt.triggerEvent(hevtBean)
-			call hevtBean.destroy()
+			set heventBean = hEventBean.create()
+			set heventBean.triggerKey = "itemPawn"
+			set heventBean.triggerUnit = u
+			set heventBean.triggerItem = hjass_global_item
+			call hevent.triggerEvent(heventBean)
+			call heventBean.destroy()
 		endif
         set u = null
 	endmethod
@@ -4571,13 +4571,13 @@ endif
 				call hplayer.subGold(p,gold)
 				call hplayer.subLumber(p,lumber)
 				//@触发 售卖物品 事件
-				set hevtBean = hEvtBean.create()
-				set hevtBean.triggerKey = "itemSell"
-				set hevtBean.triggerUnit = GetSellingUnit()
-				set hevtBean.targetUnit = GetBuyingUnit()
-				set hevtBean.triggerItem = hjass_global_item
-				call hevt.triggerEvent(hevtBean)
-				call hevtBean.destroy()
+				set heventBean = hEventBean.create()
+				set heventBean.triggerKey = "itemSell"
+				set heventBean.triggerUnit = GetSellingUnit()
+				set heventBean.targetUnit = GetBuyingUnit()
+				set heventBean.triggerItem = hjass_global_item
+				call hevent.triggerEvent(heventBean)
+				call heventBean.destroy()
 			endif
             set hjass_global_item = null
 		endif
@@ -4602,13 +4602,13 @@ endif
 			set y = GetItemY(itSeparate)
 		endif
 		//@触发 拆分物品 事件(多件拆分为单件)
-		set hevtBean = hEvtBean.create()
-		set hevtBean.triggerKey = "itemSeparate"
-		set hevtBean.triggerUnit = u
-		set hevtBean.id = itid
-		set hevtBean.type = "simple"
-		call hevt.triggerEvent(hevtBean)
-		call hevtBean.destroy()
+		set heventBean = hEventBean.create()
+		set heventBean.triggerKey = "itemSeparate"
+		set heventBean.triggerUnit = u
+		set heventBean.id = itid
+		set heventBean.type = "simple"
+		call hevent.triggerEvent(heventBean)
+		call heventBean.destroy()
 		if(IsItemOwned(itSeparate) == true)then
 			set weight = hattr.getWeightCurrent(u) - getWeight(itid)*I2R(charges)
 			call hattr.setWeightCurrent(u,weight,0)
@@ -4637,13 +4637,13 @@ endif
 		if(formula>0 and itSeparate!=null and u!=null)then
 			set itid = GetItemTypeId(itSeparate)
 			//@触发 拆分物品 事件(合成拆分)
-			set hevtBean = hEvtBean.create()
-			set hevtBean.triggerKey = "itemSeparate"
-			set hevtBean.triggerUnit = u
-			set hevtBean.id = itid
-			set hevtBean.type = "mixed"
-			call hevt.triggerEvent(hevtBean)
-			call hevtBean.destroy()
+			set heventBean = hEventBean.create()
+			set heventBean.triggerKey = "itemSeparate"
+			set heventBean.triggerUnit = u
+			set heventBean.id = itid
+			set heventBean.type = "mixed"
+			call hevent.triggerEvent(heventBean)
+			call heventBean.destroy()
 
 			if(IsItemOwned(itSeparate) == true)then
 				set x = GetUnitX(u)
@@ -4799,18 +4799,18 @@ endif
 		endif
 		set tg = LoadTriggerHandle(hash_item,itid,hk_item_onuse_trigger)
 		if(tg != null)then
-			call hevt.setTriggerUnit(tg,u)
-			call hevt.setTriggerItem(tg,it)
-			call hevt.setId(tg,itid)
+			call hevent.setTriggerUnit(tg,u)
+			call hevent.setTriggerItem(tg,it)
+			call hevent.setId(tg,itid)
 			call TriggerExecute(tg)
 			//@触发 使用物品 事件
-			set hevtBean = hEvtBean.create()
-			set hevtBean.triggerKey = "itemUsed"
-			set hevtBean.triggerUnit = u
-			set hevtBean.triggerItem = it
-			set hevtBean.id = itid
-			call hevt.triggerEvent(hevtBean)
-			call hevtBean.destroy()
+			set heventBean = hEventBean.create()
+			set heventBean.triggerKey = "itemUsed"
+			set heventBean.triggerUnit = u
+			set heventBean.triggerItem = it
+			set heventBean.id = itid
+			call hevent.triggerEvent(heventBean)
+			call heventBean.destroy()
             set tg = null
 		endif
 	endmethod
@@ -4833,7 +4833,7 @@ endif
         endloop
 	endmethod
 
-	// 令一个单位把物品全部仍在地上
+	// 命令一个单位把物品全部仍在地上
 	public static method drop takes unit origin returns nothing
 		local integer i = 0
         local item it = null

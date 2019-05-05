@@ -1242,7 +1242,7 @@ struct hAttr
     	loop
 	    	exitwhen i > qty
 		    	set it = CreateItem( itemId , 0, 0)
-				call hitem.setIsHjass(it,true)
+				call hitem.setIsHvjass(it,true)
 		    	call UnitAddItem(u,it)
 		    	call hitem.del(it,0)
 				set it = null

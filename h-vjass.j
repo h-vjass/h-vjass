@@ -62,7 +62,7 @@ library hJass initializer init needs hSync
 		set hmedia = hMedia.create()
 		set hcamera = hCamera.create()
 		set haward = hAward.create()
-		set hevt = hEvt.create()
+		set hevent = hEvent.create()
 		set hattr = hAttr.create()
 		set hattrEffect = hAttrEffect.create()
 		set hattrNatural = hAttrNatural.create()
