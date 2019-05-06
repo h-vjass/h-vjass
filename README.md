@@ -1,5 +1,5 @@
- * [gitlab网址](https://gitlab.com/h-w3x/h-vjass)
- * [最佳实践：时空之轮TD](https://gitlab.com/h-w3x/h-war3/tree/master/w3xMaps/hyperSpaceTD)
+ * [gitlab网址](https://github.com/hunzsig/h-vjass)
+ * [最佳实践：时空之轮TD](https://github.com/hunzsig/h-war3/tree/master/w3xMaps/hyperSpaceTD)
  * [h-vjass技术文档](http://hvjass.book.hunzsig.org)
  * author hunzsig
  * version v20190406
@@ -58,7 +58,7 @@ v-vjass完全独立，不依赖任何游戏平台（如JAPI）
 
 提醒：
 ### 本套代码免费提供给了解Jass/vJass的作者试用，如果不了解Jass/vJass请使用T来制作地图或自行学习，此处不提供jass教学
-### 当然即使你完全不懂jass也可以去 [vJass教程](https://gitlab.com/h-w3x/h-war3/tree/master/learn/vJass%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B) 学习
+### 当然即使你完全不懂jass也可以去 [vJass教程](https://github.com/hunzsig/h-war3/tree/master/learn/vJass%E7%B3%BB%E5%88%97%E6%95%99%E7%A8%8B) 学习
 
 > 以下教程以YDWE为例
 ## 前期准备：

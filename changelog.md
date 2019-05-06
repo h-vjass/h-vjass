@@ -1,4 +1,4 @@
-### 更新日志 <a href="https://gitlab.com/h-w3x/h-vjass" target="_blank">Git</a>
+### 更新日志 <a href="https://github.com/hunzsig/h-vjass" target="_blank">Github</a>
 
 #### 2019/04/27
     修改event模块的全局变量为hevent，而不再是hevt，与h-lua一致
