@@ -2,7 +2,6 @@
  * [最佳实践：时空之轮TD](https://github.com/hunzsig/h-war3/tree/master/w3xMaps/hyperSpaceTD)
  * [h-vjass技术文档](http://hvjass.book.hunzsig.org)
  * author hunzsig
- * version v20190406
 
 # 使用优势？
 v-vjass拥有优秀的demo，在开源的同时引导您学习的更多。
