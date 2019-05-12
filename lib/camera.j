@@ -12,6 +12,7 @@ struct hCamera
 		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
 			call ResetToGameCamera(during)
 		endif
+		set whichPlayer = null
 	endmethod
 
 	//应用镜头
@@ -19,6 +20,8 @@ struct hCamera
 		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
 			call CameraSetupApplyForceDuration( cs , true, during )
 		endif
+		set cs = null
+		set whichPlayer = null
 	endmethod
 
 	//移动到XY
@@ -26,11 +29,14 @@ struct hCamera
 		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
 			call PanCameraToTimed(x, y, during)
 		endif
+		set whichPlayer = null
 	endmethod
 
 	//移动到点
 	public static method toLoc takes location loc,player whichPlayer,real during returns nothing
 		call toXY(GetLocationX(loc),GetLocationY(loc),whichPlayer,during)
+		set loc = null
+		set whichPlayer = null
 	endmethod
 
 	//锁定镜头
@@ -38,6 +44,8 @@ struct hCamera
 		if(whichPlayer==null or GetLocalPlayer()==whichPlayer)then
 			call SetCameraTargetController(whichUnit, 0, 0, false)
 		endif
+		set whichUnit = null
+		set whichPlayer = null
 	endmethod
 
 	//设定镜头距离
@@ -78,6 +86,7 @@ struct hCamera
         endif
         //镜头动作降噪
         if( LoadBoolean( hash_player, GetHandleId(whichPlayer) , 15222 ) == true ) then
+			set whichPlayer = null
             return
         else
 			call SaveBoolean( hash_player, GetHandleId(whichPlayer) , 15222 ,true )
@@ -86,6 +95,7 @@ struct hCamera
         set t = htime.setTimeout( during ,function thistype.shakeCall)
         call htime.setPlayer(t,1,whichPlayer)
 		set t = null
+		set whichPlayer = null
     endmethod
 
     /**
@@ -118,6 +128,7 @@ struct hCamera
         endif
         //镜头动作降噪
 		if( LoadBoolean( hash_player, GetHandleId(whichPlayer) , 15222 ) == true ) then
+			set whichPlayer = null
             return
         else
 			call SaveBoolean( hash_player, GetHandleId(whichPlayer) , 15222 ,true )
@@ -126,6 +137,7 @@ struct hCamera
         set t = htime.setTimeout( during ,function thistype.quakeCall)
         call htime.setPlayer(t,1,whichPlayer)
 		set t = null
+		set whichPlayer = null
     endmethod
 
 	//镜头模式集

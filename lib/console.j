@@ -48,6 +48,10 @@ struct hConsole
 		if(StringLength(error)==6)then
 			set this.color_error = error
 		endif
+		set log = null
+		set info = null
+		set warning = null
+		set error = null
 	endmethod
 
 	public method log takes string msg returns nothing
@@ -55,6 +59,7 @@ struct hConsole
 			set msg = "|cff"+this.color_log+"[log]"+msg+"|r"
 	    	call DisplayTextToForce( GetPlayersAll(), msg )
 	    endif
+		set msg = null
 	endmethod
 
 	public method error takes string msg returns nothing
@@ -62,6 +67,7 @@ struct hConsole
 			set msg = "|cff"+this.color_error+"[log]"+msg+"|r"
 	    	call DisplayTextToForce( GetPlayersAll(), msg )
 	    endif
+		set msg = null
 	endmethod
 
 	public method info takes string msg returns nothing
@@ -69,6 +75,7 @@ struct hConsole
 			set msg = "|cff"+this.color_info+"[log]"+msg+"|r"
 	    	call DisplayTextToForce( GetPlayersAll(), msg )
 	    endif
+		set msg = null
 	endmethod
 
 	public method warning takes string msg returns nothing
@@ -76,6 +83,7 @@ struct hConsole
 			set msg = "|cff"+this.color_warning+"[log]"+msg+"|r"
 	    	call DisplayTextToForce( GetPlayersAll(), msg )
 	    endif
+		set msg = null
 	endmethod
 
 endstruct

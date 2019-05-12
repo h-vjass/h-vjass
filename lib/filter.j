@@ -96,6 +96,7 @@ struct hFilter
 	        set is_enemy =-1
 			set is_enemy_unit = whichunit
 	    endif
+		set whichunit = null
 	endmethod
 	public method isAlly takes boolean status,unit whichunit returns nothing
 	    if(status==true)then
@@ -105,6 +106,7 @@ struct hFilter
 	        set is_ally =-1
 			set is_ally_unit = whichunit
 	    endif
+		set whichunit = null
 	endmethod
 	public method isDetected takes boolean status,player whichplayer returns nothing
 	    if(status==true)then
@@ -114,6 +116,7 @@ struct hFilter
 	        set is_detected =-1
 			set is_detected_player = whichplayer
 	    endif
+		set whichplayer = null
 	endmethod
 	public method isHasSlot takes boolean status returns nothing
 	    if(status==true)then
@@ -244,6 +247,7 @@ struct hFilter
 	        set is_not_owner_player_qty = is_not_owner_player_qty+1
 			set is_not_owner_player[is_not_owner_player_qty] = p
 	    endif
+		set p = null
 	endmethod
 
 	public static method get takes nothing returns boolean

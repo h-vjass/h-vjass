@@ -24,6 +24,7 @@ struct hLightning
 	//删除闪电
 	public method del takes lightning l returns nothing
 		call DestroyLightning(l)
+		set l = null
 	endmethod
 
 	private static method duringDel takes nothing returns nothing
@@ -43,6 +44,7 @@ struct hLightning
 			call htime.setLightning(t,1,hjass_global_lightning)
 			set t = null
 		endif
+		set codename = null
 		return hjass_global_lightning
 	endmethod
 
@@ -51,7 +53,15 @@ struct hLightning
 	 * during <=0时 永久存在
 	 */
 	public method loc2loc takes string codename,location loc1,location loc2,real during returns lightning
-		return xyz2xyz(codename, GetLocationX(loc1), GetLocationY(loc1), GetLocationZ(loc1), GetLocationX(loc2), GetLocationY(loc2), GetLocationZ(loc2),during)
+		local real x1 = GetLocationX(loc1)
+		local real y1 = GetLocationY(loc1)
+		local real z1 = GetLocationZ(loc1)
+		local real x2 = GetLocationX(loc2)
+		local real y2 = GetLocationY(loc2)
+		local real z2 = GetLocationZ(loc2)
+		set loc1 = null
+		set loc2 = null
+		return xyz2xyz(codename, x1, y1, z1, x2, y2, z2,during)
 	endmethod
 
 	/**
@@ -59,7 +69,15 @@ struct hLightning
 	 * during <=0时 永久存在
 	 */
 	public method unit2unit takes string codename,unit unit1,unit unit2,real during returns lightning
-		return xyz2xyz(codename, GetUnitX(unit1), GetUnitY(unit1), GetUnitFlyHeight(unit1), GetUnitX(unit2), GetUnitY(unit2), GetUnitFlyHeight(unit2),during)
+		local real x1 = GetUnitX(unit1)
+		local real y1 = GetUnitY(unit1)
+		local real z1 = GetUnitFlyHeight(unit1)
+		local real x2 = GetUnitX(unit2)
+		local real y2 = GetUnitY(unit2)
+		local real z2 = GetUnitFlyHeight(unit2)
+		set unit1 = null
+		set unit2 = null
+		return xyz2xyz(codename, x1, y1, z1, x2, y2, z2,during)
 	endmethod
 
 endstruct

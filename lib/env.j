@@ -171,6 +171,7 @@ struct hEnv
 		if(whichRect != null)then
 			call EnumDestructablesInRectAll(whichRect, function thistype.removeEnumDestructable )
 		endif
+		set whichRect = null
 	endmethod
 
 	public static method removeInRange takes real x,real y,real width,real height returns nothing
@@ -241,6 +242,7 @@ struct hEnv
 		endif
 		call whichUnit.destroy()
 		call whichDestructable.destroy()
+		set whichRect = null
 	endmethod
 
 	private static method randomDefault takes rect whichRect,string typeStr,real excludeX,real excludeY,boolean clear returns nothing
@@ -350,42 +352,53 @@ struct hEnv
 		call thistype.random(whichRect,whichUnit,whichDestructable,whichGround,excludeX,excludeY,clear)
 		call whichUnit.destroy()
 		call whichDestructable.destroy()
+		set whichRect = null
+		set typeStr = null
 	endmethod
 
 	public static method randomSummer takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "summer", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomAutumn takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "autumn", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomWinter takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "winter", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomWinterShow takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "winterShow", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomDark takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "dark", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomPoor takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "poor", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomRuins takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "ruins", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomFire takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "fire", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 	public static method randomUnderground takes rect whichRect,real excludeX,real excludeY,boolean clear returns nothing
 		call randomDefault(whichRect, "underground", excludeX, excludeY, clear)
+		set whichRect = null
 	endmethod
 
 endstruct

@@ -50,6 +50,7 @@ struct hAbility
 	    call IssueTargetOrder( cu , "thunderbolt", u )
 	    call hunit.del(cu,0.3)
 		set cu = null
+		set u = null
 	endmethod
 
 	/**
@@ -72,6 +73,7 @@ struct hAbility
 	    local timer t = LoadTimerHandle(hash_ability, GetHandleId(u), 5241)
 	    if(t!=null and TimerGetRemaining(t)>0)then
 	    	if(during <= TimerGetRemaining(t))then
+				set u = null
 				return
 			else
 				call htime.delTimer(t)
@@ -92,6 +94,7 @@ struct hAbility
 		set loc = null
 		set cu = null
 		set t = null
+		set u = null
 	endmethod
 
 	/**
@@ -152,6 +155,7 @@ struct hAbility
 	    call htime.setUnit(t,1,u)
 		set t = null
 		set eff = null
+		set u = null
 	endmethod
 
 	/**
@@ -214,6 +218,7 @@ struct hAbility
 	    call htime.setUnit(t,1,u)
 		set t = null
 		set eff = null
+		set u = null
 	endmethod
 
 	/**
@@ -243,6 +248,7 @@ struct hAbility
 	    set t = htime.setTimeout( 0.00 ,function thistype.avoidCallBack)
 	    call htime.setUnit(t,1,whichUnit)
 		set t = null
+		set whichUnit = null
 	endmethod
 
 	/**
@@ -267,6 +273,7 @@ struct hAbility
 	    set t = htime.setTimeout( 0.00 ,function thistype.zeroInvulnerableCallBack)
 	    call htime.setUnit(t,1,whichUnit)
 		set t = null
+		set whichUnit = null
 	endmethod
 
 	/**
@@ -295,6 +302,7 @@ struct hAbility
 	    set t = htime.setTimeout( during ,function thistype.invulnerableCallBack)
 	    call htime.setUnit(t,1,whichUnit)
 		set t = null
+		set whichUnit = null
 	endmethod
 
 	/**
@@ -333,6 +341,7 @@ struct hAbility
 	    set t = htime.setTimeout( during ,function thistype.invulnerableGroupCallBackT)
 	    call htime.setGroup(t,1,whichGroup)
 		set t = null
+		set whichGroup = null
 	endmethod
 
 	/**
@@ -384,6 +393,7 @@ struct hAbility
 	    call SaveTimerHandle( hash_ability , GetHandleId(whichUnit) , 3 , t )
 		set t = null
 		set prevTimer = null
+		set whichUnit = null
 	endmethod
 
 	//为单位添加效果只限技能类一段时间 回调
@@ -410,6 +420,7 @@ struct hAbility
 	        call htime.setInteger(t,2,whichAbility)
 	    endif
 		set t = null
+		set whichUnit = null
 	endmethod
 
 	/**
@@ -422,6 +433,10 @@ struct hAbility
 	    call IssuePointOrderLoc( token , orderString , targetLoc )
 	    call hunit.del(token,2.00)
 		set token = null
+		set owner = null
+		set loc = null
+		set targetLoc = null
+		set orderString = null
 	endmethod
 
 	/**
@@ -434,6 +449,9 @@ struct hAbility
 	    call IssueImmediateOrder( token , orderString )
 	    call hunit.del(token,2.00)
 		set token = null
+		set owner = null
+		set loc = null
+		set orderString = null
 	endmethod
 
 	/**
@@ -446,6 +464,10 @@ struct hAbility
 	    call IssueTargetOrder( token , orderString , targetUnit )
 	    call hunit.del(token,2.00)
 		set token = null
+		set owner = null
+		set loc = null
+		set targetUnit = null
+		set orderString = null
 	endmethod
 
 	/**
@@ -458,6 +480,9 @@ struct hAbility
 	    call IssueTargetOrderById( token , orderId , targetUnit )
 	    call hunit.del(token,2.00)
 		set token = null
+		set owner = null
+		set loc = null
+		set targetUnit = null
 	endmethod
 
 endstruct

@@ -122,24 +122,34 @@ struct hLogic
 	 * 获取两个点间角度，如果其中一个单位为空 返回0
 	 */
 	public static method getDegBetweenLoc takes location l1,location l2 returns real
+		local real deg = 0
 		if( l1 == null or l2 == null ) then
-            return 0
+            return deg
         endif
-		return AngleBetweenPoints(l1, l2)
+		set deg = AngleBetweenPoints(l1, l2)
+		set l1 = null
+		set l2 = null
+		return deg
 	endmethod
 	
 	/**
 	 * 获取两个单位间角度，如果其中一个单位为空 返回0
 	 */
 	public static method getDegBetweenUnit takes unit fromUnit,unit toUnit returns real
-		return bj_RADTODEG * Atan2(GetUnitY(toUnit) - GetUnitY(fromUnit), GetUnitX(toUnit) - GetUnitX(fromUnit))
+		local real deg = bj_RADTODEG * Atan2(GetUnitY(toUnit) - GetUnitY(fromUnit), GetUnitX(toUnit) - GetUnitX(fromUnit))
+		set fromUnit = null
+		set toUnit = null
+		return deg
 	endmethod
 
 	/**
      *  获取两个单位间距离，如果其中一个单位为空 返回0
      */
     public static method getDistanceBetweenUnit takes unit u1,unit u2 returns real
-		return SquareRoot((GetUnitX(u1)-GetUnitX(u2))*(GetUnitX(u1)-GetUnitX(u2))+(GetUnitY(u1)-GetUnitY(u2))*(GetUnitY(u1)-GetUnitY(u2)))
+		local real distance = SquareRoot((GetUnitX(u1)-GetUnitX(u2))*(GetUnitX(u1)-GetUnitX(u2))+(GetUnitY(u1)-GetUnitY(u2))*(GetUnitY(u1)-GetUnitY(u2)))
+		set u1 = null
+		set u2 = null
+		return distance
     endmethod
 
 	/**
@@ -155,10 +165,14 @@ struct hLogic
      *  获取两个点距离，如果其中一个点为空 返回0
      */
     public static method getDistanceBetweenLoc takes location loc1,location loc2 returns real
+		local real distance = 0
         if( loc1 == null or loc2 == null ) then
-            return 0
+            return distance
         endif
-        return DistanceBetweenPoints(loc1, loc2)
+		set distance = DistanceBetweenPoints(loc1, loc2)
+		set loc1 = null
+		set loc2 = null
+        return distance
     endmethod
 
 	//字符串截取
@@ -167,6 +181,7 @@ struct hLogic
 		local integer iend = start+len
 		if(start>=0)then
 			if(start >= haystackLen)then
+				set haystack = null
 				return ""
 			elseif(iend >= haystackLen)then
 				return SubString(haystack,start,haystackLen)
@@ -174,6 +189,7 @@ struct hLogic
 				return SubString(haystack,start,iend)
 			endif
 		else
+			set haystack = null
 			return ""
 		endif
 	endmethod
@@ -194,6 +210,8 @@ struct hLogic
 				set i = i+1
 			endloop
 		endif
+		set haystack = null
+		set needle = null
 		return site
 	endmethod
 
@@ -212,6 +230,8 @@ struct hLogic
 			set m = m + f
 			set i = i - 1
 		endloop
+		set s = null
+		set map = null
 		return m
 	endmethod
 
@@ -225,6 +245,7 @@ struct hLogic
 			set hjass_global_logic_txt = thistype.substr.evaluate(map, ModuloInteger(i, n), 1) + hjass_global_logic_txt
 			set i = i / n
 		endloop
+		set map = null
 		return hjass_global_logic_txt
 	endmethod
 
@@ -235,6 +256,7 @@ struct hLogic
 		if(StringLength(s)>1)then
 			return -1
 		endif
+		set s = null
 		return LoadInteger(hash_hlogic,HASH_KEY_CHARNUM,StringHash(s))
 	endmethod
 
@@ -267,6 +289,7 @@ struct hLogic
 				call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),txt)
 			endif
 		endif
+		set s = null
 		return chinaQty
 	endmethod
 
@@ -290,6 +313,7 @@ struct hLogic
 			call SaveInteger(hash_hlogic,HASH_KEY_CHINA_QTY_CACHE,StringHash(s),chinaQty)
 			call SaveStr(hash_hlogic,HASH_KEY_HEX2STR_CACHE,StringHash(s),hjass_global_logic_txt)
 		endif
+		set s = null
 		return hjass_global_logic_txt
 	endmethod
 
@@ -306,6 +330,7 @@ struct hLogic
 			endloop
 			call SaveStr(hash_hlogic,HASH_KEY_STR2HEX_CACHE,StringHash(s),hjass_global_logic_txt)
 		endif
+		set s = null
 		return hjass_global_logic_txt
 	endmethod
 

@@ -16,6 +16,7 @@ struct hEnemy
     // 设置敌人的名称
     public static method setEnemyName takes string name returns nothing
         set enemyName = name
+        set name = null
     endmethod
 
     // 获取敌人的名称
@@ -34,10 +35,11 @@ struct hEnemy
         set enemyPlayer[enemyPlayerQty] = whichPlayer
         set enemyInc[enemyPlayerQty] = 0
         call SetPlayerName(whichPlayer,enemyName)
-        //call SetPlayerColor(whichPlayer,ConvertPlayerColor(12) )
+        call SetPlayerColor(whichPlayer,ConvertPlayerColor(12) )
         if(isShareView==true)then
             call SetPlayerAlliance(whichPlayer, players[1], ALLIANCE_SHARED_VISION, true)
         endif
+        set whichPlayer = null
     endmethod
 
     // 获取一个创建单位最少的敌人玩家
@@ -69,18 +71,21 @@ struct hEnemy
     endmethod
 
     /**
-     * 创建1敌军单位面向点
-     * @return 最后创建单位
-     */
-    public static method createUnit takes integer unitid, location loc returns unit
-        return hunit.createUnit(getEnemyPlayer(), unitid, loc)
-    endmethod
-
-    /**
      * 创建1敌军单位XY
      * @return 最后创建单位
      */
     public static method createUnitXY takes integer unitid, real x,real y returns unit
+        return hunit.createUnitXY(getEnemyPlayer(), unitid, x, y)
+    endmethod
+
+    /**
+     * 创建1敌军单位面向点
+     * @return 最后创建单位
+     */
+    public static method createUnit takes integer unitid, location loc returns unit
+        local real x = GetLocationX(loc)
+        local real y = GetLocationY(loc)
+        set loc = null
         return hunit.createUnitXY(getEnemyPlayer(), unitid, x, y)
     endmethod
 

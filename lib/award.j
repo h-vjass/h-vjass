@@ -64,6 +64,7 @@ struct hAward
         set floatStr = null
         set ttg = null
         set p = null
+        set whichUnit = null
     endmethod
 
     /**
@@ -71,18 +72,21 @@ struct hAward
      */
     public method forUnitGold takes unit whichUnit,integer gold returns nothing
         call forUnit(whichUnit,0,gold,0)
+        set whichUnit = null
     endmethod
     /**
      * 奖励单位木头
      */
     public method forUnitLumber takes unit whichUnit,integer lumber returns nothing
         call forUnit(whichUnit,0,0,lumber)
+        set whichUnit = null
     endmethod
     /**
      * 奖励单位经验
      */
     public method forUnitExp takes unit whichUnit,integer exp returns nothing
         call forUnit(whichUnit,exp,0,0)
+        set whichUnit = null
     endmethod
 
     /**
@@ -105,6 +109,7 @@ struct hAward
         call filter.destroy()
         set gCount = CountUnitsInGroup( g )
         if( gCount <=0 ) then
+            set whichUnit = null
             return
         endif
         set cutExp = R2I(I2R(exp) / I2R(gCount))
@@ -125,6 +130,7 @@ struct hAward
         call GroupClear(g)
         call DestroyGroup(g)
         set g = null
+        set whichUnit = null
     endmethod
 
     /**
@@ -150,18 +156,21 @@ struct hAward
      */
     public method forGroupGold takes unit whichUnit,integer gold returns nothing
         call forGroup(whichUnit,0,gold,0)
+        set whichUnit = null
     endmethod
     /**
      * 平分奖励英雄组木头
      */
     public method forGroupLumber takes unit whichUnit,integer lumber returns nothing
         call forGroup(whichUnit,0,0,lumber)
+        set whichUnit = null
     endmethod
     /**
      * 平分奖励英雄组经验
      */
     public method forGroupExp takes unit whichUnit,integer exp returns nothing
         call forGroup(whichUnit,exp,0,0)
+        set whichUnit = null
     endmethod
 
     /**
@@ -169,12 +178,14 @@ struct hAward
      */
     public method forPlayerGold takes unit whichUnit,integer gold returns nothing
         call forPlayer(gold,0)
+        set whichUnit = null
     endmethod
     /**
      * 平分奖励玩家组木头
      */
     public method forPlayerLumber takes unit whichUnit,integer lumber returns nothing
         call forPlayer(0,lumber)
+        set whichUnit = null
     endmethod
 
 endstruct
