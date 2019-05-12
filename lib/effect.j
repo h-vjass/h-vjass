@@ -43,6 +43,7 @@ struct hEffect
 		else
 			call DestroyEffect(AddSpecialEffect(effectModel, x,y))
 		endif
+		set effectModel = null
 	endmethod
 
 
@@ -63,6 +64,8 @@ struct hEffect
 		else
 			call DestroyEffect(AddSpecialEffectLoc(effectModel, loc))
 		endif
+		set effectModel = null
+		set loc = null
 	endmethod
 
 	/**
@@ -71,23 +74,24 @@ struct hEffect
 	public static method toUnitLoc takes string effectModel,unit targetUnit,real during returns nothing
 		local timer t = null
 		local location loc = null
-		if(targetUnit == null)then
-			return
+		if(targetUnit != null)then
+			set loc = GetUnitLoc(targetUnit)
+			if(during > 0)then
+				set t = htime.setTimeout(during,function thistype.duringDel)
+				call htime.setEffect(t,1,AddSpecialEffectLoc(effectModel, loc))
+				set t = null
+			elseif(during < 0)then
+				set t = htime.setTimeout(60,function thistype.duringDel)
+				call htime.setEffect(t,1,AddSpecialEffectLoc(effectModel, loc))
+				set t = null
+			else
+				call DestroyEffect(AddSpecialEffectLoc(effectModel, loc))
+			endif
+			call RemoveLocation(loc)
+			set loc = null
 		endif
-		set loc = GetUnitLoc(targetUnit)
-		if(during > 0)then
-			set t = htime.setTimeout(during,function thistype.duringDel)
-			call htime.setEffect(t,1,AddSpecialEffectLoc(effectModel, loc))
-			set t = null
-		elseif(during < 0)then
-			set t = htime.setTimeout(60,function thistype.duringDel)
-			call htime.setEffect(t,1,AddSpecialEffectLoc(effectModel, loc))
-			set t = null
-		else
-			call DestroyEffect(AddSpecialEffectLoc(effectModel, loc))
-		endif
-		call RemoveLocation(loc)
-		set loc = null
+		set effectModel = null
+		set targetUnit = null
 	endmethod
 
 	/**
@@ -107,6 +111,9 @@ struct hEffect
 		else
 			call DestroyEffect(hjass_global_effect)
 		endif
+		set effectModel = null
+		set targetUnit = null
+		set attach = null
 		return hjass_global_effect
 	endmethod
 
