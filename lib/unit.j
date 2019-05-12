@@ -20,7 +20,7 @@ struct hUnit
      * 获取单位的最大生命
      */
     public static method getMaxLife takes unit u returns real
-        local real val GetUnitState(u, UNIT_STATE_MAX_LIFE)
+        local real val = GetUnitState(u, UNIT_STATE_MAX_LIFE)
         set u = null
         return val
     endmethod
@@ -29,7 +29,7 @@ struct hUnit
      * 获取单位的当前生命
      */
     public static method getLife takes unit u returns real
-        local real val GetUnitState(u, UNIT_STATE_LIFE)
+        local real val = GetUnitState(u, UNIT_STATE_LIFE)
         set u = null
         return val
     endmethod

@@ -54,13 +54,13 @@ struct hIs
         local boolean flag = false
         if(whichPlayer == null) then
             set flag = false
-        else if(whichPlayer == Player(PLAYER_NEUTRAL_AGGRESSIVE)) then
+        elseif(whichPlayer == Player(PLAYER_NEUTRAL_AGGRESSIVE)) then
             set flag = true
-        else if(whichPlayer == Player(bj_PLAYER_NEUTRAL_VICTIM)) then
+        elseif(whichPlayer == Player(bj_PLAYER_NEUTRAL_VICTIM)) then
             set flag = true
-        else if(whichPlayer == Player(bj_PLAYER_NEUTRAL_EXTRA)) then
+        elseif(whichPlayer == Player(bj_PLAYER_NEUTRAL_EXTRA)) then
             set flag = true
-        else if(whichPlayer == Player(PLAYER_NEUTRAL_PASSIVE)) then
+        elseif(whichPlayer == Player(PLAYER_NEUTRAL_PASSIVE)) then
             set flag = true
         endif
         set whichPlayer = null
@@ -74,7 +74,7 @@ struct hIs
         local boolean flag = false
         if(whichUnit == null or whichPlayer == null) then
             set flag = false
-        else if(IsUnitDetected(whichUnit, whichPlayer) == true) then
+        elseif(IsUnitDetected(whichUnit, whichPlayer) == true) then
             set flag = true
         endif
         set whichUnit = null
