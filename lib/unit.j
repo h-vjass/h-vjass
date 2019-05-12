@@ -20,14 +20,18 @@ struct hUnit
      * 获取单位的最大生命
      */
     public static method getMaxLife takes unit u returns real
-        return GetUnitState(u, UNIT_STATE_MAX_LIFE)
+        local real val GetUnitState(u, UNIT_STATE_MAX_LIFE)
+        set u = null
+        return val
     endmethod
 
     /**
      * 获取单位的当前生命
      */
     public static method getLife takes unit u returns real
-        return GetUnitState(u, UNIT_STATE_LIFE)
+        local real val GetUnitState(u, UNIT_STATE_LIFE)
+        set u = null
+        return val
     endmethod
 
     /**
@@ -35,6 +39,7 @@ struct hUnit
      */
     public static method setLife takes unit u,real val returns nothing
         call SetUnitState(u, UNIT_STATE_LIFE, val)
+        set u = null
     endmethod
 
     /**
@@ -42,6 +47,7 @@ struct hUnit
      */
     public static method addLife takes unit u,real val returns nothing
         call SetUnitState(u, UNIT_STATE_LIFE, getLife(u)+val)
+        set u = null
     endmethod
 
     /**
@@ -49,6 +55,7 @@ struct hUnit
      */
     public static method subLife takes unit u,real val returns nothing
         call SetUnitState(u, UNIT_STATE_LIFE, getLife(u)-val)
+        set u = null
     endmethod
 
     /**
@@ -56,6 +63,7 @@ struct hUnit
      */
     public static method getMaxMana takes unit u returns real
         return GetUnitState(u, UNIT_STATE_MAX_MANA)
+        set u = null
     endmethod
 
     /**
@@ -63,6 +71,7 @@ struct hUnit
      */
     public static method getMana takes unit u returns real
         return GetUnitState(u, UNIT_STATE_MANA)
+        set u = null
     endmethod
 
     /**
@@ -70,6 +79,7 @@ struct hUnit
      */
     public static method setMana takes unit u,real val returns nothing
         call SetUnitState(u, UNIT_STATE_MANA, val)
+        set u = null
     endmethod
 
     /**
@@ -77,6 +87,7 @@ struct hUnit
      */
     public static method addMana takes unit u,real val returns nothing
         call SetUnitState(u, UNIT_STATE_MANA, getMana(u)+val)
+        set u = null
     endmethod
 
     /**
@@ -84,20 +95,25 @@ struct hUnit
      */
     public static method subMana takes unit u,real val returns nothing
         call SetUnitState(u, UNIT_STATE_MANA, getMana(u)-val)
+        set u = null
     endmethod
 
     /**
      * 获取单位百分比生命
      */
     public static method getLifePercent takes unit u returns real
-        return GetUnitLifePercent(u)
+        local real percent = GetUnitLifePercent(u)
+        set u = null
+        return percent
     endmethod
 
     /**
      * 获取单位百分比魔法
      */
     public static method getManaPercent takes unit u returns real
-        return GetUnitManaPercent(u)
+        local real percent = GetUnitManaPercent(u)
+        set u = null
+        return percent
     endmethod
 
     /**
@@ -105,6 +121,7 @@ struct hUnit
      */
     public static method setLifePercent takes unit u,real percent returns nothing
         call SetUnitLifePercentBJ( u, percent )
+        set u = null
     endmethod
 
     /**
@@ -112,6 +129,7 @@ struct hUnit
      */
     public static method setManaPercent takes unit u,real percent returns nothing
         call SetUnitManaPercentBJ( u, percent )
+        set u = null
     endmethod
 
     /**
@@ -119,6 +137,7 @@ struct hUnit
      */
     public static method setPeriod takes unit u,real life returns nothing
         call UnitApplyTimedLifeBJ(life, 'BTLF', u)
+        set u = null
     endmethod
     
 
@@ -132,13 +151,16 @@ struct hUnit
             call hgroup.out(u, ATTR_GROUP_PUNISH)
         endif
         call SaveBoolean(hash_unit,GetHandleId(u),hashkey_unit_isOpenPunish,isOpen)
+        set u = null
     endmethod
 
     /**
      * 单位是否启用硬直（系统默认不启用）
      */
     public static method isOpenPunish takes unit u returns boolean
-        return LoadBoolean(hash_unit,GetHandleId(u),hashkey_unit_isOpenPunish)
+        local integer hid = GetHandleId(u)
+        set u = null
+        return LoadBoolean(hash_unit,hid,hashkey_unit_isOpenPunish)
     endmethod
 
     /**
@@ -157,6 +179,7 @@ struct hUnit
      */
     public static method setAvatar takes integer uid,string avatar returns nothing
         call SaveStr(hash_unit,uid,hashkey_unit_avatar,avatar)
+        set avatar = null
     endmethod
 
     /** 
@@ -214,10 +237,13 @@ struct hUnit
             set t = null
         endif
         call SetUnitUserData(u,value)
+        set u = null
     endmethod
 
     public static method getUserData takes unit u returns integer
-        return GetUnitUserData(u)
+        local integer data = GetUnitUserData(u)
+        set u = null
+        return data
     endmethod
 
     /**
@@ -272,6 +298,7 @@ struct hUnit
             call htime.setUnit(t, 1 ,targetUnit )
             set t = null
         endif
+        set targetUnit = null
     endmethod
 
     /**
@@ -295,12 +322,12 @@ struct hUnit
         local timer t = null
         if( during <= 0 ) then
             call KillUnit( targetUnit )
-            set targetUnit = null
         else
             set t = htime.setTimeout( during , function thistype.killCall)
             call htime.setUnit( t, -1 ,targetUnit )
             set t = null
         endif
+        set targetUnit = null
     endmethod
 
     /**
@@ -312,10 +339,10 @@ struct hUnit
         if( u != null ) then
             call SetUnitExploded(u, true)
             call KillUnit(u)
-            set u = null
         endif
         call htime.delTimer(t)
         set t = null
+        set u = null
     endmethod
 
     /**
@@ -326,19 +353,21 @@ struct hUnit
         if( during <= 0 ) then
             call SetUnitExploded(targetUnit, true)
             call KillUnit(targetUnit)
-            set targetUnit = null
         else
             set t = htime.setTimeout( during , function thistype.explodedCall)
             call htime.setUnit( t, -1 ,targetUnit )
             set t = null
         endif
+        set targetUnit = null
     endmethod
 
     /**
      * 获取单位面向角度
      */
     public static method getFacing takes unit u returns real
-        return GetUnitFacing(u)
+        local real facing = GetUnitFacing(u)
+        set u = null
+        return facing
     endmethod
 
     /**
@@ -349,6 +378,8 @@ struct hUnit
         local location loc2 = null
         local real facing = 0
         if( u1 == null or u2 == null ) then
+            set u1 = null
+            set u2 = null
             return 0
         endif
         set loc1 = GetUnitLoc(u1)
@@ -358,6 +389,8 @@ struct hUnit
         call RemoveLocation( loc2 )
         set loc1 = null
         set loc2 = null
+        set u1 = null
+        set u2 = null
         return facing
     endmethod
 
@@ -367,6 +400,7 @@ struct hUnit
     public static method setUnitFly takes unit u returns nothing
         call UnitAddAbility( u , 'Amrf' ) 
         call UnitRemoveAbility( u , 'Amrf' )
+        set u = null
     endmethod
 
     /**
@@ -419,6 +453,7 @@ struct hUnit
                 set t = null
             endif
         endif
+        set u = null
     endmethod
 
     /**
@@ -428,6 +463,8 @@ struct hUnit
      */
     public static method rebornAtLoc takes unit u,location loc,real delay,real invulnerable returns nothing
         call thistype.rebornAtXY(u,GetLocationX(loc),GetLocationY(loc),delay,invulnerable)
+        set u = null
+        set loc = null
     endmethod
 
     /**
@@ -456,7 +493,12 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnit takes player whichPlayer, integer unitid, location loc returns unit
-        return CreateUnitAtLoc(whichPlayer, unitid, loc, bj_UNIT_FACING)
+        local integer i = GetConvertedPlayerId(whichPlayer)
+        local real x = GetLocationX(loc)
+        local real y = GetLocationY(loc)
+        set whichPlayer = null
+        set loc = null
+        return CreateUnit(players[i], unitid, x, y, bj_UNIT_FACING)
     endmethod
 
     /**
@@ -464,7 +506,9 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnitXY takes player whichPlayer, integer unitid, real x,real y returns unit
-        return CreateUnit(whichPlayer, unitid, x, y, bj_UNIT_FACING)
+        local integer i = GetConvertedPlayerId(whichPlayer)
+        set whichPlayer = null
+        return CreateUnit(players[i], unitid, x, y, bj_UNIT_FACING)
     endmethod
 
     /**
@@ -472,7 +516,9 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnitXYFacing takes player whichPlayer, integer unitid, real x,real y, real facing returns unit
-        return CreateUnit(whichPlayer, unitid, x, y, facing)
+        local integer i = GetConvertedPlayerId(whichPlayer)
+        set whichPlayer = null
+        return CreateUnit(players[i], unitid, x, y, facing)
     endmethod
 
     /**
@@ -480,7 +526,9 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnithXY takes player whichPlayer, integer unitid, hXY xy returns unit
-        return CreateUnit(whichPlayer, unitid, xy.x, xy.y, bj_UNIT_FACING)
+        local integer i = GetConvertedPlayerId(whichPlayer)
+        set whichPlayer = null
+        return CreateUnit(players[i], unitid, xy.x, xy.y, bj_UNIT_FACING)
     endmethod
 
     /**
@@ -488,7 +536,15 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnitLookAt takes player whichPlayer, integer unitid, location loc, location lookAt returns unit
-        return CreateUnitAtLoc(whichPlayer, unitid, loc, AngleBetweenPoints(loc, lookAt))
+        local integer i = GetConvertedPlayerId(whichPlayer)
+        local real x = GetLocationX(loc)
+        local real y = GetLocationY(loc)
+        local real xl = GetLocationX(lookAt)
+        local real yl = GetLocationY(lookAt)
+        set whichPlayer = null
+        set loc = null
+        set lookAt = null
+        return CreateUnit(players[i], unitid, x, y, hlogic.getDistanceBetweenXY(x,y,xl,yl))
     endmethod
 
     /**
@@ -496,7 +552,12 @@ struct hUnit
      * @return 最后创建单位
      */
     public static method createUnitFacing takes player whichPlayer, integer unitid, location loc, real facing returns unit
-        return CreateUnitAtLoc(whichPlayer, unitid, loc, facing)
+        local integer i = GetConvertedPlayerId(whichPlayer)
+        local real x = GetLocationX(loc)
+        local real y = GetLocationY(loc)
+        set whichPlayer = null
+        set loc = null
+        return CreateUnit(players[i], unitid, x, y, facing)
     endmethod
 
     /**
@@ -506,6 +567,9 @@ struct hUnit
     public static method createUnitAttackToLoc takes player whichPlayer, integer unitid , location loc, location attackLoc returns unit
         set hjass_global_unit = createUnitLookAt( whichPlayer , unitid , loc , attackLoc)
         call IssuePointOrderLoc( hjass_global_unit, "attack", attackLoc )
+        set whichPlayer = null
+        set loc = null
+        set attackLoc = null
         return hjass_global_unit
     endmethod
 
@@ -519,6 +583,9 @@ struct hUnit
         call IssueTargetOrder( hjass_global_unit , "attack", targetUnit )
         call RemoveLocation(locTo)
         set locTo = null
+        set whichPlayer = null
+        set loc = null
+        set targetUnit = null
         return hjass_global_unit
     endmethod
 
@@ -534,6 +601,8 @@ struct hUnit
             exitwhen qty < 0
                 call GroupAddUnit(hjass_global_group, createUnit(whichPlayer, unitid, loc))
         endloop
+        set whichPlayer = null
+        set loc = null
         return hjass_global_group
     endmethod
 
@@ -548,6 +617,8 @@ struct hUnit
             exitwhen qty < 0
                 call GroupAddUnit(hjass_global_group, createUnitFacing(whichPlayer, unitid, loc, facing))
         endloop
+        set whichPlayer = null
+        set loc = null
         return hjass_global_group
     endmethod
 
@@ -562,6 +633,7 @@ struct hUnit
             exitwhen qty < 0
                 call GroupAddUnit(hjass_global_group, createUnitXY(whichPlayer, unitid, x, y))
         endloop
+        set whichPlayer = null
         return hjass_global_group
     endmethod
 
@@ -576,6 +648,7 @@ struct hUnit
             exitwhen qty < 0
                 call GroupAddUnit(hjass_global_group, createUnitXYFacing(whichPlayer, unitid, x, y, GetRandomReal(0,360)))
         endloop
+        set whichPlayer = null
         return hjass_global_group
     endmethod
 
@@ -590,6 +663,9 @@ struct hUnit
             exitwhen qty < 0
                 call GroupAddUnit(hjass_global_group, createUnitLookAt(whichPlayer, unitid, loc, lookAt))
         endloop
+        set whichPlayer = null
+        set loc = null
+        set lookAt = null
         return hjass_global_group
     endmethod
 
@@ -600,6 +676,9 @@ struct hUnit
     public static method createUnitsAttackToLoc takes player whichPlayer, integer unitid,integer qty, location loc, location attackLoc returns group
         set hjass_global_group = createUnitsLookAt( whichPlayer , unitid , qty, loc , attackLoc )
         call GroupPointOrderLoc( hjass_global_group , "attack", attackLoc )
+        set whichPlayer = null
+        set loc = null
+        set attackLoc = null
         return hjass_global_group
     endmethod
 
@@ -613,6 +692,9 @@ struct hUnit
         call GroupTargetOrder(hjass_global_group , "attack", targetUnit )
         call RemoveLocation(locTo)
         set locTo = null
+        set whichPlayer = null
+        set loc = null
+        set targetUnit = null
         return hjass_global_group
     endmethod
 

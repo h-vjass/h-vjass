@@ -120,6 +120,7 @@ struct hSkill
             endif
             set t = null
         endif
+        set codename = null
 	endmethod
 
 	/**
@@ -155,6 +156,8 @@ struct hSkill
         set t = null
         //根据bean影响属性
         call hAttrUnit.modifyAttrByBean(u,bean,during)
+        set u = null
+        set eff = null
     endmethod
 
     /**
@@ -378,6 +381,9 @@ struct hSkill
         call htime.setBoolean(t,14,bean.isNoAvoid)
         set t = null
         set g = null
+        set mover = null
+        set targetLoc = null
+        set Meffect = null
     endmethod
 
     //穿梭回调
@@ -538,6 +544,10 @@ struct hSkill
         call htime.setString(t,15,bean.isBreak)
         call htime.setBoolean(t,16,bean.isNoAvoid)
         set t = null
+        set shutter = null
+        set whichGroup = null
+        set JEffect = null
+        set animate = null
     endmethod
 
     /**
@@ -556,6 +566,10 @@ struct hSkill
         set g = hgroup.createByUnit(whichUnit,range,function hFilter.get)
         call thistype.shuttleToGroup(shutter,g,times,speed,speedPlus,offsetDistance,JEffect,animate,skillModel,bean)
         call hf.destroy()
+        set shutter = null
+        set whichUnit = null
+        set JEffect = null
+        set animate = null
     endmethod
 
     /*

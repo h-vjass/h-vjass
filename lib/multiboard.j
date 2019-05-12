@@ -55,6 +55,7 @@ struct hMultiboard
         if(mbid != 0)then
             call SaveStr(hash_hmb, mbid ,HASH_KEY_TITLE , title )
         endif
+        set title = null
     endmethod
 
     //获取多面板标题
@@ -88,6 +89,7 @@ struct hMultiboard
             call htime.setString(t,4,content)
             set t = null
         endif
+        set content = null
     endmethod
 
     /**
@@ -101,6 +103,7 @@ struct hMultiboard
             call SaveStr(hash_hmb,mbid,HASH_KEY_ICON+col*100+row,icon )
             call thistype.setRowCol(mbid,col,row)
         endif
+        set icon = null
     endmethod
 
     /**
@@ -117,6 +120,8 @@ struct hMultiboard
             call SaveStr(hash_hmb, mbid ,HASH_KEY_ICON+col*100+row,icon )
             call thistype.setRowCol(mbid,col,row)
         endif
+        set content = null
+        set icon = null
     endmethod
 
     //获取多面板内容
@@ -145,6 +150,7 @@ struct hMultiboard
         if( hasIcon )then
             set len = len + 1.76
         endif
+        set content = null
         return len
     endmethod
 

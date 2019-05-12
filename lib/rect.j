@@ -52,34 +52,50 @@ struct hRect
 	endmethod
 
 	public static method getWidth takes rect r returns real
-		return LoadReal(hash_hrect, GetHandleId(r), HASH_WIDTH)
+		local integer hid =  GetHandleId(r)
+		set r = null
+		return LoadReal(hash_hrect, hid, HASH_WIDTH)
 	endmethod
 
 	public static method getHeight takes rect r returns real
-		return LoadReal(hash_hrect, GetHandleId(r), HASH_HEIGHT)
+		local integer hid =  GetHandleId(r)
+		set r = null
+		return LoadReal(hash_hrect, hid, HASH_HEIGHT)
 	endmethod
 
 	public static method getStartX takes rect r returns real
-		return LoadReal(hash_hrect, GetHandleId(r), HASH_START_X)
+		local integer hid =  GetHandleId(r)
+		set r = null
+		return LoadReal(hash_hrect, hid, HASH_START_X)
 	endmethod
 	public static method getStartY takes rect r returns real
-		return LoadReal(hash_hrect, GetHandleId(r), HASH_START_Y)
+		local integer hid =  GetHandleId(r)
+		set r = null
+		return LoadReal(hash_hrect, hid, HASH_START_Y)
 	endmethod
 	public static method getEndX takes rect r returns real
-		return LoadReal(hash_hrect, GetHandleId(r), HASH_END_X)
+		local integer hid =  GetHandleId(r)
+		set r = null
+		return LoadReal(hash_hrect, hid, HASH_END_X)
 	endmethod
 	public static method getEndY takes rect r returns real
-		return LoadReal(hash_hrect, GetHandleId(r), HASH_END_Y)
+		local integer hid =  GetHandleId(r)
+		set r = null
+		return LoadReal(hash_hrect, hid, HASH_END_Y)
 	endmethod
 
 	//设置区域名称
 	public static method setName takes rect whichRect,string name returns nothing
 		call SaveStr(hash_hrect, GetHandleId(whichRect),HASH_NAME,name)
+		set whichRect = null
+		set name = null
 	endmethod
 
 	//获取区域名称
 	public static method getName takes rect whichRect returns string
-		return LoadStr(hash_hrect, GetHandleId(whichRect),HASH_NAME)
+		local integer hid =  GetHandleId(whichRect)
+		set whichRect = null
+		return LoadStr(hash_hrect, hid,HASH_NAME)
 	endmethod
 
 	//删除区域
@@ -88,6 +104,7 @@ struct hRect
 		call FlushChildHashtable(hash_trigger,GetHandleId(area))
 		call FlushChildHashtable(hash_trigger_register,GetHandleId(area))
 		call RemoveRect(area)
+		set area = null
 	endmethod
 
 	//锁定do
@@ -268,6 +285,8 @@ struct hRect
 		local timer t = null
 		if(area==null)then
 			call hconsole.error("hRect.lockByRect")
+			set area = null
+			set ty = null
 			return
 		endif
 		set t = LoadTimerHandle(hash_hrect, GetHandleId(area), HASH_TIMER)
@@ -282,6 +301,8 @@ struct hRect
 			call htime.setGroup(t,hash_hrect_group,CreateGroup())
 			set t = null
 		endif
+		set area = null
+		set ty = null
 	endmethod
 
 	//锁定所有单位在某个点附近一段距离无法离开
@@ -294,6 +315,7 @@ struct hRect
 		local timer t = null
 		if(loc==null)then
 			call hconsole.error("hRect.lockByLoc")
+			set ty = null
 			return
 		endif
 		set t = LoadTimerHandle(hash_hrect, GetHandleId(loc), HASH_TIMER)
@@ -310,6 +332,8 @@ struct hRect
 			call htime.setGroup(t,hash_hrect_group,CreateGroup())
 			set t = null
 		endif
+		set loc = null
+		set ty = null
 	endmethod
 
 	//锁定所有单位在某个单位附近一段距离无法离开
@@ -322,6 +346,7 @@ struct hRect
 		local timer t = null
 		if(u==null)then
 			call hconsole.error("hRect.lockByUnit")
+			set ty = null
 			return
 		endif
 		set t = LoadTimerHandle(hash_hrect, GetHandleId(u), HASH_TIMER)
@@ -338,6 +363,8 @@ struct hRect
 			call htime.setGroup(t,hash_hrect_group,CreateGroup())
 			set t = null
 		endif
+		set u = null
+		set ty = null
 	endmethod
 
 	//删除锁定区域
@@ -348,6 +375,7 @@ struct hRect
 			set t = null
     		call SaveTimerHandle(hash_hrect, GetHandleId(area), HASH_TIMER , null)
     	endif
+		set area = null
 	endmethod
 	//删除锁定点
 	public static method delLockByLoc takes location loc returns nothing
@@ -357,6 +385,7 @@ struct hRect
 			set t = null
     		call SaveTimerHandle(hash_hrect, GetHandleId(loc), HASH_TIMER , null)
     	endif
+		set loc = null
 	endmethod
 	//删除锁定单位
 	public static method delLockByUnit takes unit u returns nothing
@@ -366,6 +395,7 @@ struct hRect
 			set t = null
     		call SaveTimerHandle(hash_hrect, GetHandleId(u), HASH_TIMER , null)
     	endif
+		set u = null
 	endmethod
 
 endstruct

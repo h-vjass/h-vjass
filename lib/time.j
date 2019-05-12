@@ -81,11 +81,15 @@ struct hTime
     //设置计时器类型 timeout | interval
     private static method setType takes timer t,string type1 returns nothing
         call SaveStr(hash_time, GetHandleId(t), StringHash("timer_type"), type1)
+        set t = null
+        set type1 = null
     endmethod
 
     //获取计时器类型
     public static method getType takes timer t returns string
-        return LoadStr(hash_time, GetHandleId(t) , StringHash("timer_type"))
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadStr(hash_time, hid , StringHash("timer_type"))
     endmethod
     
     /**
@@ -94,151 +98,227 @@ struct hTime
      //SET
     public static method setReal takes timer t,integer k,real value returns nothing
         call SaveReal(hash_time, GetHandleId(t), k, value)
+        set t = null
     endmethod
     public static method setInteger takes timer t,integer k,integer value returns nothing
         call SaveInteger(hash_time, GetHandleId(t), k, value)
+        set t = null
     endmethod
     public static method setUnit takes timer t,integer k,unit value returns nothing
         call SaveUnitHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setString takes timer t,integer k,string value returns nothing
         call SaveStr(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setBoolean takes timer t,integer k,boolean value returns nothing
         call SaveBoolean(hash_time, GetHandleId(t), k, value)
+        set t = null
     endmethod
     public static method setLoc takes timer t,integer k,location value returns nothing
         call SaveLocationHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setGroup takes timer t,integer k,group value returns nothing
         call SaveGroupHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setPlayer takes timer t,integer k,player value returns nothing
         call SavePlayerHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setItem takes timer t,integer k,item value returns nothing
         call SaveItemHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setTimerDialog takes timer t,integer k,timerdialog value returns nothing
         call SaveTimerDialogHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setTexttag takes timer t,integer k,texttag value returns nothing
         call SaveTextTagHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setEffect takes timer t,integer k,effect value returns nothing
         call SaveEffectHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setLightning takes timer t,integer k,lightning value returns nothing
         call SaveLightningHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setRect takes timer t,integer k,rect value returns nothing
         call SaveRectHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setBx takes timer t,integer k,boolexpr value returns nothing
         call SaveBooleanExprHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setTrigger takes timer t,integer k,trigger value returns nothing
         call SaveTriggerHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setMultiboard takes timer t,integer k,multiboard value returns nothing
         call SaveMultiboardHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setDestructable takes timer t,integer k,destructable value returns nothing
         call SaveDestructableHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     public static method setForce takes timer t,integer k,force value returns nothing
         call SaveForceHandle(hash_time, GetHandleId(t), k, value)
+        set t = null
+        set value = null
     endmethod
     //GET
     public static method getReal takes timer t,integer k returns real
-        return LoadReal(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadReal(hash_time, hid, k)
     endmethod
     public static method getInteger takes timer t,integer k returns integer
-        return LoadInteger(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadInteger(hash_time, hid, k)
     endmethod
     public static method getUnit takes timer t,integer k returns unit
-        return LoadUnitHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadUnitHandle(hash_time, hid, k)
     endmethod
     public static method getString takes timer t,integer k returns string
-        return LoadStr(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadStr(hash_time, hid, k)
     endmethod
     public static method getBoolean takes timer t,integer k returns boolean
-        return LoadBoolean(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadBoolean(hash_time, hid, k)
     endmethod
     public static method getLoc takes timer t,integer k returns location
-        return LoadLocationHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadLocationHandle(hash_time, hid, k)
     endmethod
     public static method getGroup takes timer t,integer k returns group
-        return LoadGroupHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadGroupHandle(hash_time, hid, k)
     endmethod
     public static method getPlayer takes timer t,integer k returns player
-        return LoadPlayerHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadPlayerHandle(hash_time, hid, k)
     endmethod
     public static method getItem takes timer t,integer k returns item
-        return LoadItemHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadItemHandle(hash_time, hid, k)
     endmethod
     public static method getTimerDialog takes timer t,integer k returns timerdialog
-        return LoadTimerDialogHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadTimerDialogHandle(hash_time, hid, k)
     endmethod
     public static method getTexttag takes timer t,integer k returns texttag
-        return LoadTextTagHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadTextTagHandle(hash_time, hid, k)
     endmethod
     public static method getEffect takes timer t,integer k returns effect
-        return LoadEffectHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadEffectHandle(hash_time, hid, k)
     endmethod
     public static method getLightning takes timer t,integer k returns lightning
-        return LoadLightningHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadLightningHandle(hash_time, hid, k)
     endmethod
     public static method getRect takes timer t,integer k returns rect
-        return LoadRectHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadRectHandle(hash_time, hid, k)
     endmethod
     public static method getBx takes timer t,integer k returns boolexpr
-        return LoadBooleanExprHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadBooleanExprHandle(hash_time, hid, k)
     endmethod
     public static method getTrigger takes timer t,integer k returns trigger
-        return LoadTriggerHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadTriggerHandle(hash_time, hid, k)
     endmethod
      public static method getMultiboard takes timer t,integer k returns multiboard
-        return LoadMultiboardHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadMultiboardHandle(hash_time, hid, k)
     endmethod
     public static method getDestructable takes timer t,integer k returns destructable
-        return LoadDestructableHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadDestructableHandle(hash_time, hid, k)
     endmethod
     public static method getForce takes timer t,integer k returns force
-        return LoadForceHandle(hash_time, GetHandleId(t), k)
+        local integer hid = GetHandleId(t)
+        set t = null
+        return LoadForceHandle(hash_time, hid, k)
     endmethod
 
     /**
      * 获取计时器设置时间
      */
     public static method getSetTime takes timer t returns real
-        if(t==null)then
-            return 0
-        else
-            return TimerGetTimeout(t)
+        local real val = 0
+        if(t!=null)then
+            set val = TimerGetTimeout(t)
         endif
+        set t = null
+        return val
     endmethod
 
     /**
      * 获取计时器剩余时间
      */
     public static method getRemainTime takes timer t returns real
-        if(t==null)then
-            return 0
-        else
-            return TimerGetRemaining(t)
+        local real val = 0
+        if(t!=null)then
+            set val = TimerGetRemaining(t)
         endif
+        set t = null
+        return val
     endmethod 
 
     /**
      * 获取计时器已过去时间
      */
     public static method getElapsedTime takes timer t returns real
-        if(t==null)then
-            return 0
-        else
-            return TimerGetElapsed(t)
+        local real val = 0
+        if(t!=null)then
+            set val = TimerGetElapsed(t)
         endif
+        set t = null
+        return val
     endmethod 
 
     /**
@@ -248,6 +328,7 @@ struct hTime
         set hjass_global_timer = CreateTimer()
         call setType(hjass_global_timer,"timeout")
         call TimerStart( hjass_global_timer, time , false, func )
+        set func = null
         return hjass_global_timer
     endmethod
 
@@ -260,6 +341,8 @@ struct hTime
         call TimerDialogDisplay(hjass_global_timer_dialog, true)
         call setTimerDialog( t , 9001 , hjass_global_timer_dialog )
         call thistype.setDialogTitle( hjass_global_timer_dialog , title )
+        set t = null
+        set title = null
         return hjass_global_timer_dialog
     endmethod
 
@@ -267,16 +350,19 @@ struct hTime
      * 设置取计时器标题
      */
     private static method setDialogTitle takes timerdialog td,string title returns nothing
-        if(td == null) then
-            return
+        if(td != null) then
+            call SaveStr(hash_time,GetHandleId(td),8001,title)
         endif
-        call SaveStr(hash_time,GetHandleId(td),8001,title)
+        set td = null
+        set title = null
     endmethod
 
     /**
      * 获取计时器标题
      */
     public static method getDialogTitle takes timerdialog td returns string
+        local integer hid =  GetHandleId(td)
+        set td = null
         if(td == null) then
             return ""
         endif
@@ -318,8 +404,8 @@ struct hTime
             endif
             call FlushChildHashtable(hash_time, GetHandleId(t))
             call DestroyTimer(t)
-            set t = null
         endif
+        set t = null
     endmethod
 
     /**
@@ -329,6 +415,7 @@ struct hTime
         set hjass_global_timer = CreateTimer()
         call setType(hjass_global_timer,"interval")
         call TimerStart( hjass_global_timer, time , true, func )
+        set func = null
         return hjass_global_timer
     endmethod
 
@@ -347,6 +434,7 @@ struct hTime
         call SaveReal(hash_time,GetHandleId(t),StringHash("pause_settimeout"),TimerGetTimeout(t))
         call SaveReal(hash_time,GetHandleId(t),StringHash("pause_remaining"),TimerGetRemaining(t))
         call PauseTimer(t)
+        set t = null
     endmethod
 
     /**
@@ -357,6 +445,7 @@ struct hTime
         local real remaining = 0
         local string title = null
         if(t==null)then
+            set func = null
             return
         endif
         if(getType(t)=="timeout")then
@@ -366,12 +455,13 @@ struct hTime
             set settimeout = LoadReal(hash_time,GetHandleId(t),StringHash("pause_settimeout"))
             set remaining = LoadReal(hash_time,GetHandleId(t),StringHash("pause_remaining"))
             call delTimer(t)
-            set t = null
             set hjass_global_timer = setTimeout(settimeout,func)
             call setDialog(hjass_global_timer, title)
             set hjass_global_timer = null
             set title = null
         endif
+        set t = null
+        set func = null
     endmethod
 
 endstruct

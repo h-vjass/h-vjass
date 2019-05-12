@@ -66,6 +66,8 @@ struct hWeather
         if(i>100)then
             call hconsole.error("weatherHashCacheMax too small")
         endif
+        set t = null
+        set w = null
     endmethod
 
     //删除天气

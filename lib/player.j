@@ -49,7 +49,9 @@ struct hPlayer
 
 	//index
 	public static method index takes player whichPlayer returns integer
-		return GetConvertedPlayerId(whichPlayer) 
+		local integer i = GetConvertedPlayerId(whichPlayer)
+		set whichPlayer = null
+		return i
 	endmethod
 
 	//getRandomUnit
@@ -75,7 +77,9 @@ struct hPlayer
 
 	//apm
 	private static method setApm takes player whichPlayer , integer apm returns nothing
-		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_apm, apm)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		call SaveInteger(hash_player, hid, hp_apm, apm)
 	endmethod
 	public static method getApm takes player whichPlayer returns integer
 		if(htime.count() > 60) then
@@ -83,9 +87,11 @@ struct hPlayer
 	    else
 	        return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_apm)
 	    endif
+		set whichPlayer = null
 	endmethod
 	private static method addApm takes player whichPlayer returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_apm , LoadInteger(hash_player, GetHandleId(whichPlayer), hp_apm)+1)
+		set whichPlayer = null
 	endmethod
 	private static method triggerApmActions takes nothing returns nothing
 		call addApm(GetTriggerPlayer())
@@ -130,6 +136,8 @@ struct hPlayer
 	private static method setSelection takes player whichPlayer,unit whichUnit returns nothing
 		if(whichPlayer!=null)then
 			call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection, whichUnit)
+			set whichPlayer = null
+			set whichUnit = null
 		endif
 	endmethod
 	public static method getSelection takes player whichPlayer returns unit
@@ -138,16 +146,20 @@ struct hPlayer
 			set hjass_global_unit= null
 			call SaveUnitHandle(hash_player, GetHandleId(whichPlayer), hp_selection, null)
 		endif
+		set whichPlayer = null
 		return hjass_global_unit
 	endmethod
 
 	//设置玩家状态
 	public static method setStatus takes player whichPlayer,string status returns nothing
 		call SaveStr(hash_player, GetHandleId(whichPlayer), hp_battle_status, status)
+		set whichPlayer = null
 	endmethod
 	//获取玩家状态
 	public static method getStatus takes player whichPlayer returns string
-		return LoadStr(hash_player, GetHandleId(whichPlayer), hp_battle_status)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadStr(hash_player, hid, hp_battle_status)
 	endmethod
 
 	//设置失败
@@ -174,11 +186,14 @@ struct hPlayer
 			set tips = "失败"
 		endif
 		call CustomDefeatBJ( whichPlayer, tips )
+		set whichPlayer = null
+		set tips = null
 	endmethod
 
 	//设置胜利
 	public static method victory takes player whichPlayer returns nothing
 		call CustomVictoryBJ( whichPlayer, true, true )
+		set whichPlayer = null
 	endmethod
 
 	/**
@@ -202,13 +217,16 @@ struct hPlayer
      */
     public static method setIsAutoConvert takes player whichPlayer,boolean b returns nothing
         call SaveBoolean(hash_player, GetHandleId(whichPlayer), hp_is_auto_convert, b)
+		set whichPlayer = null
     endmethod
 
     /**
      * 获取是否自动将{hAwardConvertRatio}黄金换1木头
      */
     public static method getIsAutoConvert takes player whichPlayer returns boolean
-        return LoadBoolean(hash_player, GetHandleId(whichPlayer), hp_is_auto_convert)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+        return LoadBoolean(hash_player, hid, hp_is_auto_convert)
     endmethod
 
     /**
@@ -231,44 +249,57 @@ struct hPlayer
             set current = current - l * player_convert_ratio
         endif
 		call SaveInteger(hash_player,pid,hp_exceed_gold,current)
+		set whichPlayer = null
         return l
     endmethod
 
 	//获取玩家造成的总伤害
 	public static method getDamage takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_damage)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_damage)
 	endmethod
 	//增加玩家造成的总伤害
 	public static method addDamage takes player whichPlayer,real val returns nothing
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_damage, getDamage(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 
 	//获取玩家受到的总伤害
 	public static method getBeDamage takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_bedamage)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_bedamage)
 	endmethod
 	//增加玩家受到的总伤害
 	public static method addBeDamage takes player whichPlayer,real val returns nothing
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_bedamage, getBeDamage(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 
 	//获取玩家杀敌数
 	public static method getKill takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_kill)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadInteger(hash_player, hid, hp_kill)
 	endmethod
 	//增加玩家杀敌数
 	public static method addKill takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_kill, getKill(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 
 
 	//获取玩家生命源设定百分比
 	public static method getLifeSourceRatio takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_life_source_ratio)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_life_source_ratio)
 	endmethod
 	//设置玩家生命源设定百分比
 	public static method setLifeSourceRatio takes player whichPlayer,real val returns nothing
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_life_source_ratio, val)
+		set whichPlayer = null
 	endmethod
 	private static method triggerLSRDialog takes nothing returns nothing
 		local real radio = 0
@@ -311,11 +342,14 @@ struct hPlayer
 	endmethod
 	//获取玩家魔法源设定百分比
 	public static method getManaSourceRatio takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_mana_source_ratio)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_mana_source_ratio)
 	endmethod
 	//设置玩家魔法源设定百分比
 	public static method setManaSourceRatio takes player whichPlayer,real val returns nothing
 		call SaveReal(hash_player, GetHandleId(whichPlayer), hp_mana_source_ratio, val)
+		set whichPlayer = null
 	endmethod
 	private static method triggerMSRDialog takes nothing returns nothing
 		local real radio = 0
@@ -395,18 +429,24 @@ struct hPlayer
 				set t = null
 			endif
 		endif
+		set whichPlayer = null
 	endmethod
 	public static method getGoldRatio takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_gold_ratio)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_gold_ratio)
 	endmethod
 	public static method setGoldRatio takes player whichPlayer,real val,real during returns nothing
 		call diffGoldRatio(whichPlayer,val-getGoldRatio(whichPlayer),during)
+		set whichPlayer = null
 	endmethod
 	public static method addGoldRatio takes player whichPlayer,real val,real during returns nothing
 		call diffGoldRatio(whichPlayer,val,during)
+		set whichPlayer = null
 	endmethod
 	public static method subGoldRatio takes player whichPlayer,real val,real during returns nothing
 		call diffGoldRatio(whichPlayer,-val,during)
+		set whichPlayer = null
 	endmethod
 
 	//木头比率
@@ -434,18 +474,24 @@ struct hPlayer
 				set t = null
 			endif
 		endif
+		set whichPlayer = null
 	endmethod
 	public static method getLumberRatio takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_lumber_ratio)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_lumber_ratio)
 	endmethod
 	public static method setLumberRatio takes player whichPlayer,real val,real during returns nothing
 		call diffLumberRatio(whichPlayer,val-getLumberRatio(whichPlayer),during)
+		set whichPlayer = null
 	endmethod
 	public static method addLumberRatio takes player whichPlayer,real val,real during returns nothing
 		call diffLumberRatio(whichPlayer,val,during)
+		set whichPlayer = null
 	endmethod
 	public static method subLumberRatio takes player whichPlayer,real val,real during returns nothing
 		call diffLumberRatio(whichPlayer,-val,during)
+		set whichPlayer = null
 	endmethod
 
 
@@ -474,18 +520,24 @@ struct hPlayer
 				set t = null
 			endif
 		endif
+		set whichPlayer = null
 	endmethod
 	public static method getExpRatio takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_exp_ratio)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_exp_ratio)
 	endmethod
 	public static method setExpRatio takes player whichPlayer,real val,real during returns nothing
 		call diffExpRatio(whichPlayer,val-getExpRatio(whichPlayer),during)
+		set whichPlayer = null
 	endmethod
 	public static method addExpRatio takes player whichPlayer,real val,real during returns nothing
 		call diffExpRatio(whichPlayer,val,during)
+		set whichPlayer = null
 	endmethod
 	public static method subExpRatio takes player whichPlayer,real val,real during returns nothing
 		call diffExpRatio(whichPlayer,-val,during)
+		set whichPlayer = null
 	endmethod
 
 
@@ -514,18 +566,24 @@ struct hPlayer
 				set t = null
 			endif
 		endif
+		set whichPlayer = null
 	endmethod
 	public static method getSellRatio takes player whichPlayer returns real
-		return LoadReal(hash_player, GetHandleId(whichPlayer), hp_sell_ratio)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadReal(hash_player, hid, hp_sell_ratio)
 	endmethod
 	public static method setSellRatio takes player whichPlayer,real val,real during returns nothing
 		call diffSellRatio(whichPlayer,val-getSellRatio(whichPlayer),during)
+		set whichPlayer = null
 	endmethod
 	public static method addSellRatio takes player whichPlayer,real val,real during returns nothing
 		call diffSellRatio(whichPlayer,val,during)
+		set whichPlayer = null
 	endmethod
 	public static method subSellRatio takes player whichPlayer,real val,real during returns nothing
 		call diffSellRatio(whichPlayer,-val,during)
+		set whichPlayer = null
 	endmethod
 
 
@@ -541,10 +599,13 @@ struct hPlayer
 			call addTotalGold(whichPlayer,relSys-prvSys)
 		endif
 		call setPrevGold(whichPlayer,relSys)
+		set whichPlayer = null
 	endmethod
 	//获取玩家金钱
 	public static method getGold takes player whichPlayer returns integer
-	    return GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_GOLD)
+		local integer data = GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_GOLD)
+		set whichPlayer = null
+	    return data
 	endmethod
 	//设置玩家金钱
 	public static method setGold takes player whichPlayer,integer gold returns nothing
@@ -562,31 +623,39 @@ struct hPlayer
         endif
 		call SetPlayerStateBJ( whichPlayer, PLAYER_STATE_RESOURCE_GOLD, gold )
 		call adjustGold(whichPlayer)
+		set whichPlayer = null
 	endmethod
 	//增加玩家金钱
 	public static method addGold takes player whichPlayer,integer gold returns nothing
 		call setGold(whichPlayer,getGold(whichPlayer)+gold)
+		set whichPlayer = null
 	endmethod
 	//减少玩家金钱
 	public static method subGold takes player whichPlayer,integer gold returns nothing
 		call setGold(whichPlayer,getGold(whichPlayer)-gold)
+		set whichPlayer = null
 	endmethod
 
 	//获取玩家总获金量
 	public static method getTotalGold takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadInteger(hash_player, hid, hp_gold)
 	endmethod
 	//增加玩家总获金量
 	public static method addTotalGold takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold, getTotalGold(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 	//获取玩家总耗金量
 	public static method getTotalGoldCost takes player whichPlayer returns integer
 		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost)
+		set whichPlayer = null
 	endmethod
 	//增加玩家总耗金量
 	public static method addTotalGoldCost takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_gold_cost, getTotalGoldCost(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 
 
@@ -602,58 +671,76 @@ struct hPlayer
 			call addTotalLumber(whichPlayer,relSys-prvSys)
 		endif
 		call setPrevLumber(whichPlayer,relSys)
+		set whichPlayer = null
 	endmethod
 	//获取玩家木材
 	public static method getLumber takes player whichPlayer returns integer
-	    return GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_LUMBER)
+		local integer data = GetPlayerState(whichPlayer, PLAYER_STATE_RESOURCE_LUMBER)
+		set whichPlayer = null
+	    return data
 	endmethod
 	//设置玩家木材
 	public static method setLumber takes player whichPlayer,integer lumber returns nothing
 	    call SetPlayerStateBJ( whichPlayer, PLAYER_STATE_RESOURCE_LUMBER, lumber )
 		call adjustLumber(whichPlayer)
+		set whichPlayer = null
 	endmethod
 	//增加玩家木材
 	public static method addLumber takes player whichPlayer,integer lumber returns nothing
 		call setLumber(whichPlayer,getLumber(whichPlayer)+lumber)
+		set whichPlayer = null
 	endmethod
 	//减少玩家木材
 	public static method subLumber takes player whichPlayer,integer lumber returns nothing
 		call setLumber(whichPlayer,getLumber(whichPlayer)-lumber)
+		set whichPlayer = null
 	endmethod
 
 	//获取玩家总获木量
 	public static method getTotalLumber takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadInteger(hash_player, hid, hp_lumber)
 	endmethod
 	//增加玩家总获木量
 	public static method addTotalLumber takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber, getTotalLumber(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 	//获取玩家总耗木量
 	public static method getTotalLumberCost takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadInteger(hash_player, hid, hp_lumber_cost)
 	endmethod
 	//增加玩家总耗木量
 	public static method addTotalLumberCost takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_lumber_cost, getTotalLumberCost(whichPlayer)+val)
+		set whichPlayer = null
 	endmethod
 
 	//获取玩家前次木量（默认0）
 	public static method getPrevLumber takes player whichPlayer returns integer
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
 		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_prev_lumber)
 	endmethod
 	//设置玩家前次木量（默认0）
 	public static method setPrevLumber takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_prev_lumber,val)
+		set whichPlayer = null
 	endmethod
 
 	//获取玩家前次金量（默认0）
 	public static method getPrevGold takes player whichPlayer returns integer
-		return LoadInteger(hash_player, GetHandleId(whichPlayer), hp_prev_gold)
+		local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+		return LoadInteger(hash_player, hid, hp_prev_gold)
 	endmethod
 	//设置玩家前次金量（默认0）
 	public static method setPrevGold takes player whichPlayer,integer val returns nothing
 		call SaveInteger(hash_player, GetHandleId(whichPlayer), hp_prev_gold,val)
+		set whichPlayer = null
 	endmethod
 
 
