@@ -15,9 +15,11 @@ struct hMsg
     //在屏幕打印信息给所有玩家
     public static method echo takes string msg returns nothing
         call DisplayTextToForce( GetPlayersAll(), msg)
+        set msg = null
     endmethod
     public static method print takes string msg returns nothing
         call echo(msg)
+        set msg = null
     endmethod
 
 
@@ -28,9 +30,13 @@ struct hMsg
         else
             call DisplayTimedTextToPlayer( whichPlayer, x, y, duration, msg)
         endif
+        set whichPlayer = null
+        set msg = null
     endmethod
     public static method printToXY takes player whichPlayer,string msg,real x,real y,real duration returns nothing
         call echoToXY( whichPlayer, msg , x, y, duration)
+        set whichPlayer = null
+        set msg = null
     endmethod
 
     //在屏幕(0,0)处打印信息给某玩家
@@ -40,9 +46,13 @@ struct hMsg
         else
             call DisplayTimedTextToPlayer( whichPlayer, 0, 0, duration, msg)
         endif
+        set whichPlayer = null
+        set msg = null
     endmethod
     public static method printTo takes player whichPlayer,string msg,real duration returns nothing
         call echoTo( whichPlayer, msg, duration)
+        set whichPlayer = null
+        set msg = null
     endmethod
 
 
@@ -51,6 +61,7 @@ struct hMsg
     public static method delttg takes texttag ttg returns nothing
         call FlushChildHashtable(hash_hmsg,GetHandleId(ttg))
         call DestroyTextTag( ttg )
+        set ttg = null
     endmethod
     //创建漂浮字
     //*设置during为0则永久显示
@@ -58,6 +69,8 @@ struct hMsg
     private static method createttg takes string msg,real size,string color,real opacity,real during returns texttag
         set hjass_global_texttag = CreateTextTag()
         if( size<0 or opacity>=100 or opacity<0 or during<0)then
+            set msg = null
+            set color = null
             return null
         endif
         if(StringLength(color)==6)then
@@ -75,16 +88,22 @@ struct hMsg
             call SetTextTagLifespan( hjass_global_texttag, during)
             call SetTextTagFadepoint( hjass_global_texttag, during)
         endif
+        set msg = null
+        set color = null
         return hjass_global_texttag
     endmethod
 
     //获取漂浮字大小
     public static method getTtgSize takes texttag ttg returns real
-        return LoadReal(hash_hmsg, GetHandleId(ttg), 2)
+        local integer hid = GetHandleId(ttg)
+        set ttg = null
+        return LoadReal(hash_hmsg, hid, 2)
     endmethod
     //获取漂浮字颜色
     public static method getTtgColor takes texttag ttg returns string
-        return LoadStr(hash_hmsg, GetHandleId(ttg), 3)
+        local integer hid = GetHandleId(ttg)
+        set ttg = null
+        return LoadStr(hash_hmsg, hid, 3)
     endmethod
     //设置漂浮字内容
     public static method setTtgMsg takes texttag ttg,string msg,real size returns nothing
@@ -93,10 +112,14 @@ struct hMsg
         endif
         call SaveStr(hash_hmsg, GetHandleId(ttg), 1 , msg)
         call SetTextTagTextBJ(  ttg , msg , size )
+        set ttg = null
+        set msg = null
     endmethod
     //获取漂浮字内容
     public static method getTtgMsg takes texttag ttg returns string
-        return LoadStr(hash_hmsg, GetHandleId(ttg), 1)
+        local integer hid = GetHandleId(ttg)
+        set ttg = null
+        return LoadStr(hash_hmsg, hid, 1)
     endmethod
     //设置漂浮字弹出样式
     private static method ttgshowScale takes nothing returns nothing
@@ -184,17 +207,25 @@ struct hMsg
             call htime.setReal(t,4,0.2)
             set t = null
         endif
+        set ttg = null
+        set showtype = null
     endmethod
     //漂浮文字 - 默认 (在某单位头上)
     public static method ttg2Unit takes unit u,string msg,real size,string color,real opacity,real during,real zOffset returns texttag
         set hjass_global_texttag = createttg(msg,size,color,opacity,during)
         call SetTextTagPos( hjass_global_texttag , GetUnitX(u)-I2R(StringLength(msg))*size*0.5 , GetUnitY(u) , zOffset )
+        set u = null
+        set msg = null
+        set color = null
         return hjass_global_texttag
     endmethod
     //漂浮文字 - 默认 (在某点上)
     public static method ttg2Loc takes location loc,string msg,real size,string color,real opacity,real during,real zOffset returns texttag
         set hjass_global_texttag = createttg(msg,size,color,opacity,during)
         call SetTextTagPos( hjass_global_texttag , GetLocationX(loc)-I2R(StringLength(msg))*size*0.5 , GetLocationY(loc) , zOffset )
+        set loc = null
+        set msg = null
+        set color = null
         return hjass_global_texttag
     endmethod
 
@@ -238,6 +269,9 @@ struct hMsg
         call htime.setTexttag( t , 2 , hjass_global_texttag )
         call htime.setReal( t , 3 , zOffset )
         set t = null
+        set u = null
+        set msg = null
+        set color = null
         return hjass_global_texttag
     endmethod
 

@@ -18,6 +18,7 @@ struct hMark
         elseif(whichPlayer == GetLocalPlayer())then
             call DisplayCineFilter(true)
         endif
+        set whichPlayer = null
     endmethod
 
     // 隐藏
@@ -27,6 +28,7 @@ struct hMark
         elseif(whichPlayer == GetLocalPlayer())then
             call DisplayCineFilter(false)
         endif
+        set whichPlayer = null
     endmethod
 
     private static method displayCall takes nothing returns nothing
@@ -49,6 +51,8 @@ struct hMark
         set t = htime.setTimeout(during,function thistype.displayCall)
         call htime.setPlayer(t,1,whichPlayer)
         set t = null
+        set whichPlayer = null
+        set path = null
     endmethod
 
 endstruct

@@ -13,6 +13,7 @@ struct hMedia
 	    if (s != null) then
 	        call StartSound(s)
 	    endif
+		set s = null
 	endmethod
 
 	//播放音效对某个玩家
@@ -20,16 +21,21 @@ struct hMedia
 	    if (s != null and GetLocalPlayer()==whichPlayer) then
 	        call StartSound(s)
 	    endif
+		set s = null
+		set whichPlayer = null
 	endmethod
 
 	//绑定单位音效
 	public static method soundPlay2Unit takes sound s,unit u returns nothing
 	    call PlaySoundOnUnitBJ( s, 100, u )
+		set s = null
+		set u = null
 	endmethod
 
 	//绑定点音效
 	public static method soundPlay2Loc takes sound s,real x,real y,real z returns nothing
 	    call SetSoundPosition( s, x, y, z )
+		set s = null
 	endmethod
 
 	private static method bgmCall takes nothing returns nothing
@@ -56,6 +62,7 @@ struct hMedia
 			call htime.setString(t,1,musicFileName)
 			set t = null
 		endif
+		set musicFileName = null
 	endmethod
 
 	private static method bgm2PlayerCall takes nothing returns nothing
@@ -83,6 +90,8 @@ struct hMedia
 				set t = null
 			endif
 		endif
+		set musicFileName = null
+		set whichPlayer = null
 	endmethod
 
 	// 停止BGM
@@ -93,6 +102,7 @@ struct hMedia
 		if(GetLocalPlayer() == whichPlayer)then
 			call StopMusic( true )
 		endif
+		set whichPlayer = null
 	endmethod
 
 	// 放烟火Call
@@ -144,6 +154,7 @@ struct hMedia
 		call htime.setReal(t,2,0)
 		call htime.setReal(t,3,during/0.15)
 		set t = null
+		set r = null
 	endmethod
 
 endstruct
