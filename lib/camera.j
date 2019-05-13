@@ -187,9 +187,11 @@ struct hCamera
 			call htime.setReal(t,1,3300)
 			set t=null
 		else
+			set model = null
 			return
 		endif
 		set thistype.model = model
+		set model = null
 	endmethod
 	//获取当前镜头模式
 	public static method getModel takes nothing returns string
