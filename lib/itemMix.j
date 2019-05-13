@@ -336,6 +336,7 @@ struct hItemMix
                 endif
             endif
         endif
+        set whichUnit = null
         return charges
     endmethod
 
