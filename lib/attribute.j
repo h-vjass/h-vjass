@@ -510,7 +510,7 @@ set x.dragonOppose = 0
  set x.crackFlyDistance = 0.0
  set x.crackFlyHigh = 0.0
         return x
-    endmethod
+   endmethod
     method destroy takes nothing returns nothing
 set life = 0
 set mana = 0
@@ -754,7 +754,7 @@ set dragonOppose = 0
  set crackFlyOdds = 0.0
  set crackFlyDistance = 0.0
  set crackFlyHigh = 0.0
-    endmethod
+   endmethod
 endstruct
 
 struct hAttr
@@ -828,7 +828,7 @@ struct hAttr
         local hAttr x
         set x = hAttr.allocate()
         return x
-    endmethod
+   endmethod
 
 	//单位注册所有属性技能
 	public static method regAllAttrSkill takes unit whichUnit returns nothing
@@ -1192,6 +1192,7 @@ struct hAttr
 			call UnitMakeAbilityPermanent( whichUnit , true, ITEM_ABILITY_SEPARATE)
         	call SetUnitAbilityLevel( whichUnit , ITEM_ABILITY_SEPARATE, 1 )
 		endif
+		set whichUnit = null
 	endmethod
 
 	/**
@@ -1200,6 +1201,7 @@ struct hAttr
     private static method setLM takes unit u,integer abilityId ,integer qty returns nothing
     	local integer i = 1
     	if( qty <= 0 )then
+		 	set u = null
 	    	return
 		endif
     	loop
@@ -1209,7 +1211,8 @@ struct hAttr
 	    		call UnitRemoveAbility( u, abilityId )
 	    	set i = i+1
     	endloop
-    endmethod
+		set u = null
+   endmethod
 
 	/**
      * 为单位添加N个同样的视野技能
@@ -1217,23 +1220,26 @@ struct hAttr
     private static method setSightAbility takes unit u,integer abilityId ,integer qty returns nothing
     	local integer i = 1
     	if( qty <= 0 )then
-	    	return
+			set u = null
+			return
 		endif
     	loop
 	    	exitwhen i > qty
 	    		call UnitAddAbility( u, abilityId )
 	    	set i = i+1
     	endloop
-    endmethod
+		set u = null
+   endmethod
 
     /**
      * 为单位添加N个同样的攻击之书 （ITEM_ABILITY 为物品栏技能）
      */
-    private static method setWhiteAttack takes unit u,integer itemId ,integer qty returns nothing
-    	local integer i = 1
+   private static method setWhiteAttack takes unit u,integer itemId ,integer qty returns nothing
+		local integer i = 1
     	local item it = null
     	local integer itemBox = GetUnitAbilityLevel(u, ITEM_ABILITY)
     	if( qty <= 0 )then
+		 	set u = null
 	    	return
 		endif
 		if(itemBox < 1)then
@@ -1251,7 +1257,8 @@ struct hAttr
     	if(itemBox < 1)then
 			call UnitRemoveAbility(u, ITEM_ABILITY)
 		endif
-    endmethod
+		set u = null
+   endmethod
 
 	//设定属性(即时/计时)
 	//白字攻击	-999999999 ～ 999999999
@@ -2075,16 +2082,13 @@ struct hAttr
 		local integer judgeHandleId = LoadInteger( hash_attr , uhid , ATTR_FLAG_UNIT )
 		local real tempReal = 0
 		if( uhid != judgeHandleId ) then
-            //call hconsole.log(GetUnitName(whichUnit)+"准备注册技能")
 			call regAllAttrSkill(whichUnit)//注册技能
-            //call hconsole.log(GetUnitName(whichUnit)+"完成技能注册")
 			call SaveInteger( hash_attr , uhid , ATTR_FLAG_UNIT , uhid )
-			//todo 变量初始化
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_LIFE , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit) )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_MANA , GetUnitStateSwap(UNIT_STATE_MAX_MANA, whichUnit) )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_DEFEND , 0 )
-            call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
-            call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , DEFAULT_ATTACK_SPEED_SPACE )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED , 0 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_SPEED_SPACE , DEFAULT_ATTACK_SPEED_SPACE )
 			call SaveStr( hash_attr , uhid , ATTR_FLAG_ATTACK_HUNT_TYPE , "physicalmagic" )//攻击类型默认物理+魔法(攻击类型不能为空)
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_PHYSICAL , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_ATTACK_MAGIC , 0 )
@@ -2098,7 +2102,6 @@ struct hAttr
 			if(hcamera.model=="zoomin")then
 				call SetUnitMoveSpeed( whichUnit , R2I(LoadReal( hash_attr , uhid , ATTR_FLAG_MOVE)*0.5) )
 			endif
-			//todo 设定默认值
 			if( his.hero(whichUnit) ) then
 				//白字
 				set tempReal = I2R(GetHeroStr(whichUnit, false))
@@ -2161,27 +2164,26 @@ struct hAttr
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_BOMB_OPPOSE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , 0 )
 			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_CRACK_FLY_OPPOSE , 0 )
-            //todo 设定默认值
-            if( his.hero(whichUnit) ) then
-                //白字
-                set tempReal = I2R(GetHeroStr(whichUnit, false))
-                call setAttrDo( ATTR_FLAG_UP_TOUGHNESS , whichUnit , tempReal*0.2 )
-                call setAttrDo( ATTR_FLAG_UP_KNOCKING , whichUnit , tempReal*5 )
-                call setAttrDo( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , tempReal*0.03 )
-                set tempReal = I2R(GetHeroAgi(whichUnit, false))
-                call setAttrDo( ATTR_FLAG_UP_KNOCKING , whichUnit , tempReal*3 )
-                call setAttrDo( ATTR_FLAG_UP_AVOID , whichUnit , tempReal*0.02 )
-                set tempReal = I2R(GetHeroInt(whichUnit, false))
-                call setAttrDo( ATTR_FLAG_UP_MANA_BACK , whichUnit , tempReal*0.2 )
-                call setAttrDo( ATTR_FLAG_UP_VIOLENCE , whichUnit , tempReal*10 )
-                call setAttrDo( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , tempReal*0.02 )
-                //救助力
-                call setAttrDo( ATTR_FLAG_UP_HELP , whichUnit , 100 + 2 * I2R(GetHeroLevel(whichUnit)-1) )
-                //负重
-                call setAttrDo( ATTR_FLAG_UP_WEIGHT , whichUnit , 10.00 + 0.25 * I2R(GetHeroLevel(whichUnit)-1) )
-                //源
-                call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
-                call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
+			if( his.hero(whichUnit) ) then
+					//白字
+					set tempReal = I2R(GetHeroStr(whichUnit, false))
+					call setAttrDo( ATTR_FLAG_UP_TOUGHNESS , whichUnit , tempReal*0.2 )
+					call setAttrDo( ATTR_FLAG_UP_KNOCKING , whichUnit , tempReal*5 )
+					call setAttrDo( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , tempReal*0.03 )
+					set tempReal = I2R(GetHeroAgi(whichUnit, false))
+					call setAttrDo( ATTR_FLAG_UP_KNOCKING , whichUnit , tempReal*3 )
+					call setAttrDo( ATTR_FLAG_UP_AVOID , whichUnit , tempReal*0.02 )
+					set tempReal = I2R(GetHeroInt(whichUnit, false))
+					call setAttrDo( ATTR_FLAG_UP_MANA_BACK , whichUnit , tempReal*0.2 )
+					call setAttrDo( ATTR_FLAG_UP_VIOLENCE , whichUnit , tempReal*10 )
+					call setAttrDo( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , tempReal*0.02 )
+					//救助力
+					call setAttrDo( ATTR_FLAG_UP_HELP , whichUnit , 100 + 2 * I2R(GetHeroLevel(whichUnit)-1) )
+					//负重
+					call setAttrDo( ATTR_FLAG_UP_WEIGHT , whichUnit , 10.00 + 0.25 * I2R(GetHeroLevel(whichUnit)-1) )
+					//源
+					call setAttrDo( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
+					call setAttrDo( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , 10 * I2R(GetHeroLevel(whichUnit)-1) )
 				//给予默认攻击距离,先判断全局有没有设定过这一个单位类型的攻击距离，大于 1 则使用，否则使用默认的近战100，远程600
 				if(hunit.getAttackRange(GetUnitTypeId(whichUnit)) > 1)then
 					call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , hunit.getAttackRange(GetUnitTypeId(whichUnit)) )
@@ -2192,17 +2194,20 @@ struct hAttr
 						call setAttrDo( ATTR_FLAG_ATTACK_RANGE , whichUnit , 600 )
 					endif
 				endif
-            endif
-            call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
-            call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
+			endif
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
+			call SaveReal( hash_attr , uhid , ATTR_FLAG_UP_PUNISH_CURRENT , GetUnitStateSwap(UNIT_STATE_MAX_LIFE, whichUnit)/2 )
+			set whichUnit = null
 			return true
 		endif
+		set whichUnit = null
 		return false
 	endmethod
 
 	// 检查单位是否已经init
 	public static method isInit takes unit whichUnit returns boolean
 		local integer uhid = GetHandleId(whichUnit)
+		set whichUnit = null
 		return LoadInteger( hash_attr , uhid , ATTR_FLAG_UNIT ) == uhid
 	endmethod
 
@@ -2256,6 +2261,7 @@ struct hAttr
 		call thistype.addAttackMagic(whichUnit,attackMagic,0)
 		call thistype.addAttackSpeed(whichUnit,attackSpeed,0)
 		call thistype.addDefend(whichUnit,defend,0)
+		set whichUnit = null
 	endmethod
 
 	public static method resetAttrGroups takes unit whichUnit returns nothing
@@ -2272,6 +2278,7 @@ struct hAttr
 		if (hgroup.isIn(whichUnit,ATTR_GROUP_MANA_SOURCE) == false and  hlogic.rabs(LoadReal(hash_attr , uhid , ATTR_FLAG_UP_MANA_SOURCE)) > 1)then
 			call GroupAddUnit(ATTR_GROUP_MANA_SOURCE,whichUnit)
 		endif
+		set whichUnit = null
 	endmethod
 
 	private static method setAttr takes integer flag , unit whichUnit , real diff , real during returns nothing
@@ -2298,11 +2305,14 @@ struct hAttr
 			call htime.setReal(t,3, -diff )
 			set t = null
 		endif
+		set whichUnit = null
 	endmethod
 
 	private static method getAttr takes integer flag , unit whichUnit returns real
+		local integer hid = GetHandleId(whichUnit)
 		call initAttr( whichUnit )
-		return LoadReal( hash_attr , GetHandleId(whichUnit) , flag )
+		set whichUnit = null
+		return LoadReal( hash_attr , hid, flag )
 	endmethod
 
 	// 使单位硬直
@@ -2322,9 +2332,13 @@ struct hAttr
 			call htime.setInteger(t,1,GetHandleId(whichUnit))
 			set t = null
 		endif
+		set whichUnit = null
 	endmethod
+
 	public static method isPunishing takes unit whichUnit returns boolean
-		return LoadBoolean( hash_attr, GetHandleId(whichUnit) , ATTR_FLAG_IS_PUNISH )
+		local integer hid = GetHandleId(whichUnit)
+		set whichUnit = null
+		return LoadBoolean( hash_attr, hid , ATTR_FLAG_IS_PUNISH )
 	endmethod
 
 
@@ -2334,12 +2348,15 @@ struct hAttr
 	endmethod
 	public static method addLife takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subLife takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setLife takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_LIFE , whichUnit , value - getLife(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 魔法 ------------------------------------------------------------ 
@@ -2348,12 +2365,15 @@ struct hAttr
 	endmethod
 	public static method addMana takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MANA , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subMana takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MANA , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setMana takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MANA , whichUnit , value - getMana(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 移动力 ------------------------------------------------------------ 
@@ -2362,12 +2382,15 @@ struct hAttr
 	endmethod
 	public static method addMove takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MOVE , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subMove takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MOVE , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setMove takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_MOVE , whichUnit , value - getMove(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 护甲 ------------------------------------------------------------ 
@@ -2376,12 +2399,15 @@ struct hAttr
 	endmethod
 	public static method addDefend takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_DEFEND , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subDefend takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_DEFEND , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setDefend takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_DEFEND , whichUnit , value - getDefend(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 攻击速度 ------------------------------------------------------------ 
@@ -2390,12 +2416,15 @@ struct hAttr
 	endmethod
 	public static method addAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setAttackSpeed takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , value - getAttackSpeed(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 攻击速度间隔 ------------------------------------------------------------ 
@@ -2404,110 +2433,122 @@ struct hAttr
 	endmethod
 
     // 攻击伤害类型 ------------------------------------------------------------ 
-    public static method getAttackHuntType takes unit whichUnit returns string
+   public static method getAttackHuntType takes unit whichUnit returns string
+	 	local integer hid = GetHandleId(whichUnit)
 		call initAttr(whichUnit)
-        return LoadStr(hash_attr, GetHandleId(whichUnit), ATTR_FLAG_ATTACK_HUNT_TYPE)
-    endmethod
-    private static method addAttackHuntTypeCall takes nothing returns nothing
-        local timer t = GetExpiredTimer()
-        local unit whichUnit = htime.getUnit(t,1)
-        local string value = htime.getString(t,2)
-        local integer hid = GetHandleId(whichUnit)
+		set whichUnit = null
+      return LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
+   endmethod
+   private static method addAttackHuntTypeCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit whichUnit = htime.getUnit(t,1)
+		local string value = htime.getString(t,2)
+		local integer hid = GetHandleId(whichUnit)
 		call initAttr(whichUnit)
-        call htime.delTimer(t)
-        call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)+value)
+		call htime.delTimer(t)
+		call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)+value)
 		set t = null
 		set whichUnit = null
 		set value = null
-    endmethod
-    private static method subAttackHuntTypeCall takes nothing returns nothing
-        local timer t = GetExpiredTimer()
-        local unit whichUnit = htime.getUnit(t,1)
-        local string value = htime.getString(t,2)
-        local integer hid = GetHandleId(whichUnit)
-        local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
-        local integer valueIndex = hlogic.strpos(old,value)
-        call htime.delTimer(t)
+   endmethod
+   private static method subAttackHuntTypeCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit whichUnit = htime.getUnit(t,1)
+		local string value = htime.getString(t,2)
+		local integer hid = GetHandleId(whichUnit)
+		local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
+		local integer valueIndex = hlogic.strpos(old,value)
+		call htime.delTimer(t)
 		set t = null
 		call initAttr(whichUnit)
 		set whichUnit = null
-        if(valueIndex==-1 or value==null)then
+      if(valueIndex==-1 or value==null)then
 			set value = null
 			set old = null
             return
-        else
-            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
+		else
+         call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
 			set value = null
 			set old = null
 		endif
-    endmethod
-    private static method setAttackHuntTypeCall takes nothing returns nothing
-        local timer t = GetExpiredTimer()
-        local unit whichUnit = htime.getUnit(t,1)
-        local string value = htime.getString(t,2)
-        local integer hid = GetHandleId(whichUnit)
-        call htime.delTimer(t)
+	endmethod
+	private static method setAttackHuntTypeCall takes nothing returns nothing
+		local timer t = GetExpiredTimer()
+		local unit whichUnit = htime.getUnit(t,1)
+		local string value = htime.getString(t,2)
+		local integer hid = GetHandleId(whichUnit)
+		call htime.delTimer(t)
 		set t = null
 		call initAttr(whichUnit)
 		set whichUnit = null
-        if(value==null)then
-            return
-        else
-            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,value)
+		if(value==null)then
+			return
+		else
+			call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,value)
 			set value = null
-        endif
-    endmethod
-    public static method addAttackHuntType takes unit whichUnit , string value , real during returns nothing
-        local integer hid = GetHandleId(whichUnit)
-        local timer t = null
+		endif
+	endmethod
+	public static method addAttackHuntType takes unit whichUnit , string value , real during returns nothing
+		local integer hid = GetHandleId(whichUnit)
+		local timer t = null
 		call initAttr(whichUnit)
-        call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)+value)
-        if(during > 0)then
-            set t = htime.setTimeout(during,function thistype.subAttackHuntTypeCall)
-            call htime.setUnit(t,1,whichUnit)
-            call htime.setString(t,2,value)
+		call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)+value)
+		if(during > 0)then
+			set t = htime.setTimeout(during,function thistype.subAttackHuntTypeCall)
+			call htime.setUnit(t,1,whichUnit)
+			call htime.setString(t,2,value)
 			set t = null
-        endif
-    endmethod
-    public static method subAttackHuntType takes unit whichUnit , string value , real during returns nothing
-        local integer hid = GetHandleId(whichUnit)
-        local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
-        local integer valueIndex = hlogic.strpos(old,value)
-        local timer t = null
+		endif
+		set whichUnit = null
+		set value = null
+   endmethod
+   public static method subAttackHuntType takes unit whichUnit , string value , real during returns nothing
+		local integer hid = GetHandleId(whichUnit)
+		local string old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
+		local integer valueIndex = hlogic.strpos(old,value)
+		local timer t = null
 		call initAttr(whichUnit)
-        if(valueIndex==-1 or value==null)then
+		if(valueIndex==-1 or value==null)then
 			set old = null
-            return
-        else
-            call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
-            if(during > 0)then
-                set t = htime.setTimeout(during,function thistype.addAttackHuntTypeCall)
-                call htime.setUnit(t,1,whichUnit)
-                call htime.setString(t,2,value)
+			set whichUnit = null
+			set value = null
+			return
+      else
+			call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,hlogic.substr(old,0,valueIndex)+hlogic.substr(old,valueIndex+StringLength(value),StringLength(old)))
+			if(during > 0)then
+				set t = htime.setTimeout(during,function thistype.addAttackHuntTypeCall)
+				call htime.setUnit(t,1,whichUnit)
+				call htime.setString(t,2,value)
 				set t = null
-            endif
+			endif
 			set old = null
-        endif
-    endmethod
-    public static method setAttackHuntType takes unit whichUnit , string value, real during returns nothing
+      endif
+		set whichUnit = null
+		set value = null
+   endmethod
+   public static method setAttackHuntType takes unit whichUnit , string value, real during returns nothing
 		local string old = null
 		local integer hid = GetHandleId(whichUnit)
 		local timer t = null
 		call initAttr(whichUnit)
-        if(value==null)then
-            return
-        else
+      if(value==null)then
+			set whichUnit = null
+			set value = null
+			return
+      else
 			if(during > 0)then
 				set old = LoadStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE)
-                set t = htime.setTimeout(during,function thistype.setAttackHuntTypeCall)
-                call htime.setUnit(t,1,whichUnit)
-                call htime.setString(t,2,old)
+				set t = htime.setTimeout(during,function thistype.setAttackHuntTypeCall)
+				call htime.setUnit(t,1,whichUnit)
+				call htime.setString(t,2,old)
 				set t = null
 				set old = null
-            endif
+         endif
 			call SaveStr(hash_attr, hid, ATTR_FLAG_ATTACK_HUNT_TYPE,value)
-        endif
-    endmethod
+      endif
+		set whichUnit = null
+		set value = null
+   endmethod
 
 	// 物理攻击力 ------------------------------------------------------------ 
 	public static method getAttackPhysical takes unit whichUnit returns real
@@ -2515,12 +2556,15 @@ struct hAttr
 	endmethod
 	public static method addAttackPhysical takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subAttackPhysical takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setAttackPhysical takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_PHYSICAL , whichUnit , value - getAttackPhysical(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 魔法攻击力 ------------------------------------------------------------ 
@@ -2529,12 +2573,15 @@ struct hAttr
 	endmethod
 	public static method addAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setAttackMagic takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_MAGIC , whichUnit , value - getAttackMagic(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 攻击距离 ------------------------------------------------------------ 
@@ -2543,12 +2590,15 @@ struct hAttr
 	endmethod
 	public static method addAttackRange takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subAttackRange takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setAttackRange takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_ATTACK_RANGE , whichUnit , value - getAttackRange(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 视野 ------------------------------------------------------------ 
@@ -2557,12 +2607,15 @@ struct hAttr
 	endmethod
 	public static method addSight takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_SIGHT , whichUnit , value , during )
+		set whichUnit = null
 	endmethod
 	public static method subSight takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_SIGHT , whichUnit , -value , during )
+		set whichUnit = null
 	endmethod
 	public static method setSight takes unit whichUnit , real value , real during returns nothing
 		call setAttr( ATTR_FLAG_SIGHT , whichUnit , value - getSight(whichUnit) , during )
+		set whichUnit = null
 	endmethod
 
 	// 力量 ------------------------------------------------------------ 
@@ -2584,12 +2637,15 @@ struct hAttr
 		call setAttr( ATTR_FLAG_UP_TOUGHNESS , whichUnit , toughness , during )
 		call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , knocking , during )
 		call setAttr( ATTR_FLAG_UP_PUNISH , whichUnit , punish , during )
+		set whichUnit = null
 	endmethod
 	public static method addStr takes unit whichUnit , real value , real during returns nothing
 		call setStr( whichUnit , getStr(whichUnit)+value , during )
+		set whichUnit = null
 	endmethod
 	public static method subStr takes unit whichUnit , real value , real during returns nothing
 		call setStr( whichUnit , getStr(whichUnit)-value , during )
+		set whichUnit = null
 	endmethod
 
 	// 敏捷 ------------------------------------------------------------ 
@@ -2607,12 +2663,15 @@ struct hAttr
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )
 		call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , knocking , during )
 		call setAttr( ATTR_FLAG_UP_AVOID , whichUnit , avoid , during )
+		set whichUnit = null
 	endmethod
 	public static method addAgi takes unit whichUnit , real value , real during returns nothing
 		call setAgi( whichUnit , getAgi(whichUnit)+value , during )
+		set whichUnit = null
 	endmethod
 	public static method subAgi takes unit whichUnit , real value , real during returns nothing
 		call setAgi( whichUnit , getAgi(whichUnit)-value , during )
+		set whichUnit = null
 	endmethod
 
 	// 智力 ------------------------------------------------------------ 
@@ -2632,12 +2691,15 @@ struct hAttr
 		call setAttr( ATTR_FLAG_UP_MANA_BACK , whichUnit , manaback , during )
 		call setAttr( ATTR_FLAG_UP_VIOLENCE , whichUnit , violence , during )
 		call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , hemophagiaSkill , during )
+		set whichUnit = null
 	endmethod
 	public static method addInt takes unit whichUnit , real value , real during returns nothing
 		call setInt( whichUnit , getInt(whichUnit)+value , during )
+		set whichUnit = null
 	endmethod
 	public static method subInt takes unit whichUnit , real value , real during returns nothing
 		call setInt( whichUnit , getInt(whichUnit)-value , during )
+		set whichUnit = null
 	endmethod
 
 	// 力量（白字） ------------------------------------------------------------ 
@@ -2659,12 +2721,15 @@ struct hAttr
 		call setAttr( ATTR_FLAG_UP_TOUGHNESS , whichUnit , toughness , during )
 		call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , knocking , during )
 		call setAttr( ATTR_FLAG_UP_PUNISH , whichUnit , punish , during )
+		set whichUnit = null
 	endmethod
 	public static method addStrWhite takes unit whichUnit , real value , real during returns nothing
 		call setStrWhite( whichUnit , getStrWhite(whichUnit)+value , during )
+		set whichUnit = null
 	endmethod
 	public static method subStrWhite takes unit whichUnit , real value , real during returns nothing
 		call setStrWhite( whichUnit , getStrWhite(whichUnit)-value , during )
+		set whichUnit = null
 	endmethod
 
 	// 敏捷（白字） ------------------------------------------------------------ 
@@ -2682,12 +2747,15 @@ struct hAttr
 		call setAttr( ATTR_FLAG_ATTACK_SPEED , whichUnit , attackspeed , during )
 		call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , knocking , during )
 		call setAttr( ATTR_FLAG_UP_AVOID , whichUnit , avoid , during )
+		set whichUnit = null
 	endmethod
 	public static method addAgiWhite takes unit whichUnit , real value , real during returns nothing
 		call setAgiWhite( whichUnit , getAgiWhite(whichUnit)+value , during )
+		set whichUnit = null
 	endmethod
 	public static method subAgiWhite takes unit whichUnit , real value , real during returns nothing
 		call setAgiWhite( whichUnit , getAgiWhite(whichUnit)-value , during )
+		set whichUnit = null
 	endmethod
 
 	// 智力（白字） ------------------------------------------------------------ 
@@ -2707,12 +2775,15 @@ struct hAttr
 		call setAttr( ATTR_FLAG_UP_MANA_BACK , whichUnit , manaback , during )
 		call setAttr( ATTR_FLAG_UP_VIOLENCE , whichUnit , violence , during )
 		call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , hemophagiaSkill , during )
+		set whichUnit = null
 	endmethod
 	public static method addIntWhite takes unit whichUnit , real value , real during returns nothing
 		call setIntWhite( whichUnit , getIntWhite(whichUnit)+value , during )
+		set whichUnit = null
 	endmethod
 	public static method subIntWhite takes unit whichUnit , real value , real during returns nothing
 		call setIntWhite( whichUnit , getIntWhite(whichUnit)-value , during )
+		set whichUnit = null
 	endmethod
 
 
@@ -2737,12 +2808,15 @@ public static method getLifeBack takes unit whichUnit returns real
 endmethod
 public static method addLifeBack takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_BACK , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subLifeBack takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_BACK , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setLifeBack takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_BACK , whichUnit , value - getLifeBack(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[life_source]
 public static method getLifeSource takes unit whichUnit returns real
@@ -2750,12 +2824,15 @@ public static method getLifeSource takes unit whichUnit returns real
 endmethod
 public static method addLifeSource takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subLifeSource takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setLifeSource takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_SOURCE , whichUnit , value - getLifeSource(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[life_source_current]
 public static method getLifeSourceCurrent takes unit whichUnit returns real
@@ -2763,12 +2840,15 @@ public static method getLifeSourceCurrent takes unit whichUnit returns real
 endmethod
 public static method addLifeSourceCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_SOURCE_CURRENT , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subLifeSourceCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_SOURCE_CURRENT , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setLifeSourceCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIFE_SOURCE_CURRENT , whichUnit , value - getLifeSourceCurrent(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[mana_back]
 public static method getManaBack takes unit whichUnit returns real
@@ -2776,12 +2856,15 @@ public static method getManaBack takes unit whichUnit returns real
 endmethod
 public static method addManaBack takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_BACK , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subManaBack takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_BACK , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setManaBack takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_BACK , whichUnit , value - getManaBack(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[mana_source]
 public static method getManaSource takes unit whichUnit returns real
@@ -2789,12 +2872,15 @@ public static method getManaSource takes unit whichUnit returns real
 endmethod
 public static method addManaSource takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subManaSource takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setManaSource takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_SOURCE , whichUnit , value - getManaSource(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[mana_source_current]
 public static method getManaSourceCurrent takes unit whichUnit returns real
@@ -2802,12 +2888,15 @@ public static method getManaSourceCurrent takes unit whichUnit returns real
 endmethod
 public static method addManaSourceCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_SOURCE_CURRENT , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subManaSourceCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_SOURCE_CURRENT , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setManaSourceCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MANA_SOURCE_CURRENT , whichUnit , value - getManaSourceCurrent(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[resistance]
 public static method getResistance takes unit whichUnit returns real
@@ -2815,12 +2904,15 @@ public static method getResistance takes unit whichUnit returns real
 endmethod
 public static method addResistance takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_RESISTANCE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subResistance takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_RESISTANCE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setResistance takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_RESISTANCE , whichUnit , value - getResistance(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[toughness]
 public static method getToughness takes unit whichUnit returns real
@@ -2828,12 +2920,15 @@ public static method getToughness takes unit whichUnit returns real
 endmethod
 public static method addToughness takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_TOUGHNESS , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subToughness takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_TOUGHNESS , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setToughness takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_TOUGHNESS , whichUnit , value - getToughness(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[avoid]
 public static method getAvoid takes unit whichUnit returns real
@@ -2841,12 +2936,15 @@ public static method getAvoid takes unit whichUnit returns real
 endmethod
 public static method addAvoid takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_AVOID , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subAvoid takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_AVOID , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setAvoid takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_AVOID , whichUnit , value - getAvoid(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[aim]
 public static method getAim takes unit whichUnit returns real
@@ -2854,12 +2952,15 @@ public static method getAim takes unit whichUnit returns real
 endmethod
 public static method addAim takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_AIM , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subAim takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_AIM , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setAim takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_AIM , whichUnit , value - getAim(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[knocking]
 public static method getKnocking takes unit whichUnit returns real
@@ -2867,12 +2968,15 @@ public static method getKnocking takes unit whichUnit returns real
 endmethod
 public static method addKnocking takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subKnocking takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setKnocking takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_KNOCKING , whichUnit , value - getKnocking(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[violence]
 public static method getViolence takes unit whichUnit returns real
@@ -2880,12 +2984,15 @@ public static method getViolence takes unit whichUnit returns real
 endmethod
 public static method addViolence takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subViolence takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setViolence takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE , whichUnit , value - getViolence(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[punish]
 public static method getPunish takes unit whichUnit returns real
@@ -2893,12 +3000,15 @@ public static method getPunish takes unit whichUnit returns real
 endmethod
 public static method addPunish takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subPunish takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setPunish takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH , whichUnit , value - getPunish(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[punish_current]
 public static method getPunishCurrent takes unit whichUnit returns real
@@ -2906,12 +3016,15 @@ public static method getPunishCurrent takes unit whichUnit returns real
 endmethod
 public static method addPunishCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_CURRENT , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subPunishCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_CURRENT , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setPunishCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_CURRENT , whichUnit , value - getPunishCurrent(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[meditative]
 public static method getMeditative takes unit whichUnit returns real
@@ -2919,12 +3032,15 @@ public static method getMeditative takes unit whichUnit returns real
 endmethod
 public static method addMeditative takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MEDITATIVE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subMeditative takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MEDITATIVE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setMeditative takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_MEDITATIVE , whichUnit , value - getMeditative(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[help]
 public static method getHelp takes unit whichUnit returns real
@@ -2932,12 +3048,15 @@ public static method getHelp takes unit whichUnit returns real
 endmethod
 public static method addHelp takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HELP , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHelp takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HELP , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHelp takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HELP , whichUnit , value - getHelp(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[hemophagia]
 public static method getHemophagia takes unit whichUnit returns real
@@ -2945,12 +3064,15 @@ public static method getHemophagia takes unit whichUnit returns real
 endmethod
 public static method addHemophagia takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHemophagia takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHemophagia takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA , whichUnit , value - getHemophagia(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[hemophagia_skill]
 public static method getHemophagiaSkill takes unit whichUnit returns real
@@ -2958,12 +3080,15 @@ public static method getHemophagiaSkill takes unit whichUnit returns real
 endmethod
 public static method addHemophagiaSkill takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHemophagiaSkill takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHemophagiaSkill takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_SKILL , whichUnit , value - getHemophagiaSkill(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[split]
 public static method getSplit takes unit whichUnit returns real
@@ -2971,12 +3096,15 @@ public static method getSplit takes unit whichUnit returns real
 endmethod
 public static method addSplit takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subSplit takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setSplit takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT , whichUnit , value - getSplit(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[split_range]
 public static method getSplitRange takes unit whichUnit returns real
@@ -2984,12 +3112,15 @@ public static method getSplitRange takes unit whichUnit returns real
 endmethod
 public static method addSplitRange takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_RANGE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subSplitRange takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_RANGE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setSplitRange takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_RANGE , whichUnit , value - getSplitRange(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[luck]
 public static method getLuck takes unit whichUnit returns real
@@ -2997,12 +3128,15 @@ public static method getLuck takes unit whichUnit returns real
 endmethod
 public static method addLuck takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LUCK , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subLuck takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LUCK , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setLuck takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LUCK , whichUnit , value - getLuck(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[invincible]
 public static method getInvincible takes unit whichUnit returns real
@@ -3010,12 +3144,15 @@ public static method getInvincible takes unit whichUnit returns real
 endmethod
 public static method addInvincible takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_INVINCIBLE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subInvincible takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_INVINCIBLE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setInvincible takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_INVINCIBLE , whichUnit , value - getInvincible(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[weight]
 public static method getWeight takes unit whichUnit returns real
@@ -3023,12 +3160,15 @@ public static method getWeight takes unit whichUnit returns real
 endmethod
 public static method addWeight takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_WEIGHT , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subWeight takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_WEIGHT , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setWeight takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_WEIGHT , whichUnit , value - getWeight(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[weight_current]
 public static method getWeightCurrent takes unit whichUnit returns real
@@ -3036,12 +3176,15 @@ public static method getWeightCurrent takes unit whichUnit returns real
 endmethod
 public static method addWeightCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_WEIGHT_CURRENT , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subWeightCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_WEIGHT_CURRENT , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setWeightCurrent takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_WEIGHT_CURRENT , whichUnit , value - getWeightCurrent(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[hunt_amplitude]
 public static method getHuntAmplitude takes unit whichUnit returns real
@@ -3049,12 +3192,15 @@ public static method getHuntAmplitude takes unit whichUnit returns real
 endmethod
 public static method addHuntAmplitude takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_AMPLITUDE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHuntAmplitude takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_AMPLITUDE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHuntAmplitude takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_AMPLITUDE , whichUnit , value - getHuntAmplitude(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[hunt_rebound]
 public static method getHuntRebound takes unit whichUnit returns real
@@ -3062,12 +3208,15 @@ public static method getHuntRebound takes unit whichUnit returns real
 endmethod
 public static method addHuntRebound takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_REBOUND , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHuntRebound takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_REBOUND , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHuntRebound takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_REBOUND , whichUnit , value - getHuntRebound(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[cure]
 public static method getCure takes unit whichUnit returns real
@@ -3075,12 +3224,15 @@ public static method getCure takes unit whichUnit returns real
 endmethod
 public static method addCure takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CURE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subCure takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CURE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setCure takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CURE , whichUnit , value - getCure(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[knocking_oppose]
 public static method getKnockingOppose takes unit whichUnit returns real
@@ -3088,12 +3240,15 @@ public static method getKnockingOppose takes unit whichUnit returns real
 endmethod
 public static method addKnockingOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subKnockingOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setKnockingOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_KNOCKING_OPPOSE , whichUnit , value - getKnockingOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[violence_oppose]
 public static method getViolenceOppose takes unit whichUnit returns real
@@ -3101,12 +3256,15 @@ public static method getViolenceOppose takes unit whichUnit returns real
 endmethod
 public static method addViolenceOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subViolenceOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setViolenceOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_VIOLENCE_OPPOSE , whichUnit , value - getViolenceOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[hemophagia_oppose]
 public static method getHemophagiaOppose takes unit whichUnit returns real
@@ -3114,12 +3272,15 @@ public static method getHemophagiaOppose takes unit whichUnit returns real
 endmethod
 public static method addHemophagiaOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHemophagiaOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHemophagiaOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEMOPHAGIA_OPPOSE , whichUnit , value - getHemophagiaOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[split_oppose]
 public static method getSplitOppose takes unit whichUnit returns real
@@ -3127,12 +3288,15 @@ public static method getSplitOppose takes unit whichUnit returns real
 endmethod
 public static method addSplitOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subSplitOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setSplitOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SPLIT_OPPOSE , whichUnit , value - getSplitOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[punish_oppose]
 public static method getPunishOppose takes unit whichUnit returns real
@@ -3140,12 +3304,15 @@ public static method getPunishOppose takes unit whichUnit returns real
 endmethod
 public static method addPunishOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subPunishOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setPunishOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_PUNISH_OPPOSE , whichUnit , value - getPunishOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[hunt_rebound_oppose]
 public static method getHuntReboundOppose takes unit whichUnit returns real
@@ -3153,12 +3320,15 @@ public static method getHuntReboundOppose takes unit whichUnit returns real
 endmethod
 public static method addHuntReboundOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHuntReboundOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHuntReboundOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HUNT_REBOUND_OPPOSE , whichUnit , value - getHuntReboundOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[swim_oppose]
 public static method getSwimOppose takes unit whichUnit returns real
@@ -3166,12 +3336,15 @@ public static method getSwimOppose takes unit whichUnit returns real
 endmethod
 public static method addSwimOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subSwimOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setSwimOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SWIM_OPPOSE , whichUnit , value - getSwimOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[heavy_oppose]
 public static method getHeavyOppose takes unit whichUnit returns real
@@ -3179,12 +3352,15 @@ public static method getHeavyOppose takes unit whichUnit returns real
 endmethod
 public static method addHeavyOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subHeavyOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setHeavyOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_HEAVY_OPPOSE , whichUnit , value - getHeavyOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[break_oppose]
 public static method getBreakOppose takes unit whichUnit returns real
@@ -3192,12 +3368,15 @@ public static method getBreakOppose takes unit whichUnit returns real
 endmethod
 public static method addBreakOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subBreakOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setBreakOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_BREAK_OPPOSE , whichUnit , value - getBreakOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[unluck_oppose]
 public static method getUnluckOppose takes unit whichUnit returns real
@@ -3205,12 +3384,15 @@ public static method getUnluckOppose takes unit whichUnit returns real
 endmethod
 public static method addUnluckOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subUnluckOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setUnluckOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_UNLUCK_OPPOSE , whichUnit , value - getUnluckOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[silent_oppose]
 public static method getSilentOppose takes unit whichUnit returns real
@@ -3218,12 +3400,15 @@ public static method getSilentOppose takes unit whichUnit returns real
 endmethod
 public static method addSilentOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subSilentOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setSilentOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_SILENT_OPPOSE , whichUnit , value - getSilentOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[unarm_oppose]
 public static method getUnarmOppose takes unit whichUnit returns real
@@ -3231,12 +3416,15 @@ public static method getUnarmOppose takes unit whichUnit returns real
 endmethod
 public static method addUnarmOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subUnarmOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setUnarmOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_UNARM_OPPOSE , whichUnit , value - getUnarmOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[fetter_oppose]
 public static method getFetterOppose takes unit whichUnit returns real
@@ -3244,12 +3432,15 @@ public static method getFetterOppose takes unit whichUnit returns real
 endmethod
 public static method addFetterOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subFetterOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setFetterOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_FETTER_OPPOSE , whichUnit , value - getFetterOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[bomb_oppose]
 public static method getBombOppose takes unit whichUnit returns real
@@ -3257,12 +3448,15 @@ public static method getBombOppose takes unit whichUnit returns real
 endmethod
 public static method addBombOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subBombOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setBombOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_BOMB_OPPOSE , whichUnit , value - getBombOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[lightning_chain_oppose]
 public static method getLightningChainOppose takes unit whichUnit returns real
@@ -3270,12 +3464,15 @@ public static method getLightningChainOppose takes unit whichUnit returns real
 endmethod
 public static method addLightningChainOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subLightningChainOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setLightningChainOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_LIGHTNING_CHAIN_OPPOSE , whichUnit , value - getLightningChainOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 // 高级属性[crack_fly_oppose]
 public static method getCrackFlyOppose takes unit whichUnit returns real
@@ -3283,12 +3480,15 @@ public static method getCrackFlyOppose takes unit whichUnit returns real
 endmethod
 public static method addCrackFlyOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit , value , during )
+	set whichUnit = null
 endmethod
 public static method subCrackFlyOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit , -value , during )
+	set whichUnit = null
 endmethod
 public static method setCrackFlyOppose takes unit whichUnit , real value , real during returns nothing
    call setAttr( ATTR_FLAG_UP_CRACK_FLY_OPPOSE , whichUnit , value - getCrackFlyOppose(whichUnit) , during )
+	set whichUnit = null
 endmethod
 
 endstruct

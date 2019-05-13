@@ -1206,6 +1206,7 @@ struct hAttrUnit
         elseif(bean.crackFlyHigh<0)then
             call hattrEffect.subCrackFlyHigh(whichUnit,bean.crackFlyHigh,during)
         endif
+        set whichUnit = null
 	endmethod
 
 
@@ -1384,6 +1385,8 @@ struct hAttrUnit
             endloop
         endif
 		set font = null
+        set colorFt = null
+        set colorBg = null
         return str
 	endmethod
 
@@ -1439,6 +1442,7 @@ struct hAttrUnit
 			set t = null
 			set ttg = null
 		endif
+        set whichUnit = null
 	endmethod
 
 	// 硬直恢复器(+100/5s)
