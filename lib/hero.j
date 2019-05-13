@@ -42,11 +42,14 @@ struct hHero
     // 设置英雄之前的等级
     public static method setHeroPrevLevel takes unit u,integer lv returns nothing
         call SaveInteger(hash_hero,GetHandleId(u),hk_hero_lv,lv)
+        set u = null
     endmethod
 
     // 获取英雄之前的等级
     public static method getHeroPrevLevel takes unit u returns integer
-        return LoadInteger(hash_hero,GetHandleId(u),hk_hero_lv)
+        local integer hid = GetHandleId(u)
+        set u = null
+        return LoadInteger(hash_hero, hid, hk_hero_lv)
     endmethod
 
     //英雄升级 - 计算白字
@@ -131,21 +134,27 @@ struct hHero
         else
             call hconsole.error("setPlayerMaxQty error")
         endif
+        set whichPlayer = null
 	endmethod
 
     //获取玩家最大单位数量
     public static method getPlayerAllowQty takes player whichPlayer returns integer
-        return player_allow_qty[GetConvertedPlayerId(whichPlayer)]
+        local integer index = GetConvertedPlayerId(whichPlayer)
+        set whichPlayer = null
+        return player_allow_qty[index]
     endmethod
 
     //设置玩家现有单位数量
     private static method setPlayerUnitQty takes player whichPlayer,integer now returns nothing
 		call SaveInteger( hash_hero , GetHandleId(whichPlayer) , hk_player_own_qty , now )
-	endmethod
+        set whichPlayer = null
+    endmethod
 
     //获取玩家现有单位数量
     public static method getPlayerUnitQty takes player whichPlayer returns integer
-		return LoadInteger( hash_hero , GetHandleId(whichPlayer) , hk_player_own_qty )
+        local integer hid = GetHandleId(whichPlayer)
+        set whichPlayer = null
+		return LoadInteger( hash_hero , hid, hk_player_own_qty )
 	endmethod
 
     //设置玩家现有单位
@@ -160,11 +169,15 @@ struct hHero
             call hevent.triggerEvent(heventBean)
             call heventBean.destroy()
         endif
+        set whichPlayer = null
+        set u = null
 	endmethod
 
     //获取玩家现有单位
     public static method getPlayerUnit takes player whichPlayer,integer index returns unit
-		return LoadUnitHandle( hash_hero , GetHandleId(whichPlayer) , StringHash("hk_player_own_unit"+I2S(index)) )
+        local integer hid = GetHandleId(whichPlayer)
+		set whichPlayer = null
+        return LoadUnitHandle( hash_hero , hid, StringHash("hk_player_own_unit"+I2S(index)) )
 	endmethod
 
     private static method getRandomUnitId takes nothing returns integer
@@ -236,6 +249,7 @@ struct hHero
             call thistype.setHeroPrevLevel(u,1)
             call TriggerRegisterUnitEvent( TRIGGER_HERO_LEVEL , u , EVENT_UNIT_HERO_LEVEL )
         endif
+        set u = null
     endmethod
 
     /**
@@ -263,6 +277,7 @@ struct hHero
      */
     public static method setHeroType takes integer uid,string t returns nothing
         call SaveStr(hash_hero,uid,hk_hero_type,t)
+        set t = null
     endmethod
 
 
@@ -276,6 +291,7 @@ struct hHero
 	private static method add2drunkery takes unit drunkery,integer unitId returns nothing
 		call SaveUnitHandle( hash_hero , unitId , hk_drunkery , drunkery )
 		call AddUnitToStock( drunkery,unitId , 1 , 1 )
+        set drunkery = null
 	endmethod
 
     /**
@@ -305,11 +321,14 @@ struct hHero
     //设置酒馆现有单位数量
     private static method setDrunkeryQty takes unit drunkery,integer now returns nothing
 		call SaveInteger( hash_hero , GetHandleId(drunkery) , hk_drunkery_qty_now , now )
+        set drunkery = null
 	endmethod
 
     //获取酒馆现有单位数量
     private static method getDrunkeryQty takes unit drunkery returns integer
-		return LoadInteger( hash_hero , GetHandleId(drunkery) , hk_drunkery_qty_now )
+        local integer hid = GetHandleId(drunkery)
+        set drunkery = null
+		return LoadInteger( hash_hero , hid , hk_drunkery_qty_now )
 	endmethod
 
     //设置每个酒馆允许的最大单位数量，只允许1～11
