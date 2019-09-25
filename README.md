@@ -1,5 +1,5 @@
- * [github网址](https://github.com/hunzsig/h-vjass)
- * [最佳实践：时空之轮TD](https://github.com/hunzsig/h-war3/tree/master/w3xMaps/hyperSpaceTD)
+ * [github网址](https://github.com/hunzsig-warcraft3/h-vjass)
+ * [最佳实践：时空之轮TD](https://github.com/hunzsig-warcraft3/w3x-hyper-space-td)
  * [h-vjass技术文档](http://hvjass.book.hunzsig.org)
  * author hunzsig
 
