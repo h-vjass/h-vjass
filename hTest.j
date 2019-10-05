@@ -83,7 +83,7 @@ struct hTest
 		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_LUMBER, 999999 )
 		call SetPlayerStateBJ( Player(0), PLAYER_STATE_RESOURCE_FOOD_CAP, 99 )
 
-		//TODO TEST
+		// TEST
 		set u = hunit.createUnit(players[1],'H00B',Location(0,0))
 		call hhero.itIs(u)
 		call hattr.setAttackRange( u, 100, 0 )

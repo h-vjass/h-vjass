@@ -961,7 +961,7 @@ struct hAttrHunt
                 endif
             endif
 
-            // ------------------ TODO 上面都是先行计算 ------------------ 
+            // ------------------ 上面都是先行计算 ------------------
 
             //造成伤害
             //call console.info("realDamage:"+R2S(realDamage))

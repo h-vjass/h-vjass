@@ -35,7 +35,7 @@ struct hAward
         set floatStr = ""
         set index = GetConvertedPlayerId(GetOwningPlayer( whichUnit ))
 
-        // TODO 增益
+        // 增益
         set realGold 	= R2I( I2R(gold) * hplayer.getGoldRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realLumber	= R2I( I2R(lumber) * hplayer.getLumberRatio(GetOwningPlayer( whichUnit )) / 100.00 )
         set realExp		= R2I( I2R(exp) * hplayer.getExpRatio(GetOwningPlayer( whichUnit )) / 100.00 )

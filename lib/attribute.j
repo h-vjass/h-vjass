@@ -2001,7 +2001,7 @@ struct hAttr
 				set futureVal = currentVal + diff
 				call SaveReal( hash_attr , uhid , flag , futureVal )
 				call SetHeroInt( whichUnit , R2I(futureVal) , true )
-            //TODO - EXT
+            // - EXT
 			elseif( flag == ATTR_FLAG_UP_LIFE_BACK ) then
 				set futureVal = LoadReal( hash_attr , uhid , flag ) + diff
 				if (hlogic.rabs(futureVal) > 0.02) then

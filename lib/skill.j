@@ -412,7 +412,7 @@ struct hSkill
             if( during <1 ) then
                 call UnitAddAbility( shutter, htime.getInteger(t, 10) )
             endif
-            //TODO
+            //
             set loc = GetUnitLoc(shutter)
             //向一个单位进行目标穿梭,如果没有，从单位组取一个(需要进行缓存)
             if( targetUnit == null ) then

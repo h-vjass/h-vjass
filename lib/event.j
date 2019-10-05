@@ -446,7 +446,7 @@ struct hEvent
         return LoadUnitHandle(hash_trigger, GetHandleId(which), hashkey_last_damage )
     endmethod
 
-    //-- TODO SET GET DATA --
+    //-- SET GET DATA --
     //设置 triggerUnit 单位
     public static method setTriggerUnit takes trigger tgr,unit which returns nothing
         call SaveUnitHandle(hash_trigger, GetHandleId(tgr), hashkey_type_TriggerUnit , which )
@@ -1584,7 +1584,7 @@ struct hEvent
         set tg = null
     endmethod
 
-    //TODO 选择单位
+    // 选择单位
     private static method onSelectionActionExpire takes nothing returns nothing
         local timer t = GetExpiredTimer()
         local integer pid = htime.getInteger(t,1)

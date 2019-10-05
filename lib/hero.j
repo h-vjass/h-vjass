@@ -281,7 +281,7 @@ struct hHero
     endmethod
 
 
-    //todo -----------酒馆模式-----------
+    // -----------酒馆模式-----------
 
     /**
 	 * 添加单位进酒馆
@@ -544,7 +544,7 @@ struct hHero
         set u = null
     endmethod
 	
-    //todo -----------双击模式-----------
+    // -----------双击模式-----------
 
     private static method buildDoubleClickActionExpire takes nothing returns nothing
         call SaveInteger(hash_hero,htime.getInteger(GetExpiredTimer(),1),htime.getInteger(GetExpiredTimer(),2),0)
