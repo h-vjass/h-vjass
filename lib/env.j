@@ -1,4 +1,4 @@
-//单位组
+//环境
 globals
 hEnv henv
 integer env_block = 'LTba'
