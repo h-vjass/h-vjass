@@ -96,12 +96,12 @@ struct hSkill
 	 */
 	public static method lightningChain takes string codename,integer qty,real reduce,boolean isRepeat,hAttrHuntBean bean returns nothing
         local timer t = null
-        set qty = qty-1
-        if(qty<0)then
-            set qty = 0
+        if(qty<1)then
+            set qty = 1
         endif
         call hlightning.unit2unit(codename,bean.fromUnit,bean.toUnit,0.2*qty)
         call hattrHunt.huntUnit(bean)
+        set qty = qty-1
         if(qty>0)then
             set t = htime.setInterval(0.35,function thistype.lightningChainLoop)
             call htime.setUnit(t,1,bean.toUnit)
