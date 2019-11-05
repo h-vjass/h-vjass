@@ -2,6 +2,7 @@
 
 globals
 hLightning hlightning
+lightning hjass_global_lightning
 string lightningCode_shandianlian_zhu = "CLPB" 		//闪电效果 - 闪电链主
 string lightningCode_shandianlian_ci = "CLSB" 		//闪电效果 - 闪电链次
 string lightningCode_jiqu = "DRAB" 					//闪电效果 - 汲取
@@ -37,14 +38,14 @@ struct hLightning
 	 */
 	public method xyz2xyz takes string codename,real x1,real y1,real z1,real x2,real y2,real z2,real during returns lightning
 		local timer t = null
-		local lightning l = AddLightningEx(codename, true, x1, y1, z1, x2, y2, z2)
+		set hjass_global_lightning = AddLightningEx(codename, true, x1, y1, z1, x2, y2, z2)
 		if(during > 0)then
 			set t = htime.setTimeout(during,function thistype.duringDel)
-			call htime.setLightning(t,1,l)
+			call htime.setLightning(t,1,hjass_global_lightning)
 			set t = null
 		endif
 		set codename = null
-		return l
+		return hjass_global_lightning
 	endmethod
 
 	/**
