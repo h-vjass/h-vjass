@@ -59,6 +59,57 @@ endstruct
 
 struct hAttrHunt
 
+    /**
+     * 单独处理分裂
+     * 解决字节码问题
+     */
+    private static method handleSplit takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local unit fromUnit = htime.getUnit(t,1)
+        local unit toUnit = htime.getUnit(t,2)
+        local real damage = htime.getReal(t,3)
+        local hAttrHuntBean huntBean
+        call htime.delTimer(t)
+        set huntBean = hAttrHuntBean.create()
+        set huntBean.fromUnit = fromUnit
+        set huntBean.toUnit = toUnit
+        set huntBean.damage = damage
+        set huntBean.huntKind = "special"
+        set huntBean.huntType = "physical"
+        set huntBean.isBreak = "defend"
+        call thistype.huntUnit(huntBean)
+        call heffect.toUnitLoc("Abilities\\Spells\\Other\\Cleave\\CleaveDamageTarget.mdl",toUnit,0)
+        call huntBean.destroy()
+        set t = null
+        set fromUnit = null
+        set toUnit = null
+    endmethod
+
+    /**
+     * 单独处理爆破
+     * 解决字节码问题
+     */
+    private static method handleBomb takes nothing returns nothing
+        local timer t = GetExpiredTimer()
+        local unit fromUnit = htime.getUnit(t,1)
+        local unit toUnit = htime.getUnit(t,2)
+        local real damage = htime.getReal(t,3)
+        local string huntType = htime.getString(t,4)
+        local hAttrHuntBean huntBean
+        call htime.delTimer(t)
+        set huntBean = hAttrHuntBean.create()
+        set huntBean.fromUnit = fromUnit
+        set huntBean.toUnit = toUnit
+        set huntBean.damage = damage
+        set huntBean.huntKind = "special"
+        set huntBean.huntType = huntType
+        call thistype.huntUnit(huntBean)
+        call huntBean.destroy()
+        set t = null
+        set fromUnit = null
+        set toUnit = null
+    endmethod
+
 	/**
      * 伤害单位
      * heffect 特效
@@ -114,6 +165,7 @@ struct hAttrHunt
         local real tempReal = 0
         local hFilter filter
         local hAttrHuntBean huntBean
+        local timer t = null
 
         //获取单位属性
     	local real fromUnitAttackPhysical = 0.0
@@ -372,7 +424,9 @@ struct hAttrHunt
         endif
 
         //计算单位是否无敌且伤害类型不混合绝对伤害（无敌属性为百分比计算，被动触发抵挡一次）
-        if( hlogic.strpos(bean.huntType,"absolute")==-1 and (his.invincible(toUnit)==true or GetRandomInt(1,100)<R2I(hattr.getInvincible(toUnit))  ))then
+        if( hlogic.strpos(bean.huntType,"absolute")==-1 \
+        and (his.invincible(toUnit)==true \
+        or GetRandomInt(1,100)<R2I(hattr.getInvincible(toUnit))  ))then
             set isDoDamage = false
         endif
 
@@ -740,14 +794,18 @@ struct hAttrHunt
             endif
 
             //计算物理暴击,几率50000满100%，伤害每10000点增加5%
-            if( hlogic.strpos(bean.huntType,"physical")!=-1 and (fromUnitKnocking-toUnitKnockingOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitKnockingOppose)/50) ) then
+            if( hlogic.strpos(bean.huntType,"physical")!=-1 \
+            and (fromUnitKnocking-toUnitKnockingOppose)>0 \
+            and GetRandomInt(1, 1000)<=R2I((fromUnitKnocking-toUnitKnockingOppose)/50) ) then
                 set realDamagePercent = realDamagePercent + fromUnitAttackPhysicalPercent * (fromUnitKnocking-toUnitKnockingOppose)*0.0005
                 set toUnitAvoid = 0 //触发暴击，无法回避
                 set isKnocking = true
             endif
 
             //计算魔法暴击,几率75000满100%，伤害每10000点增加7%
-            if( hlogic.strpos(bean.huntType,"magic")!=-1 and (fromUnitViolence-toUnitViolenceOppose)>0 and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitViolenceOppose)/75)) then
+            if( hlogic.strpos(bean.huntType,"magic")!=-1 \
+            and (fromUnitViolence-toUnitViolenceOppose)>0 \
+            and GetRandomInt(1, 1000)<=R2I((fromUnitViolence-toUnitViolenceOppose)/75)) then
                 set realDamagePercent = realDamagePercent + fromUnitAttackMagicPercent * (fromUnitViolence-toUnitViolenceOppose)*0.0007
                 set toUnitAvoid = 0 //触发暴击，无法回避
                 set isViolence = true
@@ -1115,16 +1173,11 @@ struct hAttrHunt
                             set u = FirstOfGroup(g)
                             call GroupRemoveUnit( g , u )
                             if(u!=toUnit and IsUnitEnemy(u,GetOwningPlayer(fromUnit)) == true) then
-                                set huntBean = hAttrHuntBean.create()
-                                set huntBean.fromUnit = fromUnit
-                                set huntBean.toUnit = u
-                                set huntBean.damage = realDamage * fromUnitSplit * 0.01
-                                set huntBean.huntKind = "special"
-                                set huntBean.huntType = "physical"
-                                set huntBean.isBreak = "defend"
-                                call thistype.huntUnit(huntBean)
-                                call heffect.toUnitLoc("Abilities\\Spells\\Other\\Cleave\\CleaveDamageTarget.mdl",u,0)
-                                call huntBean.destroy()
+                                set t = htime.setTimeout(0,function thistype.handleSplit)
+                                call htime.setUnit(t,1,fromUnit)
+                                call htime.setUnit(t,2,u)
+                                call htime.setReal(t,3,realDamage * fromUnitSplit * 0.01)
+                                set t = null
                             endif
                     endloop
                     call GroupClear(g)
@@ -1526,7 +1579,8 @@ struct hAttrHunt
                     call hattr.subMove(toUnit,1000,fromUnitHuntEffectFetterDuring)
                     call heffect.toUnit("Abilities\\Spells\\Orc\\SpiritLink\\SpiritLinkTarget.mdl",toUnit,"origin",fromUnitHuntEffectFetterDuring)
                 endif
-                if( GetRandomReal(1,100)<=(fromUnitHuntEffectBombOdds-toUnitBombOppose) and fromUnitHuntEffectBombVal!=0 and fromUnitHuntEffectBombRange>0 and his.silent(fromUnit) == false ) then
+                if( GetRandomReal(1,100)<=(fromUnitHuntEffectBombOdds-toUnitBombOppose) \
+                and fromUnitHuntEffectBombVal!=0 and fromUnitHuntEffectBombRange>0 and his.silent(fromUnit) == false ) then
                     if(fromUnitHuntEffectBombModel=="")then
                         set fromUnitHuntEffectBombModel = "Abilities\\Spells\\Other\\Incinerate\\FireLordDeathExplode.mdl"
                     endif
@@ -1541,14 +1595,12 @@ struct hAttrHunt
                             set u = FirstOfGroup(g)
                             call GroupRemoveUnit( g , u )
                             if( IsUnitAliveBJ(u) )then
-                                set huntBean = hAttrHuntBean.create()
-                                set huntBean.fromUnit = fromUnit
-                                set huntBean.toUnit = u
-                                set huntBean.damage = fromUnitHuntEffectBombVal
-                                set huntBean.huntKind = "special"
-                                set huntBean.huntType = bean.huntType
-                                call thistype.huntUnit(huntBean)
-                                call huntBean.destroy()
+                                set t = htime.setTimeout(0,function thistype.handleBomb)
+                                call htime.setUnit(t,1,fromUnit)
+                                call htime.setUnit(t,2,u)
+                                call htime.setReal(t,3,fromUnitHuntEffectBombVal)
+                                call htime.setString(t,4,bean.huntType)
+                                set t = null
                             endif
                     endloop
                     call GroupClear( g )
@@ -1556,7 +1608,8 @@ struct hAttrHunt
                     set g = null
                     set u = null
                 endif
-                if( GetRandomReal(1,100)<=(fromUnitHuntEffectLightningChainOdds-toUnitLightningChainOppose) and fromUnitHuntEffectLightningChainVal!=0 and fromUnitHuntEffectLightningChainQty>0 and his.silent(fromUnit) == false ) then
+                if( GetRandomReal(1,100)<=(fromUnitHuntEffectLightningChainOdds-toUnitLightningChainOppose) \
+                and fromUnitHuntEffectLightningChainVal!=0 and fromUnitHuntEffectLightningChainQty>0 and his.silent(fromUnit) == false ) then
                     if(fromUnitHuntEffectLightningChainModel=="")then
                         set fromUnitHuntEffectLightningChainModel = "Abilities\\Weapons\\Bolt\\BoltImpact.mdl"
                     endif
