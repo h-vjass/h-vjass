@@ -1,6 +1,4 @@
-//特效字符串
-
-#include "effectString.j"
+//特效
 
 globals
 hEffect heffect
