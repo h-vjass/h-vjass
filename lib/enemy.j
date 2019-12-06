@@ -31,13 +31,19 @@ struct hEnemy
 
     // 将某个玩家位置设定为敌人，同时将他名字设定为全局的enemyName，颜色调节为黑色ConvertPlayerColor(12)
     public static method setEnemyPlayer takes player whichPlayer returns nothing
+        local integer i = 0
         set enemyPlayerQty = enemyPlayerQty+1
         set enemyPlayer[enemyPlayerQty] = whichPlayer
         set enemyInc[enemyPlayerQty] = 0
         call SetPlayerName(whichPlayer,enemyName)
         call SetPlayerColor(whichPlayer,ConvertPlayerColor(12) )
         if(isShareView==true)then
-            call SetPlayerAlliance(whichPlayer, players[1], ALLIANCE_SHARED_VISION, true)
+            set i = player_max_qty
+            loop
+                exitwhen i<=0
+                    call SetPlayerAlliance(whichPlayer, players[i], ALLIANCE_SHARED_VISION, true)
+                set i=i-1
+            endloop
         endif
         set whichPlayer = null
     endmethod
