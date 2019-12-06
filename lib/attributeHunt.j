@@ -1654,13 +1654,15 @@ struct hAttrHunt
     public static method huntGroup takes hAttrHuntBean bean returns nothing
     	local unit u = null
         local group g = null
+        local integer i = 0
     	if( bean.whichGroupHuntEff != null and bean.whichGroupHuntEff != "" and bean.whichGroupHuntEffLoc != null) then
 			call heffect.toLoc(bean.whichGroupHuntEff,bean.whichGroupHuntEffLoc,0)
     	endif
+        set i = 0
         set g = CreateGroup()
         call GroupAddGroup(bean.whichGroup,g)
     	loop
-            exitwhen(IsUnitGroupEmptyBJ(g) == true)
+            exitwhen(IsUnitGroupEmptyBJ(g) == true or i > 8)
                 set u = FirstOfGroup(g)
                 call GroupRemoveUnit( g , u )
                 if(IsUnitEnemy(u,GetOwningPlayer(bean.fromUnit))==true and (bean.whichGroupRepeat==null or IsUnitInGroup(u,bean.whichGroupRepeat)==false)) then
@@ -1671,6 +1673,7 @@ struct hAttrHunt
                 	call GroupAddUnit( bean.whichGroupRepeat,u )
                 endif
                 set u = null
+                set i = i + 1
         endloop
         call GroupClear(g)
         call DestroyGroup(g)
