@@ -400,10 +400,6 @@ struct hPlayer
 		endif
 	endmethod
 
-	private static method triggerRamActions takes nothing returns nothing
-		call YDWEMemoryLeakHelperDisplayLeaks()
-	endmethod
-
 	//黄金比率
 	private static method diffGoldRatioCall takes nothing returns nothing
 		local timer t = GetExpiredTimer()
@@ -756,7 +752,6 @@ struct hPlayer
 		local trigger triggerLSR = CreateTrigger()
 		local trigger triggerMSR = CreateTrigger()
 		local trigger triggerConvert = CreateTrigger()
-		local trigger triggerRam = CreateTrigger()
 		call TriggerAddAction(triggerApm , function thistype.triggerApmActions)
 		call TriggerAddAction(triggerApmUnit , function thistype.triggerApmUnitActions)
 		call TriggerAddAction(triggerLeave , function thistype.triggerLeaveActions)
@@ -764,7 +759,6 @@ struct hPlayer
 		call TriggerAddAction(triggerLSR , function thistype.triggerLSRActions)
 		call TriggerAddAction(triggerMSR , function thistype.triggerMSRActions)
 		call TriggerAddAction(triggerConvert , function thistype.triggerConvertActions)
-		call TriggerAddAction(triggerRam , function thistype.triggerRamActions)
 		call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER )
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER )
 	    call TriggerRegisterAnyUnitEventBJ( triggerApmUnit, EVENT_PLAYER_UNIT_ISSUED_ORDER )
@@ -797,7 +791,6 @@ struct hPlayer
 					call TriggerRegisterPlayerChatEvent( triggerLSR , players[i] , "-lsr" , true)
 					call TriggerRegisterPlayerChatEvent( triggerMSR , players[i] , "-msr" , true)
 					call TriggerRegisterPlayerChatEvent( triggerConvert , players[i] , "-apc" , true)
-					call TriggerRegisterPlayerChatEvent( triggerRam , players[i] , "-ram" , true)
 	            else
 	            	call SaveBoolean(hash_player, pid, hp_isComputer, true)
 	            	call SaveStr(hash_player, pid, hp_battle_status, default_status_nil)
@@ -812,7 +805,6 @@ struct hPlayer
 		set triggerLSR = null
 		set triggerMSR = null
 		set triggerConvert = null
-		set triggerRam = null
 	endmethod
 
 
