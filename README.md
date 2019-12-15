@@ -88,7 +88,7 @@ include "[relatively_path]/h-vjass/h-vjass.j"
 ```
 
 
-# 保存地图查看是否出错，如果没有出错则v-vjass库添加成功
+# 保存地图查看是否出错，如果没有出错则h-vjass库添加成功
 
 以上仅为添加v-vjass，而在制作地图的实践中，你应该是建立自己的main文件来引用v-vjass（如可参考目录中的hMain.j）
 那么文本区内现在应该改为这样的：
