@@ -334,4 +334,36 @@ struct hLogic
 		return hjass_global_logic_txt
 	endmethod
 
+	//字符串%s替换
+    public method str_replace takes string haystack,string param1,string param2,string param3 returns string
+        local integer haystackLen = StringLength(haystack)
+        local integer start = 0
+        local integer match_index = 1
+        local string sub = null
+        local string match = ""
+        set hjass_global_logic_txt = ""
+        loop
+            exitwhen start > haystackLen
+                set sub = SubString(haystack,start,start+1)
+                call DisplayTextToPlayer( Player(0), 0, 0, sub)
+                if(match_index <= 3 and sub == "%" and "s" == SubString(haystack,start+1,start+2))then
+                    if(match_index == 1 and param1 != null)then
+                        set hjass_global_logic_txt = hjass_global_logic_txt + param1
+                    elseif(match_index == 2 and param2 != null)then
+                        set hjass_global_logic_txt = hjass_global_logic_txt + param2
+                    elseif(match_index == 3 and param3!= null)then
+                        set hjass_global_logic_txt = hjass_global_logic_txt + param3
+                    endif
+                    set match_index = match_index + 1
+                    set start = start + 1
+                else
+                    set hjass_global_logic_txt = hjass_global_logic_txt + sub
+                endif
+            set start = start + 1
+        endloop
+        set sub = null
+        set match = null
+        return hjass_global_logic_txt
+    endmethod
+
 endstruct
