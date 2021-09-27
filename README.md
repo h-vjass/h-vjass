@@ -1,7 +1,7 @@
 ### GUIDE 引导
  * [Github](https://github.com/hunzsig-warcraft3/h-vjass)
  * [Demo：时空之轮TD](https://github.com/hunzsig-warcraft3/w3x-hyper-space-td)
- * [h-vjass技术文档](http://wenku.hunzsig.org/?_=_3_8)
+ * [h-vjass技术文档](https://h-vjass.hunzsig.org)
  * Author hunzsig
 
 ### INTRODUCE 介绍
