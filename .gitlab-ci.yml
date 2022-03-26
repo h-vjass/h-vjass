@@ -1,5 +1,11 @@
-image: node:16.14.2
+image: alpine:latest
 
 pages:
+  stage: deploy
+  script:
+    - echo 'Nothing to do...'
+  artifacts:
+    paths:
+      - .
   only:
     - gh-pages
