@@ -1,0 +1,5 @@
+image: node:16.14.2
+
+pages:
+  only:
+    - gh-pages
